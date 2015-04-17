@@ -10,10 +10,22 @@ With Node and npm installed, run:
 $ npm install -g gulp && npm install -g bower && npm install && bower install
 ```
 
-You can then run:
+### Serve / watch
 
 ```sh
-$ gulp to build a production-ready version of your Polymer app 
+$ gulp serve
+```
+
+### Run tests
+
+```sh
+$ gulp test:local
+```
+
+### Build / vulcanize
+
+```sh
+$ gulp
 ```
 
 Copyright Google Inc. 2015. Released under an Apache-2 license.
