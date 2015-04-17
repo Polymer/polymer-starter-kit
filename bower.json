@@ -1,0 +1,37 @@
+{
+  "name": "polymer-starter-kit",
+  "version": "0.0.0",
+  "dependencies": {
+    "polymer": "Polymer/polymer#0.8-preview",
+    "core-elements": "Polymer/core-elements#0.8-preview",
+    "paper-elements": "Polymer/paper-elements#0.8-preview",
+    "paper-icon-button": "Polymer/paper-icon-button#0.8-preview"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#master",
+    "test-fixture": "PolymerElements/test-fixture#~0.8.1"
+  },
+  "resolutions": {
+    "core-ajax": "0.8-preview",
+    "core-collapse": "0.8-preview",
+    "core-drawer-panel": "0.8-preview",
+    "core-image": "0.8-preview",
+    "core-header-panel": "0.8-preview",
+    "core-icons": "0.8-preview",
+    "core-media-query": "0.8-preview",
+    "core-meta": "master",
+    "core-pages": "0.8-preview",
+    "core-overlay": "0.8-preview",
+    "core-selector": "0.8-preview",
+    "core-toolbar": "0.8-preview",
+    "core-icon": "0.8-preview",
+    "core-resizable": "0.8-preview",
+    "core-iconset": "0.8-preview",
+    "core-iconset-svg": "0.8-preview",
+    "layout": "master",
+    "core-focusable": "0.8-preview",
+    "webcomponentsjs": "0.6.1",
+    "core-component-page": "master",
+    "polymer": "0.8-preview"
+  }
+}
