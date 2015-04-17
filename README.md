@@ -2,6 +2,14 @@
 
 > A starting point for building web applications with Polymer
 
+### High-level
+
+* Demo elements updated to 0.8 syntax
+* Bower: pulls in 0.8-previews for all core, paper elements used.
+* Testing: updated to use `<test-fixture>`, latest WCT
+* Vulcanize: gulp-vulcanize updated upstream, works fine w/0.8 here
+* WebComponentsReady / unresolved handling baked in
+
 ### Instructions
 
 With Node and npm installed, run:
