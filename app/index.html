@@ -41,40 +41,39 @@
 <body unresolved fullbleed layout vertical>
   <template is="x-autobind" id="app">
 
-    <core-drawer-panel>
 
-      <!-- Drawer -->
-      <core-header-panel drawer>
-
+    <paper-drawer-panel id="coreDrawerPanel">
+      <div drawer>
         <!-- Drawer Toolbar -->
-        <core-toolbar>Menu</core-toolbar>
+        <paper-toolbar>Menu</paper-toolbar>
 
         <!-- Drawer Content -->
-        <core-menu selected="0">
-          <core-item label="Polymer"></core-item>
-          <core-item label="Starter"></core-item>
-          <core-item label="Kit"></core-item>
-        </core-menu>
+        <paper-menu class="list">
+          <paper-item>Polymer</paper-item>
+          <paper-item>Starter</paper-item>
+          <paper-item>Kit</paper-item>
+        </paper-menu>
 
-      </core-header-panel>
-
-      <!-- Main -->
-      <core-header-panel main>
+      </div>
+      <div main>
 
         <!-- Main Toolbar -->
-        <core-toolbar>
-          <paper-icon-button icon="menu" core-drawer-toggle></paper-icon-button>
+        <paper-toolbar>
+          <!-- Bug when used with paper-drawer-toggle -->
+          <!-- <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button> -->
+          <button id="paper-toggle" paper-drawer-toggle></button>
           <span>{{appName}}</span>
-        </core-toolbar>
+        </paper-toolbar>
 
         <!-- Main Content -->
-        <div class="hero-unit">
+      <paper-card elevation="1">
           <yo-greeting></yo-greeting>
           <p>You now have</p>
           <yo-list></yo-list>
-        </div>
-      </core-header-panel>
-    </core-drawer-panel>
+      </paper-card>
+
+      </div>
+    </paper-drawer-panel>
 
   </template>
 
