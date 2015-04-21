@@ -30,27 +30,30 @@ body {
 [drawer] {
     background-color: #EEEEEE;
 }
+
 /* TODO: these colors should come from paper-styles/default-theme.html
       once Polymer/polymer#1415 is fixed. */
 
 paper-drawer-panel #drawer {
-    background-color: #3f51b5;
+    background-color: #EEEEEE;
     border-right: 1px solid #ccc;
 }
 
 paper-drawer-panel::shadow #drawer {
-    background-color: #3f51b5;
+    background-color: #EEEEEE;
     border-right: 1px solid #ccc;
 }
 
 paper-drawer-panel[right-drawer] #drawer {
     border-left: 1px solid #ccc;
     border-right: none;
+    background: #EEEEEE;
 }
 
 paper-drawer-panel[right-drawer]::shadow #drawer {
     border-left: 1px solid #ccc;
     border-right: none;
+    background: #EEEEEE;
 }
 
 paper-drawer-panel #main {
@@ -61,11 +64,8 @@ paper-drawer-panel::shadow #main {
     background-color: #c5cae9;
 }
 
-button {
-    width: 160px;
-    height: 40px;
-    font-size: 16px;
-    margin: 8px;
+#mainToolbar {
+  background: #324090;
 }
 
 paper-card {
@@ -77,9 +77,8 @@ paper-card {
     border-radius: 2px;
 }
 
-#paper-toggle {
+#papertoggle {
     /*Temporary workaround until paper-icon-button works with the drawer panel*/
-
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='38' height='38'><path d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z'/></svg>") no-repeat center;
     width: 38px;
     height: 38px;
