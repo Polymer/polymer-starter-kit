@@ -9,6 +9,7 @@
 * Testing: updated to use `<test-fixture>`, latest WCT
 * Vulcanize: gulp-vulcanize updated upstream, works fine w/0.8 here
 * WebComponentsReady / unresolved handling baked in
+* Layout using latest paper-*, iron-* elements
 
 ### Instructions
 
