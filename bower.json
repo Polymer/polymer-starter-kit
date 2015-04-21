@@ -2,9 +2,11 @@
   "name": "polymer-starter-kit",
   "version": "0.0.0",
   "dependencies": {
-    "polymer": "Polymer/polymer#0.8-preview",
-    "core-elements": "Polymer/core-elements#0.8-preview",
-    "paper-elements": "Polymer/paper-elements#0.8-preview",
+    "paper-header-panel": "PolymerElements/paper-header-panel",
+    "paper-drawer-panel": "PolymerElements/paper-drawer-panel",
+    "paper-menu": "PolymerElements/paper-menu",
+    "paper-item": "PolymerElements/paper-item",
+    "paper-toolbar": "PolymerElements/paper-toolbar",
     "paper-icon-button": "Polymer/paper-icon-button#0.8-preview"
   },
   "devDependencies": {
@@ -12,26 +14,6 @@
     "test-fixture": "PolymerElements/test-fixture#~0.8.1"
   },
   "resolutions": {
-    "core-ajax": "0.8-preview",
-    "core-collapse": "0.8-preview",
-    "core-drawer-panel": "0.8-preview",
-    "core-image": "0.8-preview",
-    "core-header-panel": "0.8-preview",
-    "core-icons": "0.8-preview",
-    "core-media-query": "0.8-preview",
-    "core-meta": "master",
-    "core-pages": "0.8-preview",
-    "core-overlay": "0.8-preview",
-    "core-selector": "0.8-preview",
-    "core-toolbar": "0.8-preview",
-    "core-icon": "0.8-preview",
-    "core-resizable": "0.8-preview",
-    "core-iconset": "0.8-preview",
-    "core-iconset-svg": "0.8-preview",
-    "layout": "master",
-    "core-focusable": "0.8-preview",
-    "webcomponentsjs": "0.6.1",
-    "core-component-page": "master",
-    "polymer": "0.8-preview"
+    "polymer": "v0.8.0-rc.6"
   }
 }
