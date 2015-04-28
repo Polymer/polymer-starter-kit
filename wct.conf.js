@@ -15,6 +15,6 @@
  */
 
 module.exports = {
-  root: '.',
-  suites: ['app/test']
+  root: 'app',
+  suites: ['test']
 };
