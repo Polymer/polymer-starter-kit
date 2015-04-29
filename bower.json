@@ -8,14 +8,17 @@
     "paper-item": "PolymerElements/paper-item",
     "paper-toolbar": "PolymerElements/paper-toolbar",
     "paper-icon-button": "Polymer/paper-icon-button#0.8-preview",
-    "iron-elements": "PolymerElements/iron-elements"
+    "iron-elements": "PolymerElements/iron-elements",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#~0.8.3",
+    "iron-icons": "PolymerElements/iron-icons#~0.8.3"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#master",
     "test-fixture": "PolymerElements/test-fixture#~0.8.1"
   },
   "resolutions": {
-    "polymer": "v0.8.0-rc.6",
-    "layout": "^0.8.0"
+    "polymer": "v0.8.0-rc.7",
+    "layout": "^0.8.0",
+    "marked-element": "^0.8.0"
   }
 }
