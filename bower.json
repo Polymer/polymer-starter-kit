@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#master",
-    "test-fixture": "PolymerElements/test-fixture#~0.8.1"
+    "test-fixture": "PolymerElements/test-fixture#~0.8.4"
   },
   "resolutions": {
     "polymer": "v0.8.0-rc.7",
