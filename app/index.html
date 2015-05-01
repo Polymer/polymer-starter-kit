@@ -41,7 +41,6 @@
 <body unresolved fullbleed layout vertical>
   <template is="x-autobind" id="app">
 
-
     <paper-drawer-panel id="coreDrawerPanel">
       <div drawer>
         <!-- Drawer Toolbar -->
@@ -49,7 +48,7 @@
 
         <!-- Drawer Content -->
         <paper-menu class="list">
-          <paper-item>Polymer</paper-item>
+          <paper-item colored>Polymer</paper-item>
           <paper-item>Starter</paper-item>
           <paper-item>Kit</paper-item>
         </paper-menu>
@@ -66,11 +65,12 @@
         </paper-toolbar>
 
         <!-- Main Content -->
-      <paper-card elevation="1">
-          <yo-greeting></yo-greeting>
-          <p>You now have</p>
-          <yo-list></yo-list>
-      </paper-card>
+        <paper-card elevation="1">
+            <yo-greeting></yo-greeting>
+            <p class="paper-font-subhead">You now have:</p>
+            <yo-list></yo-list>
+        </paper-card>
+      </div>
 
       </div>
     </paper-drawer-panel>
