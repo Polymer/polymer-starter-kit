@@ -25,10 +25,10 @@
       }
     </style>
   <template>
-    <h1><span>{{greeting}}</span>, <span>{{greeting}}</span>!</h1>
-    <span>Update text to change the greeting.</span>
+    <h1 class="paper-font-display2"><span>{{greeting}}</span>, <span>{{greeting}}</span>!</h1>
+    <span class="paper-font-body2">Update text to change the greeting.</span>
     <!-- Listens for "change" event and sets greeting to <input>.value -->
-    <input value="{{greeting::change}}">
+    <input class="paper-font-body2" value="{{greeting::change}}">
   </template>
 </dom-module>
   <script>
