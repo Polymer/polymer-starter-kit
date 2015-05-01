@@ -27,47 +27,6 @@ body {
     padding: 0.2em 0;
 }
 
-[drawer] {
-    background-color: #EEEEEE;
-}
-
-/* TODO: these colors should come from paper-styles/default-theme.html
-      once Polymer/polymer#1415 is fixed. */
-
-paper-drawer-panel #drawer {
-    background-color: #EEEEEE;
-    border-right: 1px solid #ccc;
-}
-
-paper-drawer-panel::shadow #drawer {
-    background-color: #EEEEEE;
-    border-right: 1px solid #ccc;
-}
-
-paper-drawer-panel[right-drawer] #drawer {
-    border-left: 1px solid #ccc;
-    border-right: none;
-    background: #EEEEEE;
-}
-
-paper-drawer-panel[right-drawer]::shadow #drawer {
-    border-left: 1px solid #ccc;
-    border-right: none;
-    background: #EEEEEE;
-}
-
-paper-drawer-panel #main {
-    background-color: #c5cae9
-}
-
-paper-drawer-panel::shadow #main {
-    background-color: #c5cae9;
-}
-
-#mainToolbar {
-  background: #324090;
-}
-
 paper-card {
     display: inline-block;
     background: white;
