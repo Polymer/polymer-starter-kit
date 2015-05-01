@@ -1,0 +1,74 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<style is="x-style">
+
+/* Application theme */
+* {
+    --dark-primary-color: #303f9f;
+    --default-primary-color: #324090;
+    --light-primary-color: #c5cae9;
+    --text-primary-color: #ffffff;
+    --accent-color: #ff4081;
+    --primary-background-color: #c5cae9;
+    --primary-text-color: #212121;
+    --secondary-text-color: #757575;
+    --disabled-text-color: #bdbdbd;
+    --divider-color: #e0e0e0;
+}
+
+/* Breakpoints configuration */
+paper-card, .desktop-large paper-card,
+.desktop-xlarge paper-card {
+    --grid-columns: 12;
+    --grid-gutter: 24px;
+    width: calc(98.66% - 16px);
+}
+
+.desktop-small paper-card,
+.desktop-x-small paper-card {
+    --grid-columns: 6;
+    --grid-gutter: 16px;
+    --menu-container-display: none;
+    width: calc(97.33% - 16px);
+}
+
+.desktop-medium-landscape paper-card,
+.desktop-medium paper-card {
+    --grid-columns: 12;
+    --grid-gutter: 16px;
+    --flex: 4;
+    width: calc(98% - 16px);
+}
+
+
+/* TODO: these colors should come from paper-styles/default-theme.html
+      once Polymer/polymer#1415 is fixed. */
+[drawer], paper-drawer-panel #drawer,
+paper-drawer-panel::shadow #drawer,
+paper-drawer-panel[right-drawer]::shadow #drawer {
+    background-color: white;
+}
+
+paper-drawer-panel #drawer {
+    border-right: 1px solid #ccc;
+}
+
+paper-drawer-panel::shadow #drawer {
+    border-right: 1px solid #ccc;
+}
+
+paper-drawer-panel[right-drawer] #drawer {
+    border-left: 1px solid #ccc;
+    border-right: none;
+}
+
+paper-drawer-panel[right-drawer]::shadow #drawer {
+    border-left: 1px solid #ccc;
+    border-right: none;
+}
+
+paper-item[colored] {
+  color: #303f9f;
+  background: #c5cae9;
+}
+</style>
