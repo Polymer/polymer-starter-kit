@@ -47,7 +47,7 @@
         <paper-toolbar>Menu</paper-toolbar>
 
         <!-- Drawer Content -->
-        <more-route-selector selectedParams="{{params}}">
+        <more-route-selector>
 
           <paper-menu class="list">
             <paper-item route="home">
@@ -61,19 +61,7 @@
             <paper-item route="contact">
               <a href="#!/contact">Contact</a>
             </paper-item>
-<!--
-            TODO: This breaks navigation right now. Something is going on with urlFor that prevents paper-item instances below from doing anything useful with the anchors.
 
-            <paper-item colored route="home">
-              <a href="{{urlFor('home')}}">Home</a>
-            </paper-item>
-            <paper-item route="users">
-              <a href="{{urlFor('users')}}">Users</a>
-            </paper-item>
-            <paper-item route="contact">
-              <a href="{{urlFor('contact')}}">Contact</a>
-            </paper-item>
--->
           </paper-menu>
         </more-route-selector>
       </div>
@@ -106,6 +94,9 @@
                 <h2 class="paper-font-display2">Users</h2>
                 <p>This is the users section</p>
                 <a href="#!/users/Rob">Rob</a></p>
+                <!--
+                <a href="{{urlFor('user-info', {name: 'Rob'})}}">Rob</a>
+                 -->
               </paper-material>
             </section>
 
