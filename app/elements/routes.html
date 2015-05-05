@@ -1,0 +1,23 @@
+  <link rel="import" href="../bower_components/more-routing/more-routing.html">
+
+<!--
+The first thing any document using more-routing must do is configure the driver.
+
+more-routing supports path (`/foo/bar`) and hash (`#!/foo/bar`) style routes.
+-->
+<more-routing-config driver="hash"></more-routing-config>
+
+<!--
+You can name routes.
+
+It is strongly recommended that you declare all your named routes in an import
+such as this, as it acts as a reference for your application, and makes nesting
+more clear.
+-->
+<more-route name="home" path="/"></more-route>
+<more-route name="users" path="/users">
+  <more-route name="user-info" path="/:name"></more-route>
+</more-route>
+<more-route name="contact" path="/contact"></more-route>
+
+
