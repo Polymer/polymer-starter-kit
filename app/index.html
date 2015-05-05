@@ -47,12 +47,35 @@
         <paper-toolbar>Menu</paper-toolbar>
 
         <!-- Drawer Content -->
-        <paper-menu class="list">
-          <paper-item colored>Polymer</paper-item>
-          <paper-item>Starter</paper-item>
-          <paper-item>Kit</paper-item>
-        </paper-menu>
+        <more-route-selector selectedParams="{{params}}">
 
+          <paper-menu class="list">
+            <paper-item route="home">
+              <a href="#!/">Home</a>
+            </paper-item>
+
+            <paper-item route="users">
+              <a href="#!/users">Users</a>
+            </paper-item>
+
+            <paper-item route="contact">
+              <a href="#!/contact">Contact</a>
+            </paper-item>
+<!--
+            TODO: This breaks navigation right now. Something is going on with urlFor that prevents paper-item instances below from doing anything useful with the anchors.
+
+            <paper-item colored route="home">
+              <a href="{{urlFor('home')}}">Home</a>
+            </paper-item>
+            <paper-item route="users">
+              <a href="{{urlFor('users')}}">Users</a>
+            </paper-item>
+            <paper-item route="contact">
+              <a href="{{urlFor('contact')}}">Contact</a>
+            </paper-item>
+-->
+          </paper-menu>
+        </more-route-selector>
       </div>
       <div main>
 
@@ -65,11 +88,45 @@
         </paper-toolbar>
 
         <!-- Main Content -->
-        <paper-material elevation="1">
-            <yo-greeting></yo-greeting>
-            <p class="paper-font-subhead">You now have:</p>
-            <yo-list></yo-list>
-        </paper-material>
+        <more-route-selector selectedParams="{{params}}">
+          <iron-pages>
+
+            <section route="home">
+              <paper-material elevation="1">
+                <p>This is the home section</p>
+
+                <yo-greeting></yo-greeting>
+                <p class="paper-font-subhead">You now have:</p>
+                <yo-list></yo-list>
+              </paper-material>
+            </section>
+
+            <section route="users">
+              <paper-material elevation="1">
+                <h2 class="paper-font-display2">Users</h2>
+                <p>This is the users section</p>
+                <a href="#!/users/Rob">Rob</a></p>
+              </paper-material>
+            </section>
+
+            <section route="user-info">
+              <paper-material elevation="1">
+                <h2 class="paper-font-display2">
+                User:<span>{{params.name}}
+                </h2>
+                <div>This is <span>{{params.name}}</span>'s section</div>
+              </paper-material>
+            </section>
+
+            <section route="contact">
+              <paper-material elevation="1">
+                <h2 class="paper-font-display2">Contact</h2>
+                <p>This is the contact section</p>
+              </paper-material>
+            </section>
+
+          </iron-pages>
+        </more-route-selector>
       </div>
 
       </div>
