@@ -2,29 +2,23 @@
   "name": "polymer-starter-kit",
   "version": "0.0.0",
   "dependencies": {
-    "iron-elements": "PolymerElements/iron-elements",
-    "paper-header-panel": "PolymerElements/paper-header-panel#master",
-    "paper-drawer-panel": "PolymerElements/paper-drawer-panel#master",
-    "paper-menu": "PolymerElements/paper-menu#master",
-    "paper-item": "PolymerElements/paper-item",
-    "paper-toolbar": "PolymerElements/paper-toolbar",
-    "iron-icons": "PolymerElements/iron-icons#~0.8.3",
-    "paper-icon-button": "Polymer/paper-icon-button#0.8-preview",
-    "iron-test-helpers": "PolymerElements/iron-test-helpers#master",
+    "iron-elements": "PolymerElements/iron-elements#^0.9.0",
+    "paper-header-panel": "PolymerElements/paper-header-panel#^0.9.0",
+    "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^0.9.0",
+    "paper-menu": "PolymerElements/paper-menu#^0.9.0",
+    "paper-item": "PolymerElements/paper-item#^0.9.0",
+    "paper-toolbar": "PolymerElements/paper-toolbar#^0.9.0",
+    "iron-icons": "PolymerElements/iron-icons#^0.9.0",
+    "paper-icon-button": "PolymerElements/paper-icon-button#^0.9.0",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#^0.9.0",
     "breakpoint-control": "PolymerElements/breakpoint-control",
-    "paper-styles": "PolymerElements/paper-styles#master",
-    "paper-material": "PolymerElements/paper-material#~0.8.3",
-    "iron-pages": "PolymerElements/iron-pages#~0.8.0",
+    "paper-styles": "PolymerElements/paper-styles#^0.9.0",
+    "paper-material": "PolymerElements/paper-material#^0.9.0",
+    "iron-pages": "PolymerElements/iron-pages#^0.9.0",
     "page": "visionmedia/page.js#~1.6.3"
   },
   "devDependencies": {
-    "web-component-tester": "Polymer/web-component-tester#master",
-    "test-fixture": "PolymerElements/test-fixture#~0.8.4"
-  },
-  "resolutions": {
-    "polymer": "v0.8.0-rc.7",
-    "layout": "^0.8.0",
-    "marked-element": "^0.8.0",
-    "paper-styles": "master"
+    "web-component-tester": "*",
+    "test-fixture": "PolymerElements/test-fixture#^0.9.0"
   }
 }
