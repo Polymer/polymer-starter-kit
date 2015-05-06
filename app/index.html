@@ -47,39 +47,33 @@
         <paper-toolbar>Menu</paper-toolbar>
 
         <!-- Drawer Content -->
-        <more-route-selector>
-
-          <paper-menu class="list">
-            <paper-item route="home">
-              <a href="#!/">Home</a>
+          <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}">
+            <paper-item data-route="home">
+              <a href="/">Home</a>
             </paper-item>
 
-            <paper-item route="users">
-              <a href="#!/users">Users</a>
+            <paper-item data-route="users">
+              <a href="/users">Users</a>
             </paper-item>
 
-            <paper-item route="contact">
-              <a href="#!/contact">Contact</a>
+            <paper-item data-route="contact">
+              <a href="/contact">Contact</a>
             </paper-item>
 
           </paper-menu>
-        </more-route-selector>
       </div>
       <div main>
 
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar">
-          <!-- Bug when used with paper-drawer-toggle -->
-          <!-- <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button> -->
           <button id="papertoggle" paper-drawer-toggle></button>
           <span>{{appName}}</span>
         </paper-toolbar>
 
         <!-- Main Content -->
-        <more-route-selector selectedParams="{{params}}">
-          <iron-pages>
+          <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
-            <section route="home">
+            <section data-route="home">
               <paper-material elevation="1">
                 <p>This is the home section</p>
 
@@ -89,27 +83,24 @@
               </paper-material>
             </section>
 
-            <section route="users">
+            <section data-route="users">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Users</h2>
                 <p>This is the users section</p>
-                <a href="#!/users/Rob">Rob</a></p>
-                <!--
-                <a href="{{urlFor('user-info', {name: 'Rob'})}}">Rob</a>
-                 -->
+                <a href="/users/Rob">Rob</a></p>
               </paper-material>
             </section>
 
-            <section route="user-info">
+            <section data-route="user-info">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">
-                User:<span>{{params.name}}
+                User:<span>{{params.name}}</span>
                 </h2>
                 <div>This is <span>{{params.name}}</span>'s section</div>
               </paper-material>
             </section>
 
-            <section route="contact">
+            <section data-route="contact">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Contact</h2>
                 <p>This is the contact section</p>
@@ -117,7 +108,6 @@
             </section>
 
           </iron-pages>
-        </more-route-selector>
       </div>
 
       </div>
