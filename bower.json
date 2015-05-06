@@ -12,7 +12,10 @@
     "paper-icon-button": "Polymer/paper-icon-button#0.8-preview",
     "iron-test-helpers": "PolymerElements/iron-test-helpers#master",
     "breakpoint-control": "PolymerElements/breakpoint-control",
-    "paper-styles": "PolymerElements/paper-styles#master"
+    "paper-styles": "PolymerElements/paper-styles#master",
+    "paper-material": "PolymerElements/paper-material#~0.8.3",
+    "iron-pages": "PolymerElements/iron-pages#~0.8.0",
+    "page": "visionmedia/page.js#~1.6.3"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#master",

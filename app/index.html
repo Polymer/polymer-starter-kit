@@ -47,29 +47,67 @@
         <paper-toolbar>Menu</paper-toolbar>
 
         <!-- Drawer Content -->
-        <paper-menu class="list">
-          <paper-item colored>Polymer</paper-item>
-          <paper-item>Starter</paper-item>
-          <paper-item>Kit</paper-item>
-        </paper-menu>
+          <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}">
+            <paper-item data-route="home">
+              <a href="/">Home</a>
+            </paper-item>
 
+            <paper-item data-route="users">
+              <a href="/users">Users</a>
+            </paper-item>
+
+            <paper-item data-route="contact">
+              <a href="/contact">Contact</a>
+            </paper-item>
+
+          </paper-menu>
       </div>
       <div main>
 
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar">
-          <!-- Bug when used with paper-drawer-toggle -->
-          <!-- <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button> -->
           <button id="papertoggle" paper-drawer-toggle></button>
           <span>{{appName}}</span>
         </paper-toolbar>
 
         <!-- Main Content -->
-        <paper-material elevation="1">
-            <yo-greeting></yo-greeting>
-            <p class="paper-font-subhead">You now have:</p>
-            <yo-list></yo-list>
-        </paper-material>
+          <iron-pages attr-for-selected="data-route" selected="{{route}}">
+
+            <section data-route="home">
+              <paper-material elevation="1">
+                <p>This is the home section</p>
+
+                <yo-greeting></yo-greeting>
+                <p class="paper-font-subhead">You now have:</p>
+                <yo-list></yo-list>
+              </paper-material>
+            </section>
+
+            <section data-route="users">
+              <paper-material elevation="1">
+                <h2 class="paper-font-display2">Users</h2>
+                <p>This is the users section</p>
+                <a href="/users/Rob">Rob</a></p>
+              </paper-material>
+            </section>
+
+            <section data-route="user-info">
+              <paper-material elevation="1">
+                <h2 class="paper-font-display2">
+                User:<span>{{params.name}}</span>
+                </h2>
+                <div>This is <span>{{params.name}}</span>'s section</div>
+              </paper-material>
+            </section>
+
+            <section data-route="contact">
+              <paper-material elevation="1">
+                <h2 class="paper-font-display2">Contact</h2>
+                <p>This is the contact section</p>
+              </paper-material>
+            </section>
+
+          </iron-pages>
       </div>
 
       </div>
