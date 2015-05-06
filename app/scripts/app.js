@@ -23,6 +23,28 @@
   var app = document.querySelector('#app');
   app.appName = 'Hey, Polymer!';
 
+  // Routing
+  page('/', function () {
+    app.route = 'home';
+  });
+
+  page('/users', function () {
+    app.route = 'users';
+  });
+
+  page('/users/:name', function (data) {
+    app.route = 'user-info';
+    app.params = data.params;
+  });
+
+  page('/contact', function () {
+    app.route = 'contact';
+  });
+
+  page({
+    hashbang: true
+  });
+
   // Listen for template bound event to know when bindings
   // have resolved and content has been stamped to the page
   app.addEventListener('template-bound', function() {
