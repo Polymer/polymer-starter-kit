@@ -4,12 +4,13 @@
 
 ### High-level
 
-* Demo elements updated to 0.8 syntax
-* Bower: pulls in 0.8-previews for all core, paper elements used.
-* Testing: updated to use `<test-fixture>`, latest WCT
-* Vulcanize: gulp-vulcanize updated upstream, works fine w/0.8 here
-* WebComponentsReady / unresolved handling baked in
-* Layout using latest paper-*, iron-* elements
+* Paper and Iron elements
+* Material Design Grid & Breakpoints
+* App theming using Polymer custom props
+* Responsive App layout boilerplate
+* End-to-end Build Tooling (including Vulcanize)
+* Unit testing with Web Component Tester
+* Routing with Page.js
 
 ### Instructions
 
