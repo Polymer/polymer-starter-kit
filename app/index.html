@@ -39,7 +39,7 @@
 </head>
 
 <body unresolved fullbleed layout vertical>
-  <template is="x-autobind" id="app">
+  <template is="dom-bind" id="app">
 
     <paper-drawer-panel id="coreDrawerPanel">
       <div drawer>
@@ -48,18 +48,9 @@
 
         <!-- Drawer Content -->
           <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}">
-            <paper-item data-route="home">
-              <a href="/">Home</a>
-            </paper-item>
-
-            <paper-item data-route="users">
-              <a href="/users">Users</a>
-            </paper-item>
-
-            <paper-item data-route="contact">
-              <a href="/contact">Contact</a>
-            </paper-item>
-
+              <a data-route="home" href="/">Home</a>
+              <a data-route="users" href="/users">Users</a>
+              <a data-route="contact" href="/contact">Contact</a>
           </paper-menu>
       </div>
       <div main>
