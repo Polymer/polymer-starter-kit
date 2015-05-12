@@ -4,7 +4,7 @@
 
 ### High-level
 
-* Paper and Iron elements
+* Polymer, Paper and Iron elements
 * Material Design Grid & Breakpoints
 * App theming using Polymer custom props
 * Responsive App layout boilerplate
