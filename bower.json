@@ -15,7 +15,9 @@
     "paper-styles": "PolymerElements/paper-styles#^0.9.0",
     "paper-material": "PolymerElements/paper-material#^0.9.0",
     "iron-pages": "PolymerElements/iron-pages#^0.9.0",
-    "page": "visionmedia/page.js#~1.6.3"
+    "page": "visionmedia/page.js#~1.6.3",
+    "platinum-sw": "PolymerElements/service-worker#platinum-sw",
+    "paper-toast": "PolymerElements/paper-toast#^0.9.0"
   },
   "devDependencies": {
     "web-component-tester": "*",

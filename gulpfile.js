@@ -156,11 +156,23 @@ gulp.task('vulcanize', function () {
     .pipe($.size({title: 'vulcanize'}));
 });
 
+// Generate a list of files that should be precached.
+// The list will be consumed by the <platinum-sw-cache> element.
+var precacheTask = function (dir) {
+  return gulp.src(['{elements,scripts,styles}/**/*.*', 'index.html'], {cwd: dir})
+    .pipe($.toJson({
+      filename: path.join(dir, 'precache.json'),
+      relative: true
+    }));
+}
+gulp.task('precache', precacheTask.bind(null, 'app'));
+gulp.task('precache:dist', precacheTask.bind(null, 'dist'));
+
 // Clean Output Directory
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 // Watch Files For Changes & Reload
-gulp.task('serve', ['styles', 'elements'], function () {
+gulp.task('serve', ['styles', 'elements', 'precache'], function () {
   browserSync({
     notify: false,
     // Run as an https by uncommenting 'https: true'
@@ -200,7 +212,7 @@ gulp.task('default', ['clean'], function (cb) {
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
-    'vulcanize',
+    'vulcanize', 'precache:dist',
     cb);
 });
 

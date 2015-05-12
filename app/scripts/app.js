@@ -23,6 +23,10 @@
   var app = document.querySelector('#app');
   app.appName = 'Hey, Polymer!';
 
+  app.displayInstalledToast = function() {
+    document.querySelector('#caching-complete').show();
+  };
+
   // Listen for template bound event to know when bindings
   // have resolved and content has been stamped to the page
   app.addEventListener('template-bound', function() {
