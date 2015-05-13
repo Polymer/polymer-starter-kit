@@ -1,6 +1,4 @@
 node_modules
-
 test/temp
-bower_components
 .tmp
 test/bower_components/
