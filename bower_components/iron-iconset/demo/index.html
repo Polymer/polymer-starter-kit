@@ -1,0 +1,63 @@
+<!doctype html>
+<!--
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<html>
+<head>
+
+  <title>iron-iconset</title>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../iron-iconset.html">
+  <link rel="import" href="../../iron-icon/iron-icon.html">
+
+</head>
+<body>
+
+  <!-- Register an icon set; you can do this anywhere, including an HTMLImport! -->
+  <iron-iconset name="my-icons" src="my-icons.png" width="96" size="24"
+      icons="location place starta stopb bus car train walk">
+  </iron-iconset>
+
+  <iron-iconset name="my-icons-big" src="my-icons-big.png" width="192" size="48"
+      icons="location place starta stopb bus car train walk">
+  </iron-iconset>
+
+  <!-- Now create a bunch of icons using our iconset -->
+  <iron-icon icon="my-icons:location"></iron-icon>
+  <iron-icon icon="my-icons:place"></iron-icon>
+  <iron-icon icon="my-icons:starta"></iron-icon>
+  <iron-icon icon="my-icons:stopb"></iron-icon>
+  <iron-icon icon="my-icons:bus"></iron-icon>
+  <iron-icon icon="my-icons:car"></iron-icon>
+  <iron-icon icon="my-icons:train"></iron-icon>
+  <iron-icon icon="my-icons:walk"></iron-icon>
+  <br>
+  <!-- icons may also be specified by index -->
+  <style>
+    .embiggen iron-icon {
+      width: 48px;
+      height: 48px;
+    }
+  </style>
+
+  <div class="embiggen">
+    <iron-icon icon="my-icons-big:0"></iron-icon>
+    <iron-icon icon="my-icons-big:1"></iron-icon>
+    <iron-icon icon="my-icons-big:2"></iron-icon>
+    <iron-icon icon="my-icons-big:3"></iron-icon>
+    <iron-icon icon="my-icons-big:4"></iron-icon>
+    <iron-icon icon="my-icons-big:5"></iron-icon>
+    <iron-icon icon="my-icons-big:6"></iron-icon>
+    <iron-icon icon="my-icons-big:7"></iron-icon>
+  </div>
+
+ </body>
+</html>

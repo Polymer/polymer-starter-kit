@@ -1,0 +1,12 @@
+{
+  "name": "test-fixture",
+  "version": "0.9.0",
+  "description": "A simple element to fixture DOM for tests.",
+  "dependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "polymer": "polymer/polymer#v0.9.0-rc.1"
+  }
+}

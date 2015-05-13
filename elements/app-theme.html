@@ -1,0 +1,114 @@
+<style is="custom-style">
+
+/* Application theme */
+* {
+    --dark-primary-color: #303f9f;
+    --default-primary-color: #324090;
+    --light-primary-color: #c5cae9;
+    --text-primary-color: #ffffff;
+    --accent-color: #ff4081;
+    --primary-background-color: #c5cae9;
+    --primary-text-color: #212121;
+    --secondary-text-color: #757575;
+    --disabled-text-color: #bdbdbd;
+    --divider-color: #e0e0e0;
+}
+
+/* Breakpoints configuration */
+paper-material, .desktop-large paper-material,
+.desktop-xlarge paper-material {
+    --grid-columns: 12;
+    --grid-gutter: 24px;
+    width: calc(98.66% - 16px);
+}
+
+.desktop-small paper-material,
+.desktop-x-small paper-material {
+    --grid-columns: 6;
+    --grid-gutter: 16px;
+    --menu-container-display: none;
+    width: calc(97.33% - 16px);
+}
+
+.desktop-large /deep/ #drawer .paper-toolbar,
+.desktop-xlarge /deep/ #drawer .paper-toolbar,
+.desktop-medium /deep/ #drawer .paper-toolbar,
+.desktop-medium-landscape /deep/ #drawer .paper-toolbar {
+  margin-left: 0px;
+}
+
+.desktop-small /deep/ #drawer .paper-toolbar,
+.desktop-x-small /deep/ #drawer .paper-toolbar {
+  margin-left: 16px;
+}
+
+.desktop-medium-landscape paper-material,
+.desktop-medium paper-material {
+    --grid-columns: 12;
+    --grid-gutter: 16px;
+    --flex: 4;
+    width: calc(98% - 16px);
+}
+
+
+/* TODO: these colors should come from paper-styles/default-theme.html
+      once Polymer/polymer#1415 is fixed. */
+[drawer], paper-drawer-panel #drawer,
+paper-drawer-panel::shadow #drawer,
+paper-drawer-panel[right-drawer]::shadow #drawer,
+paper-menu.paper-menu-0 {
+    background-color: white;
+}
+
+paper-drawer-panel #drawer {
+    border-right: 1px solid #ccc;
+}
+
+paper-drawer-panel::shadow #drawer {
+    border-right: 1px solid #ccc;
+}
+
+paper-drawer-panel[right-drawer] #drawer {
+    border-left: 1px solid #ccc;
+    border-right: none;
+}
+
+paper-drawer-panel[right-drawer]::shadow #drawer {
+    border-left: 1px solid #ccc;
+    border-right: none;
+}
+
+paper-menu a {
+  text-decoration: none;
+  color: #111;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-direction: row;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  font-family: 'Roboto', 'Noto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  min-height: 48px;
+  padding: 0px 16px;
+}
+
+paper-item.iron-selected {
+  background: #c5cae9;
+}
+
+paper-item.iron-selected a {
+  color: #303f9f;
+}
+
+paper-menu.paper-menu-0 {
+  padding: 0;
+}
+</style>

@@ -1,0 +1,15 @@
+{
+  "name": "iron-component-page",
+  "version": "0.9.1",
+  "private": true,
+  "dependencies": {
+    "polymer": "polymer/polymer#v0.9.0-rc.1",
+    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^0.9.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^0.9.0"
+  },
+  "devDependencies": {
+    "test-fixture": "PolymerElements/test-fixture#^0.9.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0",
+    "web-component-tester": "*"
+  }
+}

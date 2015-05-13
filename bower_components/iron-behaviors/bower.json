@@ -1,0 +1,18 @@
+{
+  "name": "iron-behaviors",
+  "version": "0.9.0",
+  "private": true,
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#v0.9.0-rc.1"
+  },
+  "devDependencies": {
+    "iron-test-helpers": "polymerelements/iron-test-helpers#^0.9.0",
+    "test-fixture": "polymerelements/test-fixture#^0.9.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0",
+    "web-component-tester": "*"
+  }
+}

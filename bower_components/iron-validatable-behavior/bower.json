@@ -1,0 +1,32 @@
+{
+  "name": "iron-validatable-behavior",
+  "version": "0.9.0",
+  "authors": "The Polymer Authors",
+  "keywords": [
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "main": [
+    "iron-validatable-behavior.html"
+  ],
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/iron-validatable-behavior.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/PolymerElements/iron-validatable-behavior",
+  "ignore": [],
+  "dependencies": {
+    "polymer": "Polymer/polymer#v0.9.0-rc.1",
+    "iron-meta": "PolymerElements/iron-meta#^0.9.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^0.9.0",
+    "iron-validator-behavior": "PolymerElements/iron-validator-behavior#^0.9.0",
+    "test-fixture": "PolymerElements/test-fixture#^0.9.0",
+    "web-component-tester": "*",
+    "webcomponentsjs": "Polymer/webcomponentsjs#^0.6.0"
+  }
+}

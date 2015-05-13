@@ -1,0 +1,51 @@
+{
+  "name": "stacky",
+  "version": "1.2.2",
+  "description": "Stacky parses stack traces from various sources, and formats them in readable ways.",
+  "main": "lib",
+  "files": [
+    "lib/"
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PolymerLabs/stacky"
+  },
+  "keywords": [
+    "stack",
+    "trace",
+    "error",
+    "stack parser",
+    "trace parser"
+  ],
+  "author": "The Polymer Authors",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/PolymerLabs/stacky/issues"
+  },
+  "homepage": "https://github.com/PolymerLabs/stacky",
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "event-stream": "^3.1.7",
+    "gulp": "^3.8.7",
+    "gulp-coverage": "^0.2.26",
+    "gulp-coveralls": "^0.1.2",
+    "gulp-jshint": "^1.8.4",
+    "gulp-mocha": "^1.0.0",
+    "gulp-notify": "^1.5.0",
+    "gulp-plumber": "^0.6.5",
+    "gulp-watch": "^0.6.9",
+    "jshint-stylish": "^0.4.0",
+    "lazypipe": "^0.2.2",
+    "mocha": "^1.21.4"
+  },
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "lodash": "^3.0.0"
+  }
+}

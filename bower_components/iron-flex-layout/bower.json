@@ -1,0 +1,14 @@
+{
+  "name": "iron-flex-layout",
+  "version": "0.9.1",
+  "private": true,
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#v0.9.0-rc.1"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0"
+  }
+}
