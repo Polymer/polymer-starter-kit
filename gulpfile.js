@@ -26,6 +26,8 @@ var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var merge = require('merge-stream');
 var path = require('path');
+var fs = require('fs');
+var glob = require('glob');
 
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 10',
@@ -102,11 +104,18 @@ gulp.task('copy', function () {
   var elements = gulp.src(['app/elements/**/*.html'])
     .pipe(gulp.dest('dist/elements'));
 
+  var swBootstrap = gulp.src(['bower_components/platinum-sw/bootstrap/*.js'])
+    .pipe(gulp.dest('dist/elements/bootstrap'));
+
+  var swToolbox = gulp.src(['bower_components/sw-toolbox/*.js'])
+    .pipe(gulp.dest('dist/sw-toolbox'));
+
   var vulcanized = gulp.src(['app/elements/elements.html'])
     .pipe($.rename('elements.vulcanized.html'))
     .pipe(gulp.dest('dist/elements'));
 
-  return merge(app, bower, elements, vulcanized).pipe($.size({title: 'copy'}));
+  return merge(app, bower, elements, vulcanized, swBootstrap, swToolbox)
+    .pipe($.size({title: 'copy'}));
 });
 
 // Copy Web Fonts To Dist
@@ -157,23 +166,27 @@ gulp.task('vulcanize', function () {
     .pipe($.size({title: 'vulcanize'}));
 });
 
-// Generate a list of files that should be precached.
+// Generate a list of files that should be precached when serving from 'dist'.
 // The list will be consumed by the <platinum-sw-cache> element.
-var precacheTask = function (dir) {
-  return gulp.src(['{elements,scripts,styles}/**/*.*', 'index.html'], {cwd: dir})
-    .pipe($.toJson({
-      filename: path.join(dir, 'precache.json'),
-      relative: true
-    }));
-}
-gulp.task('precache', precacheTask.bind(null, 'app'));
-gulp.task('precache:dist', precacheTask.bind(null, 'dist'));
+gulp.task('precache', function (callback) {
+  var dir = 'dist';
+
+  glob('{elements,scripts,styles}/**/*.*', {cwd: dir}, function(error, files) {
+    if (error) {
+      callback(error);
+    } else {
+      files.push('index.html', './', 'bower_components/webcomponentsjs/webcomponents.min.js');
+      var filePath = path.join(dir, 'precache.json');
+      fs.writeFile(filePath, JSON.stringify(files), callback);
+    }
+  });
+});
 
 // Clean Output Directory
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 // Watch Files For Changes & Reload
-gulp.task('serve', ['styles', 'elements', 'precache'], function () {
+gulp.task('serve', ['styles', 'elements'], function () {
   browserSync({
     notify: false,
     // Run as an https by uncommenting 'https: true'
@@ -213,7 +226,7 @@ gulp.task('default', ['clean'], function (cb) {
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
-    'vulcanize', 'precache:dist',
+    'vulcanize', 'precache',
     cb);
 });
 
