@@ -30,6 +30,7 @@
     "opn": "^1.0.0",
     "require-dir": "^0.3.0",
     "run-sequence": "^1.0.2",
+    "vulcanize": ">= 1.4.2",
     "web-component-tester": "git://github.com/Polymer/web-component-tester.git#master"
   },
   "engines": {
