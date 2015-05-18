@@ -1,0 +1,183 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+
+    <title>iron-image</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../polymer/polymer.html">
+    <link rel="import" href="../iron-image.html">
+
+    <style>
+      .sized {
+        width: 200px;
+        height: 200px;
+      }
+      .gray {
+        background-color: lightgray;
+      }
+      .group {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      [hidden] {
+        display: none;
+      }
+
+      .controls {
+        display: block;
+        margin-bottom: 1em;
+      }
+
+    </style>
+
+  </head>
+  <body>
+    <template is="dom-bind">
+      <h3>Sizing: none (naturally sized)</h3>
+      <iron-image src="./polymer.svg"></iron-image>
+
+      <h3>Sizing: cover</h3>
+      <iron-image class="sized" sizing="cover" src="./polymer.svg"></iron-image>
+      <iron-image class="sized" sizing="cover" src="./polymer.svg"></iron-image>
+
+      <h3>Sizing: contain</h3>
+      <iron-image class="sized gray" sizing="contain"  src="./polymer.svg"></iron-image>
+      <iron-image class="sized gray" sizing="contain"  src="./polymer.svg"></iron-image>
+
+      <h3>Preload: none</h3>
+      <div class="group">
+        <div>No sizing</div>
+        <div class="controls">
+          <button on-click="preload" target="preload1a">Load image</button>
+        </div>
+        <iron-image id="preload1a" class="sized gray" ></iron-image>
+      </div>
+      <div class="group">
+        <div>Cover</div>
+        <div class="controls"><button on-click="preload" target="preload1b">Load image</button></div>
+        <iron-image id="preload1b" class="sized gray" sizing="cover" ></iron-image>
+      </div>
+      <div class="group">
+        <div>Contain</div>
+        <div class="controls"><button on-click="preload" target="preload1c">Load image</button></div>
+        <iron-image id="preload1c" class="sized gray" sizing="contain" ></iron-image>
+      </div>
+
+      <h3>Preload: color as placeholder</h3>
+      <div class="group">
+        <div>No sizing</div>
+        <div class="controls"><button on-click="preload" target="preload2a">Load image</button>
+          <span hidden$="[[!loading2a]]">Loading...</span></div>
+
+        <iron-image loading="{{loading2a}}" id="preload2a" class="sized gray" preload></iron-image>
+      </div>
+      <div class="group">
+        <div>Cover</div>
+        <div class="controls"><button on-click="preload" target="preload2b">Load image</button>
+          <span hidden$="[[!loading2b]]">Loading...</span></div>
+
+        <iron-image loading="{{loading2b}}" id="preload2b" class="sized gray" sizing="cover" preload ></iron-image>
+      </div>
+      <div class="group">
+        <div>Contain</div>
+        <div class="controls"><button on-click="preload" target="preload2c">Load image</button>
+          <span hidden$="[[!loading2c]]">Loading...</span></div>
+
+        <iron-image loading="{{loading2c}}" id="preload2c" class="sized gray" sizing="contain" preload ></iron-image>
+      </div>
+
+      <h3>Preload: image as placeholder</h3>
+      <div class="group">
+        <div>No sizing</div>
+        <div class="controls"><button on-click="preload" target="preload3a">Load image</button>
+          <span hidden$="[[!loading3a]]">Loading...</span></div>
+
+        <iron-image loading="{{loading3a}}" id="preload3a" class="sized gray" preload  placeholder="data:image/gif;base64,R0lGODdhyADIAOMAAO7u/5aWlqGho9jY5OPj8cLCyqyssLe3vc3N1wAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAyADIAAAE/hDISau9OOvNu/9gKI5kaZ5oqq5s675wLM90bd94ru987//AoHBILBqPyKRyyWw6n9CodEqtWq/YrHbL7Xq/4LB4TC6bz+i0es1uu9/wuHxOr9vv+Lx+z+/7/4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS06kB1tYqA9cUBQEFrgLWAgIqBOEBFNuu1gMs2ugT3d/rAe0r77bsFwMGAQLzEggc8AcQAIJwA+EBuKbQmgF+3iocDHBAXiZ9Fd6dAxhuo4R3/gwnGDgnkqE1BBM0XrN3CSOFgQYM+ouHEsFMAP1i2lQIAN8EhwS6kZPQ74BMnpZcTgiHkoA1AhKxAWDaU+pHqwvrVVVI1ScmpRIwYjxwTqo+r1vTafV6FmtSrRXEak0ooB+8tjzR4v251m0llwSgUnUaAOrJtFMDoESrty9XxYi/wk0sMEBMoRKo7iRK8SiFxu285vQMoIDR0qdNN+rmbxxJlRFLi7u22OG1mDjP4bYb2uFVf+r0CZ+cyOS1oRD/cUM4cN5EA3bDhszqWOHEhBLIZh+qHdnmaFABwIwm9BxLZxAtn6fGvr379/Djy59Pv779+/jz69/Pv7///wAGQyjggAQWaOCBCCao4IIMNujggxBGKOGEFFZo4YUYZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4oswxijjjDRKEQEAOw=="></iron-image>
+      </div>
+
+      <div class="group">
+        <div>Cover</div>
+        <div class="controls"><button on-click="preload" target="preload3b">Load image</button>
+          <span hidden$="[[!loading3b]]">Loading...</span></div>
+
+        <iron-image loading="{{loading3b}}" id="preload3b" class="sized gray" sizing="cover" preload  placeholder="data:image/gif;base64,R0lGODdhyADIAOMAAO7u/5aWlqGho9jY5OPj8cLCyqyssLe3vc3N1wAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAyADIAAAE/hDISau9OOvNu/9gKI5kaZ5oqq5s675wLM90bd94ru987//AoHBILBqPyKRyyWw6n9CodEqtWq/YrHbL7Xq/4LB4TC6bz+i0es1uu9/wuHxOr9vv+Lx+z+/7/4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS06kB1tYqA9cUBQEFrgLWAgIqBOEBFNuu1gMs2ugT3d/rAe0r77bsFwMGAQLzEggc8AcQAIJwA+EBuKbQmgF+3iocDHBAXiZ9Fd6dAxhuo4R3/gwnGDgnkqE1BBM0XrN3CSOFgQYM+ouHEsFMAP1i2lQIAN8EhwS6kZPQ74BMnpZcTgiHkoA1AhKxAWDaU+pHqwvrVVVI1ScmpRIwYjxwTqo+r1vTafV6FmtSrRXEak0ooB+8tjzR4v251m0llwSgUnUaAOrJtFMDoESrty9XxYi/wk0sMEBMoRKo7iRK8SiFxu285vQMoIDR0qdNN+rmbxxJlRFLi7u22OG1mDjP4bYb2uFVf+r0CZ+cyOS1oRD/cUM4cN5EA3bDhszqWOHEhBLIZh+qHdnmaFABwIwm9BxLZxAtn6fGvr379/Djy59Pv779+/jz69/Pv7///wAGQyjggAQWaOCBCCao4IIMNujggxBGKOGEFFZo4YUYZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4oswxijjjDRKEQEAOw=="></iron-image>
+      </div>
+
+      <div class="group">
+        <div>Contain</div>
+        <div class="controls"><button on-click="preload" target="preload3c">Load image</button>
+          <span hidden$="[[!loading3c]]">Loading...</span></div>
+
+        <iron-image loading="{{loading3c}}" id="preload3c" class="sized gray" sizing="contain" preload  placeholder="data:image/gif;base64,R0lGODdhyADIAOMAAO7u/5aWlqGho9jY5OPj8cLCyqyssLe3vc3N1wAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAyADIAAAE/hDISau9OOvNu/9gKI5kaZ5oqq5s675wLM90bd94ru987//AoHBILBqPyKRyyWw6n9CodEqtWq/YrHbL7Xq/4LB4TC6bz+i0es1uu9/wuHxOr9vv+Lx+z+/7/4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS06kB1tYqA9cUBQEFrgLWAgIqBOEBFNuu1gMs2ugT3d/rAe0r77bsFwMGAQLzEggc8AcQAIJwA+EBuKbQmgF+3iocDHBAXiZ9Fd6dAxhuo4R3/gwnGDgnkqE1BBM0XrN3CSOFgQYM+ouHEsFMAP1i2lQIAN8EhwS6kZPQ74BMnpZcTgiHkoA1AhKxAWDaU+pHqwvrVVVI1ScmpRIwYjxwTqo+r1vTafV6FmtSrRXEak0ooB+8tjzR4v251m0llwSgUnUaAOrJtFMDoESrty9XxYi/wk0sMEBMoRKo7iRK8SiFxu285vQMoIDR0qdNN+rmbxxJlRFLi7u22OG1mDjP4bYb2uFVf+r0CZ+cyOS1oRD/cUM4cN5EA3bDhszqWOHEhBLIZh+qHdnmaFABwIwm9BxLZxAtn6fGvr379/Djy59Pv779+/jz69/Pv7///wAGQyjggAQWaOCBCCao4IIMNujggxBGKOGEFFZo4YUYZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4oswxijjjDRKEQEAOw=="></iron-image>
+      </div>
+
+      <h3>Preload: color as placeholder, with Fade-in</h3>
+      <div class="group">
+        <div>No sizing</div>
+        <div class="controls"><button on-click="preload" target="preload2afade">Load image</button>
+          <span hidden$="[[!loading2aFade]]">Loading...</span></div>
+
+        <iron-image loading="{{loading2aFade}}" id="preload2afade" class="sized gray" preload fade></iron-image>
+      </div>
+      <div class="group">
+        <div>Cover</div>
+        <div class="controls"><button on-click="preload" target="preload2bfade">Load image</button>
+          <span hidden$="[[!loading2bFade]]">Loading...</span></div>
+
+        <iron-image loading="{{loading2bFade}}" id="preload2bfade" class="sized gray" sizing="cover" preload fade></iron-image>
+      </div>
+      <div class="group">
+        <div>Contain</div>
+        <div class="controls"><button on-click="preload" target="preload2cfade">Load image</button>
+          <span hidden$="[[!loading2cFade]]">Loading...</span></div>
+
+        <iron-image loading="{{loading2cFade}}" id="preload2cfade" class="sized gray" sizing="contain" preload fade></iron-image>
+      </div>
+
+      <h3>Preload: image as placeholder, with Fade-in</h3>
+      <div class="group">
+        <div>No sizing</div>
+        <div class="controls"><button on-click="preload" target="preload3afade">Load image</button>
+          <span hidden$="[[!loading3aFade]]">Loading...</span></div>
+
+        <iron-image loading="{{loading3aFade}}" id="preload3afade" class="sized gray" preload  placeholder="data:image/gif;base64,R0lGODdhyADIAOMAAO7u/5aWlqGho9jY5OPj8cLCyqyssLe3vc3N1wAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAyADIAAAE/hDISau9OOvNu/9gKI5kaZ5oqq5s675wLM90bd94ru987//AoHBILBqPyKRyyWw6n9CodEqtWq/YrHbL7Xq/4LB4TC6bz+i0es1uu9/wuHxOr9vv+Lx+z+/7/4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS06kB1tYqA9cUBQEFrgLWAgIqBOEBFNuu1gMs2ugT3d/rAe0r77bsFwMGAQLzEggc8AcQAIJwA+EBuKbQmgF+3iocDHBAXiZ9Fd6dAxhuo4R3/gwnGDgnkqE1BBM0XrN3CSOFgQYM+ouHEsFMAP1i2lQIAN8EhwS6kZPQ74BMnpZcTgiHkoA1AhKxAWDaU+pHqwvrVVVI1ScmpRIwYjxwTqo+r1vTafV6FmtSrRXEak0ooB+8tjzR4v251m0llwSgUnUaAOrJtFMDoESrty9XxYi/wk0sMEBMoRKo7iRK8SiFxu285vQMoIDR0qdNN+rmbxxJlRFLi7u22OG1mDjP4bYb2uFVf+r0CZ+cyOS1oRD/cUM4cN5EA3bDhszqWOHEhBLIZh+qHdnmaFABwIwm9BxLZxAtn6fGvr379/Djy59Pv779+/jz69/Pv7///wAGQyjggAQWaOCBCCao4IIMNujggxBGKOGEFFZo4YUYZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4oswxijjjDRKEQEAOw==" fade></iron-image>
+      </div>
+      <div class="group">
+        <div>Cover</div>
+        <div class="controls"><button on-click="preload" target="preload3bfade">Load image</button>
+          <span hidden$="[[!loading3bFade]]">Loading...</span></div>
+
+        <iron-image loading="{{loading3bFade}}" id="preload3bfade" class="sized gray" sizing="cover" preload  placeholder="data:image/gif;base64,R0lGODdhyADIAOMAAO7u/5aWlqGho9jY5OPj8cLCyqyssLe3vc3N1wAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAyADIAAAE/hDISau9OOvNu/9gKI5kaZ5oqq5s675wLM90bd94ru987//AoHBILBqPyKRyyWw6n9CodEqtWq/YrHbL7Xq/4LB4TC6bz+i0es1uu9/wuHxOr9vv+Lx+z+/7/4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS06kB1tYqA9cUBQEFrgLWAgIqBOEBFNuu1gMs2ugT3d/rAe0r77bsFwMGAQLzEggc8AcQAIJwA+EBuKbQmgF+3iocDHBAXiZ9Fd6dAxhuo4R3/gwnGDgnkqE1BBM0XrN3CSOFgQYM+ouHEsFMAP1i2lQIAN8EhwS6kZPQ74BMnpZcTgiHkoA1AhKxAWDaU+pHqwvrVVVI1ScmpRIwYjxwTqo+r1vTafV6FmtSrRXEak0ooB+8tjzR4v251m0llwSgUnUaAOrJtFMDoESrty9XxYi/wk0sMEBMoRKo7iRK8SiFxu285vQMoIDR0qdNN+rmbxxJlRFLi7u22OG1mDjP4bYb2uFVf+r0CZ+cyOS1oRD/cUM4cN5EA3bDhszqWOHEhBLIZh+qHdnmaFABwIwm9BxLZxAtn6fGvr379/Djy59Pv779+/jz69/Pv7///wAGQyjggAQWaOCBCCao4IIMNujggxBGKOGEFFZo4YUYZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4oswxijjjDRKEQEAOw==" fade></iron-image>
+      </div>
+      <div class="group">
+        <div>Contain</div>
+        <div class="controls"><button on-click="preload" target="preload3cfade">Load image</button>
+          <span hidden$="[[!loading3cFade]]">Loading...</span></div>
+
+        <iron-image loading="{{loading3cFade}}" id="preload3cfade" class="sized gray" sizing="contain" preload  placeholder="data:image/gif;base64,R0lGODdhyADIAOMAAO7u/5aWlqGho9jY5OPj8cLCyqyssLe3vc3N1wAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAyADIAAAE/hDISau9OOvNu/9gKI5kaZ5oqq5s675wLM90bd94ru987//AoHBILBqPyKRyyWw6n9CodEqtWq/YrHbL7Xq/4LB4TC6bz+i0es1uu9/wuHxOr9vv+Lx+z+/7/4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS06kB1tYqA9cUBQEFrgLWAgIqBOEBFNuu1gMs2ugT3d/rAe0r77bsFwMGAQLzEggc8AcQAIJwA+EBuKbQmgF+3iocDHBAXiZ9Fd6dAxhuo4R3/gwnGDgnkqE1BBM0XrN3CSOFgQYM+ouHEsFMAP1i2lQIAN8EhwS6kZPQ74BMnpZcTgiHkoA1AhKxAWDaU+pHqwvrVVVI1ScmpRIwYjxwTqo+r1vTafV6FmtSrRXEak0ooB+8tjzR4v251m0llwSgUnUaAOrJtFMDoESrty9XxYi/wk0sMEBMoRKo7iRK8SiFxu285vQMoIDR0qdNN+rmbxxJlRFLi7u22OG1mDjP4bYb2uFVf+r0CZ+cyOS1oRD/cUM4cN5EA3bDhszqWOHEhBLIZh+qHdnmaFABwIwm9BxLZxAtn6fGvr379/Djy59Pv779+/jz69/Pv7///wAGQyjggAQWaOCBCCao4IIMNujggxBGKOGEFFZo4YUYZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4oswxijjjDRKEQEAOw==" fade></iron-image>
+      </div>
+    </template>
+
+    <script>
+      var scope = document.querySelector('template[is=dom-bind]');
+
+      scope.preload = function(e) {
+        var img = document.querySelector('#' + e.target.getAttribute('target'));
+        img.src = './polymer.svg?' + Math.random();
+        e.target.textContent = 'Reload image';
+      };
+    </script>
+  </body>
+</html>
