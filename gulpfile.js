@@ -186,7 +186,7 @@ gulp.task('precache', function (callback) {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 // Watch Files For Changes & Reload
-gulp.task('serve', ['styles', 'elements'], function () {
+gulp.task('serve', ['styles', 'elements', 'images'], function () {
   browserSync({
     notify: false,
     // Run as an https by uncommenting 'https: true'
