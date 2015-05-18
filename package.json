@@ -6,6 +6,7 @@
     "apache-server-configs": "^2.7.1",
     "browser-sync": "^2.6.4",
     "del": "^1.1.1",
+    "glob": "^5.0.6",
     "gulp": "^3.8.5",
     "gulp-autoprefixer": "^2.1.0",
     "gulp-cache": "^0.2.8",
