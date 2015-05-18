@@ -20,52 +20,40 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>yo-list-basic</title>
+  <title>my-greeting-basic</title>
 
   <script src="../../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="../../bower_components/polymer/polymer.html">
   <script src="../../bower_components/web-component-tester/browser.js"></script>
   <script src="../../bower_components/test-fixture/test-fixture-mocha.js"></script>
   <link rel="import" href="../../bower_components/test-fixture/test-fixture.html">
 
   <!-- Step 1: import the element to test -->
-  <link rel="import" href="../elements/yo-list/yo-list.html">
+  <link rel="import" href="../elements/my-greeting/my-greeting.html">
 
 </head>
 <body>
 
   <test-fixture id="basic">
     <template>
-       <yo-list></yo-list>
+      <my-greeting></my-greeting>
     </template>
   </test-fixture>
 
   <script>
-    suite('yo-list tests', function() {
-      var list, listItems;
+
+    suite('my-greeting tests', function() {
+      var greeting, header;
 
       setup(function() {
-        list = fixture('basic');
+        greeting = fixture('basic');
       });
 
-      test('Item lengths should be equalled', function(done) {
-        // Test a property
-        // TODO: Fix list.items.push('Foo') causing a WeakMap exception
-        // Invalid value used as weak map key
-        list.items = [
-            'HTML5 Boilerplate',
-            'Core Elements',
-            'Paper Elements',
-            'Polymer'
-            ];
+      test('Welcome, Welcome!', function() {
+        header = greeting.querySelector('h1');
+        assert.equal(header.textContent, 'Welcome, Welcome!');
+      });
 
-        // Data bindings will stamp out new DOM asynchronously
-        // so wait to check for updates
-        flush(function() {
-          listItems = list.querySelectorAll('li');
-          assert.equal(list.items.length, listItems.length);
-          done();
-        });
-      })
     });
   </script>
 
