@@ -21,7 +21,8 @@
   // and give it some initial binding values
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
-  app.appName = 'Hey, Polymer!';
+  var drawerPanel = document.querySelector('#paperDrawerPanel');
+  app.appName = 'Polymer Starter Kit';
 
   app.displayInstalledToast = function() {
     document.querySelector('#caching-complete').show();
@@ -32,6 +33,9 @@
   app.addEventListener('template-bound', function() {
     console.log('Our app is ready to rock!');
   });
+
+  // Ensure the drawer is hidden on desktop/tablet
+  drawerPanel.forceNarrow = true;
 
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
