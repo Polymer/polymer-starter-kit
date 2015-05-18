@@ -92,6 +92,7 @@ gulp.task('copy', function () {
   var app = gulp.src([
     'app/*',
     '!app/test',
+    '!app/precache.json',
     'node_modules/apache-server-configs/dist/.htaccess'
   ], {
     dot: true
