@@ -61,10 +61,10 @@
 <body unresolved fullbleed layout vertical>
   <template is="dom-bind" id="app">
 
-    <paper-drawer-panel id="coreDrawerPanel">
+    <paper-drawer-panel id="paperDrawerPanel">
       <div drawer>
         <!-- Drawer Toolbar -->
-        <paper-toolbar>Menu</paper-toolbar>
+        <paper-toolbar id="drawerToolbar">Menu</paper-toolbar>
 
         <!-- Drawer Content -->
           <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}">
@@ -76,9 +76,20 @@
       <div main>
 
         <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar">
-          <button id="papertoggle" paper-drawer-toggle></button>
-          <span>{{appName}}</span>
+        <paper-toolbar id="mainToolbar" class="tall">
+          <button tabindex="1" id="papertoggle" paper-drawer-toggle>
+            <iron-icon icon="menu" paper-drawer-toggle></iron-icon>
+          </button>
+          <span class="flex"></span>
+
+          <!-- Toolbar icons -->
+          <paper-icon-button icon="refresh"></paper-icon-button>
+          <paper-icon-button icon="search"></paper-icon-button>
+          <div class="middle"></div>
+
+          <!-- Application name -->
+          <div class="bottom paper-font-display2">{{appName}}</div>
+
         </paper-toolbar>
 
         <!-- Main Content -->
