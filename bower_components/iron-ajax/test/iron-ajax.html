@@ -37,9 +37,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
   <script>
-    suite('<iron-ajax>', function() {
-      var jsonResponseHeaders = {
-        'Content-Type': 'application/json'
+    suite('<iron-ajax>', function () {
+      var responseHeaders = {
+        json: { 'Content-Type': 'application/json' },
+        plain: { 'Content-Type': 'text/plain' }
       };
       var ajax;
       var request;
@@ -52,7 +53,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           /\/responds_to_get_with_json.*/,
           [
             200,
-            jsonResponseHeaders,
+            responseHeaders.json,
             '{"success":true}'
           ]
         );
@@ -62,8 +63,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           '/responds_to_post_with_json',
           [
             200,
-            jsonResponseHeaders,
+            responseHeaders.json,
             '{"post_success":true}'
+          ]
+        );
+
+        server.respondWith(
+          'GET',
+          '/responds_to_get_with_text',
+          [
+            200,
+            responseHeaders.plain,
+            'Hello World'
           ]
         );
 
@@ -281,6 +292,66 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
         });
       });
+
+      suite('when handleAs parameter is `text`', function() {
+       
+        test('response type is string', function (done) {
+
+          ajax.url = '/responds_to_get_with_json';
+          ajax.handleAs = 'text';
+
+          request = ajax.generateRequest();
+          request.completes.then(function () {
+            expect(typeof(ajax.lastResponse)).to.be.equal('string');
+            done();
+          }).catch(function (e) {
+            done(e);
+          });
+
+          server.respond();
+
+        });
+
+      });
+
+      suite('when handleAs parameter is `json`', function() {
+       
+        test('response type is string', function (done) {
+
+          ajax.url = '/responds_to_get_with_json';
+          ajax.handleAs = 'json';
+
+          request = ajax.generateRequest();
+          request.completes.then(function () {
+            expect(typeof(ajax.lastResponse)).to.be.equal('object');
+            done();
+          }).catch(function (e) {
+            done(e);
+          });
+
+          server.respond();
+
+        });
+
+        test('fails when getting invalid json data', function (done) {
+
+          ajax.url = '/responds_to_get_with_text';
+          ajax.handleAs = 'json';
+
+          request = ajax.generateRequest();
+          request.completes.catch(function (e) {
+            expect(e).to.be.instanceOf(Error);
+            done();
+          }).catch(function (e) {
+            done(e);
+          });
+
+          server.respond();
+
+        });
+
+      });
+
     });
   </script>
 

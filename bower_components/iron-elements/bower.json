@@ -1,6 +1,6 @@
 {
   "name": "iron-elements",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Iron elements are a set of visual and non-visual utility elements. They include elements for working with layout, user input, selection, and scaffolding apps.",
   "keywords": [
     "web-components",
@@ -11,6 +11,8 @@
   ],
 
   "dependencies": {
+    "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^0.9.0",
+    "iron-a11y-keys-behavior": "PolymerElements/iron-a11y-keys-behavior#^0.9.0",
     "iron-ajax": "PolymerElements/iron-ajax#^0.9.0",
     "iron-autogrow-textarea": "PolymerElements/iron-autogrow-textarea#^0.9.0",
     "iron-behaviors": "PolymerElements/iron-behaviors#^0.9.0",
@@ -20,7 +22,7 @@
     "iron-fit-behavior": "PolymerElements/iron-fit-behavior#^0.9.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^0.9.0",
     "iron-icon": "PolymerElements/iron-icon#^0.9.0",
-    "iron-icons": "PolymerElements/iron-icon#^0.9.0",
+    "iron-icons": "PolymerElements/iron-icons#^0.9.0",
     "iron-iconset": "PolymerElements/iron-iconset#^0.9.0",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^0.9.0",
     "iron-image": "PolymerElements/iron-image#^0.9.0",

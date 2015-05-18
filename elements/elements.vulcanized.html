@@ -1,4 +1,52 @@
-<html><head><meta charset="UTF-8"><!-- Listens for "change" event and sets greeting to <input>.value --><!-- Add your elements here --><!--
+<html><head><meta charset="UTF-8"><!-- Configure your routes here --><!-- Listens for "change" event and sets greeting to <input>.value --><!-- Add your elements here --><!--
+@group Platinum Service Worker Elements
+
+The `platinum-sw-cache` element makes it easy to precache specific resources, perform runtime
+caching, and serve your cached resources when a network is unavailable.
+Under the hood, the [sw-toolbox](https://github.com/googlechrome/sw-toolbox) library is used for
+all the caching and request handling logic.
+`platinum-sw-cache` needs to be a child element of `platinum-sw-register`.
+A simple, yet useful configuration is
+
+    <platinum-sw-register>
+      <platinum-sw-cache></platinum-sw-cache>
+    </platinum-sw-register>
+
+This is enough to have all of the (local) resources your site uses cached at runtime.
+(It uses the default `defaultCacheStrategy` of "networkFirst".)
+When there's a network available, visits to your site will go against the network copy of the
+resources, but if someone visits your site when they're offline, all the cached resources will
+be used.
+
+@element platinum-sw-cache
+@status preview
+@homepage github.io
+--><!--
+@group Platinum Service Worker Elements
+
+The `platinum-sw-register` element handles
+[service worker](http://www.html5rocks.com/en/tutorials/service-worker/introduction/)
+registration, reflects the overall service worker state, and coordinates the configuration provided
+by other Service Worker Elements.
+`platinum-sw-register` is used as a parent element for children in the Service Worker Element group.
+
+    <platinum-sw-register skip-waiting
+                          clients-claim
+                          auto-register
+                          state="{{state}}"
+                          on-service-worker-error="handleSWError"
+                          on-service-worker-updated="handleSWUpdated"
+                          on-service-worker-installed="handleSWInstalled">
+      ...one or more <platinum-sw-*> children which share the service worker registration...
+    </platinum-sw-register>
+
+Please see https://github.com/PolymerElements/platinum-sw#top-level-sw-importjs for a *crucial*
+prerequisite file you must create before `<platinum-sw-register>` can be used!
+
+@element platinum-sw-register
+@status preview
+@homepage github.io
+--><!--
 `IronResizableBehavior` is a behavior that can be used in Polymer elements to
 coordinate the flow of resize events between "resizers" (elements that control the
 size or hidden state of their children) and "resizables" (elements that need to be
@@ -35,52 +83,6 @@ Example:
 @group Polymer Iron Elements
 @class iron-pages
 @extends iron-selector
---><!--
-`iron-selector` is an element which can be used to manage a list of elements
-that can be selected.  Tapping on the item will make the item selected.  The `selected` indicates
-which item is being selected.  The default is to use the index of the item.
-
-Example:
-
-    <iron-selector selected="0">
-      <div>Item 1</div>
-      <div>Item 2</div>
-      <div>Item 3</div>
-    </iron-selector>
-
-If you want to use the attribute value of an element for `selected` instead of the index,
-set `attrForSelected` to the name of the attribute.  For example, if you want to select item by
-`name`, set `attrForSelected` to `name`.
-
-Example:
-
-    <iron-selector attr-for-selected="name" selected="foo">
-      <div name="foo">Foo</div>
-      <div name="bar">Bar</div>
-      <div name="zot">Zot</div>
-    </iron-selector>
-
-`iron-selector` is not styled. Use the `iron-selected` CSS class to style the selected element.
-
-Example:
-
-    <style>
-      .iron-selected {
-        background: #eee;
-      }
-    </style>
-
-    ...
-
-    <iron-selector selected="0">
-      <div>Item 1</div>
-      <div>Item 2</div>
-      <div>Item 3</div>
-    </iron-selector>
-
-@group Polymer Core Elements
-@element iron-selector
-@homepage github.io
 --><!--
     @license
     Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
@@ -472,9 +474,25 @@ To have the content fit to the main area, use the `fit` class.
 
 Use `mode` to control the header and scrolling behavior.
 
-@group Polymer Core Elements
-@element paper-header-panel
-@homepage github.io
+Styling header panel:
+
+To change the shadow that shows up underneath the header:
+
+    paper-header-panel {
+      --paper-header-panel-shadow: {
+          height: 6px;
+          bottom: -6px;
+          box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+      };
+    }
+
+To change the panel container:
+
+    paper-slider {
+      --paper-header-panel-standard-container: {
+        border: 1px solid gray;
+      };
+    }
 --><!--
 Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -9441,309 +9459,6 @@ Polymer.Debounce = (function() {
 </script>
 
 
-
-
-
-
-<script>
-
-  (function() {
-
-    // monostate data
-    var metaDatas = {};
-    var metaArrays = {};
-
-    Polymer.IronMeta = Polymer({
-
-      is: 'iron-meta',
-
-      properties: {
-
-        /**
-         * The type of meta-data.  All meta-data of the same type is stored
-         * together.
-         *
-         * @attribute type
-         * @type String
-         * @default 'default'
-         */
-        type: {
-          type: String,
-          value: 'default',
-          observer: '_typeChanged'
-        },
-
-        /**
-         * The key used to store `value` under the `type` namespace.
-         *
-         * @attribute key
-         * @type String
-         * @default ''
-         */
-        key: {
-          type: String,
-          observer: '_keyChanged'
-        },
-
-        /**
-         * The meta-data to store or retrieve.
-         *
-         * @attribute value
-         * @type *
-         * @default this
-         */
-        value: {
-          type: Object,
-          notify: true,
-          observer: '_valueChanged'
-        },
-
-        /**
-         * If true, `value` is set to the iron-meta instance itself.
-         *
-         * @attribute self
-         * @type Boolean
-         * @default false
-         */
-         self: {
-          type: Boolean,
-          observer: '_selfChanged'
-        },
-
-        /**
-         * Array of all meta-data values for the given type.
-         *
-         * @property list
-         * @type Array
-         */
-        list: {
-          type: Array,
-          notify: true
-        }
-
-      },
-
-      /**
-       * Only runs if someone invokes the factory/constructor directly
-       * e.g. `new Polymer.IronMeta()`
-       */
-      factoryImpl: function(config) {
-        if (config) {
-          for (var n in config) {
-            switch(n) {
-              case 'type':
-              case 'key':
-              case 'value':
-                this[n] = config[n];
-                break;
-            }
-          }
-        }
-      },
-
-      created: function() {
-        // TODO(sjmiles): good for debugging?
-        this._metaDatas = metaDatas;
-        this._metaArrays = metaArrays;
-      },
-
-      _keyChanged: function(key, old) {
-        this._resetRegistration(old);
-      },
-
-      _valueChanged: function(value) {
-        this._resetRegistration(this.key);
-      },
-
-      _selfChanged: function(self) {
-        if (self) {
-          this.value = this;
-        }
-      },
-
-      _typeChanged: function(type) {
-        this._unregisterKey(this.key);
-        if (!metaDatas[type]) {
-          metaDatas[type] = {};
-        }
-        this._metaData = metaDatas[type];
-        if (!metaArrays[type]) {
-          metaArrays[type] = [];
-        }
-        this.list = metaArrays[type];
-        this._registerKeyValue(this.key, this.value);
-      },
-
-      /**
-       * Retrieves meta data value by key.
-       *
-       * @method byKey
-       * @param {String} key The key of the meta-data to be returned.
-       * @returns *
-       */
-      byKey: function(key) {
-        return this._metaData && this._metaData[key];
-      },
-
-      _resetRegistration: function(oldKey) {
-        this._unregisterKey(oldKey);
-        this._registerKeyValue(this.key, this.value);
-      },
-
-      _unregisterKey: function(key) {
-        this._unregister(key, this._metaData, this.list);
-      },
-
-      _registerKeyValue: function(key, value) {
-        this._register(key, value, this._metaData, this.list);
-      },
-
-      _register: function(key, value, data, list) {
-        if (key && data && value !== undefined) {
-          data[key] = value;
-          list.push(value);
-        }
-      },
-
-      _unregister: function(key, data, list) {
-        if (key && data) {
-          if (key in data) {
-            var value = data[key];
-            delete data[key];
-            this.arrayDelete(list, value);
-          }
-        }
-      }
-
-    });
-
-    /**
-    `iron-meta-query` can be used to access infomation stored in `iron-meta`.
-
-    Examples:
-
-    If I create an instance like this:
-
-        <iron-meta key="info" value="foo/bar"></iron-meta>
-
-    Note that keyUrl="foo/bar" is the metadata I've defined. I could define more
-    attributes or use child nodes to define additional metadata.
-
-    Now I can access that element (and it's metadata) from any `iron-meta-query` instance:
-
-         var value = new Polymer.IronMetaQuery({key: 'info'}).value;
-
-    @group Polymer Iron Elements
-    @element iron-meta-query
-    */
-    Polymer.IronMetaQuery = Polymer({
-
-      is: 'iron-meta-query',
-
-      properties: {
-
-        /**
-         * The type of meta-data.  All meta-data of the same type is stored
-         * together.
-         *
-         * @attribute type
-         * @type String
-         * @default 'default'
-         */
-        type: {
-          type: String,
-          value: 'default',
-          observer: '_typeChanged'
-        },
-
-        /**
-         * Specifies a key to use for retrieving `value` from the `type`
-         * namespace.
-         *
-         * @attribute key
-         * @type String
-         */
-        key: {
-          type: String,
-          observer: '_keyChanged'
-        },
-
-        /**
-         * The meta-data to store or retrieve.
-         *
-         * @attribute value
-         * @type *
-         * @default this
-         */
-        value: {
-          type: Object,
-          notify: true,
-          readOnly: true
-        },
-
-        /**
-         * Array of all meta-data values for the given type.
-         *
-         * @property list
-         * @type Array
-         */
-        list: {
-          type: Array,
-          notify: true
-        }
-
-      },
-
-      /**
-       * Actually a factory method, not a true constructor. Only runs if
-       * someone invokes it directly (via `new Polymer.IronMeta()`);
-       */
-      constructor: function(config) {
-        if (config) {
-          for (var n in config) {
-            switch(n) {
-              case 'type':
-              case 'key':
-                this[n] = config[n];
-                break;
-            }
-          }
-        }
-      },
-
-      created: function() {
-        // TODO(sjmiles): good for debugging?
-        this._metaDatas = metaDatas;
-        this._metaArrays = metaArrays;
-      },
-
-      _keyChanged: function(key) {
-        this._setValue(this._metaData && this._metaData[key]);
-      },
-
-      _typeChanged: function(type) {
-        this._metaData = metaDatas[type];
-        this.list = metaArrays[type];
-        if (this.key) {
-          this._keyChanged(this.key);
-        }
-      },
-
-      /**
-       * Retrieves meta data value by key.
-       *
-       * @method byKey
-       * @param {String} key The key of the meta-data to be returned.
-       * @returns *
-       */
-      byKey: function(key) {
-        return this._metaData && this._metaData[key];
-      }
-
-    });
-
-  })();
-</script>
 <style is="custom-style">
 
   * {
@@ -10047,6 +9762,322 @@ Polymer.Debounce = (function() {
 
 <style is="custom-style">
   * {
+    /**
+     * Default paper header panel shadow
+     */
+    --paper-header-panel-shadow: {
+      height: 6px;
+      bottom: -6px;
+      box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+    };
+  }
+</style>
+
+
+
+<script>
+
+  (function() {
+
+    // monostate data
+    var metaDatas = {};
+    var metaArrays = {};
+
+    Polymer.IronMeta = Polymer({
+
+      is: 'iron-meta',
+
+      properties: {
+
+        /**
+         * The type of meta-data.  All meta-data of the same type is stored
+         * together.
+         *
+         * @attribute type
+         * @type String
+         * @default 'default'
+         */
+        type: {
+          type: String,
+          value: 'default',
+          observer: '_typeChanged'
+        },
+
+        /**
+         * The key used to store `value` under the `type` namespace.
+         *
+         * @attribute key
+         * @type String
+         * @default ''
+         */
+        key: {
+          type: String,
+          observer: '_keyChanged'
+        },
+
+        /**
+         * The meta-data to store or retrieve.
+         *
+         * @attribute value
+         * @type *
+         * @default this
+         */
+        value: {
+          type: Object,
+          notify: true,
+          observer: '_valueChanged'
+        },
+
+        /**
+         * If true, `value` is set to the iron-meta instance itself.
+         *
+         * @attribute self
+         * @type Boolean
+         * @default false
+         */
+         self: {
+          type: Boolean,
+          observer: '_selfChanged'
+        },
+
+        /**
+         * Array of all meta-data values for the given type.
+         *
+         * @property list
+         * @type Array
+         */
+        list: {
+          type: Array,
+          notify: true
+        }
+
+      },
+
+      /**
+       * Only runs if someone invokes the factory/constructor directly
+       * e.g. `new Polymer.IronMeta()`
+       */
+      factoryImpl: function(config) {
+        if (config) {
+          for (var n in config) {
+            switch(n) {
+              case 'type':
+              case 'key':
+              case 'value':
+                this[n] = config[n];
+                break;
+            }
+          }
+        }
+      },
+
+      created: function() {
+        // TODO(sjmiles): good for debugging?
+        this._metaDatas = metaDatas;
+        this._metaArrays = metaArrays;
+      },
+
+      _keyChanged: function(key, old) {
+        this._resetRegistration(old);
+      },
+
+      _valueChanged: function(value) {
+        this._resetRegistration(this.key);
+      },
+
+      _selfChanged: function(self) {
+        if (self) {
+          this.value = this;
+        }
+      },
+
+      _typeChanged: function(type) {
+        this._unregisterKey(this.key);
+        if (!metaDatas[type]) {
+          metaDatas[type] = {};
+        }
+        this._metaData = metaDatas[type];
+        if (!metaArrays[type]) {
+          metaArrays[type] = [];
+        }
+        this.list = metaArrays[type];
+        this._registerKeyValue(this.key, this.value);
+      },
+
+      /**
+       * Retrieves meta data value by key.
+       *
+       * @method byKey
+       * @param {String} key The key of the meta-data to be returned.
+       * @returns *
+       */
+      byKey: function(key) {
+        return this._metaData && this._metaData[key];
+      },
+
+      _resetRegistration: function(oldKey) {
+        this._unregisterKey(oldKey);
+        this._registerKeyValue(this.key, this.value);
+      },
+
+      _unregisterKey: function(key) {
+        this._unregister(key, this._metaData, this.list);
+      },
+
+      _registerKeyValue: function(key, value) {
+        this._register(key, value, this._metaData, this.list);
+      },
+
+      _register: function(key, value, data, list) {
+        if (key && data && value !== undefined) {
+          data[key] = value;
+          list.push(value);
+        }
+      },
+
+      _unregister: function(key, data, list) {
+        if (key && data) {
+          if (key in data) {
+            var value = data[key];
+            delete data[key];
+            this.arrayDelete(list, value);
+          }
+        }
+      }
+
+    });
+
+    /**
+    `iron-meta-query` can be used to access infomation stored in `iron-meta`.
+
+    Examples:
+
+    If I create an instance like this:
+
+        <iron-meta key="info" value="foo/bar"></iron-meta>
+
+    Note that keyUrl="foo/bar" is the metadata I've defined. I could define more
+    attributes or use child nodes to define additional metadata.
+
+    Now I can access that element (and it's metadata) from any `iron-meta-query` instance:
+
+         var value = new Polymer.IronMetaQuery({key: 'info'}).value;
+
+    @group Polymer Iron Elements
+    @element iron-meta-query
+    */
+    Polymer.IronMetaQuery = Polymer({
+
+      is: 'iron-meta-query',
+
+      properties: {
+
+        /**
+         * The type of meta-data.  All meta-data of the same type is stored
+         * together.
+         *
+         * @attribute type
+         * @type String
+         * @default 'default'
+         */
+        type: {
+          type: String,
+          value: 'default',
+          observer: '_typeChanged'
+        },
+
+        /**
+         * Specifies a key to use for retrieving `value` from the `type`
+         * namespace.
+         *
+         * @attribute key
+         * @type String
+         */
+        key: {
+          type: String,
+          observer: '_keyChanged'
+        },
+
+        /**
+         * The meta-data to store or retrieve.
+         *
+         * @attribute value
+         * @type *
+         * @default this
+         */
+        value: {
+          type: Object,
+          notify: true,
+          readOnly: true
+        },
+
+        /**
+         * Array of all meta-data values for the given type.
+         *
+         * @property list
+         * @type Array
+         */
+        list: {
+          type: Array,
+          notify: true
+        }
+
+      },
+
+      /**
+       * Actually a factory method, not a true constructor. Only runs if
+       * someone invokes it directly (via `new Polymer.IronMeta()`);
+       */
+      constructor: function(config) {
+        if (config) {
+          for (var n in config) {
+            switch(n) {
+              case 'type':
+              case 'key':
+                this[n] = config[n];
+                break;
+            }
+          }
+        }
+      },
+
+      created: function() {
+        // TODO(sjmiles): good for debugging?
+        this._metaDatas = metaDatas;
+        this._metaArrays = metaArrays;
+      },
+
+      _keyChanged: function(key) {
+        this._setValue(this._metaData && this._metaData[key]);
+      },
+
+      _typeChanged: function(type) {
+        this._metaData = metaDatas[type];
+        this.list = metaArrays[type];
+        if (this.key) {
+          this._keyChanged(this.key);
+        }
+      },
+
+      /**
+       * Retrieves meta data value by key.
+       *
+       * @method byKey
+       * @param {String} key The key of the meta-data to be returned.
+       * @returns *
+       */
+      byKey: function(key) {
+        return this._metaData && this._metaData[key];
+      }
+
+    });
+
+  })();
+</script>
+
+
+<style is="custom-style">
+  * {
     --iron-icon-size: 24px;
   }
 </style>
@@ -10114,10 +10145,8 @@ Polymer.Debounce = (function() {
       // install new svg element
       var svg = this._cloneIcon(iconName);
       if (svg) {
-        // TODO(sjmiles): I know, `with` is the devil ... except it isn't
-        with (Polymer.dom(element)) {
-          insertBefore(svg, childNodes[0]);
-        }
+        var pde = Polymer.dom(element);
+        pde.insertBefore(svg, pde.childNodes[0]);
         return element._svgIcon = svg;
       }
     },
@@ -10205,7 +10234,7 @@ Polymer.Debounce = (function() {
 </script>
 <style is="custom-style">
 
-  * {
+  :root {
 
     --google-red-100: #f4c7c3;
     --google-red-300: #e67c73;
@@ -10249,7 +10278,7 @@ Polymer.Debounce = (function() {
 </style>
 <style is="custom-style">
 
-  * {
+  :root {
 
     --dark-primary-color: #303f9f;
 
@@ -10277,7 +10306,7 @@ Polymer.Debounce = (function() {
 <style is="custom-style">
 
 
-  * {
+  :root {
 
     --shadow-transition: {
       transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
@@ -10328,7 +10357,7 @@ Polymer.Debounce = (function() {
 
 <style is="custom-style">
 
-  * {
+  :root {
 
     /* Shared Styles */
 
@@ -10935,6 +10964,7 @@ Polymer.Debounce = (function() {
 </script>
 <script>
 
+  /** @behavior */
   Polymer.IronSelectableBehavior = {
 
     properties: {
@@ -11223,6 +11253,7 @@ Polymer.Debounce = (function() {
 </script>
 <script>
 
+  /** @behavior */
   Polymer.IronMultiSelectableBehavior = [
     {
 
@@ -11340,7 +11371,7 @@ Polymer.Debounce = (function() {
 
 <script>
 
-  Polymer.IronMenuBehavior = Polymer.IronMultiSelectableBehavior.concat({
+  Polymer.IronMenuBehavior = [{
 
     properties: {
 
@@ -11370,11 +11401,6 @@ Polymer.Debounce = (function() {
 
     },
 
-    observers: [
-      '_selectedItemsChanged(selectedItems)',
-      '_selectedItemChanged(selectedItem)'
-    ],
-
     hostAttributes: {
       'role': 'menu',
       'tabindex': '0'
@@ -11393,25 +11419,32 @@ Polymer.Debounce = (function() {
       }
     },
 
-    _selectedItemsChanged: function(selectedItems) {
-      this._setFocusedItem(selectedItems[0]);
-    },
-
-    _selectedItemChanged: function(selectedItem) {
-      this._setFocusedItem(selectedItem);
+    select: function(value) {
+      if (this._defaultFocusAsync) {
+        this.cancelAsync(this._defaultFocusAsync);
+        this._defaultFocusAsync = null;
+      }
+      var item = this._valueToItem(value);
+      this._setFocusedItem(item);
+      Polymer.IronMultiSelectableBehavior[0].select.call(this, value);
     },
 
     _onFocus: function(event) {
+      // do not focus the menu itself
+      this.blur();
       // clear the cached focus item
       this._setFocusedItem(null);
-      // focus the selected item when the menu receives focus, or the first item
-      // if no item is selected
-      var selectedItem = this.multi ? (this.selectedItems && this.selectedItems[0]) : this.selectedItem;
-      if (selectedItem) {
-        this._setFocusedItem(selectedItem);
-      } else {
-        this._setFocusedItem(this.items[0]);
-      }
+      this._defaultFocusAsync = this.async(function() {
+        // focus the selected item when the menu receives focus, or the first item
+        // if no item is selected
+        var selectedItem = this.multi ? (this.selectedItems && this.selectedItems[0]) : this.selectedItem;
+        if (selectedItem) {
+          this._setFocusedItem(selectedItem);
+        } else {
+          this._setFocusedItem(this.items[0]);
+        }
+      // async 100ms to wait for `select` to get called from `_itemActivate`
+      }, 100);
     },
 
     _onKeydown: function(event) {
@@ -11457,7 +11490,7 @@ Polymer.Debounce = (function() {
       this._setFocusedItem(this.items[index]);
     }
 
-  });
+  }].concat(Polymer.IronMultiSelectableBehavior);
 
 </script>
 
@@ -11980,6 +12013,50 @@ Polymer.Debounce = (function() {
 </style>
 
 <script>
+  /**
+  `iron-selector` is an element which can be used to manage a list of elements
+  that can be selected.  Tapping on the item will make the item selected.  The `selected` indicates
+  which item is being selected.  The default is to use the index of the item.
+
+  Example:
+
+      <iron-selector selected="0">
+        <div>Item 1</div>
+        <div>Item 2</div>
+        <div>Item 3</div>
+      </iron-selector>
+
+  If you want to use the attribute value of an element for `selected` instead of the index,
+  set `attrForSelected` to the name of the attribute.  For example, if you want to select item by
+  `name`, set `attrForSelected` to `name`.
+
+  Example:
+
+      <iron-selector attr-for-selected="name" selected="foo">
+        <div name="foo">Foo</div>
+        <div name="bar">Bar</div>
+        <div name="zot">Zot</div>
+      </iron-selector>
+
+  `iron-selector` is not styled. Use the `iron-selected` CSS class to style the selected element.
+
+  Example:
+
+      <style>
+        .iron-selected {
+          background: #eee;
+        }
+      </style>
+
+      ...
+
+      <iron-selector selected="0">
+        <div>Item 1</div>
+        <div>Item 2</div>
+        <div>Item 3</div>
+      </iron-selector>
+
+  */
 
   Polymer({
 
@@ -12107,13 +12184,406 @@ Polymer.Debounce = (function() {
 
 
 
+<script>
+  (function() {
+    // Grab the URI of this file to use as a base when resolving relative paths.
+    var baseURI = document.currentScript.baseURI;
+
+    Polymer({
+      is: 'platinum-sw-register',
+
+      // Used as an "emergency" switch if we make breaking changes in the way <platinum-sw-register> talks
+      // to service-worker.js. Otherwise, it shouldn't need to change, and isn't meant to be kept
+      // in sync with the element's release number.
+      _version: '1.0',
+
+      /**
+       * Fired when the initial service worker installation completes successfully.
+       * The service worker will normally only be installed once, the first time a page with a
+       * `<platinum-sw-register>` element is visited in a given browser. If the same page is visited
+       * again, the existing service worker will be reused, and there won't be another
+       * `service-worker-installed` fired.
+       *
+       * @event service-worker-installed
+       * @detail {String} A message indicating that the installation succeeded.
+       */
+
+      /**
+       * Fired when the service worker update flow completes successfully.
+       * If you make changes to your `<platinum-sw-register>` configuration (i.e. by adding in new
+       * `<platinum-sw-*>` child elements, or changing their attributes), users who had the old
+       * service worker installed will get the update installed when they see the modified elements.
+       *
+       * @event service-worker-updated
+       * @detail {String} A message indicating that the update succeeded.
+       */
+
+      /**
+       * Fired when an error prevents the service worker installation from completing.
+       *
+       * @event service-worker-error
+       * @detail {String} An error messaging indicating what went wrong.
+       */
+
+      properties: {
+        /**
+         * Whether this element should automatically register the corresponding service worker as
+         * soon as its added to a page.
+         *
+         * If set to `false`, then the service worker won't be automatically registered, and you
+         * must call this element's register() method if you want service worker functionality.
+         * This is useful if, for example, the service worker needs to be configured using
+         * information that isn't immediately available at the time the page loads.
+         *
+         * If set to `true`, the service worker will be automatically registered without having to
+         * call any methods.
+         */
+        autoRegister: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * Whether the activated service worker should [take immediate control](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#clients-claim-method)
+         * of any pages under its scope.
+         *
+         * If this is `false`, the service worker won't have any effect until the next time the page
+         * is visited/reloaded.
+         * If this is `true`, it will take control and start handling events for the current page
+         * (and any pages under the same scope open in other tabs/windows) as soon it's active.
+         * @see {@link https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#clients-claim-method}
+         */
+        clientsClaim: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * The service worker script that is [registered](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#navigator-service-worker-register).
+         * The script *should* be located at the top level of your site, to ensure that it is able
+         * to control all the pages on your site.
+         *
+         * It's *strongly* recommended that you create a top-level file named `sw-import.js`
+         * containing only:
+         *
+         * `importScripts('bower_components/platinum-sw/service-worker.js');`
+         *
+         * (adjust to match the path where your `platinum-sw` element directory can be found).
+         *
+         * This will ensure that your service worker script contains everything needed to play
+         * nicely with the Service Worker Elements group.
+         *
+         * @see {@link https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#navigator-service-worker-register}
+         */
+        href: {
+          type: String,
+          value: 'sw-import.js'
+        },
+
+        /**
+         * Whether the page should be automatically reloaded (via `window.location.reload()`) when
+         * the service worker is successfully installed.
+         *
+         * While it's perfectly valid to continue using a page with a freshly installed service
+         * worker, it's a common pattern to want to reload it immediately following the install.
+         * This ensures that, for example, if you're using a `<platinum-sw-cache>` with an on the
+         * fly caching strategy, it will get a chance to intercept all the requests needed to render
+         * your page and store them in the cache.
+         *
+         * If you don't immediately reload your page, then any resources that were loaded before the
+         * service worker was installed (e.g. this `platinum-sw-register.html` file) won't be present
+         * in the cache until the next time the page is loaded.
+         *
+         * Note that this reload will only happen when a service worker is installed for the first
+         * time. If the service worker is subsequently updated, it won't trigger another reload.
+         */
+        reloadOnInstall: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * The scope of the service worker, relative to the registered service worker script.
+         * All pages that fall under this scope will be controlled by the registered service worker.
+         *
+         * Normally, this would not need to be changed, unless you want the service worker to only
+         * apply to a subset of your site.
+         *
+         * @see {@link https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#navigator-service-worker-register}
+         */
+        scope: {
+          type: String,
+          value: './'
+        },
+
+        /**
+         * Whether an updated service worker should [bypass the `waiting` state](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-global-scope-skipwaiting)
+         * and immediately become `active`.
+         *
+         * Normally, during an update, the new service worker stays in the
+         * `waiting` state until the current page and any other tabs/windows that are using the old
+         * service worker are unloaded.
+         *
+         * If this is `false`, an updated service worker won't be activated until all instances of
+         * the old server worker have been unloaded.
+         *
+         * If this is `true`, an updated service worker will become `active` immediately.
+         * @see {@link https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-global-scope-skipwaiting}
+         */
+        skipWaiting: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * The current state of the service worker registered by this element.
+         *
+         * One of:
+         * - 'installed'
+         * - 'updated'
+         * - 'error'
+         * - 'unsupported'
+         */
+        state: {
+          notify: true,
+          readOnly: true,
+          type: String
+        }
+      },
+
+      /**
+       * Registers the service worker based on the configuration options in this element and any
+       * child elements.
+       *
+       * If you set the `autoRegister` property to `true`, then this method is called automatically
+       * at page load.
+       * It can be useful to set `autoRegister` to `false` and then explicitly call this method if
+       * there are options that are only configured after the page is loaded.
+       */
+      register: function() {
+        if ('serviceWorker' in navigator) {
+          this._constructServiceWorkerUrl().then(function(serviceWorkerUrl) {
+            this._registerServiceWorker(serviceWorkerUrl);
+          }.bind(this));
+        } else {
+          this._setState('unsupported');
+          this.fire('service-worker-error', 'Service workers are not available in the current browser.');
+        }
+      },
+
+      _constructServiceWorkerUrl: function() {
+        var paramsPromises = [];
+        var children = Polymer.dom(this).childNodes;
+        for (var i = 0; i < children.length; i++) {
+          if (typeof children[i].getParameters === 'function') {
+            paramsPromises.push(children[i].getParameters(baseURI));
+          }
+        }
+
+        return Promise.all(paramsPromises).then(function(paramsResolutions) {
+          var params = {
+            baseURI: baseURI,
+            version: this._version
+          };
+
+          paramsResolutions.forEach(function(childParams) {
+            Object.keys(childParams).forEach(function(key) {
+              if (Array.isArray(params[key])) {
+                params[key].push(childParams[key]);
+              } else {
+                params[key] = [childParams[key]];
+              }
+            });
+          });
+
+          return params;
+        }.bind(this)).then(function(params) {
+          if (params.importscriptLate) {
+            if (params.importscript) {
+              params.importscript = params.importscript.concat(params.importscriptLate);
+            } else {
+              params.importscript = params.importscriptLate;
+            }
+          }
+
+          if (params.importscript) {
+            params.importscript = this._unique(params.importscript);
+          }
+
+          params.clientsClaim = this.clientsClaim;
+          params.skipWaiting = this.skipWaiting;
+
+          var serviceWorkerUrl = new URL(this.href, window.location);
+          // It's very important to ensure that the serialization is stable.
+          // Serializing the same settings should always produce the same URL.
+          // Serializing different settings should always produce a different URL.
+          // This ensures that the service worker upgrade flow is triggered when settings change.
+          serviceWorkerUrl.search = this._serializeUrlParams(params);
+
+          return serviceWorkerUrl;
+        }.bind(this));
+      },
+
+      _unique: function(arr) {
+        return arr.filter(function(item, index) {
+          return arr.indexOf(item) === index;
+        });
+      },
+
+      _serializeUrlParams: function(params) {
+        return Object.keys(params).sort().map(function(key) {
+          // encodeURIComponent(['a', 'b']) => 'a%2Cb',
+          // so this will still work when the values are Arrays.
+          // TODO: It won't work if the values in the Arrays have ',' characters in them.
+          return encodeURIComponent(key) + "=" + encodeURIComponent(params[key]);
+        }).join('&');
+      },
+
+      _registerServiceWorker: function(serviceWorkerUrl) {
+        navigator.serviceWorker.register(serviceWorkerUrl, {scope: this.scope}).then(function(registration) {
+          if (registration.active) {
+            this._setState('installed');
+          }
+
+          registration.onupdatefound = function() {
+            var installingWorker = registration.installing;
+            installingWorker.onstatechange = function() {
+              switch (installingWorker.state) {
+                case 'installed':
+                  if (navigator.serviceWorker.controller) {
+                    this._setState('updated');
+                    this.fire('service-worker-updated',
+                      'A new service worker was installed, replacing the old service worker.');
+                  } else {
+                    if (this.reloadOnInstall) {
+                      window.location.reload();
+                    } else {
+                      this._setState('installed');
+                      this.fire('service-worker-installed', 'A new service worker was installed.');
+                    }
+                  }
+                break;
+
+                case 'redundant':
+                  this._setState('error');
+                  this.fire('service-worker-error', 'The installing service worker became redundant.');
+                break;
+              }
+            }.bind(this);
+          }.bind(this);
+        }.bind(this)).catch(function(error) {
+          this._setState('error');
+          this.fire('service-worker-error', error.toString());
+          if (error.name === 'NetworkError') {
+            var location = serviceWorkerUrl.origin + serviceWorkerUrl.pathname;
+            console.error('A valid service worker script was not found at ' + location + '\n' +
+              'To learn how to fix this, please see\n' +
+              'https://github.com/PolymerElements/platinum-sw#top-level-sw-importjs');
+          }
+        }.bind(this));
+      },
+
+      attached: function() {
+        if (this.autoRegister) {
+          this.async(this.register);
+        }
+      }
+    });
+  })();
+</script>
+<script>
+  Polymer({
+    is: 'platinum-sw-cache',
+
+    properties: {
+      /**
+       * The caching strategy used for all local (i.e. same-origin) requests.
+       *
+       * For a list of strategies, see the [`sw-toolbox` documentation](https://github.com/GoogleChrome/sw-toolbox#built-in-handlers).
+       * Specify a strategy as a string, without the "toolbox" prefix. E.g., for
+       * `toolbox.networkFirst`, set `defaultCacheStrategy` to "networkFirst".
+       *
+       * Note that the "cacheFirst" and "cacheOnly" strategies are not recommended, and may be
+       * explicitly prevented in a future release. More information can be found at
+       * https://github.com/PolymerElements/platinum-sw#cacheonly--cachefirst-defaultcachestrategy-considered-harmful
+       *
+       * @see {@link https://github.com/GoogleChrome/sw-toolbox#built-in-handlers}
+       */
+      defaultCacheStrategy: {
+        type: String,
+        value: 'networkFirst'
+      },
+
+      /**
+       * Used to provide a list of URLs that are always precached as soon as the service worker is
+       * installed. Corresponds to  [`sw-toolbox`'s `precache()` method](https://github.com/GoogleChrome/sw-toolbox#toolboxprecachearrayofurls).
+       *
+       * This is useful for URLs that that wouldn't necessarily be picked up by runtime caching,
+       * i.e. a list of resources that are needed by one of the subpages of your site, or a list of
+       * resources that are only loaded via user interaction.
+       *
+       * `precache` can be used in conjunction with `precacheFile`, and the two arrays will be
+       * concatenated.
+       *
+       * @see {@link https://github.com/GoogleChrome/sw-toolbox#toolboxprecachearrayofurls}
+       */
+      precache: {
+        type: Array,
+        value: function() { return []; }
+      },
+
+      /**
+       * Used to provide a list of URLs that are always precached as soon as the service worker is
+       * installed. Corresponds to  [`sw-toolbox`'s `precache()` method](https://github.com/GoogleChrome/sw-toolbox#toolboxprecachearrayofurls).
+       *
+       * While the `precache` option supports provided the array of URLs in as an inline attribute,
+       * this option supports providing them as an array in JSON file, which is fetched at runtime.
+       * This is useful if the array is generated via a separate build step, as it's easier to
+       * write that output to a file then it is to modify inline HTML content.
+       *
+       * `precacheFile` can be used in conjunction with `precache`, and the two arrays will be
+       * concatenated.
+       *
+       * @see {@link https://github.com/GoogleChrome/sw-toolbox#toolboxprecachearrayofurls}
+       */
+      precacheFile: String
+    },
+
+    getParameters: function(baseURI) {
+      return new Promise(function(resolve) {
+        var params = {
+          importscriptLate: new URL('bootstrap/sw-toolbox-setup.js', baseURI).href,
+          defaultCacheStrategy: this.defaultCacheStrategy,
+          precache: this.precache
+        };
+
+        if (this.precacheFile) {
+          window.fetch(this.precacheFile).then(function(response) {
+            if (!response.ok) {
+              throw Error('unable to load ' + this.precacheFile);
+            }
+            return response.json();
+          }.bind(this)).then(function(files) {
+            params.precache = params.precache.concat(files);
+          }).catch(function(error) {
+            console.info('Skipping precaching: ' + error.message);
+          }).then(function() {
+            resolve(params);
+          });
+        } else {
+          resolve(params);
+        }
+      }.bind(this));
+    }
+  });
+</script>
 
 <style is="custom-style">
 
 /* Application theme */
 * {
     --dark-primary-color: #303f9f;
-    --default-primary-color: #324090;
+    --default-primary-color: #3F51B5;
     --light-primary-color: #c5cae9;
     --text-primary-color: #ffffff;
     --accent-color: #ff4081;
@@ -12122,23 +12592,47 @@ Polymer.Debounce = (function() {
     --secondary-text-color: #757575;
     --disabled-text-color: #bdbdbd;
     --divider-color: #e0e0e0;
+
+    --drawer-menu-color: #ffffff;
+
 }
 
 /* Breakpoints configuration */
+
+/* Desktop */
+
+paper-material {
+    display: inline-block;
+    background: white;
+    box-sizing: border-box;
+    margin: 16px;
+    padding: 16px;
+    border-radius: 2px;
+}
+
 paper-material, .desktop-large paper-material,
 .desktop-xlarge paper-material {
     --grid-columns: 12;
     --grid-gutter: 24px;
     width: calc(98.66% - 16px);
+    padding-left: 30px;
 }
 
-.desktop-small paper-material,
-.desktop-x-small paper-material {
-    --grid-columns: 6;
-    --grid-gutter: 16px;
-    --menu-container-display: none;
-    width: calc(97.33% - 16px);
+/deep/ #mainToolbar .bottom,
+.desktop-medium /deep/  #mainToolbar .bottom,
+.desktop-xlarge /deep/ #mainToolbar .bottom,
+.desktop-large /deep/  #mainToolbar .bottom,
+.desktop-medium /deep/  #mainToolbar .bottom,
+.desktop-medium-landscape /deep/  #mainToolbar .bottom {
+  padding-bottom: 100px;
+  padding-left: 30px;
 }
+
+#mainToolbar {
+  height: 256px;
+}
+
+/* Medium */
 
 .desktop-large /deep/ #drawer .paper-toolbar,
 .desktop-xlarge /deep/ #drawer .paper-toolbar,
@@ -12147,19 +12641,83 @@ paper-material, .desktop-large paper-material,
   margin-left: 0px;
 }
 
-.desktop-small /deep/ #drawer .paper-toolbar,
-.desktop-x-small /deep/ #drawer .paper-toolbar {
-  margin-left: 16px;
-}
-
 .desktop-medium-landscape paper-material,
 .desktop-medium paper-material {
     --grid-columns: 12;
     --grid-gutter: 16px;
     --flex: 4;
     width: calc(98% - 16px);
+    padding-left: 30px;
 }
 
+/* Small */
+
+.desktop-small paper-material,
+.desktop-x-small paper-material {
+    --grid-columns: 6;
+    --grid-gutter: 16px;
+    --menu-container-display: none;
+    width: calc(97.33% - 16px);
+    padding-left: 16px;
+}
+
+.desktop-x-small /deep/ .image,
+.desktop-x-small .image {
+  height: 200px;
+}
+
+.desktop-x-small /deep/ .tile,
+.desktop-x-small .tile {
+  width: 360px;
+  height: 300px;
+}
+
+.desktop-x-small /deep/ #overlay,
+.desktop-x-small #overlay {
+  min-width: 360px;
+}
+
+.desktop-x-small /deep/ .bg,
+.desktop-x-small .bg {
+  background: white;
+}
+
+.desktop-x-small /deep/ .main.feed-story,
+.desktop-x-small .main.feed-story,
+.desktop-x-small .main.feed-story img {
+  width: 90%;
+}
+
+.desktop-x-small #mainToolbar,
+.desktop-x-small /deep/ #mainToolbar,
+.desktop-small-landscape /deep/ #mainToolbar {
+  height: 128px;
+}
+
+.desktop-x-small .paper-font-display2,
+.desktop-x-small /deep/ .paper-font-display2 {
+  font-size: 24px;
+}
+
+.desktop-small #mainToolbar .bottom,
+.desktop-small /deep/ #mainToolbar .bottom,
+.desktop-small-landscape #mainToolbar .bottom,
+.desktop-small-landscape /deep/ #mainToolbar .bottom,
+.desktop-x-small #mainToolbar .bottom,
+.desktop-x-small /deep/ #mainToolbar .bottom {
+  padding-bottom: 20px;
+  padding-left: 10px;
+}
+
+.desktop-small /deep/ #drawer .paper-toolbar,
+.desktop-x-small /deep/ #drawer .paper-toolbar {
+  margin-left: 16px;
+}
+
+.desktop-small /deep/ #drawer .paper-toolbar,
+.desktop-x-small /deep/ #drawer .paper-toolbar {
+  margin-left: 16px;
+}
 
 /* TODO: these colors should come from paper-styles/default-theme.html
       once Polymer/polymer#1415 is fixed. */
@@ -12221,7 +12779,29 @@ paper-item.iron-selected a {
 paper-menu.paper-menu-0 {
   padding: 0;
 }
+
+/deep/ #mainToolbar, #mainToolbar {
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),0 2px 9px 1px rgba(0,0,0,.12),0 4px 2px -2px rgba(0,0,0,.2);
+}
+
+#drawerToolbar {
+  background: #FAFAFA;
+  color: var(--dark-primary-color);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+  height: 120px;
+}
+
+#papertoggle {
+  width: 45px;
+  height: 45px;
+  border: none;
+  color: var(--drawer-menu-color);
+  background-color: transparent;
+  margin-right: 16px;
+  padding: 8px;
+}
 </style>
+
 <script>!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.page=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (process){
   /* globals require, module */
@@ -13821,46 +14401,35 @@ module.exports = Array.isArray || function (arr) {
 
   <style>
     :host {
+      @apply(--layout);
+      @apply(--layout-vertical);
+
       display: block;
       position: relative;
-    }
 
-    #outerContainer {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-    }
-
-    #mainPanel {
-      position: relative;
+      /* Create a stack context, we will need it for the shadow*/
+      z-index: 0;
     }
 
     #mainContainer {
+      @apply(--layout-flex);
+
       position: relative;
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-    }
-
-    #dropShadow {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 6px;
-      box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+      flex-basis: 0.0001px;
     }
 
     /*
      * mode: scroll
      */
     :host([mode=scroll]) #mainContainer {
+      @apply(--paper-header-panel-scroll-container);
       overflow: visible;
     }
 
-    :host([mode=scroll]) #outerContainer {
+    :host([mode=scroll]) {
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
@@ -13869,11 +14438,8 @@ module.exports = Array.isArray || function (arr) {
     /*
      * mode: cover
      */
-    :host([mode=cover]) #mainPanel {
-      position: static;
-    }
-
     :host([mode=cover]) #mainContainer {
+      @apply(--paper-header-panel-cover-container);
       position: absolute;
       top: 0;
       right: 0;
@@ -13881,27 +14447,68 @@ module.exports = Array.isArray || function (arr) {
       left: 0;
     }
 
-    :host([mode=cover]) #dropShadow {
-      position: static;
+    /*
+     * mode: standard
+     */
+    :host([mode=standard]) #mainContainer {
+      @apply(--paper-header-panel-standard-container);
+    }
+
+    /*
+     * mode: waterfall
+     */
+    :host([mode=waterfall]) #mainContainer {
+      @apply(--paper-header-panel-waterfall-container);
+    }
+
+    /*
+     * mode: waterfall-tall
+     */
+    :host([mode=waterfall-tall]) #mainContainer {
+      @apply(--paper-header-panel-waterfall-tall-container);
+    }
+
+    :host ::content paper-toolbar,
+    :host ::content .paper-header {
+      position: relative;
+      overflow: visible !important;
+    }
+
+    :host ::content paper-toolbar:after,
+    :host ::content .paper-header:after {
+      @apply(--paper-header-panel-shadow);
+
+      -webkit-transition: opacity 0.5s, -webkit-transform 0.5s;
+      transition: opacity 0.5s, transform 0.5s;
+
+      opacity: 0;
+      content: "";
+
       width: 100%;
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      z-index: 1;
+
+      -webkit-transform: scale3d(1, 0, 1);
+      -webkit-transform-origin: 0% 0%;
+
+      transform: scale3d(1, 0, 1);
+      transform-origin: 0% 0%;
+    }
+
+    :host ::content paper-toolbar.has-shadow:after,
+    :host ::content .paper-header.has-shadow:after {
+      opacity: 1;
+      -webkit-transform: scale3d(1, 1, 1);
+      transform: scale3d(1, 1, 1);
     }
   </style>
 
   <template>
-    <div id="outerContainer" class="layout vertical">
-
-      <content id="headerContent" select="paper-toolbar, .paper-header"></content>
-
-      <div id="mainPanel" class="layout vertical flex">
-
-        <div id="mainContainer" class$="[[_computeMainContainerClass(mode)]]">
-          <content id="mainContent" select="*"></content>
-        </div>
-
-        <div id="dropShadow" hidden$="[[_computeDropShadowHidden(_atTop, mode, shadow)]]"></div>
-
-      </div>
-
+    <content id="headerContent" select="paper-toolbar, .paper-header"></content>
+    <div id="mainContainer" class$="[[_computeMainContainerClass(mode)]]">
+      <content id="mainContent" select="*"></content>
     </div>
   </template>
 
@@ -13913,19 +14520,22 @@ module.exports = Array.isArray || function (arr) {
 
     'use strict';
 
+    var SHADOW_WHEN_SCROLLING = 1;
+    var SHADOW_ALWAYS = 2;
+
+
     var MODE_CONFIGS = {
-      noShadow: {
-        cover: true,
-        scroll: true,
-        seamed: true
-      },
+
       outerScroll: {
         scroll: true
       },
+
       shadowMode: {
-        waterfall: true,
-        'waterfall-tall': true
+        standard: SHADOW_ALWAYS,
+        waterfall: SHADOW_WHEN_SCROLLING,
+        'waterfall-tall': SHADOW_WHEN_SCROLLING
       },
+
       tallMode: {
         'waterfall-tall': true
       }
@@ -13940,7 +14550,7 @@ module.exports = Array.isArray || function (arr) {
        * the scrollable element which you can use to access scroll info such as
        * `scrollTop`.
        *
-       *     <paper-header-panel on-scroll="{{scrollHandler}}">
+       *     <paper-header-panel on-content-scroll="{{scrollHandler}}">
        *       ...
        *     </paper-header-panel>
        *
@@ -13950,7 +14560,7 @@ module.exports = Array.isArray || function (arr) {
        *       console.log(scroller.scrollTop);
        *     }
        *
-       * @event scroll
+       * @event content-scroll
        */
 
       properties: {
@@ -13994,22 +14604,16 @@ module.exports = Array.isArray || function (arr) {
          *       </paper-toolbar>
          *       <div class="content"></div>
          *     </paper-header-panel>
-         *
-         * @attribute mode
-         * @type string
-         * @default ''
          */
         mode: {
           type: String,
-          value: ''
+          value: 'standard',
+          observer: '_modeChanged',
+          reflectToAttribute: true
         },
 
         /**
          * If true, the drop-shadow is always shown no matter what mode is set to.
-         *
-         * @attribute shadow
-         * @type boolean
-         * @default false
          */
         shadow: {
           type: Boolean,
@@ -14019,91 +14623,46 @@ module.exports = Array.isArray || function (arr) {
         /**
          * The class used in waterfall-tall mode.  Change this if the header
          * accepts a different class for toggling height, e.g. "medium-tall"
-         *
-         * @attribute tallClass
-         * @type string
-         * @default 'tall'
          */
         tallClass: {
           type: String,
           value: 'tall'
         },
 
-        _animateDuration: {
-          value: 200
-        },
-
-        _atTop: {
-          value: true
+        /**
+         * If true, the scroller is at the top
+         */
+        atTop: {
+          type: Boolean,
+          value: true,
+          readOnly: true
         }
       },
 
-      _computeDropShadowHidden: function(_atTop, mode, shadow) {
-        var needsShadow = _atTop && MODE_CONFIGS.shadowMode[mode] || MODE_CONFIGS.noShadow[mode];
-
-        return !this.shadow && needsShadow;
-      },
-
-      _computeMainContainerClass: function(mode) {
-        if (mode !== 'cover') { return 'flex'; }
-      },
+      observers: [
+        '_computeDropShadowHidden(atTop, mode, shadow)'
+      ],
 
       ready: function() {
-        this.scrollHandler = this.scroll.bind(this);
-        this.addListener();
+        this.scrollHandler = this._scroll.bind(this);
+        this._addListener();
 
         // Run `scroll` logic once to initialze class names, etc.
-        this.scroll();
+        this._keepScrollingState();
       },
 
       detached: function() {
-        this.removeListener(this.mode);
+        this._removeListener();
       },
 
-      addListener: function() {
-        this.scroller.addEventListener('scroll', this.scrollHandler);
-      },
-
-      removeListener: function(mode) {
-        this.scroller.removeEventListener('scroll', this.scrollHandler);
-      },
-
-      domReady: function() {
-        this.async('scroll');
-      },
-
-      modeChanged: function(old) {
-        var configs = MODE_CONFIGS;
-        var header = this.header;
-
-        if (header) {
-          // in tallMode it may add tallClass to the header; so do the cleanup
-          // when mode is changed from tallMode to not tallMode
-          if (configs.tallMode[old] && !configs.tallMode[this.mode]) {
-            header.classList.remove(this.tallClass);
-            this.async(function() {
-              header.classList.remove('animate');
-            }, null, this._animateDuration);
-          } else {
-            header.classList.toggle('animate', configs.tallMode[this.mode]);
-          }
-        }
-
-        if (configs && (configs.outerScroll[this.mode] || configs.outerScroll[old])) {
-          this.removeListener(old);
-          this.addListener();
-        }
-
-        this.scroll();
-      },
-
+      /**
+       * Returns the header element
+       *
+       * @property header
+       * @type Object
+       */
       get header() {
         return Polymer.dom(this.$.headerContent).getDistributedNodes()[0];
-      },
-
-      getScrollerForMode: function(mode) {
-        return MODE_CONFIGS.outerScroll[mode] ?
-            this.$.outerContainer : this.$.mainContainer;
       },
 
       /**
@@ -14113,22 +14672,101 @@ module.exports = Array.isArray || function (arr) {
        * @type Object
        */
       get scroller() {
-        return this.getScrollerForMode(this.mode);
+        return this._getScrollerForMode(this.mode);
       },
 
-      scroll: function() {
-        var main = this.$.mainContainer;
+      /**
+       * Returns true if the scroller has a visible shadow.
+       *
+       * @property visibleShadow
+       * @type Boolean
+       */
+      get visibleShadow() {
+        return this.header.classList.contains('has-shadow');
+      },
+
+      _computeDropShadowHidden: function(atTop, mode, shadow) {
+
+        var shadowMode = MODE_CONFIGS.shadowMode[mode];
+
+        if (this.shadow) {
+          this.toggleClass('has-shadow', true, this.header);
+
+        } else if (shadowMode === SHADOW_ALWAYS) {
+          this.toggleClass('has-shadow', true, this.header);
+
+        } else if (shadowMode === SHADOW_WHEN_SCROLLING && !atTop) {
+          this.toggleClass('has-shadow', true, this.header);
+
+        } else {
+          this.toggleClass('has-shadow', false, this.header);
+
+        }
+      },
+
+      _computeMainContainerClass: function(mode) {
+        // TODO:  It will be useful to have a utility for classes
+        // e.g. Polymer.Utils.classes({ foo: true });
+
+        var classes = {};
+
+        classes['flex'] = mode !== 'cover';
+
+        return Object.keys(classes).filter(
+          function(className) {
+            return classes[className];
+          }).join(' ');
+      },
+
+      _addListener: function() {
+        this.scroller.addEventListener('scroll', this.scrollHandler, false);
+      },
+
+      _removeListener: function() {
+        this.scroller.removeEventListener('scroll', this.scrollHandler);
+      },
+
+      _modeChanged: function(newMode, oldMode) {
+        var configs = MODE_CONFIGS;
+        var header = this.header;
+        var animateDuration = 200;
+
+        if (header) {
+          // in tallMode it may add tallClass to the header; so do the cleanup
+          // when mode is changed from tallMode to not tallMode
+          if (configs.tallMode[oldMode] && !configs.tallMode[newMode]) {
+            header.classList.remove(this.tallClass);
+            this.async(function() {
+              header.classList.remove('animate');
+            }, null, animateDuration);
+          } else {
+            header.classList.toggle('animate', configs.tallMode[newMode]);
+          }
+        }
+        this._keepScrollingState();
+      },
+
+      _keepScrollingState: function () {
+        var main = this.scroller;
         var header = this.header;
 
-        this._atTop = (main.scrollTop === 0);
+        this._setAtTop(main.scrollTop === 0);
 
         if (header && MODE_CONFIGS.tallMode[this.mode]) {
-          header.classList.toggle(this.tallClass, this._atTop ||
+          this.toggleClass(this.tallClass, this.atTop ||
               header.classList.contains(this.tallClass) &&
-              main.scrollHeight < this.$.outerContainer.offsetHeight);
+              main.scrollHeight < this.offsetHeight, header);
         }
+      },
 
-        this.fire('scroll', {target: this.scroller}, this, false);
+      _scroll: function(e) {
+        this._keepScrollingState();
+        this.fire('content-scroll', {target: this.scroller}, this, false);
+      },
+
+      _getScrollerForMode: function(mode) {
+        return MODE_CONFIGS.outerScroll[mode] ?
+            this : this.$.mainContainer;
       }
 
     });
@@ -15392,7 +16030,28 @@ module.exports = Array.isArray || function (arr) {
 </script>
 <dom-module id="paper-item" assetpath="../bower_components/paper-item/">
 
-  <link rel="import" type="css" href="../bower_components/paper-item/paper-item-shared.css">
+  <style>
+/*
+    @license
+    Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+:host {
+  display: block;
+  min-height: 48px;
+  padding: 0px 16px;
+}
+
+:host > ::content > *:not(:first-child):not(:last-child) {
+  margin-right: 16px;
+}
+
+</style>
 
   <style>
 
@@ -15504,7 +16163,133 @@ module.exports = Array.isArray || function (arr) {
   });
 
 </script>
-<dom-module id="yo-list" assetpath="yo-list/">
+<dom-module id="paper-toast" assetpath="../bower_components/paper-toast/">
+  <style>
+    :host {
+      display: inline-block;
+      background: #323232;
+      color: #f1f1f1;
+      min-height: 48px;
+      min-width: 288px;
+      padding: 16px 24px 12px;
+      position: fixed;
+      box-sizing: border-box;
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+      border-radius: 2px;
+      bottom: 12px;
+      left: 12px;
+      font-size: 14px;
+      cursor: default;
+      transition-duration: 300ms;
+    }
+
+    :host(.capsule) {
+      border-radius: 24px;
+    }
+
+    :host(.fit-bottom) {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      min-width: 0;
+      border-radius: 0;
+    }
+    :host(.paper-toast-closed) {
+      visibility: hidden;
+      transition: visibility 300ms, transform 300ms;
+      transform: translateY(100px);
+    }
+    :host(.paper-toast-openend){
+      transition: visibility, transform, 300ms;
+      transform: translateY(-100px);
+    }
+  </style>
+  <template>
+    <span>{{text}}</span>
+    <content></content>
+  </template>
+</dom-module>
+<script>
+(function() {
+
+  var PaperToast = Polymer({
+    is: 'paper-toast',
+
+    properties: {
+      opened: {
+        observer: 'openChanged',
+        type: Boolean,
+        notify: true,
+        value: false
+      },
+
+      /**
+       * The duration in milliseconds to show the toast.
+       */
+      duration: {
+        type: Number,
+        value: 3000
+      },
+
+      /**
+       * The text to display in the toast.
+       */
+      text: {
+        type: String,
+        value: ""
+      }
+    },
+
+    /**
+     * Hide the toast
+     * @return {[type]} [description]
+     */
+    hide: function() {
+      this.opened = false;
+    },
+
+    _toggleClasses: function(visible) {
+      this.toggleClass('paper-toast-closed', !visible);
+      this.toggleClass('paper-toast-open', visible);
+    },
+
+    openChanged: function() {
+      if (this.opened) {
+        this.show();
+      } else {
+        if (PaperToast.currentToast === this) {
+          PaperToast.currentToast = null;
+        }
+        this._toggleClasses(false);
+      }
+    },
+
+    /**
+     * Toggle the opened state of the toast.
+     * @method toggle
+     */
+    toggle: function() {
+      this.opened = !this.opened;
+    },
+
+    /**
+     * Show the toast.
+     * @method show
+     */
+    show: function() {
+      this.opened = true;
+      if (PaperToast.currentToast && PaperToast.currentToast !== this) {
+        PaperToast.currentToast.hide();
+      }
+      PaperToast.currentToast = this;
+      this._toggleClasses(true);
+      this.debounce('dismissToast', this.hide, this.duration);
+    }
+
+  });
+})();
+</script>
+<dom-module id="my-list" assetpath="my-list/">
     <style>
       :host {
         display: block;
@@ -15522,7 +16307,7 @@ module.exports = Array.isArray || function (arr) {
   <script>
     (function () {
       Polymer({
-        is: 'yo-list',
+        is: 'my-list',
         properties: {
           items: {
             type: Array,
@@ -15535,13 +16320,14 @@ module.exports = Array.isArray || function (arr) {
             'Iron Elements and Paper Elements',
             'End-to-end Build Tooling (including Vulcanize)',
             'Unit testing with Web Component Tester',
-            'Routing with Page.js'
+            'Routing with Page.js',
+            'Offline support with the Platinum Service Worker Elements'
             ];
         }
       });
     })();
   </script>
-<dom-module id="yo-greeting" assetpath="yo-greeting/">
+<dom-module id="my-greeting" assetpath="my-greeting/">
     <style>
       :host {
         display: block;
@@ -15557,12 +16343,12 @@ module.exports = Array.isArray || function (arr) {
   <script>
   (function() {
     Polymer({
-      is: 'yo-greeting',
+      is: 'my-greeting',
 
       properties: {
         greeting: {
           type: String,
-          value: 'Allo',
+          value: 'Welcome',
           notify: true
         }
       }

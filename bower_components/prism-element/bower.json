@@ -1,9 +1,15 @@
 {
   "name": "prism-element",
-  "description": "Prism.js import and syntax highlighting.",
-  "version": "0.9.0",
+  "description": "Prism.js import and syntax highlighting",
+  "version": "0.9.2",
   "authors": [
     "The Polymer Project Authors (https://polymer.github.io/AUTHORS.txt)"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "prism",
+    "molecule"
   ],
   "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/PolymerElements/prism-highlighter",
@@ -14,7 +20,10 @@
     "/demo/"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#v0.9.0-rc.1",
-    "prism": "*"
+    "prism": "*",
+    "polymer": "Polymer/polymer#^0.9.0"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   }
 }

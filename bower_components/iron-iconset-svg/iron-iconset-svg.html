@@ -110,10 +110,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // install new svg element
       var svg = this._cloneIcon(iconName);
       if (svg) {
-        // TODO(sjmiles): I know, `with` is the devil ... except it isn't
-        with (Polymer.dom(element)) {
-          insertBefore(svg, childNodes[0]);
-        }
+        var pde = Polymer.dom(element);
+        pde.insertBefore(svg, pde.childNodes[0]);
         return element._svgIcon = svg;
       }
     },

@@ -117,8 +117,7 @@
       });
 
       function hasShadow(panel) {
-        var style = window.getComputedStyle(panel.$.dropShadow);
-        return style.display !== 'none';
+        return panel.visibleShadow;
       };
 
       test('has shadow in standard mode', function() {

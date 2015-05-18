@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <script>
 
-  Polymer.IronMenuBehavior = Polymer.IronMultiSelectableBehavior.concat({
+  Polymer.IronMenuBehavior = [{
 
     properties: {
 
@@ -47,11 +47,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     },
 
-    observers: [
-      '_selectedItemsChanged(selectedItems)',
-      '_selectedItemChanged(selectedItem)'
-    ],
-
     hostAttributes: {
       'role': 'menu',
       'tabindex': '0'
@@ -70,25 +65,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     },
 
-    _selectedItemsChanged: function(selectedItems) {
-      this._setFocusedItem(selectedItems[0]);
-    },
-
-    _selectedItemChanged: function(selectedItem) {
-      this._setFocusedItem(selectedItem);
+    select: function(value) {
+      if (this._defaultFocusAsync) {
+        this.cancelAsync(this._defaultFocusAsync);
+        this._defaultFocusAsync = null;
+      }
+      var item = this._valueToItem(value);
+      this._setFocusedItem(item);
+      Polymer.IronMultiSelectableBehavior[0].select.call(this, value);
     },
 
     _onFocus: function(event) {
+      // do not focus the menu itself
+      this.blur();
       // clear the cached focus item
       this._setFocusedItem(null);
-      // focus the selected item when the menu receives focus, or the first item
-      // if no item is selected
-      var selectedItem = this.multi ? (this.selectedItems && this.selectedItems[0]) : this.selectedItem;
-      if (selectedItem) {
-        this._setFocusedItem(selectedItem);
-      } else {
-        this._setFocusedItem(this.items[0]);
-      }
+      this._defaultFocusAsync = this.async(function() {
+        // focus the selected item when the menu receives focus, or the first item
+        // if no item is selected
+        var selectedItem = this.multi ? (this.selectedItems && this.selectedItems[0]) : this.selectedItem;
+        if (selectedItem) {
+          this._setFocusedItem(selectedItem);
+        } else {
+          this._setFocusedItem(this.items[0]);
+        }
+      // async 100ms to wait for `select` to get called from `_itemActivate`
+      }, 100);
     },
 
     _onKeydown: function(event) {
@@ -134,6 +136,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       this._setFocusedItem(this.items[index]);
     }
 
-  });
+  }].concat(Polymer.IronMultiSelectableBehavior);
 
 </script>

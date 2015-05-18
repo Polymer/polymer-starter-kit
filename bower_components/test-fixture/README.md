@@ -66,11 +66,11 @@ Data-binding systems are also supported, as long as your (custom) template
 elements define a `stamp(model)` method that returns a document fragment. This
 allows you to stamp out templates w/ custom models for your fixtures.
 
-For example, using Polymer 0.8's `x-template`:
+For example, using Polymer 0.8's `dom-template`:
 
 ```html
 <test-fixture id="bound">
-  <template is="x-template">
+  <template is="dom-template">
     <span>{{greeting}}</span>
   </template>
 </test-fixture>

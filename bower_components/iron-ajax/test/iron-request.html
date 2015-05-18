@@ -100,6 +100,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             done();
           });
         });
+
+        test('default responseType is text', function (done) {
+
+          request.send(successfulRequestOptions);
+          server.respond();
+
+          request.completes.then(function() {
+            expect(request.response).to.be.an('string')
+            done();
+          }).catch(function(e) {
+            done(new Error('Response was not a Object'));
+          });
+
+        });
+
+        test('responseType can be configured via handleAs option', function (done) {
+
+          var options = Object.create(successfulRequestOptions);
+          options.handleAs = 'json';
+
+          request.send(options);
+          server.respond();
+
+          request.completes.then(function() {
+            expect(request.response).to.be.an('object');
+            done();
+          }).catch(function(e) {
+            done(new Error('Response was not type Object'));
+          });
+
+        });
+
       });
 
       suite('special cases', function() {

@@ -45,11 +45,19 @@ for two-way data binding. `bind-value` will notify if it is changed either by us
       },
 
       /**
-       * Set to true to prevent the user from entering invalid input or setting
-       * invalid `bindValue`.
+       * Set to true to prevent the user from entering invalid input. The new input characters are
+       * matched with `allowedPattern` if it is set, otherwise it will use the `pattern` attribute if
+       * set, or the `type` attribute (only supported for `type=number`).
        */
       preventInvalidInput: {
         type: Boolean
+      },
+
+      /**
+       * Regular expression to match valid input characters.
+       */
+      allowedPattern: {
+        type: String
       },
 
       _previousValidInput: {
@@ -60,49 +68,63 @@ for two-way data binding. `bind-value` will notify if it is changed either by us
     },
 
     listeners: {
-      'input': '_onInput'
+      'input': '_onInput',
+      'keydown': '_onKeydown'
+    },
+
+    get patternRegExp() {
+      var pattern;
+      if (this.allowedPattern) {
+        pattern = new RegExp(this.allowedPattern);
+      } else if (this.pattern) {
+        pattern = new RegExp(this.pattern);
+      } else {
+        switch (this.type) {
+          case 'number':
+            pattern = /[0-9.,e-]/;
+            break;
+        }
+      }
+      return pattern;
     },
 
     ready: function() {
-      this._ensureValidValue();
       this.bindValue = this.value;
     },
 
     _bindValueChanged: function() {
-      // If this was called as a result of user input, then |_validateValue|
-      // has already been called in |_onInput|, and it doesn't need to be
-      // called again.
-      if (this.value != this.bindValue) {
-        this._setValueAndPreserveCaretPosition(this.bindValue);
-        this._ensureValidValue();
-      }
-
+      this.value = this.bindValue;
       // manually notify because we don't want to notify until after setting value
       this.fire('bind-value-changed', {value: this.bindValue});
     },
 
     _onInput: function() {
-      this._ensureValidValue();
+      this.bindValue = this.value;
     },
 
-    _ensureValidValue: function() {
-      var value;
-      /* rename with rc8 */
-      if (this.preventInvalidInput && !this.validate()) {
-        value = this._previousValidInput;
-      } else {
-        value = this._previousValidInput = this.value;
+    _isPrintable: function(keyCode) {
+      var printable =
+        (keyCode > 47 && keyCode < 58)   || // number keys
+        keyCode == 32 || keyCode == 13   || // spacebar & return key
+        (keyCode > 64 && keyCode < 91)   || // letter keys
+        (keyCode > 95 && keyCode < 112)  || // numpad keys
+        (keyCode > 185 && keyCode < 193) || // ;=,-./` (in order)
+        (keyCode > 218 && keyCode < 223);   // [\]' (in order)
+      return printable;
+    },
+
+    _onKeydown: function(event) {
+      if (!this.preventInvalidInput) {
+        return;
       }
-      // set value first to not call this method again from _bindValueChanged
-      this._setValueAndPreserveCaretPosition(value);
-      this.bindValue = value;
-    },
-
-    _setValueAndPreserveCaretPosition: function(value) {
-      var start = this.selectionStart;
-      var end = this.selectionEnd;
-      this.value = value;
-      this.setSelectionRange(start, end);
+      var regexp = this.patternRegExp;
+      if (!regexp) {
+        return;
+      }
+      var thisChar = String.fromCharCode(event.keyCode);
+      if (this._isPrintable(event.keyCode) && !regexp.test(thisChar)) {
+        event.preventDefault();
+      }
     },
 
     /**
@@ -110,12 +132,15 @@ for two-way data binding. `bind-value` will notify if it is changed either by us
      * then any constraints.
      */
     validate: function() {
+      var valid;
       if (this.hasValidator()) {
-        return Polymer.IronValidatableBehavior.validate.call(this, this.value);
+        valid = Polymer.IronValidatableBehavior.validate.call(this, this.value);
       } else {
         this.invalid = !this.validity.valid;
-        return this.validity.valid;
+        valid = this.validity.valid;
       }
+      this.fire('iron-input-validate');
+      return valid;
     }
 
   })

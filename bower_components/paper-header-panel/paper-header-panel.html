@@ -8,7 +8,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 
 <!--
 `paper-header-panel` contains a header section and a content panel section.
@@ -67,55 +67,73 @@ To have the content fit to the main area, use the `fit` class.
 
 Use `mode` to control the header and scrolling behavior.
 
-@group Polymer Core Elements
-@element paper-header-panel
-@homepage github.io
+Styling header panel:
+
+To change the shadow that shows up underneath the header:
+
+    paper-header-panel {
+      --paper-header-panel-shadow: {
+          height: 6px;
+          bottom: -6px;
+          box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+      };
+    }
+
+To change the panel container:
+
+    paper-slider {
+      --paper-header-panel-standard-container: {
+        border: 1px solid gray;
+      };
+    }
 -->
+
+<style is="custom-style">
+  * {
+    /**
+     * Default paper header panel shadow
+     */
+    --paper-header-panel-shadow: {
+      height: 6px;
+      bottom: -6px;
+      box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+    };
+  }
+</style>
 
 <dom-module id="paper-header-panel">
 
   <style>
     :host {
+      @apply(--layout);
+      @apply(--layout-vertical);
+
       display: block;
       position: relative;
-    }
 
-    #outerContainer {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-    }
-
-    #mainPanel {
-      position: relative;
+      /* Create a stack context, we will need it for the shadow*/
+      z-index: 0;
     }
 
     #mainContainer {
+      @apply(--layout-flex);
+
       position: relative;
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-    }
-
-    #dropShadow {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 6px;
-      box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+      flex-basis: 0.0001px;
     }
 
     /*
      * mode: scroll
      */
     :host([mode=scroll]) #mainContainer {
+      @apply(--paper-header-panel-scroll-container);
       overflow: visible;
     }
 
-    :host([mode=scroll]) #outerContainer {
+    :host([mode=scroll]) {
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
@@ -124,11 +142,8 @@ Use `mode` to control the header and scrolling behavior.
     /*
      * mode: cover
      */
-    :host([mode=cover]) #mainPanel {
-      position: static;
-    }
-
     :host([mode=cover]) #mainContainer {
+      @apply(--paper-header-panel-cover-container);
       position: absolute;
       top: 0;
       right: 0;
@@ -136,27 +151,68 @@ Use `mode` to control the header and scrolling behavior.
       left: 0;
     }
 
-    :host([mode=cover]) #dropShadow {
-      position: static;
+    /*
+     * mode: standard
+     */
+    :host([mode=standard]) #mainContainer {
+      @apply(--paper-header-panel-standard-container);
+    }
+
+    /*
+     * mode: waterfall
+     */
+    :host([mode=waterfall]) #mainContainer {
+      @apply(--paper-header-panel-waterfall-container);
+    }
+
+    /*
+     * mode: waterfall-tall
+     */
+    :host([mode=waterfall-tall]) #mainContainer {
+      @apply(--paper-header-panel-waterfall-tall-container);
+    }
+
+    :host ::content paper-toolbar,
+    :host ::content .paper-header {
+      position: relative;
+      overflow: visible !important;
+    }
+
+    :host ::content paper-toolbar:after,
+    :host ::content .paper-header:after {
+      @apply(--paper-header-panel-shadow);
+
+      -webkit-transition: opacity 0.5s, -webkit-transform 0.5s;
+      transition: opacity 0.5s, transform 0.5s;
+
+      opacity: 0;
+      content: "";
+
       width: 100%;
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      z-index: 1;
+
+      -webkit-transform: scale3d(1, 0, 1);
+      -webkit-transform-origin: 0% 0%;
+
+      transform: scale3d(1, 0, 1);
+      transform-origin: 0% 0%;
+    }
+
+    :host ::content paper-toolbar.has-shadow:after,
+    :host ::content .paper-header.has-shadow:after {
+      opacity: 1;
+      -webkit-transform: scale3d(1, 1, 1);
+      transform: scale3d(1, 1, 1);
     }
   </style>
 
   <template>
-    <div id="outerContainer" class="layout vertical">
-
-      <content id="headerContent" select="paper-toolbar, .paper-header"></content>
-
-      <div id="mainPanel" class="layout vertical flex">
-
-        <div id="mainContainer" class$="[[_computeMainContainerClass(mode)]]">
-          <content id="mainContent" select="*"></content>
-        </div>
-
-        <div id="dropShadow" hidden$="[[_computeDropShadowHidden(_atTop, mode, shadow)]]"></div>
-
-      </div>
-
+    <content id="headerContent" select="paper-toolbar, .paper-header"></content>
+    <div id="mainContainer" class$="[[_computeMainContainerClass(mode)]]">
+      <content id="mainContent" select="*"></content>
     </div>
   </template>
 
@@ -168,19 +224,22 @@ Use `mode` to control the header and scrolling behavior.
 
     'use strict';
 
+    var SHADOW_WHEN_SCROLLING = 1;
+    var SHADOW_ALWAYS = 2;
+
+
     var MODE_CONFIGS = {
-      noShadow: {
-        cover: true,
-        scroll: true,
-        seamed: true
-      },
+
       outerScroll: {
         scroll: true
       },
+
       shadowMode: {
-        waterfall: true,
-        'waterfall-tall': true
+        standard: SHADOW_ALWAYS,
+        waterfall: SHADOW_WHEN_SCROLLING,
+        'waterfall-tall': SHADOW_WHEN_SCROLLING
       },
+
       tallMode: {
         'waterfall-tall': true
       }
@@ -195,7 +254,7 @@ Use `mode` to control the header and scrolling behavior.
        * the scrollable element which you can use to access scroll info such as
        * `scrollTop`.
        *
-       *     <paper-header-panel on-scroll="{{scrollHandler}}">
+       *     <paper-header-panel on-content-scroll="{{scrollHandler}}">
        *       ...
        *     </paper-header-panel>
        *
@@ -205,7 +264,7 @@ Use `mode` to control the header and scrolling behavior.
        *       console.log(scroller.scrollTop);
        *     }
        *
-       * @event scroll
+       * @event content-scroll
        */
 
       properties: {
@@ -249,22 +308,16 @@ Use `mode` to control the header and scrolling behavior.
          *       </paper-toolbar>
          *       <div class="content"></div>
          *     </paper-header-panel>
-         *
-         * @attribute mode
-         * @type string
-         * @default ''
          */
         mode: {
           type: String,
-          value: ''
+          value: 'standard',
+          observer: '_modeChanged',
+          reflectToAttribute: true
         },
 
         /**
          * If true, the drop-shadow is always shown no matter what mode is set to.
-         *
-         * @attribute shadow
-         * @type boolean
-         * @default false
          */
         shadow: {
           type: Boolean,
@@ -274,91 +327,46 @@ Use `mode` to control the header and scrolling behavior.
         /**
          * The class used in waterfall-tall mode.  Change this if the header
          * accepts a different class for toggling height, e.g. "medium-tall"
-         *
-         * @attribute tallClass
-         * @type string
-         * @default 'tall'
          */
         tallClass: {
           type: String,
           value: 'tall'
         },
 
-        _animateDuration: {
-          value: 200
-        },
-
-        _atTop: {
-          value: true
+        /**
+         * If true, the scroller is at the top
+         */
+        atTop: {
+          type: Boolean,
+          value: true,
+          readOnly: true
         }
       },
 
-      _computeDropShadowHidden: function(_atTop, mode, shadow) {
-        var needsShadow = _atTop && MODE_CONFIGS.shadowMode[mode] || MODE_CONFIGS.noShadow[mode];
-
-        return !this.shadow && needsShadow;
-      },
-
-      _computeMainContainerClass: function(mode) {
-        if (mode !== 'cover') { return 'flex'; }
-      },
+      observers: [
+        '_computeDropShadowHidden(atTop, mode, shadow)'
+      ],
 
       ready: function() {
-        this.scrollHandler = this.scroll.bind(this);
-        this.addListener();
+        this.scrollHandler = this._scroll.bind(this);
+        this._addListener();
 
         // Run `scroll` logic once to initialze class names, etc.
-        this.scroll();
+        this._keepScrollingState();
       },
 
       detached: function() {
-        this.removeListener(this.mode);
+        this._removeListener();
       },
 
-      addListener: function() {
-        this.scroller.addEventListener('scroll', this.scrollHandler);
-      },
-
-      removeListener: function(mode) {
-        this.scroller.removeEventListener('scroll', this.scrollHandler);
-      },
-
-      domReady: function() {
-        this.async('scroll');
-      },
-
-      modeChanged: function(old) {
-        var configs = MODE_CONFIGS;
-        var header = this.header;
-
-        if (header) {
-          // in tallMode it may add tallClass to the header; so do the cleanup
-          // when mode is changed from tallMode to not tallMode
-          if (configs.tallMode[old] && !configs.tallMode[this.mode]) {
-            header.classList.remove(this.tallClass);
-            this.async(function() {
-              header.classList.remove('animate');
-            }, null, this._animateDuration);
-          } else {
-            header.classList.toggle('animate', configs.tallMode[this.mode]);
-          }
-        }
-
-        if (configs && (configs.outerScroll[this.mode] || configs.outerScroll[old])) {
-          this.removeListener(old);
-          this.addListener();
-        }
-
-        this.scroll();
-      },
-
+      /**
+       * Returns the header element
+       *
+       * @property header
+       * @type Object
+       */
       get header() {
         return Polymer.dom(this.$.headerContent).getDistributedNodes()[0];
-      },
-
-      getScrollerForMode: function(mode) {
-        return MODE_CONFIGS.outerScroll[mode] ?
-            this.$.outerContainer : this.$.mainContainer;
       },
 
       /**
@@ -368,22 +376,101 @@ Use `mode` to control the header and scrolling behavior.
        * @type Object
        */
       get scroller() {
-        return this.getScrollerForMode(this.mode);
+        return this._getScrollerForMode(this.mode);
       },
 
-      scroll: function() {
-        var main = this.$.mainContainer;
+      /**
+       * Returns true if the scroller has a visible shadow.
+       *
+       * @property visibleShadow
+       * @type Boolean
+       */
+      get visibleShadow() {
+        return this.header.classList.contains('has-shadow');
+      },
+
+      _computeDropShadowHidden: function(atTop, mode, shadow) {
+
+        var shadowMode = MODE_CONFIGS.shadowMode[mode];
+
+        if (this.shadow) {
+          this.toggleClass('has-shadow', true, this.header);
+
+        } else if (shadowMode === SHADOW_ALWAYS) {
+          this.toggleClass('has-shadow', true, this.header);
+
+        } else if (shadowMode === SHADOW_WHEN_SCROLLING && !atTop) {
+          this.toggleClass('has-shadow', true, this.header);
+
+        } else {
+          this.toggleClass('has-shadow', false, this.header);
+
+        }
+      },
+
+      _computeMainContainerClass: function(mode) {
+        // TODO:  It will be useful to have a utility for classes
+        // e.g. Polymer.Utils.classes({ foo: true });
+
+        var classes = {};
+
+        classes['flex'] = mode !== 'cover';
+
+        return Object.keys(classes).filter(
+          function(className) {
+            return classes[className];
+          }).join(' ');
+      },
+
+      _addListener: function() {
+        this.scroller.addEventListener('scroll', this.scrollHandler, false);
+      },
+
+      _removeListener: function() {
+        this.scroller.removeEventListener('scroll', this.scrollHandler);
+      },
+
+      _modeChanged: function(newMode, oldMode) {
+        var configs = MODE_CONFIGS;
+        var header = this.header;
+        var animateDuration = 200;
+
+        if (header) {
+          // in tallMode it may add tallClass to the header; so do the cleanup
+          // when mode is changed from tallMode to not tallMode
+          if (configs.tallMode[oldMode] && !configs.tallMode[newMode]) {
+            header.classList.remove(this.tallClass);
+            this.async(function() {
+              header.classList.remove('animate');
+            }, null, animateDuration);
+          } else {
+            header.classList.toggle('animate', configs.tallMode[newMode]);
+          }
+        }
+        this._keepScrollingState();
+      },
+
+      _keepScrollingState: function () {
+        var main = this.scroller;
         var header = this.header;
 
-        this._atTop = (main.scrollTop === 0);
+        this._setAtTop(main.scrollTop === 0);
 
         if (header && MODE_CONFIGS.tallMode[this.mode]) {
-          header.classList.toggle(this.tallClass, this._atTop ||
+          this.toggleClass(this.tallClass, this.atTop ||
               header.classList.contains(this.tallClass) &&
-              main.scrollHeight < this.$.outerContainer.offsetHeight);
+              main.scrollHeight < this.offsetHeight, header);
         }
+      },
 
-        this.fire('scroll', {target: this.scroller}, this, false);
+      _scroll: function(e) {
+        this._keepScrollingState();
+        this.fire('content-scroll', {target: this.scroller}, this, false);
+      },
+
+      _getScrollerForMode: function(mode) {
+        return MODE_CONFIGS.outerScroll[mode] ?
+            this : this.$.mainContainer;
       }
 
     });

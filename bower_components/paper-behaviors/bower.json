@@ -1,6 +1,7 @@
 {
   "name": "paper-behaviors",
-  "version": "0.9.0",
+  "version": "0.9.1",
+  "description": "Common behaviors across the paper elements",
   "authors": [
     "The Polymer Authors"
   ],
@@ -11,7 +12,9 @@
   "keywords": [
     "web-components",
     "web-component",
-    "polymer"
+    "polymer",
+    "paper",
+    "behavior"
   ],
   "private": true,
   "repository": {
@@ -21,8 +24,8 @@
   "license": "MIT",
   "homepage": "https://github.com/PolymerElements/paper-behaviors",
   "dependencies": {
-    "polymer": "polymer/polymer#v0.9.0-rc.1",
-    "iron-behaviors": "PolymerElements/iron-behaviors#^0.9.0"
+    "iron-behaviors": "PolymerElements/iron-behaviors#^0.9.0",
+    "polymer": "Polymer/polymer#^0.9.0"
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#^0.9.0",
@@ -30,7 +33,7 @@
     "paper-material": "PolymerElements/paper-material#^0.9.0",
     "paper-ripple": "PolymerElements/paper-ripple#^0.9.0",
     "test-fixture": "PolymerElements/test-fixture#^0.9.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0",
-    "web-component-tester": "*"
+    "web-component-tester": "*",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   }
 }

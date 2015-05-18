@@ -12,30 +12,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 
 <!--
-Renders documentation describing an element's API.
+Renders documentation and a demo page for an element.
 
-`iron-doc-element` renders element descriptions as extracted by
-[Hydrolysis](https://github.com/PolymerLabs/hydrolysis). You can provide them
-either via binding...
+    <iron-component-page></iron-component-page>
 
-    <iron-doc-page descriptor="{{elementDescriptor}}"></iron-doc-page>
+By default, `iron-component-page` set the module name based on the URL the
+component is being served from. To specify an HTML import with a collection of
+elements, set the `moduleName` property:
 
-...or by placing the element descriptor in JSON as the text content of a
-`iron-doc-page`:
+    <iron-component-page module-name="your-elements"></iron-component-page>
 
-    <iron-doc-page>
-      {
-        "is": "awesome-sauce",
-        "properties": [
-          {"name": "isAwesome", "type": "boolean", "desc": "Is it awesome?"},
-        ]
-      }
-    </iron-doc-page>
-
-However, be aware that due to current limitations in Polymer 0.8, _changes_ to
-the text content will not be respected, only the initial value will be loaded.
-If you wish to update the documented element, please set it via the `descriptor`
-property.
 -->
 <dom-module id="iron-component-page">
 
@@ -47,7 +33,7 @@ property.
       height: 100vh;
       left: 0;
       box-sizing: border-box;
-      mixin(--layout-vertical);
+      @apply(--layout-vertical);
       font-family: sans-serif;
     }
     [header] {
@@ -55,18 +41,18 @@ property.
       border-bottom: 1px solid #bbb;
     }
     [columns] {
-      mixin(--layout-horizontal);
-      mixin(--layout-flex);
+      @apply(--layout-horizontal);
+      @apply(--layout-flex);
     }
     [docs] {
       padding: 16px;
       background-color: #eeeeee;
       border-right: 1px solid #bbb;
       overflow: auto;
-      mixin(--layout-flex-1);
+      @apply(--layout-flex-1);
     }
     [demo] {
-      mixin(--layout-flex-3);
+      @apply(--layout-flex-3);
     }
     iframe {
       border: none;
@@ -100,7 +86,13 @@ property.
 
     properties: {
 
+      /**
+       * The name of the documentation set. By default, `iron-component-page`
+       * will set an appropriate module name based on the URL the component is
+       * being served from.
+       */
       moduleName: {
+        type: String,
         observer: '_moduleNameChanged'
       },
 

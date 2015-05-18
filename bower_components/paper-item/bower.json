@@ -1,6 +1,6 @@
 {
   "name": "paper-item",
-  "version": "0.8.0",
+  "version": "0.9.1",
   "authors": [
     "The Polymer Authors"
   ],
@@ -21,11 +21,10 @@
   },
   "license": "MIT",
   "homepage": "https://github.com/PolymerElements/paper-item",
-  "ignore": [
-  ],
+  "ignore": [],
   "dependencies": {
-    "polymer": "Polymer/polymer#v0.9.0-rc.1",
-    "paper-styles": "PolymerElements/paper-styles#^0.9.0"
+    "paper-styles": "PolymerElements/paper-styles#^0.9.0",
+    "polymer": "Polymer/polymer#^0.9.0"
   },
   "devDependencies": {
     "iron-icon": "PolymerElements/iron-icon#^0.9.0",
@@ -35,6 +34,6 @@
     "iron-component-page": "PolymerElements/iron-component-page#^0.9.0",
     "test-fixture": "PolymerElements/test-fixture#^0.9.0",
     "web-component-tester": "*",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   }
 }

@@ -17,6 +17,7 @@ hyd.Analyzer.analyze('path-to-polymer-element.html')
     });
 ```
 
+For more detail, see the [API Docs](API.md).
 
 
 ## Developing

@@ -1,13 +1,14 @@
 {
   "name": "iron-test-helpers",
-  "version": "0.9.0",
+  "version": "0.9.5",
   "authors": [
     "The Polymer Authors"
   ],
   "keywords": [
     "web-components",
     "web-component",
-    "polymer"
+    "polymer",
+    "test"
   ],
   "private": true,
   "repository": {
@@ -18,6 +19,9 @@
   "homepage": "https://github.com/PolymerElements/iron-test-helpers",
   "ignore": [],
   "dependencies": {
-    "polymer": "polymer/polymer#v0.9.0-rc.1"
+    "polymer": "Polymer/polymer#^0.9.0"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   }
 }

@@ -1,3 +1,3 @@
 # iron-menu-behavior
 
-Accessible menu behavior
+`Polymer.IronMenuBehavior` implements accessible menu behavior.
