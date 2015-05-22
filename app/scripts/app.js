@@ -39,6 +39,13 @@
     // Ensure the drawer is hidden on desktop/tablet
     var drawerPanel = document.querySelector('#paperDrawerPanel');
     drawerPanel.forceNarrow = true;
+
+    // Fallback html class in case were are
+    // unable to determine a suitable breakpoint
+    var html = document.querySelector('html');
+    if (html.classList.length === 0) {
+      html.classList.add('mobile-small');
+    }
   });
 
 })(document);
