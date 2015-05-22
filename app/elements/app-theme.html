@@ -28,6 +28,7 @@ paper-material {
     margin: 16px;
     padding: 16px;
     border-radius: 2px;
+    height: 100%;
 }
 
 paper-material, .desktop-large paper-material,
@@ -54,6 +55,8 @@ paper-material, .desktop-large paper-material,
 
 /* Medium */
 
+.tablet-small /deep/ #drawer .paper-toolbar,
+.tablet-large /deep/ #drawer .paper-toolbar,
 .desktop-large /deep/ #drawer .paper-toolbar,
 .desktop-xlarge /deep/ #drawer .paper-toolbar,
 .desktop-medium /deep/ #drawer .paper-toolbar,
@@ -61,6 +64,7 @@ paper-material, .desktop-large paper-material,
   margin-left: 0px;
 }
 
+.tablet-large paper-material,
 .desktop-medium-landscape paper-material,
 .desktop-medium paper-material {
     --grid-columns: 12;
@@ -72,6 +76,15 @@ paper-material, .desktop-large paper-material,
 
 /* Small */
 
+.mobile-small .paper-font-display2,
+.mobile-large .paper-font-display2,
+.desktop-small /deep/ .paper-font-display2,
+.desktop-x-small /deep/ .paper-font-display2 {
+  font-size: 30px;
+}
+
+.mobile-small paper-material,
+.mobile-large paper-material,
 .desktop-small paper-material,
 .desktop-x-small paper-material {
     --grid-columns: 6;
@@ -81,44 +94,62 @@ paper-material, .desktop-large paper-material,
     padding-left: 16px;
 }
 
+.mobile-small /deep/ .image,
+.mobile-large .image,
 .desktop-x-small /deep/ .image,
 .desktop-x-small .image {
   height: 200px;
 }
 
+.mobile-small /deep/ .tile,
+.mobile-large .tile,
 .desktop-x-small /deep/ .tile,
 .desktop-x-small .tile {
   width: 360px;
   height: 300px;
 }
 
+.mobile-small /deep/ #overlay,
+.mobile-large /deep/ #overlay,
 .desktop-x-small /deep/ #overlay,
 .desktop-x-small #overlay {
   min-width: 360px;
 }
 
+.mobile-small /deep/ .bg,
+.mobile-large /deep/ .bg,
 .desktop-x-small /deep/ .bg,
 .desktop-x-small .bg {
   background: white;
 }
 
+.mobile-small /deep/ .main.feed-story,
+.mobile-large /deep/ .main.feed-story,
+.mobile-small .main.feed-story img,
+.mobile-large .main.feed-story img,
 .desktop-x-small /deep/ .main.feed-story,
 .desktop-x-small .main.feed-story,
 .desktop-x-small .main.feed-story img {
   width: 90%;
 }
 
+.mobile-small #mainToolbar,
+.mobile-large #mainToolbar,
 .desktop-x-small #mainToolbar,
 .desktop-x-small /deep/ #mainToolbar,
 .desktop-small-landscape /deep/ #mainToolbar {
   height: 128px;
 }
 
+.mobile-small .paper-font-display2,
+.mobile-large .paper-font-display2,
 .desktop-x-small .paper-font-display2,
 .desktop-x-small /deep/ .paper-font-display2 {
   font-size: 24px;
 }
 
+.mobile-small #mainToolbar .bottom,
+.mobile-large #mainToolbar .bottom,
 .desktop-small #mainToolbar .bottom,
 .desktop-small /deep/ #mainToolbar .bottom,
 .desktop-small-landscape #mainToolbar .bottom,
@@ -129,15 +160,15 @@ paper-material, .desktop-large paper-material,
   padding-left: 10px;
 }
 
+.mobile-small /deep/ #drawer .paper-toolbar,
+.mobile-large /deep/ #drawer .paper-toolbar,
 .desktop-small /deep/ #drawer .paper-toolbar,
 .desktop-x-small /deep/ #drawer .paper-toolbar {
   margin-left: 16px;
 }
 
-.desktop-small /deep/ #drawer .paper-toolbar,
-.desktop-x-small /deep/ #drawer .paper-toolbar {
-  margin-left: 16px;
-}
+
+/* All other styles */
 
 /* TODO: these colors should come from paper-styles/default-theme.html
       once Polymer/polymer#1415 is fixed. */
