@@ -18,14 +18,15 @@
     "page": "visionmedia/page.js#~1.6.3",
     "platinum-sw": "PolymerElements/platinum-sw#0.8-preview",
     "paper-toast": "PolymerElements/paper-toast#^0.9.0",
-    "iron-flex-layout": "PolymerElements/iron-flex-layout#0.9.2"
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#0.9.2",
+    "neon-animation": "PolymerElements/neon-animated-pages#0.9.2"
   },
   "devDependencies": {
     "web-component-tester": "*",
     "test-fixture": "PolymerElements/test-fixture#^0.9.0"
   },
   "resolutions": {
-    "polymer": "v0.9.0-rc.1",
+    "polymer": "^0.9.0-rc.1",
     "webcomponentsjs": "^0.7.0"
   }
 }
