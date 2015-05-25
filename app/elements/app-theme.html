@@ -1,17 +1,19 @@
 <style is="custom-style">
 
 /* Application theme */
-* {
-    --dark-primary-color: #303f9f;
-    --default-primary-color: #3F51B5;
-    --light-primary-color: #c5cae9;
-    --text-primary-color: #ffffff;
-    --accent-color: #ff4081;
+/* Generate your own at MaterialPalette.com */
+
+:root {
+    --dark-primary-color: #303F9F;
+    --default-primary-color:#3F51B5;
+    --light-primary-color: #C5CAE9;
+    --text-primary-color: #ffffff; /*text/icons*/
+    --accent-color: #FF4081;
     --primary-background-color: #c5cae9;
     --primary-text-color: #212121;
-    --secondary-text-color: #757575;
+    --secondary-text-color: #727272;
     --disabled-text-color: #bdbdbd;
-    --divider-color: #e0e0e0;
+    --divider-color: #B6B6B6;
     --drawer-menu-color: #ffffff;
 }
 
@@ -54,8 +56,6 @@ paper-material, .desktop-large paper-material,
     padding: 16px;
     border-radius: 2px;
     height: 100%;
-    --grid-columns: 12;
-    --grid-gutter: 24px;
     width: calc(98.66% - 16px);
     padding-left: 30px;
 }
@@ -68,10 +68,6 @@ paper-material, .desktop-large paper-material,
 .desktop-medium-landscape /deep/  #mainToolbar .bottom {
   padding-bottom: 100px;
   padding-left: 30px;
-}
-
-#mainToolbar {
-  height: 256px;
 }
 
 /* Medium */
@@ -88,8 +84,6 @@ paper-material, .desktop-large paper-material,
 .tablet-large paper-material,
 .desktop-medium-landscape paper-material,
 .desktop-medium paper-material {
-    --grid-columns: 12;
-    --grid-gutter: 16px;
     --flex: 4;
     width: calc(98% - 16px);
     padding-left: 30px;
@@ -108,8 +102,6 @@ paper-material, .desktop-large paper-material,
 .mobile-large paper-material,
 .desktop-small paper-material,
 .desktop-x-small paper-material {
-    --grid-columns: 6;
-    --grid-gutter: 16px;
     --menu-container-display: none;
     width: calc(97.33% - 16px);
     padding-left: 16px;
@@ -148,13 +140,6 @@ paper-material, .desktop-large paper-material,
   width: 90%;
 }
 
-.mobile-small /deep/ #mainToolbar,
-.mobile-large /deep/ #mainToolbar,
-.desktop-x-small /deep/ #mainToolbar,
-.desktop-small-landscape /deep/ #mainToolbar {
-  height: 128px;
-}
-
 .mobile-small /deep/ .paper-font-display2,
 .mobile-large /deep/ .paper-font-display2,
 .desktop-x-small /deep/ .paper-font-display2,
@@ -167,8 +152,8 @@ paper-material, .desktop-large paper-material,
 .desktop-small /deep/ #mainToolbar .bottom,
 .desktop-small-landscape /deep/ #mainToolbar .bottom,
 .desktop-x-small /deep/ #mainToolbar .bottom {
-  padding-bottom: 20px;
-  padding-left: 10px;
+  padding-left: 50px;
+  padding-bottom: 0px;
 }
 
 .mobile-small /deep/ #drawer .paper-toolbar,
