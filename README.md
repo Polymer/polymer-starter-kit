@@ -38,4 +38,3 @@ $ gulp test:local
 $ gulp
 ```
 
-Copyright Google Inc. 2015. Released under an Apache-2 license.
