@@ -81,7 +81,7 @@ In order to guarantee that the latest version of your Service Worker script is b
 * Hit shift-reload to bypass the service worker as to ensure that the remaining tab isn't under the control of a service worker
 * Hit reload to let the newer version of the Service Worker control the page.
 
-If you find anything to still be stale, can also try navigating to `chrome:serviceworker-internals` (in Chrome), finding the relevant Service Worker entry for your application and clicking 'Unregister' before refreshing your app.
+If you find anything to still be stale, you can also try navigating to `chrome:serviceworker-internals` (in Chrome), finding the relevant Service Worker entry for your application and clicking 'Unregister' before refreshing your app. This will (of course) only clear it from the local development machine. If you have already deployed to production then further work will be necessary to remove it from your user's machines.
 
 #### Not yet ready for Service Worker support?
 
