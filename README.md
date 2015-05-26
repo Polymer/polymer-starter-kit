@@ -9,7 +9,7 @@
 * Routing with Page.js
 * Unit testing with Web Component Tester
 * Offline-first setup through Service Worker elements
-* End-to-end Build Tooling (including Vulcanize)
+* End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
 
 ## Getting Started
 
