@@ -77,24 +77,24 @@ paper-material, .desktop-large paper-material,
     padding-left: 30px;
 }
 
-/deep/ #mainToolbar .bottom,
-.desktop-medium /deep/  #mainToolbar .bottom,
-.desktop-xlarge /deep/ #mainToolbar .bottom,
-.desktop-large /deep/  #mainToolbar .bottom,
-.desktop-medium /deep/  #mainToolbar .bottom,
-.desktop-medium-landscape /deep/  #mainToolbar .bottom {
+#mainToolbar .bottom,
+.desktop-medium  #mainToolbar .bottom,
+.desktop-xlarge #mainToolbar .bottom,
+.desktop-large  #mainToolbar .bottom,
+.desktop-medium  #mainToolbar .bottom,
+.desktop-medium-landscape  #mainToolbar .bottom {
   padding-bottom: 100px;
   padding-left: 30px;
 }
 
 /* Medium */
 
-.tablet-small /deep/ #drawer .paper-toolbar,
-.tablet-large /deep/ #drawer .paper-toolbar,
-.desktop-large /deep/ #drawer .paper-toolbar,
-.desktop-xlarge /deep/ #drawer .paper-toolbar,
-.desktop-medium /deep/ #drawer .paper-toolbar,
-.desktop-medium-landscape /deep/ #drawer .paper-toolbar {
+.tablet-small #drawer .paper-toolbar,
+.tablet-large #drawer .paper-toolbar,
+.desktop-large #drawer .paper-toolbar,
+.desktop-xlarge #drawer .paper-toolbar,
+.desktop-medium #drawer .paper-toolbar,
+.desktop-medium-landscape #drawer .paper-toolbar {
   margin-left: 0px;
 }
 
@@ -108,10 +108,10 @@ paper-material, .desktop-large paper-material,
 
 /* Small */
 
-.mobile-small /deep/ .paper-font-display2,
-.mobile-large /deep/ .paper-font-display2,
-.desktop-small /deep/ .paper-font-display2,
-.desktop-x-small /deep/ .paper-font-display2 {
+.mobile-small .paper-font-display2,
+.mobile-large .paper-font-display2,
+.desktop-small .paper-font-display2,
+.desktop-x-small .paper-font-display2 {
   font-size: 30px;
 }
 
@@ -124,66 +124,66 @@ paper-material, .desktop-large paper-material,
     padding-left: 16px;
 }
 
-.mobile-small /deep/ .image,
-.desktop-x-small /deep/ .image {
+.mobile-small .image,
+.desktop-x-small .image {
   height: 200px;
 }
 
-.mobile-small /deep/ .tile,
-.desktop-x-small /deep/ .tile {
+.mobile-small .tile,
+.desktop-x-small .tile {
   width: 360px;
   height: 300px;
 }
 
-.mobile-small /deep/ #overlay,
-.mobile-large /deep/ #overlay,
-.desktop-x-small /deep/ #overlay,
+.mobile-small #overlay,
+.mobile-large #overlay,
+.desktop-x-small #overlay,
 .desktop-x-small #overlay {
   min-width: 360px;
 }
 
-.mobile-small /deep/ .bg,
-.mobile-large /deep/ .bg,
-.desktop-x-small /deep/ .bg {
+.mobile-small .bg,
+.mobile-large .bg,
+.desktop-x-small .bg {
   background: white;
 }
 
-.mobile-small /deep/ .main.feed-story,
-.mobile-large /deep/ .main.feed-story,
-.mobile-small /deep/ .main.feed-story img,
-.mobile-large /deep/ .main.feed-story img,
-.desktop-x-small /deep/ .main.feed-story,
-.desktop-x-small /deep/ .main.feed-story img {
+.mobile-small .main.feed-story,
+.mobile-large .main.feed-story,
+.mobile-small .main.feed-story img,
+.mobile-large .main.feed-story img,
+.desktop-x-small .main.feed-story,
+.desktop-x-small .main.feed-story img {
   width: 90%;
 }
 
-.mobile-small /deep/ paper-material h1,
-.mobile-large /deep/ paper-material h1,
-.desktop-x-small /deep/ paper-material h1,
-.desktop-x-small /deep/ paper-material h1 {
+.mobile-small paper-material /deep/ h1,
+.mobile-large paper-material /deep/ h1,
+.desktop-small paper-material /deep/ h1,
+.desktop-x-small paper-material /deep/ h1 {
+  font-size: 22px;
+}
+
+.mobile-small .appname,
+.mobile-large .appname,
+.desktop-x-small .appname,
+.desktop-x-small .appname {
   font-size: 24px;
 }
 
-.mobile-small /deep/ .appname,
-.mobile-large /deep/ .appname,
-.desktop-x-small /deep/ .appname,
-.desktop-x-small /deep/ .appname {
-  font-size: 24px;
-}
-
-.mobile-small /deep/ #mainToolbar .bottom,
-.mobile-large /deep/ #mainToolbar .bottom,
-.desktop-small /deep/ #mainToolbar .bottom,
-.desktop-small-landscape /deep/ #mainToolbar .bottom,
-.desktop-x-small /deep/ #mainToolbar .bottom {
+.mobile-small #mainToolbar .bottom,
+.mobile-large #mainToolbar .bottom,
+.desktop-small #mainToolbar .bottom,
+.desktop-small-landscape #mainToolbar .bottom,
+.desktop-x-small #mainToolbar .bottom {
   padding-left: 50px;
   padding-bottom: 24px;
 }
 
-.mobile-small /deep/ #drawer .paper-toolbar,
-.mobile-large /deep/ #drawer .paper-toolbar,
-.desktop-small /deep/ #drawer .paper-toolbar,
-.desktop-x-small /deep/ #drawer .paper-toolbar {
+.mobile-small #drawer .paper-toolbar,
+.mobile-large #drawer .paper-toolbar,
+.desktop-small #drawer .paper-toolbar,
+.desktop-x-small #drawer .paper-toolbar {
   margin-left: 16px;
 }
 
@@ -244,7 +244,7 @@ paper-menu.paper-menu-0 {
   padding: 0;
 }
 
-/deep/ #mainToolbar, #mainToolbar {
+#mainToolbar, #mainToolbar {
   box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),0 2px 9px 1px rgba(0,0,0,.12),0 4px 2px -2px rgba(0,0,0,.2);
 }
 
