@@ -14,7 +14,14 @@
     --secondary-text-color: #727272;
     --disabled-text-color: #bdbdbd;
     --divider-color: #B6B6B6;
+
+    /* Components */
+    /* paper-drawer-panel */
     --drawer-menu-color: #ffffff;
+    --drawer-border-color: 1px solid #ccc;
+    --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
+    /* paper-menu */
+    --menu-link-color: #111111;
 }
 
 /*
@@ -166,36 +173,37 @@ paper-material, .desktop-large paper-material,
 
 /* General styles */
 
-/* TODO: these colors should come from paper-styles/default-theme.html
-      once Polymer/polymer#1415 is fixed. */
+/* TODO: these colors should come from paper-styles/default-theme.html once we update to 0.9.4+ */
+
 [drawer], paper-drawer-panel #drawer,
 paper-drawer-panel::shadow #drawer,
 paper-drawer-panel[right-drawer]::shadow #drawer,
 paper-menu.paper-menu-0 {
-    background-color: white;
+    background-color: var(--drawer-menu-color);
 }
 
+
 paper-drawer-panel #drawer {
-    border-right: 1px solid #ccc;
+    border-right: var(--drawer-border-color);
 }
 
 paper-drawer-panel::shadow #drawer {
-    border-right: 1px solid #ccc;
+    border-right: var(--drawer-border-color);
 }
 
 paper-drawer-panel[right-drawer] #drawer {
-    border-left: 1px solid #ccc;
+    border-left: var(--drawer-border-color);
     border-right: none;
 }
 
 paper-drawer-panel[right-drawer]::shadow #drawer {
-    border-left: 1px solid #ccc;
+    border-left: var(--drawer-border-color);
     border-right: none;
 }
 
 paper-menu a {
   text-decoration: none;
-  color: #111;
+  color: var(--menu-link-color);
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -215,14 +223,6 @@ paper-menu a {
   padding: 0px 16px;
 }
 
-paper-item.iron-selected {
-  background: #c5cae9;
-}
-
-paper-item.iron-selected a {
-  color: #303f9f;
-}
-
 paper-menu.paper-menu-0 {
   padding: 0;
 }
@@ -234,7 +234,7 @@ paper-menu.paper-menu-0 {
 #drawerToolbar {
   background: #FAFAFA;
   color: var(--dark-primary-color);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+  border-bottom: var(--drawer-toolbar-border-color);
   height: 120px;
 }
 
