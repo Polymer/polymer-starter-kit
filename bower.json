@@ -4,17 +4,17 @@
   "dependencies": {
     "iron-elements": "PolymerElements/iron-elements#0.9.0",
     "paper-elements": "PolymerElements/paper-elements#0.9.0",
-    "platinum-sw": "PolymerElements/platinum-sw#0.8-preview",
     "iron-icons": "PolymerElements/iron-icons#^0.9.0",
     "breakpoint-control": "PolymerElements/breakpoint-control",
-    "page": "visionmedia/page.js#~1.6.3"
+    "page": "visionmedia/page.js#~1.6.3",
+    "platinum-elements": "PolymerElements/platinum-elements"
   },
   "devDependencies": {
     "web-component-tester": "*",
     "test-fixture": "PolymerElements/test-fixture#^0.9.0"
   },
   "resolutions": {
-    "polymer": "^0.9.0-rc.1",
-    "webcomponentsjs": "^0.7.0"
+    "polymer": "^0.9.0",
+    "webcomponentsjs": "^0.7.1"
   }
 }
