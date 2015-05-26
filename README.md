@@ -1,25 +1,39 @@
 ## Polymer Starter Kit
 
-> A starting point for building web applications with Polymer
+> A starting point for building web applications with Polymer 1.0
 
-### High-level
+### Included out of the box:
 
-* Polymer, Paper and Iron elements
-* Material Design Grid & Breakpoints
-* App theming using Polymer custom props
-* Offline-first through Service Worker elements
-* Responsive App layout boilerplate
-* End-to-end Build Tooling (including Vulcanize)
-* Unit testing with Web Component Tester
+* [Polymer](http://polymer-project.org), Paper and Iron elements
+* [Material Design](http://www.google.com/design/spec/material-design/introduction.html) layout 
 * Routing with Page.js
+* Unit testing with Web Component Tester
+* Offline-first setup through Service Worker elements
+* End-to-end Build Tooling (including Vulcanize)
 
-### Instructions
+## Getting Started
 
-With Node and npm installed, run:
+To take advantage of Polymer Starter Kit you need to:
+
+1. Get a copy of the code.
+2. Install the dependencies if you don't already have them.
+3. Modify the application to your liking.
+4. Deploy your production code.
+
+## Getting the code
+
+[Download](https://github.com/polymerelements/polymer-starter-kit/releases/latest) and extract Polymer Starter Kit to where you want to work.
+
+### Install dependencies
+
+With [Node.js](http://nodejs.org) and npm installed, run:
 
 ```sh
-$ npm install -g gulp && npm install -g bower && npm install && bower install
+$ npm run deps
 ```
+
+This will install the element sets (Paper, Iron, Platinum) and tools
+we will use to serve and build apps.
 
 ### Serve / watch
 
@@ -27,17 +41,23 @@ $ npm install -g gulp && npm install -g bower && npm install && bower install
 $ gulp serve
 ```
 
+This outputs an IP address you can use to locally test and another that can be used on devices connected to your network.
+
 ### Run tests
 
 ```sh
 $ gulp test:local
 ```
 
-### Build / vulcanize
+This runs the unit tests defined in the `app/test` directory through [web-component-tester](https://github.com/Polymer/web-component-tester).
+
+### Build & Vulcanize
 
 ```sh
 $ gulp
 ```
+
+Build and optimize the current project, ready for deployment. This includes linting as well as vulcanization, image, script, stylesheet and HTML optimization and minification.
 
 ### Service Worker
 
@@ -45,7 +65,7 @@ Polymer Starter Kit offers an offline-first experience thanks to Service Worker,
 
 Our default offline setup should work well for relatively simple applications. For more complex apps, we recommend learning how Service Worker works so that you can make the most of the Platinum Service Worker element abstractions. 
 
-### Filing bugs in the right place
+#### Filing bugs in the right place
 
 If you experience an issue with Service Worker support in your application, check the origin of the issue and use the appropriate issue tracker:
 
