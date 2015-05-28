@@ -87,16 +87,16 @@ paper-material, .desktop-large paper-material,
   padding-left: 30px;
 }
 
-/* Medium */
-
-.tablet-small /deep/ #drawer .paper-toolbar,
-.tablet-large /deep/ #drawer .paper-toolbar,
-.desktop-large /deep/ #drawer .paper-toolbar,
-.desktop-xlarge /deep/ #drawer .paper-toolbar,
-.desktop-medium /deep/ #drawer .paper-toolbar,
-.desktop-medium-landscape /deep/ #drawer .paper-toolbar {
-  margin-left: 0px;
+.mobile-small /deep/ #mainToolbar .bottom,
+.mobile-large /deep/ #mainToolbar .bottom,
+.desktop-small /deep/ #mainToolbar .bottom,
+.desktop-small-landscape /deep/ #mainToolbar .bottom,
+.desktop-x-small /deep/ #mainToolbar .bottom {
+  padding-left: 50px;
+  padding-bottom: 24px;
 }
+
+/* Medium */
 
 .tablet-large paper-material,
 .desktop-medium-landscape paper-material,
@@ -108,85 +108,61 @@ paper-material, .desktop-large paper-material,
 
 /* Small */
 
-.mobile-small /deep/ .paper-font-display2,
-.mobile-large /deep/ .paper-font-display2,
-.desktop-small /deep/ .paper-font-display2,
-.desktop-x-small /deep/ .paper-font-display2 {
-  font-size: 30px;
+@media (max-width: 639px) {
+  .paper-font-display2 {
+    font-size: 30px;
+  }
+
+  paper-material {
+      --menu-container-display: none;
+      width: calc(97.33% - 16px);
+      padding-left: 16px;
+  }
+
+  #drawer .paper-toolbar {
+    margin-left: 16px;
+  }
+
+  .image {
+    height: 200px;
+  }
+
+  .main.feed-story,
+  .main.feed-story img {
+    width: 90%;
+  }
+
+  .tile {
+    width: 360px;
+    height: 300px;
+  }
+
+  #overlay {
+    min-width: 360px;
+  }
+
+  .bg {
+    background: white;
+  }
+
+
+  paper-material h1 {
+    font-size: 24px;
+  }
+
+  .appname {
+    font-size: 24px;
+  }
 }
 
-.mobile-small paper-material,
-.mobile-large paper-material,
-.desktop-small paper-material,
-.desktop-x-small paper-material {
-    --menu-container-display: none;
-    width: calc(97.33% - 16px);
-    padding-left: 16px;
-}
+@media (min-width: 640px) {
 
-.mobile-small /deep/ .image,
-.desktop-x-small /deep/ .image {
-  height: 200px;
+  paper-material {
+    width: calc(98% - 16px);
+    padding-left: 30px;
+  }
+  
 }
-
-.mobile-small /deep/ .tile,
-.desktop-x-small /deep/ .tile {
-  width: 360px;
-  height: 300px;
-}
-
-.mobile-small /deep/ #overlay,
-.mobile-large /deep/ #overlay,
-.desktop-x-small /deep/ #overlay,
-.desktop-x-small #overlay {
-  min-width: 360px;
-}
-
-.mobile-small /deep/ .bg,
-.mobile-large /deep/ .bg,
-.desktop-x-small /deep/ .bg {
-  background: white;
-}
-
-.mobile-small /deep/ .main.feed-story,
-.mobile-large /deep/ .main.feed-story,
-.mobile-small /deep/ .main.feed-story img,
-.mobile-large /deep/ .main.feed-story img,
-.desktop-x-small /deep/ .main.feed-story,
-.desktop-x-small /deep/ .main.feed-story img {
-  width: 90%;
-}
-
-.mobile-small /deep/ paper-material h1,
-.mobile-large /deep/ paper-material h1,
-.desktop-x-small /deep/ paper-material h1,
-.desktop-x-small /deep/ paper-material h1 {
-  font-size: 24px;
-}
-
-.mobile-small /deep/ .appname,
-.mobile-large /deep/ .appname,
-.desktop-x-small /deep/ .appname,
-.desktop-x-small /deep/ .appname {
-  font-size: 24px;
-}
-
-.mobile-small /deep/ #mainToolbar .bottom,
-.mobile-large /deep/ #mainToolbar .bottom,
-.desktop-small /deep/ #mainToolbar .bottom,
-.desktop-small-landscape /deep/ #mainToolbar .bottom,
-.desktop-x-small /deep/ #mainToolbar .bottom {
-  padding-left: 50px;
-  padding-bottom: 24px;
-}
-
-.mobile-small /deep/ #drawer .paper-toolbar,
-.mobile-large /deep/ #drawer .paper-toolbar,
-.desktop-small /deep/ #drawer .paper-toolbar,
-.desktop-x-small /deep/ #drawer .paper-toolbar {
-  margin-left: 16px;
-}
-
 
 /* General styles */
 
