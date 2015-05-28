@@ -1,19 +1,4 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="breakpoint-rule.html">
-
-<script src="breakpoint-control-behavior.js"></script>
-
-<script>
+<link rel="import" href="../polymer/polymer.html"><link rel="import" href="breakpoint-rule.html"><script src="breakpoint-control-behavior.js"></script><script>
 (function() {
   'use strict';
 
@@ -115,22 +100,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
 
-        if (ruleElement.minWidth !== '') {
-          breakpointQuery = breakpointQuery.min(ruleElement.minWidth);
-        }
-
-        if (ruleElement.maxWidth !== '') {
-          breakpointQuery = breakpointQuery.max(ruleElement.maxWidth);
-        }
-
-        if (ruleElement.minRatio !== '') {
-          breakpointQuery = breakpointQuery.minRatio(ruleElement.minRatio);
-        }
-
-        if (ruleElement.maxRatio !== '') {
-          breakpointQuery = breakpointQuery.maxRatio(ruleElement.maxRatio);
-        }
-
+        breakpointQuery = breakpointQuery
+            .min(ruleElement.minWidth)
+            .max(ruleElement.maxWidth)
+            .minRatio(ruleElement.minRatio)
+            .maxRatio(ruleElement.maxRatio);
+  
         breakpoints[ruleElements[i].name] = breakpointQuery;
       }
 

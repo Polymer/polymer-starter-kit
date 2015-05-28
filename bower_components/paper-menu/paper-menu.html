@@ -1,24 +1,4 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-menu-behavior/iron-menu-behavior.html">
-<link rel="import" href="../paper-styles/paper-styles.html">
-
-<!--
-`<paper-menu>` implements an accessible menu control with Material Design styling.
--->
-
-<dom-module id="paper-menu">
-
-  <style>
+<link rel="import" href="../polymer/polymer.html"><link rel="import" href="../iron-menu-behavior/iron-menu-behavior.html"><link rel="import" href="../paper-styles/paper-styles.html"><dom-module id="paper-menu"><style>
 
     :host {
       display: block;
@@ -27,45 +7,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       background: var(--paper-menu-background-color, --primary-background-color);
       color: var(--paper-menu-color, --primary-text-color);
 
-      mixin(--paper-menu);
+      @apply(--paper-menu);
     }
 
-    :host > ::content > [disabled] {
+    /* need a wrapper element to make this higher specificity than the :host rule in paper-item */
+    .content > ::content > .iron-selected {
+      font-weight: bold;
+
+      @apply(--paper-menu-selected-item);
+    }
+
+    .content > ::content > [disabled] {
       color: var(--paper-menu-disabled-color, --disabled-text-color);
     }
 
-    :host > ::content > .iron-selected {
+    .content > ::content > *:focus {
       position: relative;
+      outline: 0;
+
+      @apply(--paper-menu-colored-focused-item);
     }
 
-    :host > ::content > .iron-selected::after {
+    .content > ::content > *:focus:after {
       @apply(--layout-fit);
-
       background: currentColor;
       /* FIXME move to paper-styles for next widget */
       opacity: 0.12;
       content: '';
 
-      mixin(--paper-menu-selected-item);
+      @apply(--paper-menu-colored-focused-item-after);
     }
 
-    :host > ::content > .iron-selected[colored]::after {
+    .content > ::content > *[colored]:focus:after {
       opacity: 0.26;
-
-      mixin(--paper-menu-colored-selected-item);
     }
 
-  </style>
-
-  <template>
-
-    <content></content>
-
-  </template>
-
-</dom-module>
-
-<script>
+  </style><template><div class="content"><content></content></div></template></dom-module><script>
 
 (function() {
 

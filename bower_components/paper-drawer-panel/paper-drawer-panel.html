@@ -1,87 +1,4 @@
-<!--
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-media-query/iron-media-query.html">
-<link rel="import" href="../iron-selector/iron-selector.html">
-
-<!--
-`paper-drawer-panel` contains a drawer panel and a main panel.  The drawer
-and the main panel are side-by-side with drawer on the left.  When the browser
-window size is smaller than the `responsiveWidth`, `paper-drawer-panel`
-changes to narrow layout.  In narrow layout, the drawer will be stacked on top
-of the main panel.  The drawer will slide in/out to hide/reveal the main
-panel.
-
-Use the attribute `drawer` to indicate that the element is the drawer panel and
-`main` to indicate that the element is the main panel.
-
-Example:
-
-    <paper-drawer-panel>
-      <div drawer> Drawer panel... </div>
-      <div main> Main panel... </div>
-    </paper-drawer-panel>
-
-The drawer and the main panels are not scrollable.  You can set CSS overflow
-property on the elements to make them scrollable or use `paper-header-panel`.
-
-Example:
-
-    <paper-drawer-panel>
-      <paper-header-panel drawer>
-        <paper-toolbar></paper-toolbar>
-        <div> Drawer content... </div>
-      </paper-header-panel>
-      <paper-header-panel main>
-        <paper-toolbar></paper-toolbar>
-        <div> Main content... </div>
-      </paper-header-panel>
-    </paper-drawer-panel>
-
-An element that should toggle the drawer will automatically do so if it's
-given the `paper-drawer-toggle` attribute.  Also this element will automatically
-be hidden in wide layout.
-
-Example:
-
-    <paper-drawer-panel>
-      <paper-header-panel drawer>
-        <paper-toolbar>
-          <div>Application</div>
-        </paper-toolbar>
-        <div> Drawer content... </div>
-      </paper-header-panel>
-      <paper-header-panel main>
-        <paper-toolbar>
-          <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-          <div>Title</div>
-        </paper-toolbar>
-        <div> Main content... </div>
-      </paper-header-panel>
-    </paper-drawer-panel>
-
-To position the drawer to the right, add `rightDrawer` attribute.
-
-    <paper-drawer-panel rightDrawer>
-      <div drawer> Drawer panel... </div>
-      <div main> Main panel... </div>
-    </paper-drawer-panel>
-
-@group Polymer Elements
-@element paper-drawer-panel
-@homepage github.io
--->
-
-<dom-module id="paper-drawer-panel">
-
-  <style>
+<link rel="import" href="../polymer/polymer.html"><link rel="import" href="../iron-media-query/iron-media-query.html"><link rel="import" href="../iron-selector/iron-selector.html"><dom-module id="paper-drawer-panel"><style>
     :host {
       display: block;
       position: absolute;
@@ -228,38 +145,7 @@ To position the drawer to the right, add `rightDrawer` attribute.
     iron-selector:not(.narrow-layout) #main ::content [paper-drawer-toggle] {
       display: none;
     }
-  </style>
-
-  <template>
-    <iron-media-query
-        on-query-matches-changed="onQueryMatchesChanged"
-        query="[[_computeMediaQuery(forceNarrow, responsiveWidth)]]">
-    </iron-media-query>
-
-    <iron-selector
-        attr-for-selected="id"
-        class$="[[_computeIronSelectorClass(narrow, transition, dragging, rightDrawer)]]"
-        on-iron-activate="onSelect"
-        selected="[[selected]]">
-
-      <div id="main" style$="[[_computeMainStyle(narrow, rightDrawer, drawerWidth)]]">
-        <content select="[main]"></content>
-        <div id="scrim"></div>
-        <div id="edgeSwipeOverlay"
-            hidden$="[[_computeSwipeOverlayHidden(narrow, disableEdgeSwipe)]]">
-        </div>
-      </div>
-
-      <div id="drawer" style$="[[_computeDrawerStyle(drawerWidth)]]">
-        <content select="[drawer]"></content>
-      </div>
-
-    </iron-selector>
-  </template>
-
-</dom-module>
-
-<script>
+  </style><template><iron-media-query on-query-matches-changed="onQueryMatchesChanged" query="[[_computeMediaQuery(forceNarrow, responsiveWidth)]]"></iron-media-query><iron-selector attr-for-selected="id" class$="[[_computeIronSelectorClass(narrow, transition, dragging, rightDrawer)]]" activate-event="" selected="[[selected]]"><div id="main" style$="[[_computeMainStyle(narrow, rightDrawer, drawerWidth)]]"><content select="[main]"></content><div id="scrim" on-tap="closeDrawer"></div><div id="edgeSwipeOverlay" hidden$="[[_computeSwipeOverlayHidden(narrow, disableEdgeSwipe)]]"></div></div><div id="drawer" style$="[[_computeDrawerStyle(drawerWidth)]]"><content select="[drawer]"></content></div></iron-selector></template></dom-module><script>
 
   (function() {
 
@@ -397,7 +283,8 @@ To position the drawer to the right, add `rightDrawer` attribute.
         narrow: {
           reflectToAttribute: true,
           type: Boolean,
-          value: false
+          value: false,
+          notify: true
         },
 
         // Whether the drawer is peeking out from the edge.
@@ -461,23 +348,13 @@ To position the drawer to the right, add `rightDrawer` attribute.
           value: false
         },
 
-        /**
-         * Starting X coordinate of a tracking gesture. It is non-null only between trackStart and
-         * trackEnd events.
-         * @type {?number}
-         */
-        _startX: {
-          type: Number,
-          value: null
-        }
-
       },
 
       listeners: {
-        click: 'onClick',
-        track: 'onTrack',
-        down: 'downHandler',
-        up: 'upHandler'
+        tap: '_onTap',
+        track: '_onTrack',
+        down: '_downHandler',
+        up: '_upHandler'
       },
 
       _computeIronSelectorClass: function(narrow, transition, dragging, rightDrawer) {
@@ -515,16 +392,16 @@ To position the drawer to the right, add `rightDrawer` attribute.
         return !narrow || disableEdgeSwipe;
       },
 
-      onTrack: function(event) {
+      _onTrack: function(event) {
         switch (event.detail.state) {
           case 'end':
-            this.trackEnd(event);
+            this._trackEnd(event);
             break;
-          case 'move':
-            this.trackX(event);
+          case 'track':
+            this._trackX(event);
             break;
           case 'start':
-            this.trackStart(event);
+            this._trackStart(event);
             break;
         }
       },
@@ -541,7 +418,7 @@ To position the drawer to the right, add `rightDrawer` attribute.
        * @method togglePanel
        */
       togglePanel: function() {
-        if (this.isMainSelected()) {
+        if (this._isMainSelected()) {
           this.openDrawer();
         } else {
           this.closeDrawer();
@@ -573,7 +450,7 @@ To position the drawer to the right, add `rightDrawer` attribute.
           this.selected = this.defaultSelected;
         }
 
-        this.setAttribute('touch-action', this.swipeAllowed() ? 'pan-y' : '');
+        this.setScrollDirection(this._swipeAllowed() ? 'y' : 'all');
         this.fire('paper-responsive-change', {narrow: this.narrow});
       },
 
@@ -585,79 +462,75 @@ To position the drawer to the right, add `rightDrawer` attribute.
         this._responsiveChange(this.forceNarrow);
       },
 
-      swipeAllowed: function() {
+      _swipeAllowed: function() {
         return this.narrow && !this.disableSwipe;
       },
 
-      isMainSelected: function() {
+      _isMainSelected: function() {
         return this.selected === 'main';
       },
 
-      startEdgePeek: function() {
+      _startEdgePeek: function() {
         this.width = this.$.drawer.offsetWidth;
-        this.moveDrawer(this.translateXForDeltaX(this.rightDrawer ?
+        this._moveDrawer(this._translateXForDeltaX(this.rightDrawer ?
             -this.edgeSwipeSensitivity : this.edgeSwipeSensitivity));
         this.peeking = true;
       },
 
-      stopEdgePeek: function() {
+      _stopEdgePeek: function() {
         if (this.peeking) {
           this.peeking = false;
-          this.moveDrawer(null);
+          this._moveDrawer(null);
         }
       },
 
-      downHandler: function(e) {
-        if (!this.dragging && this.isMainSelected() && this.isEdgeTouch(e)) {
-          this.startEdgePeek();
+      _downHandler: function(e) {
+        if (!this.dragging && this._isMainSelected() && this._isEdgeTouch(e)) {
+          this._startEdgePeek();
         }
       },
 
-      upHandler: function(e) {
-        this.stopEdgePeek();
+      _upHandler: function(e) {
+        this._stopEdgePeek();
       },
 
-      onClick: function(e) {
-        var isTargetToggleElement = e.target &&
+      _onTap: function(e) {
+        var targetElement = Polymer.dom(e).localTarget;
+        var isTargetToggleElement = targetElement &&
           this.drawerToggleAttribute &&
-          e.target.hasAttribute(this.drawerToggleAttribute);
+          targetElement.hasAttribute(this.drawerToggleAttribute);
 
         if (isTargetToggleElement) {
           this.togglePanel();
         }
       },
 
-      isEdgeTouch: function(event) {
+      _isEdgeTouch: function(event) {
         var x = event.detail.x;
 
-        return !this.disableEdgeSwipe && this.swipeAllowed() &&
+        return !this.disableEdgeSwipe && this._swipeAllowed() &&
           (this.rightDrawer ?
             x >= this.offsetWidth - this.edgeSwipeSensitivity :
             x <= this.edgeSwipeSensitivity);
       },
 
-      trackStart: function(event) {
-        if (this.swipeAllowed()) {
+      _trackStart: function(event) {
+        if (this._swipeAllowed()) {
           this.dragging = true;
-          this._startX = event.detail.x;
 
-          if (this.isMainSelected()) {
-            this.dragging = this.peeking || this.isEdgeTouch(event);
+          if (this._isMainSelected()) {
+            this.dragging = this.peeking || this._isEdgeTouch(event);
           }
 
           if (this.dragging) {
             this.width = this.$.drawer.offsetWidth;
             this.transition = false;
-
-            // TODO: Re-enable when tap gestures are implemented.
-            //
-            // e.preventTap();
           }
         }
       },
 
-      translateXForDeltaX: function(deltaX) {
-        var isMain = this.isMainSelected();
+      _translateXForDeltaX: function(deltaX) {
+        var isMain = this._isMainSelected();
 
         if (this.rightDrawer) {
           return Math.max(0, isMain ? this.width + deltaX : deltaX);
@@ -666,8 +539,8 @@ To position the drawer to the right, add `rightDrawer` attribute.
         }
       },
 
-      trackX: function(event) {
-        var dx = event.detail.x - this._startX;
+      _trackX: function(event) {
+        var dx = event.detail.dx;
 
         if (this.dragging) {
           if (this.peeking) {
@@ -679,28 +552,27 @@ To position the drawer to the right, add `rightDrawer` attribute.
             this.peeking = false;
           }
 
-          this.moveDrawer(this.translateXForDeltaX(dx));
+          this._moveDrawer(this._translateXForDeltaX(dx));
         }
       },
 
-      trackEnd: function(event) {
+      _trackEnd: function(event) {
         if (this.dragging) {
-          var xDirection = (event.detail.x - this._startX) > 0;
+          var xDirection = event.detail.dx > 0;
 
           this.dragging = false;
-          this._startX = null;
           this.transition = true;
-          this.moveDrawer(null);
+          this._moveDrawer(null);
 
           if (this.rightDrawer) {
-            this[(xDirection > 0) ? 'closeDrawer' : 'openDrawer']();
+            this[xDirection ? 'closeDrawer' : 'openDrawer']();
           } else {
-            this[(xDirection > 0) ? 'openDrawer' : 'closeDrawer']();
+            this[xDirection ? 'openDrawer' : 'closeDrawer']();
           }
         }
       },
 
-      transformForTranslateX: function(translateX) {
+      _transformForTranslateX: function(translateX) {
         if (translateX === null) {
           return '';
         }
@@ -709,19 +581,14 @@ To position the drawer to the right, add `rightDrawer` attribute.
             'translate3d(' + translateX + 'px, 0, 0)';
       },
 
-      moveDrawer: function(translateX) {
+      _moveDrawer: function(translateX) {
         var s = this.$.drawer.style;
 
         if (this.hasTransform) {
-          s.transform = this.transformForTranslateX(translateX);
+          s.transform = this._transformForTranslateX(translateX);
         } else {
-          s.webkitTransform = this.transformForTranslateX(translateX);
+          s.webkitTransform = this._transformForTranslateX(translateX);
         }
-      },
-
-      onSelect: function(e) {
-        e.preventDefault();
-        this.selected = e.detail.selected;
       }
 
     });

@@ -1,42 +1,4 @@
-<!doctype html>
-<!--
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-<html>
-<head>
-  <title>iron-ajax</title>
-
-  <script src="../../webcomponentsjs/webcomponents.js"></script>
-  <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../test-fixture/test-fixture-mocha.js"></script>
-
-  <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../../test-fixture/test-fixture.html">
-  <link rel="import" href="../iron-ajax.html">
-</head>
-<body>
-  <test-fixture id="TrivialGet">
-    <template>
-      <iron-ajax url="/responds_to_get_with_json"></iron-ajax>
-    </template>
-  </test-fixture>
-  <test-fixture id="AutoGet">
-    <template>
-      <iron-ajax auto url="/responds_to_get_with_json"></iron-ajax>
-    </template>
-  </test-fixture>
-  <test-fixture id="TrivialPost">
-    <template>
-      <iron-ajax method="POST"
-                 url="/responds_to_post_with_json"></iron-ajax>
-    </template>
-  </test-fixture>
-  <script>
+<!doctype html><html><head><title>iron-ajax</title><script src="../../webcomponentsjs/webcomponents.js"></script><script src="../../web-component-tester/browser.js"></script><script src="../../test-fixture/test-fixture-mocha.js"></script><link rel="import" href="../../polymer/polymer.html"><link rel="import" href="../../test-fixture/test-fixture.html"><link rel="import" href="../iron-ajax.html"></head><body><test-fixture id="TrivialGet"><template><iron-ajax url="/responds_to_get_with_json"></iron-ajax></template></test-fixture><test-fixture id="ParamsGet"><template><iron-ajax url="/responds_to_get_with_json" params='{"a": "a"}'></iron-ajax></template></test-fixture><test-fixture id="AutoGet"><template><iron-ajax auto="" url="/responds_to_get_with_json"></iron-ajax></template></test-fixture><test-fixture id="TrivialPost"><template><iron-ajax method="POST" url="/responds_to_post_with_json"></iron-ajax></template></test-fixture><test-fixture id="DebouncedGet"><template><iron-ajax auto="" url="/responds_to_debounced_get_with_json" debounce-duration="150"></iron-ajax></template></test-fixture><script>
     suite('<iron-ajax>', function () {
       var responseHeaders = {
         json: { 'Content-Type': 'application/json' },
@@ -75,6 +37,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             200,
             responseHeaders.plain,
             'Hello World'
+          ]
+        );
+
+        server.respondWith(
+          'GET',
+          '/responds_to_debounced_get_with_json',
+          [
+            200,
+            responseHeaders.json,
+            '{"success": "true"}'
           ]
         );
 
@@ -155,6 +127,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         test('holds all requests in the `activeRequests` Array', function() {
           expect(requests).to.deep.eql(ajax.activeRequests);
+        });
+      });
+
+      suite('when params are changed', function() {
+        test('generates a request that reflects the change', function() {
+          ajax = fixture('ParamsGet');
+          request = ajax.generateRequest();
+
+          expect(request.xhr.url).to.be.equal('/responds_to_get_with_json?a=a');
+
+          ajax.params = {b: 'b'};
+          request = ajax.generateRequest();
+
+          expect(request.xhr.url).to.be.equal('/responds_to_get_with_json?b=b');
         });
       });
 
@@ -255,6 +241,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
       });
 
+      suite('when debouncing requests', function() {
+        setup(function() {
+          ajax = fixture('DebouncedGet');
+        });
+
+        test('only requests a single resource', function(done) {
+          ajax.requestOptionsChanged();
+          expect(server.requests[0]).to.be.equal(undefined);
+          ajax.requestOptionsChanged();
+          window.setTimeout(function() {
+            expect(server.requests[0]).to.be.ok;
+            done();
+          }, 200);
+        });
+      });
+
       suite('when a response handler is bound', function() {
         var responseHandler;
 
@@ -294,7 +296,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       suite('when handleAs parameter is `text`', function() {
-       
+
         test('response type is string', function (done) {
 
           ajax.url = '/responds_to_get_with_json';
@@ -314,8 +316,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       });
 
+      suite('when a request fails', function() {
+        test('the error event has useful details', function(done) {
+
+          ajax.url = '/responds_to_get_with_text';
+          ajax.handleAs = 'json';
+          ajax.generateRequest();
+
+          ajax.addEventListener('error', function(event) {
+            try {
+              expect(event.detail.request).to.be.okay;
+              expect(event.detail.error).to.be.okay;
+              done();
+            } catch (e) {
+              done(e);
+            }
+          });
+
+          server.respond();
+        });
+      });
+
       suite('when handleAs parameter is `json`', function() {
-       
+
         test('response type is string', function (done) {
 
           ajax.url = '/responds_to_get_with_json';
@@ -353,7 +376,4 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
     });
-  </script>
-
-</body>
-</html>
+  </script></body></html>

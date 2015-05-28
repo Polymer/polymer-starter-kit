@@ -1,0 +1,25 @@
+{
+  "name": "iron-resizable-behavior",
+  "version": "0.9.1",
+  "description": "Coordinates the flow of resizeable elements",
+  "private": true,
+  "main": "iron-resizable-behavior.html",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "iron",
+    "behavior"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.9.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "polymerelements/iron-component-page#^0.9.0",
+    "test-fixture": "polymerelements/test-fixture#^0.9.0",
+    "web-component-tester": "*",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}

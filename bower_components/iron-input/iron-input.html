@@ -1,17 +1,11 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
+<link rel="import" href="../polymer/polymer.html"><link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html"><script>
 
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
+/*
+`<iron-input>` adds two-way binding and custom validators using `Polymer.IronValidatorBehavior`
+to `<input>`.
 
-<!--
+### Two-way binding
+
 By default you can only get notified of changes to an `input`'s `value` due to user input:
 
     <input value="{{myValue::input}}">
@@ -21,8 +15,21 @@ for two-way data binding. `bind-value` will notify if it is changed either by us
 
     <input is="iron-input" bind-value="{{myValue}}">
 
--->
-<script>
+### Custom validators
+
+You can use custom validators that implement `Polymer.IronValidatorBehavior` with `<iron-input>`.
+
+    <input is="iron-input" validator="my-custom-validator">
+
+### Stopping invalid input
+
+It may be desirable to only allow users to enter certain characters. You can use the
+`prevent-invalid-input` and `allowed-pattern` attributes together to accomplish this. This feature
+is separate from validation, and `allowed-pattern` does not affect how the input is validated.
+
+    <!-- only allow characters that match [0-9] -->
+    <input is="iron-input" prevent-invaild-input allowed-pattern="[0-9]">
+*/
 
   Polymer({
 
@@ -72,7 +79,7 @@ for two-way data binding. `bind-value` will notify if it is changed either by us
       'keydown': '_onKeydown'
     },
 
-    get patternRegExp() {
+    get _patternRegExp() {
       var pattern;
       if (this.allowedPattern) {
         pattern = new RegExp(this.allowedPattern);
@@ -93,7 +100,9 @@ for two-way data binding. `bind-value` will notify if it is changed either by us
     },
 
     _bindValueChanged: function() {
-      this.value = this.bindValue;
+      if (this.value !== this.bindValue) {
+        this.value = this.bindValue;
+      }
       // manually notify because we don't want to notify until after setting value
       this.fire('bind-value-changed', {value: this.bindValue});
     },
@@ -114,10 +123,10 @@ for two-way data binding. `bind-value` will notify if it is changed either by us
     },
 
     _onKeydown: function(event) {
-      if (!this.preventInvalidInput) {
+      if (!this.preventInvalidInput && this.type !== 'number') {
         return;
       }
-      var regexp = this.patternRegExp;
+      var regexp = this._patternRegExp;
       if (!regexp) {
         return;
       }
@@ -128,8 +137,9 @@ for two-way data binding. `bind-value` will notify if it is changed either by us
     },
 
     /**
-     * Returns true if the value is valid. The validator provided in `validator` will be used first,
+     * Returns true if `value` is valid. The validator provided in `validator` will be used first,
      * then any constraints.
+     * @return {Boolean} True if the value is valid.
      */
     validate: function() {
       var valid;
@@ -143,5 +153,11 @@ for two-way data binding. `bind-value` will notify if it is changed either by us
       return valid;
     }
 
-  })
+  });
+
+  /*
+  The `iron-input-validate` event is fired whenever `validate()` is called.
+  @event iron-input-validate
+  */
+
 </script>

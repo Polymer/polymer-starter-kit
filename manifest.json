@@ -1,6 +1,6 @@
 {
   "name": "Polymer Starter Kit",
-  "short_name": "PSK",
+  "short_name": "Polymer Starter Kit",
   "icons": [{
         "src": "images/touch/icon-128x128.png",
         "sizes": "128x128"
@@ -14,6 +14,6 @@
         "src": "images/touch/chrome-touch-icon-192x192.png",
         "sizes": "192x192"
       }],
-  "start_url": "/index.html?homescreen=1",
+  "start_url": "/#!/",
   "display": "standalone"
 }

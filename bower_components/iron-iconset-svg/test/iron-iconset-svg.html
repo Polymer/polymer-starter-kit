@@ -1,54 +1,4 @@
-<!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<html>
-<head>
-
-  <title>iron-iconset-svg</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../test-fixture/test-fixture-mocha.js"></script>
-
-  <link rel="import" href="../iron-iconset-svg.html">
-  <link rel="import" href="../../iron-meta/iron-meta.html">
-  <link rel="import" href="../../test-fixture/test-fixture.html">
-
-</head>
-<body>
-
-  <test-fixture id="TrivialIconsetSvg">
-    <template>
-      <iron-iconset-svg name="foo"></iron-iconset-svg>
-      <iron-meta type="iconset"></iron-meta>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="StandardIconsetSvg">
-    <template>
-      <iron-iconset-svg name="my-icons" size="20">
-        <svg>
-          <defs>
-            <circle id="circle" cx="20" cy="20" r="10"></circle>
-            <rect id="square" x="0" y="0" width="20" height="20"></rect>
-          </defs>
-        </svg>
-      </iron-iconset-svg>
-      <div></div>
-    </template>
-  </test-fixture>
-
-  <script>
+<!doctype html><html><head><title>iron-iconset-svg</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="../../webcomponentsjs/webcomponents-lite.js"></script><script src="../../web-component-tester/browser.js"></script><script src="../../test-fixture/test-fixture-mocha.js"></script><link rel="import" href="../iron-iconset-svg.html"><link rel="import" href="../../iron-meta/iron-meta.html"><link rel="import" href="../../test-fixture/test-fixture.html"></head><body><test-fixture id="TrivialIconsetSvg"><template><iron-iconset-svg name="foo"></iron-iconset-svg><iron-meta type="iconset"></iron-meta></template></test-fixture><test-fixture id="StandardIconsetSvg"><template><iron-iconset-svg name="my-icons" size="20"><svg><defs><circle id="circle" cx="20" cy="20" r="10"></circle><rect id="square" x="0" y="0" width="20" height="20"></rect></defs></svg></iron-iconset-svg><div></div></template></test-fixture><script>
 suite('<iron-iconset>', function () {
   suite('basic behavior', function () {
     var iconset;
@@ -102,7 +52,4 @@ suite('<iron-iconset>', function () {
     });
   });
 });
-  </script>
-
-</body>
-</html>
+  </script></body></html>

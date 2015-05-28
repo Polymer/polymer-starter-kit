@@ -1,0 +1,224 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../marked-element/marked-element.html">
+<link rel="import" href="../paper-styles/paper-styles.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../prism-element/prism-highlighter.html">
+
+<link rel="import" href="iron-doc-property.html">
+
+<!--
+Renders documentation describing an element's API.
+
+`iron-doc-viewer` renders element and behavior descriptions as extracted by
+[Hydrolysis](https://github.com/PolymerLabs/hydrolysis). You can provide them
+either via binding...
+
+    <iron-doc-viewer descriptor="{{elementDescriptor}}"></iron-doc-viewer>
+
+...or by placing the element descriptor in JSON as the text content of an
+`iron-doc-viewer`:
+
+    <iron-doc-viewer>
+      {
+        "is": "awesome-sauce",
+        "properties": [
+          {"name": "isAwesome", "type": "boolean", "desc": "Is it awesome?"},
+        ]
+      }
+    </iron-doc-viewer>
+
+However, be aware that due to current limitations in Polymer 0.8, _changes_ to
+the text content will not be respected, only the initial value will be loaded.
+If you wish to update the documented element, please set it via the `descriptor`
+property.
+
+@demo demo/index.html Basic Demo
+-->
+<dom-module id="iron-doc-viewer">
+
+  <link rel="import" type="css" href="iron-doc-viewer.css">
+
+  <template>
+    <prism-highlighter></prism-highlighter>
+
+    <section id="summary" class="card" hidden$="[[!descriptor.desc]]">
+      <header>Documentation</header>
+      <marked-element markdown="{{descriptor.desc}}"></marked-element>
+    </section>
+
+    <nav id="api">
+      <header>API Reference</header>
+      <a id="togglePrivate" on-tap="_togglePrivate">{{_privateToggleLabel}}</a>
+      <a id="toggleCollapsed" on-tap="_toggleCollapsed">{{_collapseToggleLabel}}</a>
+    </nav>
+
+    <section id="properties" class="card" hidden$="{{_noneToShow(_showPrivate,_properties)}}">
+      <header>Properties</header>
+      <template is="dom-repeat" items="{{_properties}}" hidden$="{{!_properties.length}}">
+        <iron-doc-property descriptor="{{item}}"></iron-doc-property>
+      </template>
+    </section>
+
+    <section id="methods" class="card"  hidden$="{{_noneToShow(_showPrivate,_methods)}}">
+      <header>Methods</header>
+      <template is="dom-repeat" items="{{_methods}}">
+        <iron-doc-property descriptor="{{item}}"></iron-doc-property>
+      </template>
+    </section>
+
+    <section id="events" class="card" hidden$="{{_noneToShow(_showPrivate,_events)}}">
+      <header>Events</header>
+      <template is="dom-repeat" items="{{_events}}">
+        <iron-doc-property descriptor="{{item}}"></iron-doc-property>
+      </template>
+    </section>
+
+  </template>
+
+</dom-module>
+
+<script>
+(function() {
+
+  Polymer({
+
+    is: 'iron-doc-viewer',
+
+    properties: {
+
+      /**
+       * The [Hydrolysis](https://github.com/PolymerLabs/hydrolysis)-generated
+       * element descriptor to display details for.
+       *
+       * Alternatively, the element descriptor can be provided as JSON via the text content
+       * of this element.
+       *
+       * @type {hydrolysis.ElementDescriptor}
+       */
+      descriptor: {
+        type: Object,
+        observer: '_descriptorChanged',
+      },
+
+      /** Whether properties should be expanded or collapsed. */
+      _collapsed: {
+        type:     Boolean,
+        value:    false,
+        observer: '_collapsedChanged',
+      },
+
+      /** The label to show for the collapse/expand button. */
+      _collapseToggleLabel: String,
+
+      /** Whether private properties should be hidden or shown. */
+      _showPrivate: {
+        type:     Boolean,
+        value:    false,
+        observer: '_showPrivateChanged',
+      },
+
+      /** The label to show for the collapse/expand button. */
+      _privateToggleLabel: String,
+
+    },
+
+    ready: function() {
+      var jsonDescriptor = this._loadJson();
+      // Note that this is only an error during element creation. You are free
+      // to stomp over the descriptor after it is ready.
+      if (jsonDescriptor && this.descriptor) {
+        console.error(
+            this,
+            'received both a bound descriptor:', this.descriptor,
+            'and JSON descriptor:', this._jsonDescriptor,
+            'Please provide only one');
+        throw new Error(
+            '<iron-doc-viewer> accepts either a bound or JSON descriptor; not both');
+      }
+
+      if (jsonDescriptor) {
+        this.descriptor = jsonDescriptor;
+      }
+    },
+
+    /**
+     * Loads a hydrolysis element descriptor (as JSON) from the text content of
+     * this element, if present.
+     *
+     * @return {hydrolysis.ElementDescriptor} The parsed descriptor, or `null`.
+     */
+    _loadJson: function() {
+      var textContent = '';
+      Array.prototype.forEach.call(Polymer.dom(this).childNodes, function(node) {
+        textContent = textContent + node.textContent;
+      });
+      textContent = textContent.trim();
+      if (textContent === '') return null;
+
+      try {
+        return JSON.parse(textContent);
+      } catch(error) {
+        console.error('Failure when parsing JSON:', textContent, error);
+        throw error;
+      }
+    },
+
+    /** Converts `descriptor` into our template-friendly `_model`. */
+    _descriptorChanged: function() {
+      if (!this.descriptor) return;
+
+      // Split the documented properties between functions and other types.
+      var properties = [];
+      var methods    = [];
+
+      for (var i = 0, property; property = this.descriptor.properties[i]; i++) {
+        (property.type === 'Function' ? methods : properties).push(property);
+      }
+      this._properties = properties;
+      this._methods    = methods;
+      this._events     = this.descriptor.events || [];
+
+      this.toggleAttribute('abstract', this.descriptor.abstract);
+    },
+
+    _collapsedChanged: function() {
+      this._collapseToggleLabel = this._collapsed ? 'expand' : 'collapse';
+
+      // Bound values aren't exposed to dom-repeat's scope.
+      var properties = this.querySelectorAll('iron-doc-property');
+      for (var i = 0, property; property = properties[i]; i++) {
+        property.collapsed = this._collapsed;
+      }
+    },
+
+    _toggleCollapsed: function() {
+      this._collapsed = !this._collapsed;
+    },
+
+    _showPrivateChanged: function() {
+      this._privateToggleLabel = (this._showPrivate ? 'hide' : 'show') + ' private API';
+      this.toggleClass('show-private', this._showPrivate);
+    },
+
+    _togglePrivate: function() {
+      this._showPrivate = !this._showPrivate;
+    },
+
+    _noneToShow: function(showPrivate, items) {
+      for (var i = 0; i < items.length; i++) {
+        if (showPrivate || !items[i].private) return false;
+      }
+      return true;
+    }
+  });
+
+})();
+</script>

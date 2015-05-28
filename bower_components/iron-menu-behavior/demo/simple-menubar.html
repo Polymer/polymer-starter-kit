@@ -1,0 +1,27 @@
+<link rel="import" href="../../polymer/polymer.html"><link rel="import" href="../iron-menubar-behavior.html"><dom-module id="simple-menubar"><style>
+
+    .content ::content > .iron-selected {
+      color: red;
+    }
+
+    .content ::content > * {
+      display: inline-block;
+    }
+
+  </style><template><div class="content"><content></content></div></template></dom-module><script>
+
+(function() {
+
+  Polymer({
+
+    is: 'simple-menubar',
+
+    behaviors: [
+      Polymer.IronMenubarBehavior
+    ]
+
+  });
+
+})();
+
+</script>

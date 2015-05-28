@@ -1,0 +1,31 @@
+{
+  "name": "iron-behaviors",
+  "version": "0.9.4",
+  "description": "Provides a set of behaviors for the iron elements",
+  "private": true,
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.9.0",
+    "iron-a11y-keys-behavior": "PolymerElements/iron-a11y-keys-behavior#^0.9.0"
+  },
+  "devDependencies": {
+    "iron-test-helpers": "polymerelements/iron-test-helpers#^0.9.0",
+    "iron-component-page": "polymerelements/iron-component-page#^0.9.0",
+    "test-fixture": "polymerelements/test-fixture#^0.9.0",
+    "web-component-tester": "*",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "homepage": "https://github.com/PolymerElements/iron-behaviors",
+  "_release": "0.9.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.4",
+    "commit": "3195b5f932a2bacafc4767ac0d039077ae9ea9c9"
+  },
+  "_source": "git://github.com/PolymerElements/iron-behaviors.git",
+  "_target": "^0.9.0",
+  "_originalSource": "PolymerElements/iron-behaviors"
+}

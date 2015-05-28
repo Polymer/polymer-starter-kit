@@ -1,65 +1,9 @@
-<!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>iron-a11y-keys</title>
-
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../test-fixture/test-fixture-mocha.js"></script>
-  <script src="../../iron-test-helpers/mock-interactions.js"></script>
-
-  <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../../test-fixture/test-fixture.html">
-  <link rel="import" href="../iron-a11y-keys-behavior.html">
-</head>
-<body>
-  <test-fixture id="BasicKeys">
-    <template>
-      <x-a11y-basic-keys></x-a11y-basic-keys>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="ComboKeys">
-    <template>
-      <x-a11y-combo-keys></x-a11y-combo-keys>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="AlternativeEventKeys">
-    <template>
-      <x-a11y-alternate-event-keys></x-a11y-alternate-event-keys>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="BehaviorKeys">
-    <template>
-      <x-a11y-behavior-keys></x-a11y-behavior-keys>
-    </template>
-  </test-fixture>
-
-  <script>
+<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes"><title>iron-a11y-keys</title><script src="../../webcomponentsjs/webcomponents-lite.js"></script><script src="../../web-component-tester/browser.js"></script><script src="../../test-fixture/test-fixture-mocha.js"></script><script src="../../iron-test-helpers/mock-interactions.js"></script><link rel="import" href="../../polymer/polymer.html"><link rel="import" href="../../test-fixture/test-fixture.html"><link rel="import" href="../iron-a11y-keys-behavior.html"></head><body><test-fixture id="BasicKeys"><template><x-a11y-basic-keys></x-a11y-basic-keys></template></test-fixture><test-fixture id="ComboKeys"><template><x-a11y-combo-keys></x-a11y-combo-keys></template></test-fixture><test-fixture id="AlternativeEventKeys"><template><x-a11y-alternate-event-keys></x-a11y-alternate-event-keys></template></test-fixture><test-fixture id="BehaviorKeys"><template><x-a11y-behavior-keys></x-a11y-behavior-keys></template></test-fixture><script>
 suite('Polymer.IronA11yKeysBehavior', function() {
   var keys;
 
   suiteSetup(function() {
-    Polymer({
-      is: 'x-a11y-basic-keys',
-
-      behaviors: [
-        Polymer.IronA11yKeysBehavior
-      ],
-
+    var KeysTestBehavior = [Polymer.IronA11yKeysBehavior, {
       properties: {
         keyCount: {
           type: Number,
@@ -67,12 +11,21 @@ suite('Polymer.IronA11yKeysBehavior', function() {
         }
       },
 
+      _keyHandler: function(event) {
+        this.keyCount++;
+        this.lastEvent = event;
+      }
+    }];
+
+    Polymer({
+      is: 'x-a11y-basic-keys',
+
+      behaviors: [
+        KeysTestBehavior
+      ],
+
       keyBindings: {
         'space': '_keyHandler'
-      },
-
-      _keyHandler: function() {
-        this.keyCount++;
       }
     });
 
@@ -80,22 +33,11 @@ suite('Polymer.IronA11yKeysBehavior', function() {
       is: 'x-a11y-combo-keys',
 
       behaviors: [
-        Polymer.IronA11yKeysBehavior
+        KeysTestBehavior
       ],
-
-      properties: {
-        keyCount: {
-          type: Number,
-          value: 0
-        }
-      },
 
       keyBindings: {
         'ctrl+shift+a': '_keyHandler'
-      },
-
-      _keyHandler: function() {
-        this.keyCount++;
       }
     });
 
@@ -103,22 +45,11 @@ suite('Polymer.IronA11yKeysBehavior', function() {
       is: 'x-a11y-alternate-event-keys',
 
       behaviors: [
-        Polymer.IronA11yKeysBehavior
+        KeysTestBehavior
       ],
-
-      properties: {
-        keyCount: {
-          type: Number,
-          value: 0
-        }
-      },
 
       keyBindings: {
         'space:keyup': '_keyHandler'
-      },
-
-      _keyHandler: function() {
-        this.keyCount++;
       }
     });
 
@@ -134,23 +65,12 @@ suite('Polymer.IronA11yKeysBehavior', function() {
       is: 'x-a11y-behavior-keys',
 
       behaviors: [
-        Polymer.IronA11yKeysBehavior,
+        KeysTestBehavior,
         XA11yBehavior
       ],
 
-      properties: {
-        keyCount: {
-          type: Number,
-          value: 0
-        }
-      },
-
       keyBindings: {
         'space': '_keyHandler'
-      },
-
-      _keyHandler: function() {
-        this.keyCount++;
       }
     });
   });
@@ -191,6 +111,31 @@ suite('Polymer.IronA11yKeysBehavior', function() {
 
       MockInteractions.pressSpace(keys);
       expect(keys.keyCount).to.be.equal(1);
+    });
+
+    suite('matching keyboard events to keys', function() {
+      test('can be done imperatively', function() {
+        var event = new CustomEvent('keydown');
+        event.keyCode = 65;
+        expect(keys.keyboardEventMatchesKeys(event, 'a')).to.be.equal(true);
+      });
+
+      test('can be done with a provided keyboardEvent', function() {
+        var event;
+        MockInteractions.pressSpace(keys);
+        event = keys.lastEvent;
+
+        expect(event.detail.keyboardEvent).to.be.okay;
+        expect(keys.keyboardEventMatchesKeys(event, 'space')).to.be.equal(true);
+      });
+
+      test('can handle variations in arrow key names', function() {
+        var event = new CustomEvent('keydown');
+        event.key = 'up';
+        expect(keys.keyboardEventMatchesKeys(event, 'up')).to.be.equal(true);
+        event.key = 'ArrowUp';
+        expect(keys.keyboardEventMatchesKeys(event, 'up')).to.be.equal(true);
+      });
     });
   });
 
@@ -240,7 +185,6 @@ suite('Polymer.IronA11yKeysBehavior', function() {
       expect(keys.keyCount).to.be.equal(2);
     });
   });
+
 });
-  </script>
-</body>
-</html>
+  </script></body></html>
