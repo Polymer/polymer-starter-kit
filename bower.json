@@ -1,6 +1,7 @@
 {
   "name": "polymer-starter-kit",
   "version": "0.0.0",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "dependencies": {
     "iron-elements": "PolymerElements/iron-elements#0.9.0",
     "paper-elements": "PolymerElements/paper-elements#0.9.0",
