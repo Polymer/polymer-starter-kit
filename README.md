@@ -65,7 +65,7 @@ Polymer 1.0 introduces a shim for CSS custom properties. We take advantage of th
 
 ### Service Worker
 
-Polymer Starter Kit offers an offline-first experience thanks to Service Worker, [sw-precache](https://github.com/GoogleChrome/sw-precache) and the [Platinum Service Worker elements](https://github.com/PolymerElements/platinum-sw). New to Service Worker? Read the following [introduction](http://www.html5rocks.com/en/tutorials/service-worker/introduction/) to understand how it works.
+Polymer Starter Kit offers an offline-first experience thanks to Service Worker and the [Platinum Service Worker elements](https://github.com/PolymerElements/platinum-sw). New to Service Worker? Read the following [introduction](http://www.html5rocks.com/en/tutorials/service-worker/introduction/) to understand how it works.
 
 Our default offline setup should work well for relatively simple applications. For more complex apps, we recommend learning how Service Worker works so that you can make the most of the Platinum Service Worker element abstractions. 
 
