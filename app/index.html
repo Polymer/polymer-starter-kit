@@ -60,8 +60,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <paper-drawer-panel id="paperDrawerPanel" forceNarrow>
       <div drawer>
+
         <!-- Drawer Toolbar -->
-        <paper-toolbar id="drawerToolbar">Menu</paper-toolbar>
+        <paper-toolbar id="drawerToolbar">
+          <span>Menu</span>
+        </paper-toolbar>
 
         <!-- Drawer Content -->
           <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}">
