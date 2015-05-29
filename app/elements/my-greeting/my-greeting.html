@@ -13,6 +13,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
       }
+
+      @media (max-width: 600px) {
+        h1.paper-font-display1 {
+          font-size: 24px;
+        }
+      }
     </style>
   <template>
     <h1 class="paper-font-display1"><span>{{greeting}}</span>, <span>{{greeting}}</span>!</h1>
