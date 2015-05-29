@@ -111,4 +111,65 @@ paper-menu a {
   margin-right: 16px;
   padding: 8px;
 }
+
+/* Breakpoints */
+
+/* Small */
+
+@media (max-width: 600px) {
+
+  paper-toolbar.has-shadow {
+    height: 56px;
+  }
+
+  .paper-font-display2 {
+    font-size: 30px;
+  }
+
+  .paper-font-display1 {
+    font-size: 12px;
+  }
+
+  paper-material {
+    --menu-container-display: none;
+    width: calc(97.33% - 16px);
+    padding-left: 16px;
+  }
+
+  #drawer .paper-toolbar {
+    margin-left: 16px;
+  }
+
+  #overlay {
+    min-width: 360px;
+  }
+
+  .bg {
+    background: white;
+  }
+
+  #mainToolbar .bottom {
+    padding-left: 50px;
+    padding-bottom: 24px;
+  }
+
+  #mainToolbar.has-shadow .bottom {
+    padding-bottom: 0px;
+  }
+
+  .appname {
+    font-size: 24px;
+    padding-bottom: 0px;
+  }
+}
+
+@media (min-width: 601px) {
+
+  paper-material {
+    width: calc(98% - 16px);
+    padding-left: 30px;
+  }
+
+}
+
 </style>
