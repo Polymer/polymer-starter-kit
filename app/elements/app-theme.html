@@ -46,32 +46,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 /* General styles */
 
-/* TODO: these colors should come from paper-styles/default-theme.html once we update to 0.9.4+ */
-
-[drawer], paper-drawer-panel #drawer,
-paper-drawer-panel::shadow #drawer,
-paper-drawer-panel[right-drawer]::shadow #drawer,
-paper-menu.paper-menu-0 {
-    background-color: var(--drawer-menu-color);
+paper-material {
+  border-radius: 2px;
+  height: 100%;
+  padding: 16px 0px 16px 0px;
+  width: calc(98.66% - 16px);
+  margin: 16px auto;
+  background: white;
 }
 
-
-paper-drawer-panel #drawer {
-    border-right: var(--drawer-border-color);
+#mainToolbar {
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),
+  0 2px 9px 1px rgba(0,0,0,.12),
+  0 4px 2px -2px rgba(0,0,0,.2);
 }
 
-paper-drawer-panel::shadow #drawer {
-    border-right: var(--drawer-border-color);
+paper-menu iron-icon {
+  margin-right: 33px;
+  opacity: 0.54;
 }
 
-paper-drawer-panel[right-drawer] #drawer {
-    border-left: var(--drawer-border-color);
-    border-right: none;
+.paper-menu > .iron-selected {
+  color: var(--default-primary-color);
 }
 
-paper-drawer-panel[right-drawer]::shadow #drawer {
-    border-left: var(--drawer-border-color);
-    border-right: none;
+#mainToolbar .bottom {
+  padding-bottom: 100px;
+  padding-left: 30px;
 }
 
 paper-menu a {
@@ -89,29 +90,19 @@ paper-menu a {
   font-family: 'Roboto', 'Noto', sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 24px;
   min-height: 48px;
   padding: 0px 16px;
 }
 
-paper-menu.paper-menu-0 {
-  padding: 0;
-}
-
-/deep/ #mainToolbar, #mainToolbar {
-  box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),0 2px 9px 1px rgba(0,0,0,.12),0 4px 2px -2px rgba(0,0,0,.2);
-}
-
 #drawerToolbar {
-  background: #FAFAFA;
-  color: var(--dark-primary-color);
   border-bottom: var(--drawer-toolbar-border-color);
   height: 120px;
 }
 
-#papertoggle {
+#paperToggle {
   width: 45px;
   height: 45px;
   border: none;
