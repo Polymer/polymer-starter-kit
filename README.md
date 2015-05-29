@@ -7,7 +7,7 @@
 
 * [Polymer](http://polymer-project.org), Paper and Iron elements
 * [Material Design](http://www.google.com/design/spec/material-design/introduction.html) layout 
-* Routing with Page.js
+* Routing with [Page.js](https://visionmedia.github.io/page.js/)
 * Unit testing with Web Component Tester
 * Offline-first setup through Service Worker elements
 * End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
@@ -72,7 +72,7 @@ Web apps built with Polymer Starter Kit come configured with support for [Web Co
 
 Polymer uses [Bower](http://bower.io) for package management. This makes it easy to keep your elements up to date and versioned. For tooling, we use NPM to manage Node-based dependencies.
 
-### Service Worker
+## Service Worker
 
 Polymer Starter Kit offers an offline-first experience thanks to Service Worker and the [Platinum Service Worker elements](https://github.com/PolymerElements/platinum-sw). New to Service Worker? Read the following [introduction](http://www.html5rocks.com/en/tutorials/service-worker/introduction/) to understand how it works.
 
