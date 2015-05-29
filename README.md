@@ -59,6 +59,10 @@ $ gulp
 
 Build and optimize the current project, ready for deployment. This includes linting as well as vulcanization, image, script, stylesheet and HTML optimization and minification.
 
+## Application Theming
+
+Polymer 1.0 introduces a shim for CSS custom properties. We take advantage of this in `app/elements/app-theme.html` to provide theming for your application. You can also find our presets for Material Design breakpoints in this file.
+
 ### Service Worker
 
 Polymer Starter Kit offers an offline-first experience thanks to Service Worker, [sw-precache](https://github.com/GoogleChrome/sw-precache) and the [Platinum Service Worker elements](https://github.com/PolymerElements/platinum-sw). New to Service Worker? Read the following [introduction](http://www.html5rocks.com/en/tutorials/service-worker/introduction/) to understand how it works.
