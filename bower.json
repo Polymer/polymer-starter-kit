@@ -3,19 +3,17 @@
   "version": "0.0.0",
   "license": "http://polymer.github.io/LICENSE.txt",
   "dependencies": {
-    "iron-elements": "PolymerElements/iron-elements#0.9.0",
-    "paper-elements": "PolymerElements/paper-elements#0.9.0",
-    "platinum-sw": "PolymerElements/platinum-sw#0.8-preview",
-    "iron-icons": "PolymerElements/iron-icons#^0.9.0",
-    "breakpoint-control": "PolymerElements/breakpoint-control",
+    "iron-elements": "PolymerElements/iron-elements#1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#1.0.0",
+    "platinum-elements": "PolymerElements/platinum-elements#1.0.0",
     "page": "visionmedia/page.js#~1.6.3"
   },
   "devDependencies": {
     "web-component-tester": "*",
-    "test-fixture": "PolymerElements/test-fixture#^0.9.0"
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0"
   },
   "resolutions": {
-    "polymer": "^0.9.0-rc.1",
-    "webcomponentsjs": "^0.7.0"
+    "polymer": "Polymer/polymer#^1.0.0",
+    "webcomponentsjs": "^0.7.2"
   }
 }
