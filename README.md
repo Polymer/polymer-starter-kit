@@ -25,16 +25,17 @@ To take advantage of Polymer Starter Kit you need to:
 
 [Download](https://github.com/polymerelements/polymer-starter-kit/releases/latest) and extract Polymer Starter Kit to where you want to work.
 
-### Install dependencies
+### Quick start
 
-With [Node.js](http://nodejs.org) and npm installed, run:
+With [Node.js](http://nodejs.org) installed, run:
 
 ```sh
-$ npm run deps
+git clone https://github.com/PolymerElements/polymer-starter-kit.git
+cd polymer-starter-kit
+npm start
 ```
 
-This will install the element sets (Paper, Iron, Platinum) and tools
-we will use to serve and build apps.
+This will install all the dependencies including npm dependencies, Bower components and the element sets (Paper, Iron, Platinum), then it will start the app in development mode.
 
 ### Serve / watch
 

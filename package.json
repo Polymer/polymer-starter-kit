@@ -3,10 +3,15 @@
   "version": "0.0.0",
   "dependencies": {},
   "scripts": {
-    "deps": "npm install -g gulp && npm install -g bower && npm install && bower install"
+    "prebower-install": "npm install",
+    "bower-install": "bower install",
+    "prestart": "npm run bower-install",
+    "start": "gulp serve",
+    "test": "gulp test"
   },
   "devDependencies": {
     "apache-server-configs": "^2.7.1",
+    "bower": "^1.4.1",
     "browser-sync": "^2.6.4",
     "del": "^1.1.1",
     "glob": "^5.0.6",
