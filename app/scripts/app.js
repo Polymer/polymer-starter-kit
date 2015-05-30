@@ -34,6 +34,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     drawerPanel.forceNarrow = true;
   });
 
+  // Close drawer after menu item is selected if drawerPanel is narrow
+  app.onMenuSelect = function() {
+    var drawerPanel = document.querySelector('#paperDrawerPanel');
+    if (drawerPanel.narrow) {
+      drawerPanel.closeDrawer();
+    }
+  };
+
 })(document);
 
 // TODO: Decide if we still want to suggest wrapping as it requires
