@@ -27,10 +27,10 @@ To take advantage of Polymer Starter Kit you need to:
 
 ### Install dependencies
 
-With [Node.js](http://nodejs.org) and npm installed, run:
+With [Node.js](http://nodejs.org) and npm installed, run the following one liner from the root of your Polymer Starter Kit download:
 
 ```sh
-$ npm run deps
+$ npm install -g gulp && npm install -g bower && npm install && bower install
 ```
 
 This will install the element sets (Paper, Iron, Platinum) and tools
