@@ -2,6 +2,9 @@
   "name": "polymer-starter-kit",
   "version": "0.0.0",
   "dependencies": {},
+  "scripts": {
+    "test": ""
+  },
   "devDependencies": {
     "apache-server-configs": "^2.7.1",
     "browser-sync": "^2.6.4",
