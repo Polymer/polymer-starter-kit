@@ -41,9 +41,3 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   };
 
 })(document);
-
-// TODO: Decide if we still want to suggest wrapping as it requires
-// using webcomponents.min.js.
-// wrap document so it plays nice with other libraries
-// http://www.polymer-project.org/platform/shadow-dom.html#wrappers
-// )(wrap(document));
