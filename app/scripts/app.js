@@ -7,7 +7,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-(function (document) {
+(function(document) {
   'use strict';
 
   // Grab a reference to our auto-binding template
