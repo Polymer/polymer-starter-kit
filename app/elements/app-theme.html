@@ -71,11 +71,6 @@ paper-menu iron-icon {
   color: var(--default-primary-color);
 }
 
-#mainToolbar .bottom {
-  padding-bottom: 120px;
-  margin-left: 58px;
-}
-
 paper-menu a {
   text-decoration: none;
   color: var(--menu-link-color);
@@ -104,13 +99,25 @@ paper-menu a {
 }
 
 #paperToggle {
-  width: 45px;
-  height: 45px;
   border: none;
   color: var(--drawer-menu-color);
   background-color: transparent;
-  margin: -6px -6px 0px -6px;
   padding: 12px;
+  margin: 4px;
+  margin-left: -14px;
+}
+
+#mainToolbar .bottom {
+  padding-bottom: 120px;
+  margin-left: 36px;
+}
+
+#mainToolbar.has-shadow .appname {
+  font-size: 20px;
+  padding-bottom: 0px;
+  margin-left: 36px;
+}
+
 /* Height of the scroll area */
 .content {
   height: 700px;
@@ -121,9 +128,12 @@ paper-menu a {
 /* Small */
 
 @media (max-width: 600px) {
-
-  paper-toolbar.has-shadow {
-    height: 56px;
+  
+  paper-material {
+    --menu-container-display: none;
+    width: calc(97.33% - 32px);
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .paper-font-display2 {
@@ -132,13 +142,6 @@ paper-menu a {
 
   .paper-font-display1 {
     font-size: 12px;
-  }
-
-  paper-material {
-    --menu-container-display: none;
-    width: calc(97.33% - 32px);
-    padding-left: 16px;
-    padding-right: 16px;
   }
 
   #drawer .paper-toolbar {
@@ -153,23 +156,6 @@ paper-menu a {
     background: white;
   }
 
-  #mainToolbar .bottom {
-    margin-left: 50px;
-    padding-bottom: 24px;
-  }
-
-  #mainToolbar.has-shadow .bottom {
-    padding-bottom: 0px;
-  }
-
-  .appname {
-    font-size: 20px;
-    padding-bottom: 0px;
-  }
-
-  #paperToggle {
-    margin-left: -14px;
-  }
 }
 
 @media (min-width: 601px) {
@@ -179,14 +165,6 @@ paper-menu a {
     padding-left: 30px;
     padding-right: 30px;
   }
-
-  #mainToolbar.has-shadow .bottom {
-    margin-left: 50px;
-    padding-bottom: 0;
-    padding-left: 0;
-    font-size: 24px;
-  }
-
 }
 
 /* Material Design Adaptive Breakpoints */
