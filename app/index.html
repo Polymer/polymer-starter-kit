@@ -85,6 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </paper-menu>
       </div>
       <paper-header-panel main mode="waterfall-tall">
+
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar">
           <button tabindex="1" id="paperToggle" paper-drawer-toggle>
@@ -103,6 +104,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-toolbar>
 
         <!-- Main Content -->
+        <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
             <section data-route="home">
@@ -113,6 +115,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <my-list></my-list>
 
                 <p class="paper-font-body2">Looking for more Web App layouts? Check out our <a href="https://github.com/PolymerElements/app-layout-templates">layouts</a> collection. You can also <a href="http://polymerelements.github.io/app-layout-templates/">preview</a> them live.</p>
+              </paper-material>
+              <paper-material elevation="1">
+
+                <p class="paper-font-body2">This is another card.</p>
               </paper-material>
             </section>
 
@@ -142,6 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           </iron-pages>
           </paper-header-panel>
+      </div>
     </paper-drawer-panel>
 
     <paper-toast id="caching-complete"
