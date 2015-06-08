@@ -47,6 +47,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 /* General styles */
 
+#drawerToolbar {
+  border-bottom: var(--drawer-toolbar-border-color);
+  height: 120px;
+}
+
 paper-material {
   border-radius: 2px;
   height: 100%;
@@ -54,12 +59,6 @@ paper-material {
   width: calc(98.66% - 16px);
   margin: 16px auto;
   background: white;
-}
-
-#mainToolbar {
-  box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),
-  0 2px 9px 1px rgba(0,0,0,.12),
-  0 4px 2px -2px rgba(0,0,0,.2);
 }
 
 paper-menu iron-icon {
@@ -93,11 +92,6 @@ paper-menu a {
   padding: 0px 16px;
 }
 
-#drawerToolbar {
-  border-bottom: var(--drawer-toolbar-border-color);
-  height: 120px;
-}
-
 #paperToggle {
   border: none;
   color: var(--drawer-menu-color);
@@ -106,12 +100,17 @@ paper-menu a {
   margin: 4px 4px 4px -14px;
 }
 
-#mainToolbar .bottom {
-  padding-bottom: 120px;
+#mainToolbar {
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),
+  0 2px 9px 1px rgba(0,0,0,.12),
+  0 4px 2px -2px rgba(0,0,0,.2);
+}
+
+#mainToolbar .middle {
   margin-left: 48px;
 }
 
-#mainToolbar.has-shadow .appname {
+#mainToolbar.has-shadow .middle {
   font-size: 20px;
   padding-bottom: 0px;
   margin-left: 48px;
@@ -135,12 +134,12 @@ paper-menu a {
     padding-right: 16px;
   }
 
-  .paper-font-display2 {
-    font-size: 30px;
-  }
-
   .paper-font-display1 {
     font-size: 12px;
+  }
+
+  .appname {
+    font-size: 30px;
   }
 
   #drawer .paper-toolbar {
