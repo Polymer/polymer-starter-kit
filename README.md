@@ -216,6 +216,18 @@ a dependency failed to correctly install. We recommend running `npm cache clean`
 `npm install` to see if this corrects the problem. If not, please check the [issue tracker](https://github.com/PolymerElements/polymer-starter-kit/issues) in case
 there is a workaround or fix already posted.
 
+> I'm having trouble getting Vulcanize to fully build my project on Windows. Help?
+
+Some Windows users have run into trouble with the `elements.vulcanized.html` file in their `dist` folder
+not being correctly vulcanized. This can happen if your project is in a folder with a name containing a 
+space. You can work around this issue by ensuring your path doesn't contain one.
+
+There is also an [in-flight](https://github.com/PolymerElements/polymer-starter-kit/issues/62#issuecomment-108974016) issue
+where some are finding they need to disable the `inlineCss` option in our configuration for Vulcanize
+to correctly build. We are still investigating this, however for the time-being use the workaround if 
+you find your builds getting stuck here.
+
+
 > How do I add new JavaScript files to Starter Kit so they're picked up by the build process?
 
 At the bottom of `app/index.html`, you will find a build block that can be used to include additional
