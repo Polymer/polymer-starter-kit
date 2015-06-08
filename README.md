@@ -211,10 +211,18 @@ We recommend following the [fixing npm permissions](https://github.com/sindresor
 guide to address any messages around administrator permissions being required. If you use `sudo`
 to work around these issues, this guide may also be useful for avoiding that.
 
+If you run into an exception that mentions five optional dependencies failing (or an `EEXIST` error), you 
+may have run into an npm [bug](https://github.com/npm/npm/issues/6309). We recommend updating to npm 2.11.0+ 
+to work around this. You can do this by opening a Command Prompt/terminal and running `npm install npm@2.11.0 -g`. If you are on Windows, 
+Node.js (and npm) may have been installed into `C:\Program Files\`. Updating npm by running `npm install npm@2.11.0 -g` will install npm
+into `%AppData%\npm`, but your system will still use the npm version. You can avoid this by deleting your older npm from `C:\Program Files\nodejs`
+as described [here](https://github.com/npm/npm/issues/6309#issuecomment-67549380).
+
 If the issue is to do with a failure somewhere else, you might find that due to a network issue
 a dependency failed to correctly install. We recommend running `npm cache clean` and deleting the `node_modules` directory followed by 
 `npm install` to see if this corrects the problem. If not, please check the [issue tracker](https://github.com/PolymerElements/polymer-starter-kit/issues) in case
 there is a workaround or fix already posted.
+
 
 > I'm having trouble getting Vulcanize to fully build my project on Windows. Help?
 
