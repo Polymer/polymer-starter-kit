@@ -47,7 +47,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   /* General styles */
 
+
+
   #drawerToolbar {
+    background-color: var(--dark-primary-color);
     border-bottom: var(--drawer-toolbar-border-color);
     height: 120px;
   }
@@ -163,6 +166,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       padding-left: 30px;
       padding-right: 30px;
     }
+
+    #drawer.paper-drawer-panel > [drawer]  {
+      box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+    }
+
+    iron-pages {
+      padding: 48px 56px;
+    }
   }
 
   /* Material Design Adaptive Breakpoints */
