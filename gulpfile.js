@@ -84,8 +84,7 @@ gulp.task('copy', function () {
   var app = gulp.src([
     'app/*',
     '!app/test',
-    '!app/precache.json',
-    'node_modules/apache-server-configs/dist/.htaccess'
+    '!app/precache.json'
   ], {
     dot: true
   }).pipe(gulp.dest('dist'));
@@ -195,8 +194,8 @@ gulp.task('serve', ['styles', 'elements', 'images'], function () {
   });
 
   gulp.watch(['app/**/*.html'], reload);
-  gulp.watch(['app/styles/**/*.{css}'], ['styles', reload]);
-  gulp.watch(['app/elements/**/*.{css}'], ['elements', reload]);
+  gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
+  gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
   gulp.watch(['app/{scripts,elements}/**/*.js'], ['jshint']);
   gulp.watch(['app/images/**/*'], reload);
 });

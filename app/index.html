@@ -58,7 +58,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body unresolved class="fullbleed layout vertical">
   <template is="dom-bind" id="app">
 
-    <paper-drawer-panel id="paperDrawerPanel" forceNarrow>
+    <paper-drawer-panel id="paperDrawerPanel" force-narrow>
       <div drawer>
 
         <!-- Drawer Toolbar -->
@@ -85,6 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </paper-menu>
       </div>
       <paper-header-panel main mode="waterfall-tall">
+
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar">
           <button tabindex="1" id="paperToggle" paper-drawer-toggle>
@@ -95,14 +96,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <!-- Toolbar icons -->
           <paper-icon-button icon="refresh"></paper-icon-button>
           <paper-icon-button icon="search"></paper-icon-button>
-          <div class="middle"></div>
 
           <!-- Application name -->
-          <div class="appname bottom paper-font-display2">Polymer Starter Kit</div>
+          <div class="middle paper-font-display2 app-name">Polymer Starter Kit</div>
+
+          <!-- Application sub title -->
+          <div class="bottom title"></div>
 
         </paper-toolbar>
 
         <!-- Main Content -->
+        <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
             <section data-route="home">
@@ -114,13 +118,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 <p class="paper-font-body2">Looking for more Web App layouts? Check out our <a href="https://github.com/PolymerElements/app-layout-templates">layouts</a> collection. You can also <a href="http://polymerelements.github.io/app-layout-templates/">preview</a> them live.</p>
               </paper-material>
+              <paper-material elevation="1">
+                <p class="paper-font-body2">This is another card.</p>
+              </paper-material>
             </section>
 
             <section data-route="users">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Users</h2>
                 <p>This is the users section</p>
-                <a href="/users/Rob">Rob</a></p>
+                <a href="/users/Rob">Rob</a>
               </paper-material>
             </section>
 
@@ -141,7 +148,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
           </iron-pages>
-          </paper-header-panel>
+        </div>
+      </paper-header-panel>
     </paper-drawer-panel>
 
     <paper-toast id="caching-complete"
