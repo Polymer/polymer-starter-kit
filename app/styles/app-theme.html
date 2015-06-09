@@ -23,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   :root {
     --dark-primary-color: #303F9F;
-    --default-primary-color:#3F51B5;
+    --default-primary-color: #3F51B5;
     --light-primary-color: #C5CAE9;
     --text-primary-color: #ffffff; /*text/icons*/
     --accent-color: #FF4081;
@@ -57,7 +57,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   paper-material {
     border-radius: 2px;
     height: 100%;
-    padding: 16px 0px 16px 0px;
+    padding: 16px 0 16px 0;
     width: calc(98.66% - 16px);
     margin: 16px auto;
     background: white;
@@ -91,7 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     font-weight: 400;
     line-height: 24px;
     min-height: 48px;
-    padding: 0px 16px;
+    padding: 0 16px;
   }
 
   #paperToggle {
@@ -108,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   #mainToolbar.has-shadow .middle {
     font-size: 20px;
-    padding-bottom: 0px;
+    padding-bottom: 0;
     margin-left: 48px;
   }
 
@@ -161,13 +161,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       padding-right: 30px;
     }
 
-    #drawer.paper-drawer-panel > [drawer]  {
-      border-right: 1px solid rgba(0,0,0,0.14);
-    }
+    #drawer.paper-drawer-panel > [drawer] {
+      border-right: 1px solid rgba(0, 0, 0, 0.14);
+    }
 
     iron-pages {
-      padding: 48px 62px;
-    }
+      padding: 48px 62px;
+    }
+
   }
 
   /* Material Design Adaptive Breakpoints */
@@ -180,11 +181,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
    */
 
   /* mobile-small */
-  @media all and (min-width: 0px) and (max-width: 360px) and (orientation: portrait) { }
+  @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) { }
   /* mobile-large */
   @media all and (min-width: 361px) and (orientation: portrait) { }
   /* mobile-small-landscape */
-  @media all and (min-width: 0px) and (max-width: 480px) and (orientation: landscape) { }
+  @media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape) { }
   /* mobile-large-landscape */
   @media all and (min-width: 481px) and (orientation: landscape) { }
   /* tablet-small-landscape */
@@ -196,9 +197,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /* tablet-large */
   @media all and (min-width: 601px) and (max-width: 840px) and (orientation : portrait) { }
   /* desktop-x-small-landscape */
-  @media all and (min-width: 0px) and (max-width: 480px) and (orientation: landscape) { }
+  @media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape) { }
   /* desktop-x-small */
-  @media all and (min-width: 0px) and (max-width: 480px) and (max-aspect-ratio: 4/3) { }
+  @media all and (min-width: 0) and (max-width: 480px) and (max-aspect-ratio: 4/3) { }
   /* desktop-small-landscape */
   @media all and (min-width: 481px) and (max-width: 840px) and (orientation: landscape) { }
   /* desktop-small */
