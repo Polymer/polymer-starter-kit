@@ -48,8 +48,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /* General styles */
 
   #drawerToolbar {
+    color: var(--secondary-text-color);
+    background-color: var(--drawer-menu-color);
     border-bottom: var(--drawer-toolbar-border-color);
-    height: 120px;
+    height: 64px;
   }
 
   paper-material {
@@ -98,12 +100,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background-color: transparent;
     padding: 12px;
     margin: 4px 4px 4px -14px;
-  }
-
-  #mainToolbar {
-    box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),
-    0 2px 9px 1px rgba(0,0,0,.12),
-    0 4px 2px -2px rgba(0,0,0,.2);
   }
 
   #mainToolbar .middle {
@@ -160,9 +156,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     paper-material {
       width: calc(98% - 46px);
+      margin-bottom: 32px;
       padding-left: 30px;
       padding-right: 30px;
     }
+
+    #drawer.paper-drawer-panel > [drawer]  {
+      border-right: 1px solid rgba(0,0,0,0.14);
+    }
+
+    iron-pages {
+      padding: 48px 62px;
+    }
   }
 
   /* Material Design Adaptive Breakpoints */
