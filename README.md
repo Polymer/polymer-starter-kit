@@ -102,7 +102,7 @@ Build and optimize the current project, ready for deployment. This includes lint
 
 ## Application Theming
 
-Polymer 1.0 introduces a shim for CSS custom properties. We take advantage of this in `app/elements/app-theme.html` to provide theming for your application. You can also find our presets for Material Design breakpoints in this file.
+Polymer 1.0 introduces a shim for CSS custom properties. We take advantage of this in `app/styles/app-theme.html` to provide theming for your application. You can also find our presets for Material Design breakpoints in this file.
 
 [Read more](https://www.polymer-project.org/1.0/docs/devguide/styling.html) about CSS custom properties.
 
@@ -178,8 +178,8 @@ You will also want to navigate to `chrome://serviceworker-internals` and unregis
 
 > Where do I customise my application theme?
 
-Theming can be achieved using [CSS Custom properties](https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling-details) via [app/elements/app-theme.html](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/elements/app-theme.html). 
-You can also use `app/styles/` for pure CSS stylesheets (e.g for global styles), however note that Custom properties will not work there under the shim.
+Theming can be achieved using [CSS Custom properties](https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling-details) via [app/styles/app-theme.html](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/styles/app-theme.html).
+You can also use `app/styles/main.css` for pure CSS stylesheets (e.g for global styles), however note that Custom properties will not work there under the shim.
 
 A [Polycast](https://www.youtube.com/watch?v=omASiF85JzI) is also available that walks through theming using Polymer 1.0.
 
