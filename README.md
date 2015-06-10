@@ -5,7 +5,7 @@
 
 ### Included out of the box:
 
-* [Polymer](http://polymer-project.org), [Paper](https://elements.polymer-project.org/browse?package=paper-elements) and [Iron](https://elements.polymer-project.org/browse?package=iron-elements) elements
+* [Polymer](http://polymer-project.org), [Paper](https://elements.polymer-project.org/browse?package=paper-elements), [Iron](https://elements.polymer-project.org/browse?package=iron-elements) and [Neon](https://elements.polymer-project.org/browse?package=neon-elements) elements
 * [Material Design](http://www.google.com/design/spec/material-design/introduction.html) layout 
 * Routing with [Page.js](https://visionmedia.github.io/page.js/)
 * Unit testing with Web Component Tester
