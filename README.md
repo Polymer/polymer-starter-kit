@@ -9,7 +9,7 @@
 * [Material Design](http://www.google.com/design/spec/material-design/introduction.html) layout
 * Routing with [Page.js](https://visionmedia.github.io/page.js/)
 * Unit testing with Web Component Tester
-* Optional Offline-first setup through [Platinum](https://elements.polymer-project.org/browse?package=platinum-elements) Service Worker elements
+* Optional offline setup through [Platinum](https://elements.polymer-project.org/browse?package=platinum-elements) Service Worker elements
 * End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
 
 ## Getting Started
@@ -118,9 +118,9 @@ Polymer uses [Bower](http://bower.io) for package management. This makes it easy
 
 ## Service Worker
 
-Polymer Starter Kit offers an optional offline-first experience thanks to Service Worker and the [Platinum Service Worker elements](https://github.com/PolymerElements/platinum-sw). New to Service Worker? Read the following [introduction](http://www.html5rocks.com/en/tutorials/service-worker/introduction/) to understand how it works.
+Polymer Starter Kit offers an optional offline experience thanks to Service Worker and the [Platinum Service Worker elements](https://github.com/PolymerElements/platinum-sw). New to Service Worker? Read the following [introduction](http://www.html5rocks.com/en/tutorials/service-worker/introduction/) to understand how it works.
 
-Our optional default offline setup should work well for relatively simple applications. For more complex apps, we recommend learning how Service Worker works so that you can make the most of the Platinum Service Worker element abstractions.
+Our optional offline setup should work well for relatively simple applications. For more complex apps, we recommend learning how Service Worker works so that you can make the most of the Platinum Service Worker element abstractions.
 
 ### Enable Service Worker support?
 
@@ -146,14 +146,15 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
   -->
   ```
 1. Uncomment Service Worker code in elements.html
-```c
-<!-- Uncomment next block to enable Service Worker Support (2/2) -->
-<!--
-<link rel="import" href="../bower_components/platinum-sw/platinum-sw-cache.html">
-<link rel="import" href="../bower_components/platinum-sw/platinum-sw-register.html">
--->
-```
-1. Add 'precache' to the list in the 'default' gulp task like below. [(gulpfile.js)](https://github.com/PolymerElements/polymer-starter-kit/blob/master/gulpfile.js)
+  ```c
+  <!-- Uncomment next block to enable Service Worker Support (2/2) -->
+  <!--
+  <link rel="import" href="../bower_components/platinum-sw/platinum-sw-cache.html">
+  <link rel="import" href="../bower_components/platinum-sw/platinum-sw-register.html">
+  -->
+  ```
+1. Add 'precache' to the list in the 'default' gulp task like below.
+[(gulpfile.js)](https://github.com/PolymerElements/polymer-starter-kit/blob/master/gulpfile.js)  
   ```c
   // Build Production Files, the Default Task
   gulp.task('default', ['clean'], function (cb) {
