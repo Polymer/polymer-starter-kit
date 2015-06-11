@@ -98,7 +98,15 @@ This runs the unit tests defined in the `app/test` directory through [web-compon
 gulp
 ```
 
-Build and optimize the current project, ready for deployment. This includes linting as well as vulcanization, image, script, stylesheet and HTML optimization and minification.
+Build and optimize the current project, ready for deployment. This includes linting as well as vulcanization, image, script, stylesheet and HTML optimization and minification. Outputs code to dist folder.
+
+#### Build, Vulcanize & Serve
+
+```sh
+gulp serve:dist
+```
+
+Build and optimize the current project, serves built code from dist folder. This includes linting as well as vulcanization, image, script, stylesheet and HTML optimization and minification.
 
 ## Application Theming
 
