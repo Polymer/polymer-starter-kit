@@ -135,7 +135,7 @@ Our optional offline setup should work well for relatively simple applications. 
 To enable Service Worker support for Polymer Starter Kit project use these 3 steps:
 
 1. Uncomment Service Worker code in index.html
-  ```c
+  ```HTML
   <!-- Uncomment next block to enable Service Worker support (1/2) -->
   <!--
   <paper-toast id="caching-complete"
@@ -155,7 +155,7 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
   ```
 1. Uncomment Service Worker code in elements.html
   
-  ```c
+  ```HTML
   <!-- Uncomment next block to enable Service Worker Support (2/2) -->
   <!--
   <link rel="import" href="../bower_components/platinum-sw/platinum-sw-cache.html">
@@ -165,7 +165,7 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
 1. Add 'precache' to the list in the 'default' gulp task like below.
 [(gulpfile.js)](https://github.com/PolymerElements/polymer-starter-kit/blob/master/gulpfile.js)  
   
-  ```c
+  ```HTML
   // Build Production Files, the Default Task
   gulp.task('default', ['clean'], function (cb) {
     runSequence(
