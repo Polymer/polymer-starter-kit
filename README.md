@@ -167,7 +167,6 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
   });
   ```
 
-
 #### Filing bugs in the right place
 
 If you experience an issue with Service Worker support in your application, check the origin of the issue and use the appropriate issue tracker:
