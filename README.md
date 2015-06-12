@@ -154,7 +154,7 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
   -->
   ```
 1. Uncomment Service Worker code in elements.html
-  
+
   ```HTML
   <!-- Uncomment next block to enable Service Worker Support (2/2) -->
   <!--
@@ -164,7 +164,7 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
   ```
 1. Add 'precache' to the list in the 'default' gulp task like below.
 [(gulpfile.js)](https://github.com/PolymerElements/polymer-starter-kit/blob/master/gulpfile.js)  
-  
+
   ```JavaScript
   // Build Production Files, the Default Task
   gulp.task('default', ['clean'], function (cb) {
