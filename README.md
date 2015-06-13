@@ -260,6 +260,8 @@ Don't worry! We've got your covered. Polymer Starter Kit tries to offer everythi
 
 If you find that you just want the simplest setup possible, we recommend using Polymer Starter Kit light, which is available from the [Releases](https://github.com/PolymerElements/polymer-starter-kit/releases) page. This takes next to no time to setup.
 
+If you have troubles installing dependencies please don't use PSK but use the version with all dependenencies checked in on the releases page though that's bad practise because that's not cross platform.
+
 ## Contributing
 
 Polymer Starter Kit is a new project and is an ongoing effort by the Web Component community. We welcome your bug reports, PRs for improvements, docs and anything you think would improve the experience for other Polymer developers.
