@@ -103,6 +103,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     padding-bottom: 0;
     margin-left: 48px;
   }
+  
+  #mainToolbar .bottom {
+    transition: 0.18s opacity 0.18s ease-in;
+    opacity: 1;
+  }
+
+  #mainToolbar:not(.tall) .bottom {
+    transition: 0.18s opacity ease-in;
+    opacity: 0;
+  }
 
   #mainToolbar .bottom {
     transition: 0.18s opacity 0.18s ease-in;
