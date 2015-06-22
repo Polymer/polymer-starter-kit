@@ -2,6 +2,7 @@
   "private": true,
   "devDependencies": {
     "browser-sync": "^2.7.7",
+    "connect-history-api-fallback": "^1.1.0",
     "del": "^1.1.1",
     "glob": "^5.0.6",
     "gulp": "^3.8.5",

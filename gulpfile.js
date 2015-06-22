@@ -20,6 +20,7 @@ var merge = require('merge-stream');
 var path = require('path');
 var fs = require('fs');
 var glob = require('glob');
+var historyApiFallback = require('connect-history-api-fallback');
 
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 10',
@@ -196,6 +197,7 @@ gulp.task('serve', ['styles', 'elements', 'images'], function () {
     // https: true,
     server: {
       baseDir: ['.tmp', 'app'],
+      middleware: [ historyApiFallback() ],
       routes: {
         '/bower_components': 'bower_components'
       }
@@ -226,7 +228,8 @@ gulp.task('serve:dist', ['default'], function () {
     // Note: this uses an unsigned certificate which on first access
     //       will present a certificate warning in the browser.
     // https: true,
-    server: 'dist'
+    server: 'dist',
+    middleware: [ historyApiFallback() ]
   });
 });
 
