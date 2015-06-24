@@ -31,7 +31,8 @@
     "web-component-tester": "^3.1.3"
   },
   "scripts": {
-    "test": "gulp test:local"
+    "test": "gulp test:local",
+    "start": "gulp serve"
   },
   "engines": {
     "node": ">=0.10.0"
