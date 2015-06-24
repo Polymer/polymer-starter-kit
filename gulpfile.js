@@ -21,6 +21,7 @@ var path = require('path');
 var fs = require('fs');
 var glob = require('glob');
 var historyApiFallback = require('connect-history-api-fallback');
+var arrayUniq = require('array-uniq');
 
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 10',
@@ -164,14 +165,27 @@ gulp.task('vulcanize', function () {
 gulp.task('precache', function (callback) {
   var dir = 'dist';
 
-  glob('{elements,scripts,styles}/**/*.*', {cwd: dir}, function(error, files) {
+  // Read the development precache.json so we can merge it
+  fs.readFile('app/precache.json', 'utf8', function (error, file) {
     if (error) {
       callback(error);
-    } else {
-      files.push('index.html', './', 'bower_components/webcomponentsjs/webcomponents-lite.min.js');
-      var filePath = path.join(dir, 'precache.json');
-      fs.writeFile(filePath, JSON.stringify(files), callback);
     }
+
+    var precache = JSON.parse(file);
+
+    // Build automated precache
+    glob('{elements,scripts,styles}/**/*.*', {cwd: dir}, function (error, files) {
+      if (error) {
+        callback(error);
+      } else {
+        files.push('index.html', './', 'bower_components/webcomponentsjs/webcomponents-lite.min.js');
+        // Merge development precache with automated precache, removing duplicates
+        files = arrayUniq(files.concat(precache));
+        // Write file out to dist dir
+        var filePath = path.join(dir, 'precache.json');
+        fs.writeFile(filePath, JSON.stringify(files), callback);
+      }
+    });
   });
 });
 
