@@ -51,7 +51,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     color: var(--secondary-text-color);
     background-color: var(--drawer-menu-color);
     border-bottom: var(--drawer-toolbar-border-color);
-    height: 64px;
   }
 
   paper-material {
@@ -98,10 +97,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     margin-left: 48px;
   }
 
-  #mainToolbar.has-shadow .middle {
+  #mainToolbar:not(.tall) .middle {
     font-size: 20px;
     padding-bottom: 0;
     margin-left: 48px;
+  }
+
+  #mainToolbar .bottom {
+    transition: 0.18s opacity 0.18s ease-in;
+    opacity: 1;
+  }
+
+  #mainToolbar:not(.tall) .bottom {
+    transition: 0.18s opacity ease-in;
+    opacity: 0;
   }
 
   /* Height of the scroll area */
