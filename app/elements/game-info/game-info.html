@@ -1,0 +1,129 @@
+<link rel="import" href="../../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../game-players/game-players.html">
+<link rel="import" href="../game-ages/game-ages.html">
+<link rel="import" href="../game-artists/game-artists.html">
+<link rel="import" href="../game-designers/game-designers.html">
+<link rel="import" href="../game-publishers/game-publishers.html">
+<link rel="import" href="../game-released/game-released.html">
+<link rel="import" href="../game-info/game-info.html">
+
+<dom-module id="game-info">
+  <template>
+		<div layout horizontal>
+			<iron-tooltip label="Category">
+				<iron-icon icon="subject"></iron-icon>
+			</iron-tooltip>
+			<tag-manager readonly="{{readonly}}" hint="+" tagClass="categories" tags="{{categories}}" suggestions="{{allCategories}}"></tag-manager>
+		</div>
+
+		<div layout horizontal>
+			<iron-tooltip label="Mechanics">
+				<iron-icon icon="build"></iron-icon>
+			</iron-tooltip>
+			<tag-manager readonly="{{readonly}}" hint="+" tagClass="mechanics" tags="{{mechanics}}" suggestions="{{allMechanics}}"></tag-manager>
+		</div>
+
+		<div layout horizontal>
+			<iron-tooltip label="Tags">
+				<iron-icon icon="label"></iron-icon>
+			</iron-tooltip>
+			<tag-manager readonly="{{readonly}}" hint="+" tagClass="tags" tags="{{tags}}" suggestions="{{allTags}}"></tag-manager>
+		</div>
+
+		<div>
+			<iron-tooltip label="Released">
+				<iron-icon icon="event" class="icon"></iron-icon>
+			</iron-tooltip>
+			<game-released model="{{released}}"></game-released>
+		</div>
+
+		<div>
+			<iron-tooltip label="Designed by">
+				<iron-icon icon="image:edit"></iron-icon>
+			</iron-tooltip>
+			<game-designers designers="{{designers}}"></game-designers>
+		</div>
+
+		<div>
+			<iron-tooltip label="Artists">
+				<iron-icon icon="image:brush"></iron-icon>
+			</iron-tooltip>
+			<game-artists artists="{{artists}}"></game-artists>
+		</div>
+
+		<div>
+			<iron-tooltip label="Published by">
+				<iron-icon icon="work"></iron-icon>
+			</iron-tooltip>
+			<game-publishers publishers="{{publishers}}"></game-publishers>
+		</div>
+
+		<div hidden?="{{!website}}">
+			<iron-tooltip label="Official Website">
+				<iron-icon icon="home"></iron-icon>
+			</iron-tooltip>
+			<a href="{{website}}">Official Website</a>
+		</div>
+
+		<div hidden?="{{!rulebook}}">
+			<iron-tooltip label="Rules">
+				<iron-icon icon="book"></iron-icon>
+			</iron-tooltip>
+			<a href="{{rulebook}}">Rules</a>
+		</div>
+
+		<div>
+			<iron-tooltip label="Players">
+				<iron-icon icon="face"></iron-icon>
+			</iron-tooltip>
+			<game-players min={{players.min}} max={{players.max}} recommended={{players.recommended}}></game-players>
+		</div>
+
+		<div hidden?="{{!ages}}">
+			<iron-tooltip label="Ages">
+				<iron-icon icon="hourglass-empty"></iron-icon>
+			</iron-tooltip>
+			<game-ages min="{{ages.min}}" max="9"></game-ages>
+		</div>
+
+		<div>
+			<iron-tooltip label="Playing time">
+				<iron-icon icon="schedule"></iron-icon>
+			</iron-tooltip>	30-70 min
+		</div>
+  </template>
+
+	<script>
+	  (function() {
+	    Polymer({
+	      is: 'game-info',
+
+	      properties: {
+          website: String,
+          released: Object,
+          publishers: Array,
+          players: Object,
+          name: String,
+          rulebook: String,
+          designers: Array,
+          ages: Object,
+          readonly: Boolean,
+          categories: Array,
+          mechanics: Array,
+          tags: Array,
+          artists: Array,
+
+					_categories: {
+						type: Array,
+						value: ['Adventure', 'Card game', 'Fantasy', 'Fighting', 'Miniatures']
+					},
+					_mechanics: {
+						type: Array,
+						values: ['Auction/Bidding', 'Battle', 'Card Drafting', 'Co-operative Play', 'Dice Rolling', 'Storytelling']
+					}
+	      },
+	    });
+	  })();
+	</script>
+  
+</dom-module>

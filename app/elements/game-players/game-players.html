@@ -1,0 +1,19 @@
+<dom-module id="game-players">
+  <template>
+    <span>{{min}}</span>-<span>{{max}}</span>
+  </template>
+
+	<script>
+	  (function() {
+	    Polymer({
+	      is: 'game-players',
+
+	      properties: {
+	        min: String,
+					max: String
+	      }
+	    });
+	  })();
+	</script>
+  
+</dom-module>

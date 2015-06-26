@@ -1,0 +1,28 @@
+<dom-module id="game-ages">
+  <template>
+	   <span>{{_ages(min, max)}}</span>
+  </template>
+
+  <script>
+	  (function() {
+      Polymer({
+      	is: 'game-ages',
+
+      	properties: {
+      		min: String,
+      		max: String
+      	},
+        // make computed prop?
+      	_ages: function (min, max) {
+      		var agesText = '';
+      		if (min) {
+      			agesText += min;
+      		}
+      		agesText += max ? (' to ' + max) : ' and up';
+      		return agesText;
+      	}
+    	});
+	  })();
+  </script>
+
+</dom-module>

@@ -1,0 +1,20 @@
+<dom-module id="game-designers">
+  <template>
+    <template is="dom-repeat" items="{{designers}}">
+      <a href="/designers/{{designer.id}}">{{item.name}}</a>
+    </template>
+  </template>
+
+  <script>
+    (function() {
+      Polymer({
+        is: 'game-designers',
+
+        properties: {
+          designers: Array
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

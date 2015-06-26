@@ -1,0 +1,36 @@
+<link rel="import" href="../../elements/game-info/game-info.html">
+
+<dom-module id="game-main">
+  <template>
+		<h1>{{game.name}}</h1>
+
+		<paper-tabs id="tabs" selected="{{selected}}" class="menu">
+			<paper-tab>Discussion</paper-tab>
+			<paper-tab>Images</paper-tab>
+			<paper-tab>Rating & Stats</paper-tab>
+		</paper-tabs>
+
+		<iron-pages selected="{{selected}}">
+  		<div>Page 1</div>
+  		<div>Page 2</div>
+  		<div>Page 3</div>
+		</iron-pages>
+
+		<game-info ages="{{game.ages}}" players="{{game.players}}" artists="{{game.artists}}" designers="{{game.designers}}" publishers="{{game.publishers}}" released="{{game.released}}" website="{{game.website}}"></game-info>
+
+	</template>
+
+	<script>
+		(function() {
+			Polymer({
+				is: 'game-main',
+
+				properties: {
+					game: Object,
+				}
+
+			});
+		})();
+	</script>
+  
+</dom-module>

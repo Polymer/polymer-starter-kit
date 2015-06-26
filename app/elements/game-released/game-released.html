@@ -1,0 +1,62 @@
+<dom-module id="game-released">
+  <template>
+    <app-globals id="globals"></app-globals>
+
+    <span hidden?="{{!readOnly}}">{{_releasedText(model)}}</span>
+
+    <span hidden?="{{readOnly}}">
+      <paper-toggle-button checked="{{model.released}}" on-change="{{releasedChanged}}"></paper-toggle-button>&nbsp;&nbsp;
+      <paper-input id="year" label="year" value="{{model.year}}"></paper-input>
+    </span>
+  </template>
+
+	<script>
+	  (function() {
+	    Polymer({
+	      is: 'game-released',
+
+	      properties: {
+	        model: Object
+	      },
+
+        _releasedText: function(model) {
+          return model.released ? model.year : 'Unreleased';
+        }
+	    });
+	  })();
+	</script>
+  
+</dom-module>
+
+
+<!-- Todo: Fix when edit mode exists
+
+  <script>
+    Polymer({
+    is: 'game-released',
+    properties: {
+      model: {
+        year: undefined,
+        released: false
+      }
+    },
+    ready: function () {
+      if (!this.model.released) {
+        this.$.year.disabled = false;
+        this.readOnly = this.$.globals.readOnly;
+      }
+    },
+
+    releasedChanged: function (e, detail, sender) {
+      if (this.model.released) {
+        this.$.year.disabled = false;
+        this.$.year.focus();
+      } else {
+        this.$.year.disabled = true;
+      }
+    }
+  });
+
+</script>
+</dom-module>
+-->
