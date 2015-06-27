@@ -1,4 +1,4 @@
-# robotstxt.org
+# www.robotstxt.org
 
 User-agent: *
 Disallow:
