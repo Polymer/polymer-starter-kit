@@ -8,89 +8,140 @@
 <link rel="import" href="../game-info/game-info.html">
 
 <dom-module id="game-info">
+  <style>
+    div {
+      padding: 16px;
+    }
+
+    dl dd {
+      display: inline;
+      margin: 0;
+    }
+
+    dl dd:after {
+      display: block;
+      content: '';
+      margin-bottom: 7px;
+    }
+
+    dl dt {
+      display: inline-block;
+      min-width: 40%;
+    }
+
+    iron-icon {
+      opacity: 0.54;
+    }
+
+    label {
+      font-weight: 300;
+    }
+
+    iron-icon.rating {
+      color: #FFA000; /* Amber 700 */
+      height: 36px;
+      width: 36px;
+    }
+  </style>
   <template>
-		<div layout horizontal>
-			<iron-tooltip label="Category">
-				<iron-icon icon="subject"></iron-icon>
-			</iron-tooltip>
-			<tag-manager readonly="{{readonly}}" hint="+" tagClass="categories" tags="{{categories}}" suggestions="{{allCategories}}"></tag-manager>
-		</div>
+    <iron-image src="http://lorempixel.com/400/400" style="width:100%; height: 200px" sizing="cover"></iron-image>
 
-		<div layout horizontal>
-			<iron-tooltip label="Mechanics">
-				<iron-icon icon="build"></iron-icon>
-			</iron-tooltip>
-			<tag-manager readonly="{{readonly}}" hint="+" tagClass="mechanics" tags="{{mechanics}}" suggestions="{{allMechanics}}"></tag-manager>
-		</div>
+    <div>
+      <h3>{{name}}</h3>
 
-		<div layout horizontal>
-			<iron-tooltip label="Tags">
-				<iron-icon icon="label"></iron-icon>
-			</iron-tooltip>
-			<tag-manager readonly="{{readonly}}" hint="+" tagClass="tags" tags="{{tags}}" suggestions="{{allTags}}"></tag-manager>
-		</div>
+      <iron-icon icon="star" class="rating"></iron-icon>
+      <iron-icon icon="star" class="rating"></iron-icon>
+      <iron-icon icon="star" class="rating"></iron-icon>
+      <iron-icon icon="star" class="rating"></iron-icon>
+      <iron-icon icon="star" class="rating"></iron-icon>
 
-		<div>
-			<iron-tooltip label="Released">
-				<iron-icon icon="event" class="icon"></iron-icon>
-			</iron-tooltip>
-			<game-released model="{{released}}"></game-released>
-		</div>
-
-		<div>
-			<iron-tooltip label="Designed by">
-				<iron-icon icon="image:edit"></iron-icon>
-			</iron-tooltip>
-			<game-designers designers="{{designers}}"></game-designers>
-		</div>
-
-		<div>
-			<iron-tooltip label="Artists">
-				<iron-icon icon="image:brush"></iron-icon>
-			</iron-tooltip>
-			<game-artists artists="{{artists}}"></game-artists>
-		</div>
-
-		<div>
-			<iron-tooltip label="Published by">
-				<iron-icon icon="work"></iron-icon>
-			</iron-tooltip>
-			<game-publishers publishers="{{publishers}}"></game-publishers>
-		</div>
-
-		<div hidden?="{{!website}}">
-			<iron-tooltip label="Official Website">
-				<iron-icon icon="home"></iron-icon>
-			</iron-tooltip>
-			<a href="{{website}}">Official Website</a>
-		</div>
-
-		<div hidden?="{{!rulebook}}">
-			<iron-tooltip label="Rules">
-				<iron-icon icon="book"></iron-icon>
-			</iron-tooltip>
-			<a href="{{rulebook}}">Rules</a>
-		</div>
-
-		<div>
-			<iron-tooltip label="Players">
-				<iron-icon icon="face"></iron-icon>
-			</iron-tooltip>
-			<game-players min={{players.min}} max={{players.max}} recommended={{players.recommended}}></game-players>
-		</div>
-
-		<div hidden?="{{!ages}}">
-			<iron-tooltip label="Ages">
-				<iron-icon icon="hourglass-empty"></iron-icon>
-			</iron-tooltip>
-			<game-ages min="{{ages.min}}" max="9"></game-ages>
-		</div>
-
-		<div>
-			<iron-tooltip label="Playing time">
-				<iron-icon icon="schedule"></iron-icon>
-			</iron-tooltip>	30-70 min
-		</div>
+      <dl>
+        <dt>
+          <iron-icon icon="subject"></iron-icon>
+          <label>Category</label>
+        </dt>
+        <dd>TBD
+          <!--<tag-manager readonly="{{readonly}}" hint="+" tagClass="categories" tags="{{categories}}" suggestions="{{allCategories}}"></tag-manager>-->
+        </dd>
+        <dt>
+          <iron-icon icon="build"></iron-icon>
+          <label>Mechanics</label>
+        </dt>
+        <dd>TBD
+          <!--<tag-manager readonly="{{readonly}}" hint="+" tagClass="mechanics" tags="{{mechanics}}" suggestions="{{allMechanics}}"></tag-manager>-->
+        </dd>
+        <dt>
+          <iron-icon icon="label"></iron-icon>
+          <label>Tags</label>
+        </dt>
+        <dd> TBD
+          <!-- <tag-manager readonly="{{readonly}}" hint="+" tagClass="tags" tags="{{tags}}" suggestions="{{allTags}}"></tag-manager> -->
+        </dd>
+        <dt>
+          <iron-icon icon="event" class="icon"></iron-icon>
+          <label>Released</label>
+        </dt>
+        <dd>
+          <game-released model="{{released}}"></game-released>
+        </dd>
+        <dt>
+          <iron-icon icon="image:edit"></iron-icon>
+          <label>Designers</label>
+        </dt>
+        <dd>
+          <game-designers designers="{{designers}}"></game-designers>
+        </dd>
+        <dt>
+          <iron-icon icon="image:brush"></iron-icon>
+          <label>Artists</label>
+        </dt>
+        <dd>
+          <game-artists artists="{{artists}}"></game-artists>
+        </dd>
+        <dt>
+          <iron-icon icon="work"></iron-icon>
+          <label>Published by</label>
+        </dt>
+        <dd>
+          <game-publishers publishers="{{publishers}}"></game-publishers>
+        </dd>
+        <dt>
+          <iron-icon icon="home"></iron-icon>
+          <label>Website</label>
+        </dt>
+        <dd>
+          <a href="{{website}}">{{website}}</a>
+        </dd>
+        <dt>
+          <iron-icon icon="book"></iron-icon>
+          <label>Rules</label>
+        </dt>
+        <dd>
+          <a href="{{rules}}">{{rules}}</a>
+        </dd>
+        <dt>
+          <iron-icon icon="face"></iron-icon>
+          <label>Players</label>
+        </dt>
+        <dd>
+          <game-players min={{players.min}} max={{players.max}} recommended={{players.recommended}}></game-players>
+        </dd>
+        <dt>
+          <iron-icon icon="hourglass-empty"></iron-icon>
+          <label>Ages</label>
+        </dt>
+        <dd>
+          <game-ages min="{{ages.min}}" max="9"></game-ages>
+        </dd>
+        <dt>
+          <iron-icon icon="schedule"></iron-icon>
+          <label>Time</label>
+        </dt>
+        <dd>
+          30-70 min
+        </dd>
+      </dl>
+    </div>
   </template>
 
 	<script>
@@ -104,7 +155,7 @@
           publishers: Array,
           players: Object,
           name: String,
-          rulebook: String,
+          rules: String,
           designers: Array,
           ages: Object,
           readonly: Boolean,
@@ -125,5 +176,5 @@
 	    });
 	  })();
 	</script>
-  
+
 </dom-module>

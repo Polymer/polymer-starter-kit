@@ -1,22 +1,38 @@
 <link rel="import" href="../../elements/game-info/game-info.html">
 
 <dom-module id="game-main">
+  <style>
+    .main {
+      margin-right: 30px;
+    }
+
+    iron-pages {
+      padding: 20px;
+    }
+  </style>
+
   <template>
-		<h1>{{game.name}}</h1>
+    <div class="layout horizontal">
+    <paper-material class="flex-2 main">
+  		<paper-tabs id="tabs" selected="{{selected}}" class="menu">
+  			<paper-tab>Discussion</paper-tab>
+  			<paper-tab>Images</paper-tab>
+  			<paper-tab>Rating & Stats</paper-tab>
+  		</paper-tabs>
 
-		<paper-tabs id="tabs" selected="{{selected}}" class="menu">
-			<paper-tab>Discussion</paper-tab>
-			<paper-tab>Images</paper-tab>
-			<paper-tab>Rating & Stats</paper-tab>
-		</paper-tabs>
+  		<iron-pages selected="{{selected}}">
+    		<div>Page 1</div>
+    		<div>Page 2</div>
+    		<div>Page 3</div>
+  		</iron-pages>
+    </paper-material>
 
-		<iron-pages selected="{{selected}}">
-  		<div>Page 1</div>
-  		<div>Page 2</div>
-  		<div>Page 3</div>
-		</iron-pages>
-
-		<game-info ages="{{game.ages}}" players="{{game.players}}" artists="{{game.artists}}" designers="{{game.designers}}" publishers="{{game.publishers}}" released="{{game.released}}" website="{{game.website}}"></game-info>
+    <section class="flex">
+      <paper-material elevation="1">
+  		    <game-info ages="{{game.ages}}" players="{{game.players}}" artists="{{game.artists}}" designers="{{game.designers}}" publishers="{{game.publishers}}" released="{{game.released}}" website="{{game.website}}" name="{{game.name}}" rules="{{game.rules}}"></game-info>
+      </paper-material>
+    </section>
+  </div>
 
 	</template>
 
@@ -32,5 +48,5 @@
 			});
 		})();
 	</script>
-  
+
 </dom-module>
