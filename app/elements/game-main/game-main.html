@@ -9,23 +9,20 @@
     iron-pages {
       padding: 20px;
     }
+
+    iron-image {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-left: 5px;
+    }
   </style>
 
   <template>
     <div class="layout horizontal">
-    <paper-material class="flex-2 main">
-  		<paper-tabs id="tabs" selected="{{selected}}" class="menu">
-  			<paper-tab>Discussion</paper-tab>
-  			<paper-tab>Images</paper-tab>
-  			<paper-tab>Rating & Stats</paper-tab>
-  		</paper-tabs>
-
-  		<iron-pages selected="{{selected}}">
-    		<div>Page 1</div>
-    		<div>Page 2</div>
-    		<div>Page 3</div>
-  		</iron-pages>
-    </paper-material>
+    <section class="flex-2 main">
+      <div class="layout horizontal center">4 Contributors: <iron-image src="http://lorempixel.com/50/50"></iron-image> <iron-image src="http://lorempixel.com/53/53"> </iron-image> <iron-image src="http://lorempixel.com/52/52"></iron-image> <iron-image src="http://lorempixel.com/51/51"></iron-image></div>
+    </section>
 
     <section class="flex">
       <paper-material elevation="1">
