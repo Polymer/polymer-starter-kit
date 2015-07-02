@@ -12,20 +12,25 @@
     iron-icon {
       margin-right: 15px;
     }
+
+    span {
+      text-align: right;
+      padding-right: 13px;
+    }
   </style>
   <template>
       <template is="dom-repeat" items="{{items}}">
-        <paper-material>
-          <div class="layout horizontal">
+          <paper-material class="layout horizontal">
             <div class="flex">
               <h4><iron-icon class="pro" hidden$="{{!item.pro}}" icon="thumb-up"></iron-icon><iron-icon class="con" hidden$="{{item.pro}}" icon="thumb-down"></iron-icon>{{item.heading}}</h4>
+              <p hidden$="{{!item.description}}">{{item.description}}</p>
             </div>
-            <div>
-              <span>{{item.votes}}</span> votes: <paper-icon-button hidden$="{{!item.pro}}" class="pro" icon="thumb-up"></paper-icon-button><paper-icon-button hidden$="{{item.pro}}" class="con" icon="thumb-down"></paper-icon-button>
+            <div class="layout vertical">
+              <paper-icon-button class="pro" icon="arrow-drop-up" on-click="up"></paper-icon-button>
+              <span>{{item.votes}}</span>
+              <paper-icon-button class="con" icon="arrow-drop-down" on-click="down"></paper-icon-button>
             </div>
-          </div>
-          <p hidden$="{{!item.description}}">{{item.description}}</p>
-        </paper-material>
+          </paper-material>
       </template>
   </template>
 
@@ -39,6 +44,7 @@
             notify: true,
           }
         },
+
         ready: function() {
           this.items = [
             {
@@ -60,6 +66,16 @@
               pro: false
             }
           ];
+        },
+
+        up: function(e) {
+          var model = e.model;
+          model.set('item.votes', model.item.votes + 1);
+        },
+
+        down: function(e) {
+          var model = e.model;
+          model.set('item.votes', model.item.votes - 1);
         }
       });
     })();
