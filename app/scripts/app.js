@@ -30,6 +30,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // imports are loaded and elements have been registered
   });
 
+  // custom transformation: scale header's titles
+  addEventListener('paper-header-transform', function(e) {
+    var appName = document.querySelector('.app-name');
+    var middleContainer = document.querySelector('.middle-container');
+    var bottomContainer = document.querySelector('.bottom-container');
+    var d = e.detail;
+    var m = d.height - d.condensedHeight;
+    var y = Math.min(1, d.y / m);
+    var scaleMiddle = Math.max(0.50, (m - d.y) / (m / 0.50)  + 0.50);
+    var scaleBottom = 1 - y;
+
+    // move/translate middleContainer
+    Polymer.Base.transform('translate3d(0,' + y * 100 + '%,0)', middleContainer);
+
+    // scale bottomContainer and bottom sub title to nothing and back
+    Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
+
+    // scale middle app name
+    Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
+  });
+
   // Close drawer after menu item is selected if drawerPanel is narrow
   app.onMenuSelect = function() {
     var drawerPanel = document.querySelector('#paperDrawerPanel');
