@@ -40,7 +40,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var yRatio = Math.min(1, detail.y / heightDiff);
     var scaleMiddle = Math.max(0.50, (heightDiff - detail.y) / (heightDiff / 0.50)  + 0.50);
     var scaleBottom = 1 - yRatio;
-    console.log("heightDiff: ",heightDiff, "yRatio:",yRatio, "detail.y", detail.y);
 
     // Move/translate middleContainer
     Polymer.Base.transform('translate3d(0,' + yRatio * 100 + '%,0)', middleContainer);
