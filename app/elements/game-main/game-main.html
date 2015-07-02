@@ -1,4 +1,5 @@
 <link rel="import" href="../../elements/game-info/game-info.html">
+<link rel="import" href="../../elements/game-pros-and-cons/game-pros-and-cons.html">
 
 <dom-module id="game-main">
   <style>
@@ -16,20 +17,40 @@
       border-radius: 50%;
       margin-left: 5px;
     }
+
+    header {
+      margin-bottom: 20px;
+    }
+
+    game-pros-and-cons {
+      margin-bottom: 40px;
+    }
   </style>
 
   <template>
-    <div class="layout horizontal">
-    <section class="flex-2 main">
-      <div class="layout horizontal center">4 Contributors: <iron-image src="http://lorempixel.com/50/50"></iron-image> <iron-image src="http://lorempixel.com/53/53"> </iron-image> <iron-image src="http://lorempixel.com/52/52"></iron-image> <iron-image src="http://lorempixel.com/51/51"></iron-image></div>
-    </section>
+    <header class="layout horizontal center">4 Contributors: <iron-image src="http://lorempixel.com/50/50"></iron-image> <iron-image src="http://lorempixel.com/53/53"> </iron-image> <iron-image src="http://lorempixel.com/52/52"></iron-image> <iron-image src="http://lorempixel.com/51/51"></iron-image></header>
 
-    <section class="flex">
-      <paper-material elevation="1">
-  		    <game-info ages="{{game.ages}}" players="{{game.players}}" artists="{{game.artists}}" designers="{{game.designers}}" publishers="{{game.publishers}}" released="{{game.released}}" website="{{game.website}}" name="{{game.name}}" rules="{{game.rules}}"></game-info>
-      </paper-material>
-    </section>
-  </div>
+    <div class="layout horizontal">
+      <section class="flex-2 main">
+        <game-pros-and-cons></game-pros-and-cons>
+
+        <p>Did we miss anything?</p>
+
+        <paper-button raised>
+          <iron-icon icon="thumb-up" class="pro"></iron-icon> Add pro
+        </paper-button>
+        <paper-button raised>
+          <iron-icon icon="thumb-down" class="con"></iron-icon> Add con
+        </paper-button>
+
+      </section>
+
+      <section class="flex">
+        <paper-material elevation="1">
+    		    <game-info ages="{{game.ages}}" players="{{game.players}}" artists="{{game.artists}}" designers="{{game.designers}}" publishers="{{game.publishers}}" released="{{game.released}}" website="{{game.website}}" name="{{game.name}}" rules="{{game.rules}}"></game-info>
+        </paper-material>
+      </section>
+    </div>
 
 	</template>
 

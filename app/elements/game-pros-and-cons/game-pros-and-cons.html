@@ -1,0 +1,68 @@
+<dom-module id="game-pros-and-cons">
+  <style>
+    :host {
+      display: block;
+    }
+
+    paper-material {
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    iron-icon {
+      margin-right: 15px;
+    }
+  </style>
+  <template>
+      <template is="dom-repeat" items="{{items}}">
+        <paper-material>
+          <div class="layout horizontal">
+            <div class="flex">
+              <h4><iron-icon class="pro" hidden$="{{!item.pro}}" icon="thumb-up"></iron-icon><iron-icon class="con" hidden$="{{item.pro}}" icon="thumb-down"></iron-icon>{{item.heading}}</h4>
+            </div>
+            <div>
+              <span>{{item.votes}}</span> votes: <paper-icon-button hidden$="{{!item.pro}}" class="pro" icon="thumb-up"></paper-icon-button><paper-icon-button hidden$="{{item.pro}}" class="con" icon="thumb-down"></paper-icon-button>
+            </div>
+          </div>
+          <p hidden$="{{!item.description}}">{{item.description}}</p>
+        </paper-material>
+      </template>
+  </template>
+
+  <script>
+    (function () {
+      Polymer({
+        is: 'game-pros-and-cons',
+        properties: {
+          items: {
+            type: Array,
+            notify: true,
+          }
+        },
+        ready: function() {
+          this.items = [
+            {
+              heading: 'Easy to understand the rules',
+              description: 'Some knowledge will be required to understand the rules as there are some unexplained conventions that are presumed to be understood.',
+              votes: 14,
+              pro: false
+            },
+            {
+              heading: 'Great for those looking for a classic fantasy experience',
+              description: '',
+              votes: 16,
+              pro: true
+            },
+            {
+              heading: 'Requries prior knowledge of RPGs to completely understand',
+              description: 'Some knowledge will be required to understand the rules as there are some unexplained conventions that are presumed to be understood.',
+              votes: 14,
+              pro: false
+            }
+          ];
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

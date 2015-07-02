@@ -32,6 +32,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     --secondary-text-color: #727272;
     --disabled-text-color: #bdbdbd;
     --divider-color: #B6B6B6;
+    --danger-color: #F44336; /* Red 500 */
+    --success-color: #4CAF50; /* Green 500 */
 
     /* Components */
 
@@ -213,4 +215,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   @media all and (min-width: 1281px) and (max-width: 1600px) { }
   /* desktop-xlarge */
   @media all and (min-width: 1601px) and (max-width: 1920px) { }
+
+  iron-icon.con /deep/, paper-icon-button.con /deep/  {
+    color: var(--danger-color);
+  }
+
+  iron-icon.pro /deep/, paper-icon-button.pro /deep/  {
+    color: var(--success-color);
+  }
+
 </style>
