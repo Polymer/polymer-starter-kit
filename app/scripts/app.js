@@ -30,7 +30,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // imports are loaded and elements have been registered
   });
 
-  // Custom transformation: scale header's titles
+  // Main area's paper-scroll-header-panel custom condensing transformation of
+  // the appName in the middle-container and the bottom title in the bottom-container.
+  // The appName is moved to top and shrunk on condensing. The bottom sub title
+  // is shrunk to nothing on condensing.
   addEventListener('paper-header-transform', function(e) {
     var appName = document.querySelector('.app-name');
     var middleContainer = document.querySelector('.middle-container');
@@ -38,7 +41,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var detail = e.detail;
     var heightDiff = detail.height - detail.condensedHeight;
     var yRatio = Math.min(1, detail.y / heightDiff);
-    var scaleMiddle = Math.max(0.50, (heightDiff - detail.y) / (heightDiff / 0.50)  + 0.50);
+    var maxMiddleScale = 0.50;  // appName max size when condensed. The smaller the number the smaller the condensed size.
+    var scaleMiddle = Math.max(maxMiddleScale, (heightDiff - detail.y) / (heightDiff / (1-maxMiddleScale))  + maxMiddleScale);
     var scaleBottom = 1 - yRatio;
 
     // Move/translate middleContainer
@@ -47,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // Scale bottomContainer and bottom sub title to nothing and back
     Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
 
-    // Scale middle app name
+    // Scale middleContainer appName
     Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
   });
 
