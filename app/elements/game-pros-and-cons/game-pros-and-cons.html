@@ -17,32 +17,99 @@
       text-align: right;
       padding-right: 13px;
     }
+
+    paper-dialog-scrollable {
+      padding: 16px;
+    }
+
+    paper-input {
+      margin: 0 20px 0 20px;
+    }
   </style>
   <template>
-      <template is="dom-repeat" items="{{items}}">
-          <paper-material class="layout horizontal">
-            <div class="flex">
-              <h4><iron-icon class="pro" hidden$="{{!item.pro}}" icon="thumb-up"></iron-icon><iron-icon class="con" hidden$="{{item.pro}}" icon="thumb-down"></iron-icon>{{item.heading}}</h4>
-              <p hidden$="{{!item.description}}">{{item.description}}</p>
-            </div>
-            <div class="layout vertical">
-              <paper-icon-button class="pro" icon="arrow-drop-up" on-click="up"></paper-icon-button>
-              <span>{{item.votes}}</span>
-              <paper-icon-button class="con" icon="arrow-drop-down" on-click="down"></paper-icon-button>
-            </div>
-          </paper-material>
-      </template>
+    <template is="dom-repeat" items="{{items}}">
+        <paper-material class="layout horizontal">
+          <div class="flex">
+            <h4><iron-icon class="pro" hidden$="{{!item.pro}}" icon="thumb-up"></iron-icon><iron-icon class="con" hidden$="{{item.pro}}" icon="thumb-down"></iron-icon>{{item.heading}}</h4>
+            <p hidden$="{{!item.description}}">{{item.description}}</p>
+          </div>
+          <div class="layout vertical">
+            <paper-icon-button icon="arrow-drop-up" on-click="up"></paper-icon-button>
+            <span>{{item.votes}}</span>
+            <paper-icon-button icon="arrow-drop-down" on-click="down"></paper-icon-button>
+          </div>
+        </paper-material>
+    </template>
+
+    <div class="layout horizontal end-justified">
+      <paper-button raised on-click="addPro">
+        <iron-icon icon="thumb-up" class="pro"></iron-icon> Add pro
+      </paper-button>
+      <paper-button raised on-click="addCon">
+        <iron-icon icon="thumb-down" class="con"></iron-icon> Add con
+      </paper-button>
+    </div>
+
+    <paper-dialog id="dialog">
+      <h2>{{_modalHeading(newItem)}}</h2>
+      <paper-dialog-scrollable>
+        <paper-input label="Title" value="{{newItem.heading::input}}"></paper-input>
+        <paper-input label="Description" value="{{newItem.description::input}}"></paper-input>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm>Accept</paper-button>
+      </div>
+    </paper-dialog>
   </template>
 
   <script>
     (function () {
       Polymer({
         is: 'game-pros-and-cons',
+
         properties: {
           items: {
             type: Array,
             notify: true,
+          },
+          newItem: {
+            type: Object,
+            value: function() {
+              return {
+                heading: '',
+                description: '',
+                pro: true,
+                votes: 0
+              }
+            }
           }
+        },
+
+        listeners: {
+          'iron-overlay-closed': 'add',
+        },
+
+        add: function(e) {
+          if (!e.detail.confirmed) { return; }
+
+          var clone = JSON.parse(JSON.stringify(this.newItem));
+          this.push('items', clone);
+          resetNewItem();
+        },
+
+        resetNewItem: function() {
+          this.newItem = {
+            heading: '',
+            description: '',
+            pro: true,
+            votes: 0
+          }
+        },
+
+        _modalHeading: function(item) {
+          var end = item.pro ? 'pro' : 'con'
+          return 'Add a ' + end;
         },
 
         ready: function() {
@@ -66,6 +133,7 @@
               pro: false
             }
           ];
+
         },
 
         up: function(e) {
@@ -76,6 +144,16 @@
         down: function(e) {
           var model = e.model;
           model.set('item.votes', model.item.votes - 1);
+        },
+
+        addPro: function() {
+          this.$.dialog.open();
+          this.newItem.pro = true;
+        },
+
+        addCon: function() {
+          this.$.dialog.open();
+          this.newItem.pro = false;
         }
       });
     })();

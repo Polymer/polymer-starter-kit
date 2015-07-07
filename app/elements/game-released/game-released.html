@@ -4,10 +4,10 @@
 
     <span hidden?="{{!readOnly}}">{{_releasedText(model)}}</span>
 
-    <span hidden?="{{readOnly}}">
+    <!--<span hidden?="{{readOnly}}">
       <paper-toggle-button checked="{{model.released}}" on-change="{{releasedChanged}}"></paper-toggle-button>&nbsp;&nbsp;
       <paper-input id="year" label="year" value="{{model.year}}"></paper-input>
-    </span>
+    </span>-->
   </template>
 
 	<script>
@@ -25,7 +25,7 @@
 	    });
 	  })();
 	</script>
-  
+
 </dom-module>
 
 
