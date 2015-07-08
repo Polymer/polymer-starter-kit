@@ -51,7 +51,7 @@
     </div>
 
     <paper-dialog id="dialog">
-      <h2>{{_modalHeading(newItem)}}</h2>
+      <h2>{{modalHeading}}</h2>
       <paper-dialog-scrollable>
         <paper-input label="Title" value="{{newItem.heading::input}}"></paper-input>
         <paper-input label="Description" value="{{newItem.description::input}}"></paper-input>
@@ -73,6 +73,7 @@
             type: Array,
             notify: true,
           },
+
           newItem: {
             type: Object,
             value: function() {
@@ -82,7 +83,12 @@
                 pro: true,
                 votes: 0
               }
-            }
+            },
+          },
+
+          modalHeading: {
+            type: String,
+            computed: 'getModalHeading(newItem.pro)'
           }
         },
 
@@ -107,8 +113,8 @@
           }
         },
 
-        _modalHeading: function(item) {
-          var end = item.pro ? 'pro' : 'con'
+        getModalHeading: function(pro) {
+          var end = pro ? 'pro' : 'con'
           return 'Add a ' + end;
         },
 
@@ -123,13 +129,13 @@
         },
 
         addPro: function() {
+          this.set('newItem.pro', true);
           this.$.dialog.open();
-          this.newItem.pro = true;
         },
 
         addCon: function() {
+          this.set('newItem.pro', false);
           this.$.dialog.open();
-          this.newItem.pro = false;
         }
       });
     })();
