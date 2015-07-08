@@ -1,5 +1,5 @@
 <link rel="import" href="../../elements/game-info/game-info.html">
-<link rel="import" href="../../elements/game-pros-and-cons/game-pros-and-cons.html">
+<link rel="import" href="../../elements/game-quotes/game-quotes.html">
 
 <dom-module id="game-main">
   <style>
@@ -32,7 +32,7 @@
 
     <div class="layout horizontal">
       <section class="flex-2 main">
-        <game-pros-and-cons></game-pros-and-cons>
+        <game-quotes quotes="{{game.quotes}}"></game-quotes>
       </section>
 
       <section class="flex">

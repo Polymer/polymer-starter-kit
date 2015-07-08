@@ -1,4 +1,4 @@
-<dom-module id="game-pros-and-cons">
+<dom-module id="game-quotes">
   <style>
     :host {
       display: block;
@@ -27,7 +27,7 @@
     }
   </style>
   <template>
-    <template is="dom-repeat" items="{{items}}">
+    <template is="dom-repeat" items="{{quotes}}">
         <paper-material class="layout horizontal">
           <div class="flex">
             <h4><iron-icon class="pro" hidden$="{{!item.pro}}" icon="thumb-up"></iron-icon><iron-icon class="con" hidden$="{{item.pro}}" icon="thumb-down"></iron-icon>{{item.heading}}</h4>
@@ -66,10 +66,10 @@
   <script>
     (function () {
       Polymer({
-        is: 'game-pros-and-cons',
+        is: 'game-quotes',
 
         properties: {
-          items: {
+          quotes: {
             type: Array,
             notify: true,
           },
@@ -94,8 +94,8 @@
           if (!e.detail.confirmed) { return; }
 
           var clone = JSON.parse(JSON.stringify(this.newItem));
-          this.push('items', clone);
-          resetNewItem();
+          this.push('quotes', clone);
+          this.resetNewItem();
         },
 
         resetNewItem: function() {
@@ -110,30 +110,6 @@
         _modalHeading: function(item) {
           var end = item.pro ? 'pro' : 'con'
           return 'Add a ' + end;
-        },
-
-        ready: function() {
-          this.items = [
-            {
-              heading: 'Easy to understand the rules',
-              description: 'Some knowledge will be required to understand the rules as there are some unexplained conventions that are presumed to be understood.',
-              votes: 14,
-              pro: false
-            },
-            {
-              heading: 'Great for those looking for a classic fantasy experience',
-              description: '',
-              votes: 16,
-              pro: true
-            },
-            {
-              heading: 'Requries prior knowledge of RPGs to completely understand',
-              description: 'Some knowledge will be required to understand the rules as there are some unexplained conventions that are presumed to be understood.',
-              votes: 14,
-              pro: false
-            }
-          ];
-
         },
 
         up: function(e) {
