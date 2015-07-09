@@ -1,0 +1,20 @@
+<dom-module id="game-publishers">
+  <template>
+    <template is="dom-repeat" items="{{publishers}}">
+      <a href="/publishers/{{publisher.id}}">{{item.name}}</a>
+    </template>
+  </template>
+
+  <script>
+    (function() {
+      Polymer({
+        is: 'game-publishers',
+
+        properties: {
+          publishers: Array
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

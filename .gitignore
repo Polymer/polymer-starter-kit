@@ -2,3 +2,5 @@ node_modules
 dist
 bower_components
 .tmp
+test/bower_components/
+.DS_Store

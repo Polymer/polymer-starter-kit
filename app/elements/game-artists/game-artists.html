@@ -1,0 +1,18 @@
+<dom-module id="game-artists">
+  <template>
+    <template is="dom-repeat" items="{{artists}}">
+      <a href="/artists/{{item.id}}">{{item.name}}</a>
+    </template>
+  </template>
+
+  <script>
+  (function() {
+    Polymer({
+       is: "game-artists",
+       properties: {
+         artists: Array
+       }});
+     })();
+  </script>
+
+</dom-module>
