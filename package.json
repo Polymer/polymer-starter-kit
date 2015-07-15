@@ -20,7 +20,6 @@
     "gulp-replace": "^0.5.3",
     "gulp-size": "^1.0.0",
     "gulp-uglify": "^1.2.0",
-    "gulp-uncss": "^1.0.1",
     "gulp-useref": "^1.1.2",
     "gulp-vulcanize": "^6.0.0",
     "jshint-stylish": "^2.0.0",
