@@ -69,18 +69,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-toolbar>
 
         <!-- Drawer Content -->
-        <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-          <a data-route="home" href="/">
+        <paper-menu class="list" attr-for-selected="data-route" selected="[[route]]" on-iron-select="onMenuSelect">
+          <a data-route="home" href="javascript:void(0)" path="/">
             <iron-icon icon="home"></iron-icon>
             <span>Home</span>
           </a>
 
-          <a data-route="users" href="/users">
+          <a data-route="users" href="javascript:void(0)" path="/users">
             <iron-icon icon="info"></iron-icon>
             <span>Users</span>
           </a>
 
-          <a data-route="contact" href="/contact">
+          <a data-route="contact" href="javascript:void(0)" path="/contact">
             <iron-icon icon="mail"></iron-icon>
             <span>Contact</span>
           </a>
