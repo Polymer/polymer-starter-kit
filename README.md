@@ -299,6 +299,8 @@ during a build.
 <!-- endbuild-->
 ```
 
+If you are not using the build-blocks, but still wish for additional files (e.g scripts or stylesheets) to be included in the final `dist` directory, you will need to either copy these files as part of the gulpfile.js build process (see the `copy` task for how to automate this) or manually copy the files.
+
 ### I'm finding the installation/tooling here overwhelming. What should I do?
 
 Don't worry! We've got your covered. Polymer Starter Kit tries to offer everything you need to build and optimize your apps for production, which is why we include the tooling we do. We realise however that our tooling setup may not be for everyone.
