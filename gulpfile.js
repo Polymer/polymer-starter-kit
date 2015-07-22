@@ -58,7 +58,7 @@ gulp.task('elements', function () {
 // Lint JavaScript
 gulp.task('jshint', function () {
   return gulp.src([
-      'app/scripts/**/*.js',
+      //'app/scripts/**/*.js',
       'app/elements/**/*.js',
       'app/elements/**/*.html'
     ])
@@ -84,6 +84,7 @@ gulp.task('images', function () {
 gulp.task('copy', function () {
   var app = gulp.src([
     'app/*',
+    '!app/scripts-ts',
     '!app/test',
     '!app/precache.json'
   ], {
@@ -178,7 +179,7 @@ gulp.task('precache', function (callback) {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 // Watch Files For Changes & Reload
-gulp.task('serve', ['styles', 'elements', 'images'], function () {
+gulp.task('serve', ['ts', 'styles', 'elements', 'images'], function () {
   browserSync({
     notify: false,
     logPrefix: 'PSK',
@@ -207,6 +208,7 @@ gulp.task('serve', ['styles', 'elements', 'images'], function () {
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
   gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
   gulp.watch(['app/{scripts,elements}/**/*.js'], ['jshint']);
+  gulp.watch(['app/scripts-ts/**/*.ts'], ['ts']);
   gulp.watch(['app/images/**/*'], reload);
 });
 
@@ -233,7 +235,7 @@ gulp.task('serve:dist', ['default'], function () {
 });
 
 // Build Production Files, the Default Task
-gulp.task('default', ['clean'], function (cb) {
+gulp.task('default', ['ts', 'clean'], function (cb) {
   runSequence(
     ['copy', 'styles'],
     'elements',
@@ -249,3 +251,10 @@ require('web-component-tester').gulp.init(gulp);
 
 // Load custom tasks from the `tasks` directory
 try { require('require-dir')('tasks'); } catch (err) {}
+
+var tsProject = $.typescript.createProject('tsconfig.json');
+gulp.task('ts', function() {
+    var tsResult = gulp.src(['app/scripts-ts/*.ts', 'bower_components/polymer-ts/polymer-ts.ts'])
+        .pipe($.typescript(tsProject));
+    return tsResult.js.pipe(gulp.dest('app/scripts'));
+});
