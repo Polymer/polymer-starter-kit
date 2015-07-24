@@ -2,3 +2,5 @@ node_modules
 dist
 bower_components
 .tmp
+app/scripts/*.js
+!app/scripts/app.js

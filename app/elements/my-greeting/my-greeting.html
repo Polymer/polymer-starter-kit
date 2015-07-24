@@ -26,21 +26,4 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- Listens for "input" event and sets greeting to <input>.value -->
     <input class="paper-font-body2" value="{{greeting::input}}">
   </template>
-
-  <script>
-    (function() {
-      Polymer({
-        is: 'my-greeting',
-
-        properties: {
-          greeting: {
-            type: String,
-            value: 'Welcome!',
-            notify: true
-          }
-        }
-      });
-    })();
-  </script>
-
 </dom-module>
