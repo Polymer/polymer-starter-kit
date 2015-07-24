@@ -56,17 +56,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   });
 
   // Close drawer after menu item is selected if drawerPanel is narrow
-  app.onMenuSelect = function(event) {
+  app.onMenuSelect = function() {
     var drawerPanel = document.querySelector('#paperDrawerPanel');
     if (drawerPanel.narrow) {
       drawerPanel.closeDrawer();
-    }
-
-    var attributes = event.detail.item.attributes;
-    var path = attributes.path.value;
-    var route = attributes['data-route'].value;
-    if (route !== app.route) {
-      page(path);
     }
   };
 
