@@ -1,5 +1,5 @@
 ![](https://cloud.githubusercontent.com/assets/110953/7877439/6a69d03e-0590-11e5-9fac-c614246606de.png)
-## Polymer Starter Kit
+## Polymer Starter Kit [![CodeHunt.io](https://img.shields.io/badge/vote-codehunt.io-02AFD1.svg)](http://codehunt.io/sub/polymer-starter-kit/?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 > A starting point for building web applications with Polymer 1.0
 
