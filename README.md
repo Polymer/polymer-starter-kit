@@ -154,7 +154,7 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
   <link rel="import" href="../bower_components/platinum-sw/platinum-sw-register.html">
   -->
   ```
-3. Add 'precache' to the list in the 'default' gulp task like below.
+3. Uncomment 'cache-config' in the `runSequence()` section of the 'default' gulp task, like below:
 [(gulpfile.js)](https://github.com/PolymerElements/polymer-starter-kit/blob/master/gulpfile.js)
 
   ```JavaScript
@@ -164,7 +164,7 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
       ['copy', 'styles'],
       'elements',
       ['jshint', 'images', 'fonts', 'html'],
-      'vulcanize', 'precache',
+      'vulcanize', 'cache-config',
       cb);
   });
   ```
