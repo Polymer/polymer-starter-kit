@@ -79,7 +79,7 @@ This installs the element sets (Paper, Iron, Platinum) and tools the starter kit
 #### Serve / watch
 
 ```sh
-gulp serve
+npm run start
 ```
 
 This outputs an IP address you can use to locally test and another that can be used on devices connected to your network.
@@ -87,7 +87,7 @@ This outputs an IP address you can use to locally test and another that can be u
 #### Run tests
 
 ```sh
-gulp test:local
+npm test
 ```
 
 This runs the unit tests defined in the `app/test` directory through [web-component-tester](https://github.com/Polymer/web-component-tester).
