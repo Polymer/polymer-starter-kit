@@ -32,7 +32,8 @@
   },
   "scripts": {
     "test": "gulp test:local",
-    "start": "gulp serve"
+    "start": "gulp serve",
+    "build": "gulp"
   },
   "engines": {
     "node": ">=0.10.0"
