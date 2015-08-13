@@ -16,10 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var app = document.querySelector('#app');
 
   app.displayInstalledToast = function() {
-    // Check to make sure caching is actually enabled—it won't be in the dev environment.
-    if (!document.querySelector('platinum-sw-cache').disabled) {
-      document.querySelector('#caching-complete').show();
-    }
+    document.querySelector('#caching-complete').show();
   };
 
   // Listen for template bound event to know when bindings
@@ -38,9 +35,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // The appName is moved to top and shrunk on condensing. The bottom sub title
   // is shrunk to nothing on condensing.
   addEventListener('paper-header-transform', function(e) {
-    var appName = document.querySelector('#mainToolbar .app-name');
-    var middleContainer = document.querySelector('#mainToolbar .middle-container');
-    var bottomContainer = document.querySelector('#mainToolbar .bottom-container');
+    var appName = document.querySelector('.app-name');
+    var middleContainer = document.querySelector('.middle-container');
+    var bottomContainer = document.querySelector('.bottom-container');
     var detail = e.detail;
     var heightDiff = detail.height - detail.condensedHeight;
     var yRatio = Math.min(1, detail.y / heightDiff);
@@ -59,7 +56,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   });
 
   // Close drawer after menu item is selected if drawerPanel is narrow
-  app.onDataRouteClick = function() {
+  app.onMenuSelect = function() {
     var drawerPanel = document.querySelector('#paperDrawerPanel');
     if (drawerPanel.narrow) {
       drawerPanel.closeDrawer();
