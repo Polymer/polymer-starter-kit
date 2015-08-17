@@ -9,12 +9,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <dom-module id="my-list">
-  <style>
-    :host {
-      display: block;
-    }
-  </style>
   <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
     <ul>
       <template is="dom-repeat" items="{{items}}">
         <li><span class="paper-font-body1">{{item}}</span></li>
