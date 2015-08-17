@@ -92,6 +92,8 @@ gulp test:local
 
 This runs the unit tests defined in the `app/test` directory through [web-component-tester](https://github.com/Polymer/web-component-tester).
 
+To run tests Java 7 or higher is required.
+
 #### Build & Vulcanize
 
 ```sh
