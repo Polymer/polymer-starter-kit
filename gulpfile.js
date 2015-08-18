@@ -22,6 +22,7 @@ var fs = require('fs');
 var glob = require('glob');
 var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
+var polybuild = require('polybuild');
 var crypto = require('crypto');
 
 var AUTOPREFIXER_BROWSERS = [
@@ -146,19 +147,34 @@ gulp.task('html', function () {
     .pipe($.size({title: 'html'}));
 });
 
-// Vulcanize imports
+// Polybuild will take take of inlining html imports,
+// scripts and css for you.
 gulp.task('vulcanize', function () {
-  var DEST_DIR = 'dist/elements';
+  var files = gulp.src('dist/index.html')
+  .pipe(polybuild({maximumCrush: true}))
+  .pipe(gulp.dest('dist/'));
 
-  return gulp.src('dist/elements/elements.vulcanized.html')
-    .pipe($.vulcanize({
-      stripComments: true,
-      inlineCss: true,
-      inlineScripts: true
-    }))
-    .pipe(gulp.dest(DEST_DIR))
-    .pipe($.size({title: 'vulcanize'}));
+  // Rename the generated index.build.html back to
+  // index.html as it's still your app entry point.
+  var index = gulp.src('dist/index.build.html')
+  .pipe($.rename('index.html'))
+  .pipe(gulp.dest('dist/'));
 });
+// If you require more granular configuration of Vulcanize
+// than polybuild provides, uncomment the section below.
+
+// Vulcanize imports
+// gulp.task('vulcanize', function () {
+//   var DEST_DIR = 'dist/elements';
+//   return gulp.src('dist/elements/elements.vulcanized.html')
+//     .pipe($.vulcanize({
+//       stripComments: true,
+//       inlineCss: true,
+//       inlineScripts: true
+//     }))
+//     .pipe(gulp.dest(DEST_DIR))
+//     .pipe($.size({title: 'vulcanize'}));
+// });
 
 // Generate config data for the <sw-precache-cache> element.
 // This include a list of files that should be precached, as well as a (hopefully unique) cache
