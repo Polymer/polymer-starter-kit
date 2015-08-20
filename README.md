@@ -309,6 +309,26 @@ Don't worry! We've got your covered. Polymer Starter Kit tries to offer everythi
 
 If you find that you just want the simplest setup possible, we recommend using Polymer Starter Kit light, which is available from the [Releases](https://github.com/PolymerElements/polymer-starter-kit/releases) page. This takes next to no time to setup.
 
+### If you require more granular configuration of Vulcanize than polybuild provides you an option by:
+
+1. Copy code below
+2. Then replace `gulp.task('vulcanize', function () {...` entire gulp vulcanize task code in `grunfile.js`
+
+```javascript
+// Vulcanize granular configuration
+gulp.task('vulcanize', function () {
+  var DEST_DIR = 'dist/elements';
+  return gulp.src('dist/elements/elements.vulcanized.html')
+    .pipe($.vulcanize({
+      stripComments: true,
+      inlineCss: true,
+      inlineScripts: true
+    }))
+    .pipe(gulp.dest(DEST_DIR))
+    .pipe($.size({title: 'vulcanize'}));
+});
+```
+
 ## Contributing
 
 Polymer Starter Kit is a new project and is an ongoing effort by the Web Component community. We welcome your bug reports, PRs for improvements, docs and anything you think would improve the experience for other Polymer developers.

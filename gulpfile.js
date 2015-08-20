@@ -23,6 +23,7 @@ var glob = require('glob');
 var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
+var polybuild = require('polybuild');
 
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 10',
@@ -146,18 +147,24 @@ gulp.task('html', function () {
     .pipe($.size({title: 'html'}));
 });
 
-// Vulcanize imports
+// Polybuild will take care of inlining html imports,
+// scripts and css for you.
 gulp.task('vulcanize', function () {
-  var DEST_DIR = 'dist/elements';
+ return gulp.src('dist/index.html')
+ .pipe(polybuild({maximumCrush: true}))
+ .pipe(gulp.dest('dist/'));
+});
 
-  return gulp.src('dist/elements/elements.vulcanized.html')
-    .pipe($.vulcanize({
-      stripComments: true,
-      inlineCss: true,
-      inlineScripts: true
-    }))
-    .pipe(gulp.dest(DEST_DIR))
-    .pipe($.size({title: 'vulcanize'}));
+// If you require more granular configuration of Vulcanize
+// than polybuild provides, follow instructions from readme at:
+// https://github.com/PolymerElements/polymer-starter-kit/#if-you-require-more-granular-configuration-of-vulcanize-than-polybuild-provides-you-an-option-by
+
+// Rename Polybuild's index.build.html to index.html
+gulp.task('rename-index', function () {
+ gulp.src('dist/index.build.html')
+ .pipe($.rename('index.html'))
+ .pipe(gulp.dest('dist/'));
+ return del(['dist/index.build.html']);
 });
 
 // Generate config data for the <sw-precache-cache> element.
@@ -255,12 +262,12 @@ gulp.task('serve:dist', ['default'], function () {
 
 // Build production files, the default task
 gulp.task('default', ['clean'], function (cb) {
-  // Uncomment 'cache-config' after 'vulcanize' if you are going to use service workers.
+  // Uncomment 'cache-config' after 'rename-index' if you are going to use service workers.
   runSequence(
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
-    'vulcanize', // 'cache-config',
+    'vulcanize','rename-index', // 'cache-config',
     cb);
 });
 
