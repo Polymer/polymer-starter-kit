@@ -150,9 +150,9 @@ gulp.task('html', function () {
 // Polybuild will take care of inlining html imports,
 // scripts and css for you.
 gulp.task('vulcanize', function () {
- return gulp.src('dist/index.html')
- .pipe(polybuild({maximumCrush: true}))
- .pipe(gulp.dest('dist/'));
+  return gulp.src('dist/index.html')
+    .pipe(polybuild({maximumCrush: true}))
+    .pipe(gulp.dest('dist/'));
 });
 
 // If you require more granular configuration of Vulcanize
@@ -161,10 +161,10 @@ gulp.task('vulcanize', function () {
 
 // Rename Polybuild's index.build.html to index.html
 gulp.task('rename-index', function () {
- gulp.src('dist/index.build.html')
- .pipe($.rename('index.html'))
- .pipe(gulp.dest('dist/'));
- return del(['dist/index.build.html']);
+  gulp.src('dist/index.build.html')
+    .pipe($.rename('index.html'))
+    .pipe(gulp.dest('dist/'));
+  return del(['dist/index.build.html']);
 });
 
 // Generate config data for the <sw-precache-cache> element.
