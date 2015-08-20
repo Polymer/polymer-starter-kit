@@ -312,7 +312,7 @@ If you find that you just want the simplest setup possible, we recommend using P
 ### If you require more granular configuration of Vulcanize than polybuild provides you an option by:
 
 1. Copy code below
-2. Then replace `gulp.task('vulcanize', function () {...` entire gulp vulcanize task code in `grunfile.js`
+2. Then replace `gulp.task('vulcanize', function () {...` entire gulp vulcanize task code in `gulpfile.js`
 
 ```javascript
 // Vulcanize granular configuration
