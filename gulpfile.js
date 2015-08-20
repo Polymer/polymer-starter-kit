@@ -147,18 +147,24 @@ gulp.task('html', function () {
     .pipe($.size({title: 'html'}));
 });
 
-// Polybuild will take take of inlining HTML imports,
-// scripts and CSS for you.
+// Polybuild will take care of inlining html imports,
+// scripts and css for you.
 gulp.task('vulcanize', function () {
-  var files = gulp.src('dist/index.html')
-  .pipe(polybuild({maximumCrush: true}))
-  .pipe(gulp.dest('dist/'));
+ return gulp.src('dist/index.html')
+ .pipe(polybuild({maximumCrush: true}))
+ .pipe(gulp.dest('dist/'));
+});
 
-  // Rename the generated index.build.html back to
-  // index.html as it's still your app entry point.
-  var index = gulp.src('dist/index.build.html')
-  .pipe($.rename('index.html'))
-  .pipe(gulp.dest('dist/'));
+// If you require more granular configuration of Vulcanize
+// than polybuild provides, follow instructions from readme at:
+// https://github.com/PolymerElements/polymer-starter-kit/#if-you-require-more-granular-configuration-of-vulcanize-than-polybuild-provides-you-an-option-by
+
+// Rename Polybuild's index.build.html to index.html
+gulp.task('rename-index', function () {
+ gulp.src('dist/index.build.html')
+ .pipe($.rename('index.html'))
+ .pipe(gulp.dest('dist/'));
+ return del(['dist/index.build.html']);
 });
 
 // Generate config data for the <sw-precache-cache> element.
@@ -256,12 +262,12 @@ gulp.task('serve:dist', ['default'], function () {
 
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
-  // Uncomment 'cache-config' after 'vulcanize' if you are going to use service workers.
+  // Uncomment 'cache-config' after 'rename-index' if you are going to use service workers.
   runSequence(
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
-    'vulcanize', // 'cache-config',
+    'vulcanize','rename-index', // 'cache-config',
     cb);
 });
 
