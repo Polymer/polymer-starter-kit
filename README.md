@@ -34,7 +34,7 @@ The standard version of Polymer Starter Kit comes with tools that are very handy
 With Node.js installed, run the following one liner from the root of your Polymer Starter Kit download:
 
 ```sh
-npm install -g gulp bower && npm install && bower install
+sudo aptitude install nasm && sudo npm install -g gulp bower && npm install && bower install
 ```
 
 #### Prerequisites (for everyone)
@@ -45,6 +45,7 @@ The full starter kit requires the following major dependencies:
 - npm, the node package manager, installed with Node.js and used to install Node.js packages.
 - gulp, a Node.js-based build tool.
 - bower, a Node.js-based package manager used to install front-end packages (like Polymer).
+- nasm, https://github.com/imagemin/jpegtran-bin/issues/9#issuecomment-23159526
 
 **To install dependencies:**
 
