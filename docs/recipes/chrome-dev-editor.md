@@ -29,7 +29,7 @@ page('*', function () {
 });
 ```
 
-For example:
+After the code will look like the following
 
 ```
 ...
