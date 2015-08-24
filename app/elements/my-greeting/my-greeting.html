@@ -10,19 +10,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="my-greeting">
   <template>
+    <style include="shared-styles"></style>
     <style>
       :host {
         display: block;
-      }
-
-      .page-title {
-        @apply(--paper-font-display2);
-      }
-
-      @media (max-width: 600px) {
-        .page-title {
-          font-size: 24px!important;
-        }
       }
     </style>
     <h2 class="page-title"><span>{{greeting}}</span></h2>
@@ -48,4 +39,3 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 
 </dom-module>
-greeting
