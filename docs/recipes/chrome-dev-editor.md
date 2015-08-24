@@ -6,15 +6,18 @@ To use the Polymer Starter Kit you have to download the [latest release](https:/
 
 After downloading the `polymer-starter0kit-light-*.zip` file unpack it in a new folder (for Example `psk-light`) you should have a directory structure like 
 
-TODO: ADD IMAGE
+![psk-light-folder-p1](https://cloud.githubusercontent.com/assets/1431346/9451900/a73ffcf2-4ab1-11e5-8742-e0b5523ba9d5.png)
+
 
 Before opening the folder inside CDE, we need to move the file `bower.json` to `app/bower.json`, this way running `Bower Update` will place the updated packages in `app/bower_components`
 
-TODO: ADD IMAGE
+![bower json-post](https://cloud.githubusercontent.com/assets/1431346/9452119/c5826a46-4ab2-11e5-96c5-00cf404d9c50.png)
+
 
 We can now `Open Folder...` inside CDE and start renaming the file `app/manifes.json` to `app/web-app-manifest.json`, followed by updating the link to it in the file `app/index.html`
 
-TODO: ADD IMAGE
+![manifest json](https://cloud.githubusercontent.com/assets/1431346/9452182/27e41478-4ab3-11e5-8e40-d7c0f1249feb.png)
+
 
 *This change is needed because `manifest.json` is interpreted by CDE as a Chrome App Manifest and the web app manifest is slightly different*
 
@@ -46,4 +49,4 @@ For example:
 ```
 
 
-Select `app/index.html` and hit run to start the application in the browser.
+Select `app/index.html` and hit run (or press CTRL+R) to see the application running in the browser.
