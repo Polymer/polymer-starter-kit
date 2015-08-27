@@ -24,6 +24,9 @@ var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
 var polybuild = require('polybuild');
+var parseArgs = require('minimist')
+var replace = require('gulp-replace');
+var taskDir = './gulp-tasks/';
 
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 10',
@@ -202,6 +205,10 @@ gulp.task('cache-config', function (callback) {
 gulp.task('clean', function (cb) {
   del(['.tmp', 'dist'], cb);
 });
+
+// Create new element from app/elements/starter-element.html
+// syntax: gulp el --new my-element
+gulp.task('el', require(taskDir + 'el')($, gulp, parseArgs, replace, fs));
 
 // Watch files for changes & reload
 gulp.task('serve', ['styles', 'elements', 'images'], function () {

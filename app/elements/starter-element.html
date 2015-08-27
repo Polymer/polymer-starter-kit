@@ -1,0 +1,40 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<dom-module id="starter-element">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <paper-material elevation="1">
+      <h2 class="page-title">Welecome to <span>{{name}}</span>!</h2>
+      <p>This is your new element <span>{{name}}</span>.</p>
+    </paper-material>
+  </template>
+
+  <script>
+    (function() {
+      Polymer({
+        is: 'starter-element',
+
+        properties: {
+          name: {
+            type: String,
+            value: 'starter-element'
+          }
+        }
+      });
+    })();
+  </script>
+
+</dom-module>
