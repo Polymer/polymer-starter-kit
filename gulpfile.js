@@ -44,7 +44,7 @@ var styleTask = function (stylesPath, srcs) {
     .pipe($.changed(stylesPath, {extension: '.css'}))
     .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
     .pipe(gulp.dest('.tmp/' + stylesPath))
-    .pipe($.if('*.css', $.cssmin()))
+    .pipe($.cssmin())
     .pipe(gulp.dest('dist/' + stylesPath))
     .pipe($.size({title: stylesPath}));
 };
