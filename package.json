@@ -24,6 +24,7 @@
     "gulp-vulcanize": "^6.0.0",
     "jshint-stylish": "^2.0.0",
     "merge-stream": "^0.1.7",
+    "minimist": "^1.2.0",
     "opn": "^1.0.0",
     "polybuild": "^1.0.5",
     "require-dir": "^0.3.0",
