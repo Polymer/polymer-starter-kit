@@ -94,7 +94,7 @@ gulp.task('html', function () {
 
 - Enable ES2015 support in JSHint. Add `"esnext": true` to the `.jshintrc` file:
 
-```json
+```
 {
   "esnext": true,
   "node": true,
