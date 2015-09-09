@@ -21,7 +21,7 @@ We can now `Open Folder...` inside CDE and start renaming the file `app/manifest
 
 *This change is needed because `manifest.json` is interpreted by CDE as a Chrome App Manifest and the web app manifest is slightly different*
 
-Open `app/routing.html` and add the following code after the last route:
+Open `app/elements/routing.html` and add the following code after the last route:
 
 ```
 page('*', function () {
