@@ -12,6 +12,7 @@
   "quotmark": "single",
   "undef": true,
   "unused": true,
+  "newcap": false,
   "globals": {
     "wrap": true,
     "unwrap": true,
