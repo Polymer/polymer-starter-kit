@@ -92,7 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-scroll-header-panel>
 
       <!-- Main Area -->
-      <paper-scroll-header-panel main condenses keep-condensed-header>
+      <paper-scroll-header-panel main id="headerPanelMain" condenses keep-condensed-header>
 
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar" class="tall">
@@ -181,6 +181,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </paper-scroll-header-panel>
     </paper-drawer-panel>
+
+    <paper-toast id="toast">
+      <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
+    </paper-toast>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
     <!--
