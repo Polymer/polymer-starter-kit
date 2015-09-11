@@ -19,7 +19,7 @@ We can now `Open Folder...` inside CDE and start renaming the file `app/manifest
 ![manifest json](https://cloud.githubusercontent.com/assets/1431346/9452182/27e41478-4ab3-11e5-8e40-d7c0f1249feb.png)
 
 
-*This change is needed because `manifest.json` is interpreted by CDE as a Chrome App Manifest and the web app manifest is slightly different*
+*This change is needed because `manifest.json` is interpreted by CDE as a [Chrome Apps Manifest](https://developer.chrome.com/extensions/manifest) and the [web app manifest](https://w3c.github.io/manifest/) is slightly different*
 
 Open `app/elements/routing.html` and add the following code after the last route:
 
