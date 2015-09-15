@@ -72,7 +72,7 @@ With Polymer, it is easy to fall into the trap of getting a flash of unstyled co
 
 You can easily modify `loadElements` to enable this type of behavior.
 
-```
+```js
 function loadElements() {
   document.body.innerHTML = '<div><!-- loading screen markup → </div>'
   bundle.rel = 'import';
