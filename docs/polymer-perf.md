@@ -95,5 +95,6 @@ We hope to explore further ideas including [application shells](https://github.c
 
 Further reading
 
-[Fast Polymer app loading](https://gist.github.com/ebidel/1ba71473d687d0567bd3) from Eric Bidelman
-[Polymer for the Performance-obsessed](https://aerotwist.com/blog/polymer-for-the-performance-obsessed/) from Paul Lewis
+* [Fast Polymer app loading](https://gist.github.com/ebidel/1ba71473d687d0567bd3) from Eric Bidelman
+* [Polymer Perf Patterns](https://www.youtube.com/watch?v=Yr84DpNaMfk) from Eric Bidelman
+* [Polymer for the Performance-obsessed](https://aerotwist.com/blog/polymer-for-the-performance-obsessed/) from Paul Lewis
