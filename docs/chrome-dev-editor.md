@@ -23,7 +23,7 @@ We can now `Open Folder...` inside CDE and start renaming the file `app/manifest
 
 Open `app/elements/routing.html` and add the following code after the last route:
 
-```
+```javascript
 page('*', function () {
   app.route = 'home';
 });
@@ -31,7 +31,7 @@ page('*', function () {
 
 After the change, the code will look like the following:
 
-```
+```javascript
 ...
 page('/contact', function () {
   app.route = 'contact';
