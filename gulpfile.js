@@ -65,7 +65,6 @@ gulp.task('jshint', function () {
       'app/elements/**/*.js',
       'app/elements/**/*.html'
     ])
-    .pipe(reload({stream: true, once: true}))
     .pipe($.jshint.extract()) // Extract JS from .html files
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
