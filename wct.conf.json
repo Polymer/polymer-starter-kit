@@ -1,8 +1,0 @@
-{
-  "suites": ["app/test"],
-  "webserver": {
-    "pathMappings": [
-      {"/components/polymer-starter-kit/app/bower_components": "bower_components"}
-    ]
-  }
-}
