@@ -166,7 +166,7 @@ gulp.task('rename-index', function () {
   gulp.src('dist/index.build.html')
     .pipe($.rename('index.html'))
     .pipe(gulp.dest('dist/'));
-  return del(['dist/index.build.html']);
+  return del(['dist/index.build.html'], gulp.src('dist'));
 });
 
 // Generate config data for the <sw-precache-cache> element.
