@@ -180,11 +180,11 @@ gulp.task('vulcanize', function () {
 // https://github.com/PolymerElements/polymer-starter-kit/#if-you-require-more-granular-configuration-of-vulcanize-than-polybuild-provides-you-an-option-by
 
 // Rename Polybuild's index.build.html to index.html
-gulp.task('rename-index', function () {
+gulp.task('rename-index', function (cb) {
   gulp.src('dist/index.build.html')
     .pipe($.rename('index.html'))
     .pipe(gulp.dest('dist/'));
-  return del(['dist/index.build.html']);
+  return del(['dist/index.build.html'],cb);
 });
 
 // Generate config data for the <sw-precache-cache> element.
