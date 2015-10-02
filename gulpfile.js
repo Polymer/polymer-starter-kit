@@ -181,10 +181,13 @@ gulp.task('vulcanize', function () {
 
 // Rename Polybuild's index.build.html to index.html
 gulp.task('rename-index', function () {
-  gulp.src('dist/index.build.html')
+  return gulp.src('dist/index.build.html')
     .pipe($.rename('index.html'))
     .pipe(gulp.dest('dist/'));
-  return del(['dist/index.build.html']);
+});
+
+gulp.task('remove-old-build-index', function () {
+  return del('dist/index.build.html');
 });
 
 // Generate config data for the <sw-precache-cache> element.
@@ -287,7 +290,7 @@ gulp.task('default', ['clean'], function (cb) {
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
-    'vulcanize','rename-index', // 'cache-config',
+    'vulcanize','rename-index', 'remove-old-build-index', // 'cache-config',
     cb);
 });
 
