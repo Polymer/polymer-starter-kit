@@ -66,16 +66,15 @@ gulp.task('default', ['clean'], function (cb) {
 });
 ```
 
- - In the `html` task remove the `app` useref search path to make sure the ES2015 JS files aren't picked up. We don't need `app` anymore because all JS and HTML files are in `.tmp`:
+ - In the `optimizeHtmlTask` function remove the `app` useref search path to make sure the ES2015 JS files aren't picked up. We don't need `app` anymore because all JS and HTML files are in `.tmp`:
 
 ```javascript
-// Scan Your HTML For Assets & Optimize Them
-gulp.task('html', function () {
+var optimizeHtmlTask = function (src, dest) {
   var assets = $.useref.assets({searchPath: ['.tmp', 'dist']});
 
   ...
 
-});
+};
 ```
 
 
