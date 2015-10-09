@@ -7,43 +7,14 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
+<link rel="import" href="../bower_components/more-routing/more-routing-config.html">
+<link rel="import" href="../bower_components/more-routing/more-route.html">
+<link rel="import" href="../bower_components/more-routing/more-route-selector.html">
 
-<script src="../bower_components/page/page.js"></script>
-<script>
-  window.addEventListener('WebComponentsReady', function() {
+<more-routing-config driver="hash"></more-routing-config>
 
-    // We use Page.js for routing. This is a Micro
-    // client-side router inspired by the Express router
-    // More info: https://visionmedia.github.io/page.js/
-
-    // Middleware
-    function scrollToTop(ctx, next) {
-      app.scrollPageToTop();
-      next();
-    }
-
-    // Routes
-    page('/', scrollToTop, function() {
-      app.route = 'home';
-    });
-
-    page('/users', scrollToTop, function() {
-      app.route = 'users';
-    });
-
-    page('/users/:name', scrollToTop, function(data) {
-      app.route = 'user-info';
-      app.params = data.params;
-    });
-
-    page('/contact', scrollToTop, function() {
-      app.route = 'contact';
-    });
-
-    // add #! before urls
-    page({
-      hashbang: true
-    });
-
-  });
-</script>
+<more-route name="home" path="/"></more-route>
+<more-route name="users" path="/users">
+  <more-route name="user-info" path="/:name"></more-route>
+</more-route>
+<more-route name="contact" path="/contact"></more-route>

@@ -1,0 +1,16 @@
+<dom-module id="psk-user">
+  <template>
+    <more-route context name="user-info" params="{{params}}"></more-route>
+      <paper-material elevation="1">
+        <h2 class="page-title">
+        User:<span>{{params.name}}</span>
+        </h2>
+        <div>This is <span>{{params.name}}</span>'s section</div>
+      </paper-material>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'psk-user',
+  });
+</script>

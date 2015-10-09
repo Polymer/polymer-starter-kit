@@ -1,0 +1,18 @@
+<dom-module id="psk-users">
+  <template>
+    <more-route context name="users"></more-route>
+    <paper-material elevation="1">
+      <h2 class="page-title">Users</h2>
+      <p>This is the users section</p>
+      <a href$="{{urlFor('user-info', 'Rob')}}">Rob</a>
+    </paper-material>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'psk-users',
+    urlFor: function(route, prop) {
+      return MoreRouting.urlFor(route, {name: prop});
+    }
+  });
+</script>
