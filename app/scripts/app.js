@@ -17,8 +17,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   app.displayInstalledToast = function() {
     // Check to make sure caching is actually enabled—it won't be in the dev environment.
-    if (!document.querySelector('platinum-sw-cache').disabled) {
-      document.querySelector('#caching-complete').show();
+    if (!Polymer.dom(document).querySelector('platinum-sw-cache').disabled) {
+      Polymer.dom(document).querySelector('#caching-complete').show();
     }
   };
 
@@ -37,10 +37,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // the appName in the middle-container and the bottom title in the bottom-container.
   // The appName is moved to top and shrunk on condensing. The bottom sub title
   // is shrunk to nothing on condensing.
-  addEventListener('paper-header-transform', function(e) {
-    var appName = document.querySelector('#mainToolbar .app-name');
-    var middleContainer = document.querySelector('#mainToolbar .middle-container');
-    var bottomContainer = document.querySelector('#mainToolbar .bottom-container');
+  window.addEventListener('paper-header-transform', function(e) {
+    var appName = Polymer.dom(document).querySelector('#mainToolbar .app-name');
+    var middleContainer = Polymer.dom(document).querySelector('#mainToolbar .middle-container');
+    var bottomContainer = Polymer.dom(document).querySelector('#mainToolbar .bottom-container');
     var detail = e.detail;
     var heightDiff = detail.height - detail.condensedHeight;
     var yRatio = Math.min(1, detail.y / heightDiff);
@@ -60,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   // Close drawer after menu item is selected if drawerPanel is narrow
   app.onDataRouteClick = function() {
-    var drawerPanel = document.querySelector('#paperDrawerPanel');
+    var drawerPanel = Polymer.dom(document).querySelector('#paperDrawerPanel');
     if (drawerPanel.narrow) {
       drawerPanel.closeDrawer();
     }
