@@ -39,42 +39,58 @@ Make sure the `js` gulp task is triggered by the common build tasks:
 
  - In the gulp `serve` task, make sure `js` is triggered initially and on HTML and JS files changes:
 
-```javascript
-gulp.task('serve', ['styles', 'elements', 'images', 'js'], function () {
+```patch
+-gulp.task('serve', ['styles', 'elements', 'images'], function () {
++gulp.task('serve', ['styles', 'elements', 'images', 'js'], function () {
 
   ...
 
-  gulp.watch(['app/**/*.html'], ['js', reload]);
+- gulp.watch(['app/**/*.html'], reload);
++ gulp.watch(['app/**/*.html'], ['js', reload]);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
   gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
-  gulp.watch(['app/{scripts,elements}/**/*.js'], ['jshint', 'js']);
+- gulp.watch(['app/{scripts,elements}/**/*.js'], ['jshint']);
++ gulp.watch(['app/{scripts,elements}/**/*.js'], ['jshint', 'js']);
   gulp.watch(['app/images/**/*'], reload);
 });
 ```
 
  - In the `default` task make sure `js` is run in parallel to `elements`:
 
-```javascript
+```patch
 gulp.task('default', ['clean'], function (cb) {
 
   ...
 
-        ['elements', 'js'],
-
-  ...
-  
+  runSequence(
+    ['copy', 'styles'],
+-   'elements',
++   ['elements', 'js'],
+    ['jshint', 'images', 'fonts', 'html'],
+    'vulcanize', // 'cache-config',
+    cb);
 });
 ```
 
- - In the `optimizeHtmlTask` function remove the `app` useref search path to make sure the ES2015 JS files aren't picked up. We don't need `app` anymore because all JS and HTML files are in `.tmp`:
+ - In the `html` task replace `app` in the paths by `dist` since dist should already contain all JS and HTML files now transpiled.
+ 
+ ```patch
+ // Scan your HTML for assets & optimize them
+ gulp.task('html', function () {
+   return optimizeHtmlTask(
+-    ['app/**/*.html', '!app/{elements,test}/**/*.html'],  
++    ['dist/**/*.html', '!dist/{elements,test}/**/*.html'],
+     'dist');
+ });
+ ```
 
-```javascript
+
+ - In the `optimizeHtmlTask` function remove the `searchPath` attribute since all assets should be found under the `dist` folder and we want to make sure we are not picking up duplicates and un-transpiled JS files:
+
+```patch
 var optimizeHtmlTask = function (src, dest) {
-  var assets = $.useref.assets({searchPath: ['.tmp', 'dist']});
-
-  ...
-
-};
+- var assets = $.useref.assets({searchPath: ['.tmp', 'app', 'dist']});
++ var assets = $.useref.assets();
 ```
 
 
@@ -82,9 +98,9 @@ var optimizeHtmlTask = function (src, dest) {
 
 - Enable ES2015 support in JSCS. Add `"esnext": true` to the `.jscsrc` file:
 
-```json
+```patch
 {
-  "esnext": true,
++ "esnext": true,
   "preset": "google",
   "disallowSpacesInAnonymousFunctionExpression": null,
   "excludeFiles": ["node_modules/**"]
@@ -93,13 +109,9 @@ var optimizeHtmlTask = function (src, dest) {
 
 - Enable ES2015 support in JSHint. Add `"esnext": true` to the `.jshintrc` file:
 
-```
+```patch
 {
-  "esnext": true,
++ "esnext": true,
   "node": true,
   "browser": true,
-  
-  ...
-  
-}
 ```
