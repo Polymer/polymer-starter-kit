@@ -115,7 +115,7 @@ Polymer 1.0 introduces a shim for CSS custom properties. We take advantage of th
 ### Styling
 1. ***main.css*** - to define styles that can be applied outside of Polymer's custom CSS properties implementation. Some of the use-cases include defining styles that you want to be applied for a splash screen, styles for your application 'shell' before it gets upgraded using Polymer or critical style blocks that you want parsed before your elements are.
 2. ***app-theme.html*** - to provide theming for your application. You can also find our presets for Material Design breakpoints in this file.
-3. ***shared-styles.html*** - to shared styles between elements and index.html.
+3. ***shared-styles.html*** - to share styles between elements and index.html.
 4. ***element styles only*** - styles specific to element. These styles should be inside the `<style></style>` inside `template`.
 
   ```HTML
