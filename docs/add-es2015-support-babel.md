@@ -117,7 +117,7 @@ var optimizeHtmlTask = function (src, dest) {
 ```
 
 ## Optional - When using shadow-dom instead shady-dom
-Place this configuration (which you can read more [here](https://www.polymer-project.org/1.0/docs/devguide/settings.html)) in a separete file like `scripts/polymer-settings`
+Place this configuration ([Read more](https://www.polymer-project.org/1.0/docs/devguide/settings.html)) in a separete file like `scripts/polymer-settings`
 
 ```html
 <script>
