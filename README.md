@@ -11,6 +11,7 @@
 * Unit testing with [Web Component Tester](https://github.com/Polymer/web-component-tester)
 * Optional offline setup through [Platinum](https://elements.polymer-project.org/browse?package=platinum-elements) Service Worker elements
 * End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
+* [Recipes](/docs/README.md/) for ES2015 support, Polymer performance and using Chrome Dev Editor
 
 ## Getting Started
 
