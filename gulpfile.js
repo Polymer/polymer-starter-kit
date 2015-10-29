@@ -58,10 +58,10 @@ var jshintTask = function (src) {
 
 var imageOptimizeTask = function (src, dest) {
   return gulp.src(src)
-    .pipe($.cache($.imagemin({
+    .pipe($.imagemin({
       progressive: true,
       interlaced: true
-    })))
+    }))
     .pipe(gulp.dest(dest))
     .pipe($.size({title: 'images'}));
 };
