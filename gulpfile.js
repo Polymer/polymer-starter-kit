@@ -45,9 +45,7 @@ var styleTask = function (stylesPath, srcs) {
     .pipe(gulp.dest('.tmp/' + stylesPath))
     .pipe($.cssmin())
     .pipe(gulp.dest('dist/' + stylesPath))
-    .pipe($.size({
-      title: stylesPath
-    }));
+    .pipe($.size({title: stylesPath}));
 };
 
 var imageOptimizeTask = function(src, dest) {
