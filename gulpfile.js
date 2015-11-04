@@ -36,7 +36,7 @@ var AUTOPREFIXER_BROWSERS = [
   'bb >= 10'
 ];
 
-var styleTask = function (stylesPath, srcs) {
+var styleTask = function(stylesPath, srcs) {
   return gulp.src(srcs.map(function(src) {
       return path.join('app', stylesPath, src);
     }))
@@ -106,8 +106,19 @@ gulp.task('lint', function() {
       'app/elements/**/*.html',
       'gulpfile.js'
     ])
-    .pipe($.jshint.extract()) // Extract JS from .html files
+    .pipe(reload({
+      stream: true,
+      once: true
+    }))
+
+  // Extract JS from .html files
+  .pipe($.jshint.extract())
     .pipe($.jshint())
+
+  // JSCS has not yet a extract option
+  .pipe($.if('*.html', $.htmlExtract()))
+    .pipe($.jscs())
+    .pipe($.jscsStylish.combineWithHintResults())
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });
@@ -276,7 +287,7 @@ gulp.task('serve:dist', ['default'], function() {
 });
 
 // Build production files, the default task
-gulp.task('default', ['clean'], function (cb) {
+gulp.task('default', ['clean'], function(cb) {
   // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
     ['copy', 'styles'],
