@@ -74,17 +74,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="home" href="/" on-tap="onDataRouteClick">
+          <a data-route="home" href="{{baseUrl}}" on-tap="onDataRouteClick">
             <iron-icon icon="home"></iron-icon>
             <span>Home</span>
           </a>
 
-          <a data-route="users" href="/users" on-tap="onDataRouteClick">
+          <a data-route="users" href="users" on-tap="onDataRouteClick">
             <iron-icon icon="info"></iron-icon>
             <span>Users</span>
           </a>
 
-          <a data-route="contact" href="/contact" on-tap="onDataRouteClick">
+          <a data-route="contact" href="contact" on-tap="onDataRouteClick">
             <iron-icon icon="mail"></iron-icon>
             <span>Contact</span>
           </a>
@@ -157,16 +157,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-material elevation="1">
                 <h2 class="page-title">Users</h2>
                 <p>This is the users section</p>
-                <a href="/users/Rob">Rob</a>
+                <a href$="{{baseUrl}}users/Addy">Addy</a><br>
+                <a href$="{{baseUrl}}users/Rob">Rob</a><br>
+                <a href$="{{baseUrl}}users/Chuck">Chuck</a><br>
+                <a href$="{{baseUrl}}users/Sam">Sam</a>
               </paper-material>
             </section>
 
             <section data-route="user-info">
               <paper-material elevation="1">
-                <h2 class="page-title">
-                User:<span>{{params.name}}</span>
-                </h2>
-                <div>This is <span>{{params.name}}</span>'s section</div>
+                <h2 class="page-title">User: {{params.name}}</h2>
+                <div>This is {{params.name}}'s section</div>
               </paper-material>
             </section>
 

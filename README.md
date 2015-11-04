@@ -13,6 +13,9 @@
 * End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
 * [Recipes](/docs/README.md/) for ES2015 support, Polymer performance and using Chrome Dev Editor
 
+### Demo
+See latest Polymer Starter Kit Demo (from master) at http://polymerelements.github.io/polymer-starter-kit
+
 ## Getting Started
 
 To take advantage of Polymer Starter Kit you need to:
@@ -148,6 +151,16 @@ Web apps built with Polymer Starter Kit come configured with support for [Web Co
 ## Dependency Management
 
 Polymer uses [Bower](http://bower.io) for package management. This makes it easy to keep your elements up to date and versioned. For tooling, we use npm to manage Node.js-based dependencies.
+
+## Deploy
+
+### Github Pages
+1. Uncomment this line  `// app.baseUrl = '/polymer-starter-kit/';` in app.js near the top
+2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `bobs-awesome-site`)
+3. Run `build-deploy-gh-pages` from command line
+4. To see changes wait 1-2 minutes then load Github pages for your app (ex: http://polymerelements.github.io/polymer-starter-kit)
+
+[See more details](/docs/deploy-to-github-pages.md/)
 
 ## Service Worker
 
