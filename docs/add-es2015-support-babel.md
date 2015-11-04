@@ -33,7 +33,7 @@ Note: At the time of writing Crisper does not generate the sourcemaps. Your app 
 
  - [ragingwind/gulp-crisper#4](https://github.com/ragingwind/gulp-crisper/issues/4)
  - [PolymerLabs/crisper#14](https://github.com/PolymerLabs/crisper/issues/14)
- 
+
 
 ## Integrating the transpile task
 
@@ -75,12 +75,12 @@ gulp.task('default', ['clean'], function (cb) {
 ```
 
  - In the `html` task replace `app` in the paths by `dist` since dist should already contain all JS and HTML files now transpiled.
- 
+
  ```patch
  // Scan your HTML for assets & optimize them
  gulp.task('html', function () {
    return optimizeHtmlTask(
--    ['app/**/*.html', '!app/{elements,test}/**/*.html'],  
+-    ['app/**/*.html', '!app/{elements,test}/**/*.html'],
 +    [dist('/**/*.html'), '!' + dist('/{elements,test}/**/*.html')],
      dist());
  });
