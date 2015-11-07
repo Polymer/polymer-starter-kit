@@ -19,7 +19,7 @@ var reload = browserSync.reload;
 var merge = require('merge-stream');
 var path = require('path');
 var fs = require('fs');
-var glob = require('glob');
+var glob = require('glob-all');
 var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
@@ -204,11 +204,10 @@ gulp.task('cache-config', function(callback) {
     disabled: false
   };
 
-  glob('{elements,scripts,styles}/**/*.*', {cwd: dir}, function(error, files) {
+  glob(['index.html', './', 'bower_components/webcomponentsjs/webcomponents-lite.min.js', '{elements,scripts,styles}/**/*.*'], {cwd: dir}, function(error, files) {
     if (error) {
       callback(error);
     } else {
-      files.push('index.html', './', 'bower_components/webcomponentsjs/webcomponents-lite.min.js');
       config.precache = files;
 
       var md5 = crypto.createHash('md5');
