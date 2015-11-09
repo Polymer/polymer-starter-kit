@@ -7,3 +7,6 @@ before_script:
   - sleep 3
   - npm i -g bower
   - bower i
+script:
+  - npm run lint
+  - npm test
