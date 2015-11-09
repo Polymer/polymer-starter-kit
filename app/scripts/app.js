@@ -47,8 +47,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // appName max size when condensed. The smaller the number the smaller the condensed size.
     var maxMiddleScale = 0.50;
     var auxHeight = heightDiff - detail.y;
-    var auxScale = (heightDiff / (1 - maxMiddleScale)) + maxMiddleScale;
-    var scaleMiddle = Math.max(maxMiddleScale, auxHeight / auxScale);
+    var auxScale = heightDiff / (1 - maxMiddleScale);
+    var scaleMiddle = Math.max(maxMiddleScale, auxHeight / auxScale + maxMiddleScale);
     var scaleBottom = 1 - yRatio;
 
     // Move/translate middleContainer
