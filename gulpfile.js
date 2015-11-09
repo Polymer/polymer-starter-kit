@@ -205,7 +205,12 @@ gulp.task('cache-config', function(callback) {
     disabled: false
   };
 
-  glob(['index.html', './', 'bower_components/webcomponentsjs/webcomponents-lite.min.js', '{elements,scripts,styles}/**/*.*'], {cwd: dir}, function(error, files) {
+  glob([
+    'index.html',
+    './',
+    'bower_components/webcomponentsjs/webcomponents-lite.min.js',
+    '{elements,scripts,styles}/**/*.*'],
+    {cwd: dir}, function(error, files) {
     if (error) {
       callback(error);
     } else {
@@ -222,8 +227,8 @@ gulp.task('cache-config', function(callback) {
 });
 
 // Clean output directory
-gulp.task('clean', function(cb) {
-  del(['.tmp', 'dist'], cb);
+gulp.task('clean', function() {
+  return del(['.tmp', 'dist']);
 });
 
 // Watch files for changes & reload
