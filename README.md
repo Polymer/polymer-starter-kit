@@ -5,7 +5,7 @@
 
 ### Included out of the box:
 
-* [Polymer](http://polymer-project.org), [Paper](https://elements.polymer-project.org/browse?package=paper-elements), [Iron](https://elements.polymer-project.org/browse?package=iron-elements) and [Neon](https://elements.polymer-project.org/browse?package=neon-elements) elements
+* [Polymer](https://www.polymer-project.org/), [Paper](https://elements.polymer-project.org/browse?package=paper-elements), [Iron](https://elements.polymer-project.org/browse?package=iron-elements) and [Neon](https://elements.polymer-project.org/browse?package=neon-elements) elements
 * [Material Design](http://www.google.com/design/spec/material-design/introduction.html) layout
 * Routing with [Page.js](https://visionmedia.github.io/page.js/)
 * Unit testing with [Web Component Tester](https://github.com/Polymer/web-component-tester)
@@ -208,7 +208,7 @@ If you experience an issue with Service Worker support in your application, chec
 
 * [sw-toolbox](https://github.com/GoogleChrome/sw-toolbox/issues)
 * [platinum-sw](https://github.com/PolymerElements/platinum-sw/issues)
-* [platinum-push-notifications-manager](https://github.com/PolymerElements/push-notification-manager/)
+* [platinum-push-notifications-manager](https://github.com/PolymerElements/platinum-push-messaging)
 * For all other issues, feel free to file them [here](https://github.com/polymerelements/polymer-starter-kit/issues).
 
 #### I get an error message about "Only secure origins are allowed"
