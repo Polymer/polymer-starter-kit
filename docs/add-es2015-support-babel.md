@@ -7,7 +7,7 @@ This recipe focuses on adding an ES2015 to ES5 transpile step to Polymer Starter
 
 ## Create a transpile gulp task
 
-- Install the gulp Babel, Sourcemap and Crisper plugins: `npm install --save-dev gulp-babel gulp-sourcemaps gulp-crisper`
+- Install the gulp Babel, Sourcemap, Crisper plugins and Babel ES2015 preset: `npm install --save-dev gulp-babel gulp-sourcemaps gulp-crisper babel-preset-es2015`
 - Add the following gulp task in the `gulpfile.js` file:
 
 ```patch
@@ -16,7 +16,9 @@ This recipe focuses on adding an ES2015 to ES5 transpile step to Polymer Starter
 +  return gulp.src(['app/**/*.{js,html}'])
 +    .pipe($.sourcemaps.init())
 +    .pipe($.if('*.html', $.crisper())) // Extract JS from .html files
-+    .pipe($.if('*.js', $.babel()))
++    .pipe($.if('*.js', $.babel({
++      presets: ['es2015']
++    })))
 +    .pipe($.sourcemaps.write('.'))
 +    .pipe(gulp.dest('.tmp/'))
 +    .pipe(gulp.dest(dist()));
