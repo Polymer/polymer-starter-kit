@@ -1,69 +1,85 @@
-<link rel="import" href="../polymer/polymer.html"><link rel="import" href="../paper-styles/paper-styles.html"><dom-module id="paper-input-char-counter"><style>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
 
-    :host {
-      display: inline-block;
-      float: right;
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-styles/paper-styles.html">
+<link rel="import" href="paper-input-addon-behavior.html">
 
-      @apply(--paper-input-container-add-on);
-      @apply(--paper-input-container-add-on-font);
+<!--
+`<paper-input-char-counter>` is a character counter for use with `<paper-input-container>`. It
+shows the number of characters entered in the input and the max length if it is specified.
 
-      @apply(--paper-input-char-counter);
-    }
+    <paper-input-container>
+      <input is="iron-input" maxlength="20">
+      <paper-input-char-counter></paper-input-char-counter>
+    </paper-input-container>
 
-  </style><template><span>[[charCounter]]</span></template></dom-module><script>
+### Styling
 
-(function() {
+The following mixin is available for styling:
 
+Custom property | Description | Default
+----------------|-------------|----------
+`--paper-input-char-counter` | Mixin applied to the element | `{}`
+-->
+<dom-module id="paper-input-char-counter">
+  <template>
+
+    <style>
+      :host {
+        display: inline-block;
+        float: right;
+
+        @apply(--paper-font-caption);
+        @apply(--paper-input-char-counter);
+      }
+
+      :host-context([dir="rtl"]) {
+        float: left;
+      }
+    </style>
+
+    <span>[[_charCounterStr]]</span>
+
+  </template>
+</dom-module>
+
+<script>
   Polymer({
-
     is: 'paper-input-char-counter',
 
-    hostAttributes: {
-      'add-on': ''
-    },
+    behaviors: [
+      Polymer.PaperInputAddonBehavior
+    ],
 
     properties: {
+      _charCounterStr: {
+        type: String,
+        value: '0'
+      }
+    },
 
-      /**
-       * The associated input element.
-       */
-      inputElement: {
-        type: Object
-      },
-
-      /**
-       * The current value of the input element.
-       */
-      value: {
-        type: String
-      },
-
-      /**
-       * The character counter string.
-       */
-      charCounter: {
-        computed: '_computeCharCounter(inputElement,value)',
-        type: String
+    update: function(state) {
+      if (!state.inputElement) {
+        return;
       }
 
-    },
+      state.value = state.value || '';
 
-    attached: function() {
-      this.fire('addon-attached');
-    },
-
-    _computeCharCounter: function(inputElement,value) {
       // Account for the textarea's new lines.
-      var str = value.replace(/(\r\n|\n|\r)/g, '--').length;
+      var str = state.value.replace(/(\r\n|\n|\r)/g, '--').length;
 
-      if (inputElement.hasAttribute('maxlength')) {
-        str += '/' + inputElement.maxLength;
+      if (state.inputElement.hasAttribute('maxlength')) {
+        str += '/' + state.inputElement.getAttribute('maxlength');
       }
-      return str;
+      this._charCounterStr = str;
     }
-
   });
-
-})();
-
 </script>

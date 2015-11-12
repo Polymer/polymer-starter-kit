@@ -21,7 +21,7 @@ Service Worker Toolbox is available through Bower, npm or direct from github:
 From your registering page, register your service worker in the normal way. For example:
 
 ```javascript
-navigator.serviceWorker.register('my-service-worker.js', {scope: '/'});
+navigator.serviceWorker.register('my-service-worker.js');
 ```
 
 For even lower friction, if you don't intend to doing anything more fancy than just registering with a default scope, you can instead include the Service Worker Toolbox companion script in your HTML:
@@ -53,13 +53,13 @@ toolbox.router.get('/', toolbox.networkFirst);
 // (http://expressjs.com/guide/routing.html)
 toolbox.router.get(':foo/index.html', function(request, values) {
   return new Response('Handled a request for ' + request.url +
-      ', where foo is "' + values.foo + '");
+      ', where foo is "' + values.foo + '"');
 });
 
 // For requests to other origins, specify the origin as an option
 toolbox.router.post('/(.*)', apiHandler, {origin: 'https://api.example.com'});
 
-// Provide a default handler
+// Provide a default handler for GET requests
 toolbox.router.default = myDefaultRequestHandler;
 
 // You can provide a list of resources which will be cached at service worker install time
@@ -105,7 +105,13 @@ Handle the request by trying to fetch the URL from the network. If the fetch fai
 ### Global Options
 Any method that accepts an `options` object will accept a boolean option of `debug`. When true this causes Service Worker Toolbox to output verbose log messages to the worker's console.
 
-Most methods that involve a cache (`toolbox.cache`, `toolbox.uncache`, `toolbox.fastest`, `toolbox.cacheFirst`, `toolbox.cacheOnly`, `toolbox.networkFirst`) accept an option called `cache`, which is the **name** of the [Cache](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#cache) that should be used. If not specifed Service Worker Toolbox will use a default cache.
+Most methods that involve a cache (`toolbox.cache`, `toolbox.uncache`, `toolbox.fastest`, `toolbox.cacheFirst`, `toolbox.cacheOnly`, `toolbox.networkFirst`) accept an option called `cacheName`, which is the **name** of the [Cache](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#cache) that should be used. If not specified, Service Worker Toolbox will use a default cache.
+
+The `networkFirst` strategy supports a timeout, specified in seconds via the `networkTimeoutSeconds`
+global or local option. If `networkTimeoutSeconds` is explicitly set, then any network requests that
+take longer than that amount of time will automatically fall back to the cached response if one
+exists. By default, when `networkTimeoutSeconds` is not set, the browser's native networking timeout
+logic applies.
 
 ### `toolbox.router.get(urlPattern, handler, options)`
 ### `toolbox.router.post(urlPattern, handler, options)`
@@ -122,7 +128,7 @@ Create a route that causes requests for URLs matching `urlPattern` to be resolve
 Like `toolbox.router.get`, etc., but matches any HTTP method.
 
 ### `toolbox.router.default`
-If you set this property to a function it will be used as the request handler for any request that does not match a route.
+If you set this property to a function it will be used as the request handler for any GET request that does not match a route.
 
 ### `toolbox.precache(arrayOfURLs)`
 Add each URL in arrayOfURLs to the list of resources that should be cached during the service worker install step. Note that this needs to be called before the install event is triggered, so you should do it on the first run of your script.
@@ -141,7 +147,7 @@ Patches are encouraged, and may be submitted by forking this project and submitt
 
 ## License
 
-Copyright 2014 Google, Inc.
+Copyright 2015 Google, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

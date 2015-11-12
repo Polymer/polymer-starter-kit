@@ -4,12 +4,11 @@ iron-ajax
 The `iron-ajax` element exposes network request functionality.
 
 ```html
-<iron-ajax
-    auto
-    url="http://gdata.youtube.com/feeds/api/videos/"
-    params='{"alt":"json", "q":"chrome"}'
+<iron-ajax auto
+    url="https://www.googleapis.com/youtube/v3/search"
+    params='{"part":"snippet", "q":"polymer", "key": "AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI", "type": "video"}'
     handle-as="json"
-    on-response="handleResponse"></iron-ajax>
+    last-response="{{ajaxResponse}}"></iron-ajax>
 ```
 
 With `auto` set to `true`, the element performs a request whenever

@@ -17,9 +17,11 @@ and use another, user-defined iconset.
 
 Example:
 
-    <iron-iconset id="my-icons" src="my-icons.png" width="96" size="24"
-        icons="location place starta stopb bus car train walk">
-    </iron-iconset>
+```html
+<iron-iconset id="my-icons" src="my-icons.png" width="96" size="24"
+    icons="location place starta stopb bus car train walk">
+</iron-iconset>
+```
 
 This will automatically register the icon set "my-icons" to the iconset
 database.  To use these icons from within another element, make a
@@ -27,17 +29,23 @@ database.  To use these icons from within another element, make a
 given iconset. To apply a particular icon to an element, use the
 `applyIcon` method. For example:
 
-    iconset.applyIcon(iconNode, 'car');
+```javascript
+iconset.applyIcon(iconNode, 'car');
+```
 
 Themed icon sets are also supported. The `iron-iconset` can contain child
 `property` elements that specify a theme with an offsetX and offsetY of the
 theme within the icon resource. For example.
 
-    <iron-iconset id="my-icons" src="my-icons.png" width="96" size="24"
-        icons="location place starta stopb bus car train walk">
-      <property theme="special" offsetX="256" offsetY="24"></property>
-    </iron-iconset>
+```html
+<iron-iconset id="my-icons" src="my-icons.png" width="96" size="24"
+    icons="location place starta stopb bus car train walk">
+  <property theme="special" offsetX="256" offsetY="24"></property>
+</iron-iconset>
+```
 
 Then a themed icon can be applied like this:
 
-    iconset.applyIcon(iconNode, 'car', 'special');
+```javascript
+iconset.applyIcon(iconNode, 'car', 'special');
+```

@@ -18,6 +18,6 @@ test('can be clicked', function(done) {
   button.addEventListener('click', function() {
     done();
   });
-  MockInteractions.down(button);
+  MockInteractions.tap(button);
 });
 ```

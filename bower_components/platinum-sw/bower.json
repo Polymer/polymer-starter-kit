@@ -1,11 +1,13 @@
 {
   "name": "platinum-sw",
   "private": true,
-  "version": "0.9.0",
+  "version": "1.2.3",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "authors": [
     "The Polymer Authors"
   ],
   "description": "Service worker helper elements.",
+  "main": "platinum-sw-elements.html",
   "keywords": [
     "caching",
     "offline",
@@ -18,17 +20,16 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "bower_components"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^0.9.0-rc.1",
-    "sw-toolbox": "^2.0.0"
+    "polymer": "Polymer/polymer#^1.0.0",
+    "sw-toolbox": "^2.0.4"
   },
   "devDependencies": {
-    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^0.9.0",
-    "marked-element": "PolymerElements/marked-element#^0.9.0",
-    "web-component-tester": "Polymer/web-component-tester#^2.2.6"
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.2",
+    "marked-element": "PolymerElements/marked-element#^1.0.0",
+    "web-component-tester": "*",
+    "fetch": "^0.9.0"
   }
 }

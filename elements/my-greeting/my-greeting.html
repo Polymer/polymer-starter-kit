@@ -7,32 +7,38 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="my-greeting">
+  <template>
+    <style include="shared-styles"></style>
     <style>
       :host {
         display: block;
       }
     </style>
-  <template>
-    <h1 class="paper-font-display1"><span>{{greeting}}</span>, <span>{{greeting}}</span>!</h1>
+    <h2 class="page-title">{{greeting}}</h2>
     <span class="paper-font-body2">Update text to change the greeting.</span>
-    <!-- Listens for "change" event and sets greeting to <input>.value -->
-    <input class="paper-font-body2" value="{{greeting::change}}">
+    <!-- Listens for "input" event and sets greeting to <input>.value -->
+    <input class="paper-font-body2" value="{{greeting::input}}">
   </template>
-</dom-module>
-  <script>
-  (function() {
-    Polymer({
-      is: 'my-greeting',
 
-      properties: {
-        greeting: {
-          type: String,
-          value: 'Welcome',
-          notify: true
+  <script>
+    (function() {
+      'use strict';
+      
+      Polymer({
+        is: 'my-greeting',
+
+        properties: {
+          greeting: {
+            type: String,
+            value: 'Welcome!',
+            notify: true
+          }
         }
-      }
-    });
+      });
     })();
   </script>
+
+</dom-module>

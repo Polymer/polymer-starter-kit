@@ -15,13 +15,14 @@
  * @namespace hydrolysis
  */
 module.exports = {
-  Analyzer:     require('./lib/analyzer'),
-  docs:         require('./lib/ast-utils/docs'),
-  FSResolver:   require('./lib/loader/fs-resolver'),
-  jsdoc:        require('./lib/ast-utils/jsdoc'),
-  Loader:       require('./lib/loader/file-loader'),
-  NoopResolver: require('./lib/loader/noop-resolver'),
-  XHRResolver:  require('./lib/loader/xhr-resolver'),
-  _jsParse:     require('./lib/ast-utils/js-parse'),
-  _importParse: require('./lib/ast-utils/import-parse'),
+  Analyzer:          require('./lib/analyzer'),
+  docs:              require('./lib/ast-utils/docs'),
+  FSResolver:        require('./lib/loader/fs-resolver'),
+  jsdoc:             require('./lib/ast-utils/jsdoc'),
+  Loader:            require('./lib/loader/file-loader'),
+  NoopResolver:      require('./lib/loader/noop-resolver'),
+  RedirectResolver:  require('./lib/loader/redirect-resolver'),
+  XHRResolver:       require('./lib/loader/xhr-resolver'),
+  _jsParse:          require('./lib/ast-utils/js-parse'),
+  _importParse:      require('./lib/ast-utils/import-parse'),
 };

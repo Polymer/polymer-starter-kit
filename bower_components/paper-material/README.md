@@ -6,6 +6,8 @@ create the effect of a lifted piece of paper.
 
 Example:
 
-    <paper-material elevation="1">
-      ... content ...
-    </paper-material>
+```html
+<paper-material elevation="1">
+  ... content ...
+</paper-material>
+```

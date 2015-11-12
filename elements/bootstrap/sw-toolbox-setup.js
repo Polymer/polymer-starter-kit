@@ -8,31 +8,56 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-var swToolboxURL = new URL('../sw-toolbox/sw-toolbox.js', params.get('baseURI')).href;
-importScripts(swToolboxURL);
+(function(global) {
+  var swToolboxURL = new URL('../sw-toolbox/sw-toolbox.js', global.params.get('baseURI')).href;
+  importScripts(swToolboxURL);
 
-if (params.has('defaultCacheStrategy')) {
-  var strategy = params.get('defaultCacheStrategy');
-  toolbox.router.default = toolbox[strategy] || self[strategy];
-}
+  var cacheId = global.params.get('cacheId');
+  if (cacheId) {
+    global.toolbox.options.cacheName = cacheId + '$$$' + global.registration.scope;
+  }
+  
+  if (global.params.has('defaultCacheStrategy')) {
+    var strategy = global.params.get('defaultCacheStrategy');
+    global.toolbox.router.default = global.toolbox[strategy] || global[strategy];
+  }
 
-if (params.has('precache')) {
-  toolbox.precache(params.get('precache'));
-}
+  var precachePromise;
+  // When precacheFingerprint is present inside the cacheConfigFile JSON, its a signal that instead
+  // of reading the list of URLs to precache from the service worker's URL parameters, we need to
+  // instead fetch the JSON file and read the list of precache URLs for there. This works around
+  // the problem that the list of URLs to precache might be longer than the browser-specific limit
+  // on the size of a service worker's URL.
+  if (global.params.has('precacheFingerprint') && global.params.has('cacheConfigFile')) {
+    precachePromise = global.fetch(global.params.get('cacheConfigFile')).then(function(response) {
+      return response.json();
+    }).then(function(json) {
+      return json.precache || [];
+    }).catch(function(error) {
+      return [];
+    }).then(function(precache) {
+      return precache.concat(global.params.get('precache'));
+    })
+  } else {
+    precachePromise = Promise.resolve(global.params.get('precache'));
+  }
 
-if (params.has('route')) {
-  var setsOfRouteParams = params.get('route');
-  while (setsOfRouteParams.length > 0) {
-    var routeParams = setsOfRouteParams.splice(0, 3);
-    var originParam;
-    if (routeParams[2]) {
-      originParam = {origin: new RegExp(routeParams[2])};
-    }
-    var handler = toolbox[routeParams[1]] || self[routeParams[1]];
-    if (typeof handler === 'function') {
-      toolbox.router.get(routeParams[0], handler, originParam);
-    } else {
-      console.error('Unable to register sw-toolbox route: ', routeParams);
+  global.toolbox.precache(precachePromise);
+  
+  if (global.params.has('route')) {
+    var setsOfRouteParams = global.params.get('route');
+    while (setsOfRouteParams.length > 0) {
+      var routeParams = setsOfRouteParams.splice(0, 3);
+      var originParam;
+      if (routeParams[2]) {
+        originParam = {origin: new RegExp(routeParams[2])};
+      }
+      var handler = global.toolbox[routeParams[1]] || global[routeParams[1]];
+      if (typeof handler === 'function') {
+        global.toolbox.router.get(routeParams[0], handler, originParam);
+      } else {
+        console.error('Unable to register sw-toolbox route: ', routeParams);
+      }
     }
   }
-}
+})(self);

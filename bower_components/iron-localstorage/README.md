@@ -8,4 +8,6 @@ is the key to the data ("value" property) stored in localStorage.
 value is changed.  Note that if value is an object auto-save will be
 triggered only when value is a different instance.
 
-    <iron-localstorage name="my-app-storage" value="{{value}}"></iron-localstorage>
+```html
+<iron-localstorage name="my-app-storage" value="{{value}}"></iron-localstorage>
+```

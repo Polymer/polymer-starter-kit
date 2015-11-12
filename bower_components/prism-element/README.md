@@ -1,4 +1,17 @@
-# prism-element
+
+<!---
+
+This README is automatically generated from the comments in these files:
+prism-highlighter.html
+
+Edit those files, and our readme bot will duplicate them over here!
+Edit this file, and the bot will squash your changes :)
+
+-->
+
+
+##&lt;prism-highlighter&gt;
+
 
 Syntax highlighting via [Prism](http://prismjs.com/).
 
@@ -11,3 +24,4 @@ containing the source to highlight. The event detail can optionally contain a
 `lang` property, containing a string like `"html"`, `"js"`, etc.
 
 This flow is supported by [`<marked-element>`](https://github.com/PolymerElements/marked-element).
+

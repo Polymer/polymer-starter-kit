@@ -1,4 +1,45 @@
-<!doctype html><html><head><meta charset="UTF-8"><title>paper-material basic tests</title><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><script src="../../webcomponentsjs/webcomponents.js"></script><script src="../../web-component-tester/browser.js"></script><script src="../../test-fixture/test-fixture-mocha.js"></script><link href="../../test-fixture/test-fixture.html" rel="import"><link href="../../layout/layout.html" rel="import"><link href="../paper-material.html" rel="import"></head><body><test-fixture id="TrivialCard"><template><paper-material elevation="1"></paper-material></template></test-fixture><test-fixture id="ProgressiveElevations"><template><paper-material elevation="1"></paper-material><paper-material elevation="2"></paper-material><paper-material elevation="3"></paper-material><paper-material elevation="4"></paper-material><paper-material elevation="5"></paper-material></template></test-fixture><script>
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>paper-material basic tests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+  <link href="../../test-fixture/test-fixture.html" rel="import">
+  <link href="../paper-material.html" rel="import">
+
+</head>
+<body>
+  <test-fixture id="TrivialCard">
+    <template>
+      <paper-material elevation="1"></paper-material>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="ProgressiveElevations">
+    <template>
+      <paper-material elevation="1"></paper-material>
+      <paper-material elevation="2"></paper-material>
+      <paper-material elevation="3"></paper-material>
+      <paper-material elevation="4"></paper-material>
+      <paper-material elevation="5"></paper-material>
+    </template>
+  </test-fixture>
+
+  <script>
     suite('<paper-material>', function() {
       suite('with a non-zero elevation attribute', function() {
         var style;
@@ -45,4 +86,6 @@
         });
       });
     });
-  </script></body></html>
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "name": "iron-jsonp-library",
-  "version": "0.9.1",
+  "version": "1.0.3",
   "description": "Loads jsonp libraries",
   "authors": [
     "Aleks Totic <a@totic.org>",
@@ -8,24 +8,28 @@
   ],
   "keywords": [
     "web-component",
-    "web-components",
     "polymer",
-    "core-shared-library"
+    "behavior"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/iron-jsonp-library.git"
+  },
   "main": "iron-jsonp-library.html",
-  "license": "MIT",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/PolymerElements/iron-jsonp-library/",
   "ignore": [
     "/.*",
-    "/test/",
-    "/demo/"
+    "/test/"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^0.9.0"
+    "polymer": "Polymer/polymer#^1.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^0.9.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "web-component-tester": "*",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.2",
+    "paper-spinner": "PolymerElements/paper-spinner#^1.0.1"
   }
 }

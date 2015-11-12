@@ -1,7 +1,33 @@
-<!doctype html><html><head><title>iron-iconset-svg</title><script src="../../webcomponentsjs/webcomponents-lite.js"></script><link rel="import" href="svg-sample-icons.html"><style shim-shadowdom="">
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<html>
+<head>
+
+  <title>iron-iconset-svg</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link href="../../paper-styles/demo-pages.html" rel="import">
+
+  <link rel="import" href="svg-sample-icons.html">
+  <style is="custom-style">
+
+    .centered {
+      text-align: center;
+    }
+
     iron-icon {
-      height: 128px;
-      width: 128px;
+      height: 64px;
+      width: 64px;
+      margin: auto 1em;
     }
 
     iron-icon:nth-of-type(1) {
@@ -10,11 +36,14 @@
 
     iron-icon:nth-of-type(2) {
       fill: green;
-      stroke: orange;
     }
 
     iron-icon:nth-of-type(3) {
       fill: navy;
+    }
+
+    iron-icon:nth-of-type(4) {
+      fill: red;
     }
 
     iron-icon {
@@ -23,7 +52,19 @@
     }
 
     iron-icon:hover {
-      -webkit-filter: drop-shadow( 2px 2px 2px #333 );
-      filter: drop-shadow( 2px 2px 2px #333 );
+      -webkit-filter: drop-shadow( 2px 2px 2px var(--google-grey-700) );
+      filter: drop-shadow( 2px 2px 2px var(--google-grey-700) );
     }
-  </style></head><body><iron-icon icon="svg-sample-icons:codepen"></iron-icon><iron-icon icon="svg-sample-icons:twitter"></iron-icon><iron-icon icon="svg-sample-icons:youtube"></iron-icon></body></html>
+  </style>
+</head>
+<body>
+
+  <div class="vertical-section vertical-section-container centered">
+    <iron-icon icon="svg-sample-icons:codepen"></iron-icon>
+    <iron-icon icon="svg-sample-icons:twitter"></iron-icon>
+    <iron-icon icon="svg-sample-icons:youtube"></iron-icon>
+    <iron-icon icon="inline:shape"></iron-icon>
+  </div>
+
+</body>
+</html>

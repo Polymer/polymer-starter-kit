@@ -6,55 +6,53 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<!--
-@group Platinum Service Worker Elements
-
-The `platinum-sw-fetch` element creates custom [`fetch` event](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#fetch-event-section)
-handlers for given URL patterns. Possible use cases include:
-
-- Using a special caching strategy for specific URLs.
-- Returning static "fallback" responses instead of network errors when a remote API
-is unavailable.
-
-In short, any scenario in which you'd like a service worker to intercept network
-requests and provide custom response handling.
-
-If you'd like a single caching policy applied to all same-origin requests, then an alternative to
-using `platinum-sw-fetch` is to use `platinum-sw-cache` with the `defaultCacheStategy`
-property set.
-
-Under the hood, the [sw-toolbox](https://github.com/googlechrome/sw-toolbox) library is used for
-all the request handling logic.
-
-`platinum-sw-fetch` needs to be a child element of `platinum-sw-register`.
-An example configuration is:
-
-    <platinum-sw-register>
-      <platinum-sw-import-script href="custom-fetch-handler.js"></platinum-sw-import-script>
-      <platinum-sw-fetch handler="customFetchHandler"
-                         path="/(.*)/customFetch"></platinum-sw-fetch>
-    </platinum-sw-register>
-
-This implies that there's a `custom-fetch-handler.js` file in the same directory as the current page,
-which defines a `sw-toolbox` compliant
-[request handler](https://github.com/googlechrome/sw-toolbox#request-handlers) named
-`customFetchHandler`. This definition is imported using `platinum-sw-import-script`. The
-`platinum-sw-fetch` element takes care of mapping which request paths are handled by
-`customFetchHandler`.
-
-Anything not matching the `path` pattern is ignored by `platinum-sw-fetch`,
-and it's possible to have multiple `platinum-sw-fetch` elements that each define different paths
-and different handlers. The path matching is performed top-down, starting with the first
-`platinum-sw-fetch` element.
-
-@element platinum-sw-fetch
-@status preview
-@homepage github.io
--->
-
 <link rel="import" href="../polymer/polymer.html">
 
 <script>
+  /**
+   * The `<platinum-sw-fetch>` element creates custom [`fetch` event](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#fetch-event-section)
+   * handlers for given URL patterns. Possible use cases include:
+   *
+   * - Using a special caching strategy for specific URLs.
+   * - Returning static "fallback" responses instead of network errors when a remote API
+   * is unavailable.
+   *
+   * In short, any scenario in which you'd like a service worker to intercept network
+   * requests and provide custom response handling.
+   *
+   * If you'd like a single caching policy applied to all same-origin requests, then an alternative
+   * to using `<platinum-sw-fetch>` is to use `<platinum-sw-cache>` with the `defaultCacheStategy`
+   * property set.
+   *
+   * Under the hood, the [sw-toolbox](https://github.com/googlechrome/sw-toolbox) library is used
+   * for all the request handling logic.
+   *
+   * `<platinum-sw-fetch>` needs to be a child element of `<platinum-sw-register>`.
+   *
+   * An example configuration is:
+   *
+   *     <platinum-sw-register auto-register>
+   *       <platinum-sw-import-script href="custom-fetch-handler.js"></platinum-sw-import-script>
+   *       <platinum-sw-fetch handler="customFetchHandler"
+   *                          path="/(.*)/customFetch"></platinum-sw-fetch>
+   *     </platinum-sw-register>
+   *
+   * This implies that there's a `custom-fetch-handler.js` file in the same directory as the current
+   * page, which defines a `sw-toolbox` compliant
+   * [request handler](https://github.com/googlechrome/sw-toolbox#request-handlers) named
+   * `customFetchHandler`. This definition is imported using `<platinum-sw-import-script>`. The
+   * `<platinum-sw-fetch>` element takes care of mapping which request paths are handled by
+   * `customFetchHandler`.
+   *
+   * Anything not matching the `path` pattern is ignored by `<platinum-sw-fetch>`,
+   * and it's possible to have multiple `<platinum-sw-fetch>` elements that each define different
+   * paths and different handlers. The path matching is performed top-down, starting with the first
+   * `<platinum-sw-fetch>` element.
+   *
+   * The `path` will, by default, only match same-origin requests. If you'd like to define a custom
+   * handler for requests on a specific cross-origin domain, you must use the `origin` parameter
+   * in conjunction with `path` to match the domains you'd like to handle.
+   */
   Polymer({
     is: 'platinum-sw-fetch',
 
@@ -81,16 +79,15 @@ and different handlers. The path matching is performed top-down, starting with t
        *
        * `origin` is a `String`, but it is used internally to construct a
        * [`RegExp` object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions),
-       * which is used for the matching. To properly escape RegExp sequences like `\.`, it's
-       * necessary to add in an extra level of string-escaping first ('\\.').
+       * which is used for the matching.
        *
        * Note that the `origin` value will be matched against the full domain name and the protocol.
        * If you want to match  'http' and 'https', then use 'https?://' at the start of your string.
        *
        * Some examples:
-       * - `origin="https?://.+\\.google\\.com"` → a RegExp that matches `http` or `https` requests
-       *   made to any domain, as long as it ends in `.google.com`.
-       * - `origin="https://www\\.example\\.com" → a RegExp that will only match `https` requests to
+       * - `origin="https?://.+\.google\.com"` → a RegExp that matches `http` or `https` requests
+       *   made to any domain that ends in `.google.com`.
+       * - `origin="https://www\.example\.com" → a RegExp that will only match `https` requests to
        *   one domain, `www.example.com`.
        *
        * @see {@link https://github.com/googlechrome/sw-toolbox#toolboxrouterheadurlpattern-handler-options}
@@ -121,13 +118,16 @@ and different handlers. The path matching is performed top-down, starting with t
       path: String
     },
 
-    getParameters: function(baseURI) {
+    _getParameters: function(baseURI) {
       return new Promise(function(resolve) {
         var params = {
           importscriptLate: new URL('bootstrap/sw-toolbox-setup.js', baseURI).href
         };
         if (this.path && this.handler) {
           params.route = [this.path, this.handler, this.origin];
+        } else {
+          console.warn('The following platinum-sw-fetch element will not have any effect. ' +
+            'Both the "path" and "handler" attributes must be set.', this);
         }
         resolve(params);
       }.bind(this));

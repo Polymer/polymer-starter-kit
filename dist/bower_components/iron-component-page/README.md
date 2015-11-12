@@ -1,2 +1,0 @@
-iron-component-page
-===================

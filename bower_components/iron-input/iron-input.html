@@ -1,4 +1,17 @@
-<link rel="import" href="../polymer/polymer.html"><link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html"><script>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
+
+<script>
 
 /*
 `<iron-input>` adds two-way binding and custom validators using `Polymer.IronValidatorBehavior`
@@ -28,7 +41,10 @@ It may be desirable to only allow users to enter certain characters. You can use
 is separate from validation, and `allowed-pattern` does not affect how the input is validated.
 
     <!-- only allow characters that match [0-9] -->
-    <input is="iron-input" prevent-invaild-input allowed-pattern="[0-9]">
+    <input is="iron-input" prevent-invalid-input allowed-pattern="[0-9]">
+
+@hero hero.svg
+@demo demo/index.html
 */
 
   Polymer({
@@ -70,13 +86,18 @@ is separate from validation, and `allowed-pattern` does not affect how the input
       _previousValidInput: {
         type: String,
         value: ''
+      },
+
+      _patternAlreadyChecked: {
+        type: Boolean,
+        value: false
       }
 
     },
 
     listeners: {
       'input': '_onInput',
-      'keydown': '_onKeydown'
+      'keypress': '_onKeypress'
     },
 
     get _patternRegExp() {
@@ -99,30 +120,65 @@ is separate from validation, and `allowed-pattern` does not affect how the input
       this.bindValue = this.value;
     },
 
+    /**
+     * @suppress {checkTypes}
+     */
     _bindValueChanged: function() {
       if (this.value !== this.bindValue) {
-        this.value = this.bindValue;
+        this.value = !(this.bindValue || this.bindValue === 0) ? '' : this.bindValue;
       }
       // manually notify because we don't want to notify until after setting value
       this.fire('bind-value-changed', {value: this.bindValue});
     },
 
     _onInput: function() {
+      // Need to validate each of the characters pasted if they haven't
+      // been validated inside `_onKeypress` already.
+      if (this.preventInvalidInput && !this._patternAlreadyChecked) {
+        var valid = this._checkPatternValidity();
+        if (!valid) {
+          this.value = this._previousValidInput;
+        }
+      }
+
       this.bindValue = this.value;
+      this._previousValidInput = this.value;
+      this._patternAlreadyChecked = false;
     },
 
-    _isPrintable: function(keyCode) {
-      var printable =
-        (keyCode > 47 && keyCode < 58)   || // number keys
-        keyCode == 32 || keyCode == 13   || // spacebar & return key
-        (keyCode > 64 && keyCode < 91)   || // letter keys
-        (keyCode > 95 && keyCode < 112)  || // numpad keys
-        (keyCode > 185 && keyCode < 193) || // ;=,-./` (in order)
-        (keyCode > 218 && keyCode < 223);   // [\]' (in order)
-      return printable;
+    _isPrintable: function(event) {
+      // What a control/printable character is varies wildly based on the browser.
+      // - most control characters (arrows, backspace) do not send a `keypress` event
+      //   in Chrome, but the *do* on Firefox
+      // - in Firefox, when they do send a `keypress` event, control chars have
+      //   a charCode = 0, keyCode = xx (for ex. 40 for down arrow)
+      // - printable characters always send a keypress event.
+      // - in Firefox, printable chars always have a keyCode = 0. In Chrome, the keyCode
+      //   always matches the charCode.
+      // None of this makes any sense.
+
+      // For these keys, ASCII code == browser keycode.
+      var anyNonPrintable =
+        (event.keyCode == 8)   ||  // backspace
+        (event.keyCode == 9)   ||  // tab
+        (event.keyCode == 13)  ||  // enter
+        (event.keyCode == 27);     // escape
+
+      // For these keys, make sure it's a browser keycode and not an ASCII code.
+      var mozNonPrintable =
+        (event.keyCode == 19)  ||  // pause
+        (event.keyCode == 20)  ||  // caps lock
+        (event.keyCode == 45)  ||  // insert
+        (event.keyCode == 46)  ||  // delete
+        (event.keyCode == 144) ||  // num lock
+        (event.keyCode == 145) ||  // scroll lock
+        (event.keyCode > 32 && event.keyCode < 41)   || // page up/down, end, home, arrows
+        (event.keyCode > 111 && event.keyCode < 124); // fn keys
+
+      return !anyNonPrintable && !(event.charCode == 0 && mozNonPrintable);
     },
 
-    _onKeydown: function(event) {
+    _onKeypress: function(event) {
       if (!this.preventInvalidInput && this.type !== 'number') {
         return;
       }
@@ -130,18 +186,45 @@ is separate from validation, and `allowed-pattern` does not affect how the input
       if (!regexp) {
         return;
       }
-      var thisChar = String.fromCharCode(event.keyCode);
-      if (this._isPrintable(event.keyCode) && !regexp.test(thisChar)) {
+
+      // Handle special keys and backspace
+      if (event.metaKey || event.ctrlKey || event.altKey)
+        return;
+
+      // Check the pattern either here or in `_onInput`, but not in both.
+      this._patternAlreadyChecked = true;
+
+      var thisChar = String.fromCharCode(event.charCode);
+      if (this._isPrintable(event) && !regexp.test(thisChar)) {
         event.preventDefault();
       }
+    },
+
+    _checkPatternValidity: function() {
+      var regexp = this._patternRegExp;
+      if (!regexp) {
+        return true;
+      }
+      for (var i = 0; i < this.value.length; i++) {
+        if (!regexp.test(this.value[i])) {
+          return false;
+        }
+      }
+      return true;
     },
 
     /**
      * Returns true if `value` is valid. The validator provided in `validator` will be used first,
      * then any constraints.
-     * @return {Boolean} True if the value is valid.
+     * @return {boolean} True if the value is valid.
      */
     validate: function() {
+      // Empty, non-required input is valid.
+      if (!this.required && this.value == '') {
+        this.invalid = false;
+        return true;
+      }
+
       var valid;
       if (this.hasValidator()) {
         valid = Polymer.IronValidatableBehavior.validate.call(this, this.value);

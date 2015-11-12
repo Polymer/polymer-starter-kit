@@ -1,20 +1,37 @@
 {
   "name": "iron-component-page",
-  "version": "0.9.4",
+  "description": "Turns a raw element definition into beautiful documentation",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "docs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/iron-component-page.git"
+  },
+  "version": "1.0.9",
   "private": true,
+  "license": "http://polymer.github.io/LICENSE.txt",
   "dependencies": {
-    "polymer": "polymer/polymer#^0.9.0",
-    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^0.9.0",
-    "iron-flex-layout": "PolymerElements/iron-flex-layout#^0.9.0",
-    "paper-toolbar": "PolymerElements/paper-toolbar#^0.9.0",
-    "hydrolysis": "Polymer/hydrolysis#^1.6",
-    "paper-header-panel": "PolymerElements/paper-header-panel#^0.9.0",
-    "iron-icons": "PolymerElements/iron-icons#^0.9.0",
-    "iron-selector": "PolymerElements/iron-selector#^0.9.0"
+    "polymer": "Polymer/polymer#^1.0.0",
+    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^1.0.1",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "paper-toolbar": "PolymerElements/paper-toolbar#^1.0.0",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
+    "hydrolysis": "Polymer/hydrolysis#^1.18",
+    "paper-header-panel": "PolymerElements/paper-header-panel#^1.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^1.0.0",
+    "iron-selector": "PolymerElements/iron-selector#^1.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.0"
   },
   "devDependencies": {
-    "test-fixture": "PolymerElements/test-fixture#^0.9.0",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "web-component-tester": "*"
-  }
+  },
+  "main": "iron-component-page.html"
 }

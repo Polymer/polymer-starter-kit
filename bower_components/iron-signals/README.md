@@ -10,12 +10,16 @@ instead.
 To send a signal, fire a custom event of type `iron-signal`, with
 a detail object containing `name` and `data` fields.
 
-    this.fire('iron-signal', {name: 'hello', data: null});
+```javascript
+this.fire('iron-signal', {name: 'hello', data: null});
+```
 
 To receive a signal, listen for `iron-signal-<name>` event on a
 `iron-signals` element.
 
-  <iron-signals on-iron-signal-hello="{{helloSignal}}">
+```html
+<iron-signals on-iron-signal-hello="helloSignal">
+```
 
 You can fire a signal event from anywhere, and all
 `iron-signals` elements will receive the event, regardless

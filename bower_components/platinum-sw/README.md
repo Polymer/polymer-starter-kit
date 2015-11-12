@@ -25,6 +25,17 @@ they visit the top-level page and the service worker is registered, it will auto
 all sub-pages, which will fall under its
 [scope](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#service-worker-registration-scope).
 
+## Relative Paths & Vulcanization
+If, as part of your web app's build process, you [Vulcanize](https://github.com/polymer/vulcanize)
+the platinum-sw elements, you'll likely run into issues due to relative paths to helper/bootstrap
+files being incorrect. For example, a few of the elements attempt to import the
+`sw-toolbox-setup.js` script via a relative path, and that will fail when the elements are moved by
+the Vulcanization process. The recommended approach is to explicitly copy the directory containing
+those helper files into the same directory as the Vulcanized output, which maintains the relative
+paths. The Polymer Starter Kit's [gulpfile.js](https://github.com/PolymerElements/polymer-starter-kit/blob/ee1b0c5ac5dd26e3ac56b12ec36d607ff02dced4/gulpfile.js#L100)
+illustrates one way of doing this. An alternative approach is to use
+`<platinum-sw-register base-uri="path/to/directory">` and hardcode a base URI to use.
+
 ## `cacheOnly` & `cacheFirst` `defaultCacheStrategy` Considered Harmful
 The [`sw-toolbox` library](https://github.com/googlechrome/sw-toolbox),
 which `<platinum-sw-cache>` is built on, supports a number of

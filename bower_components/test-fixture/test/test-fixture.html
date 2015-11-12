@@ -1,4 +1,24 @@
-<!doctype html><html><head><title>test-fixture</title><script src="../../webcomponentsjs/webcomponents-lite.js"></script><script src="../../web-component-tester/browser.js"></script><script src="../test-fixture-mocha.js"></script><link rel="import" href="../test-fixture.html"></head><body><script>
+<!doctype html>
+<!--
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <title>test-fixture</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../test-fixture-mocha.js"></script>
+
+  <link rel="import" href="../test-fixture.html">
+</head>
+<body>
+  <script>
     (function() {
       var proto = Object.create(HTMLElement.prototype);
 
@@ -12,7 +32,35 @@
         prototype: proto
       });
     })();
-  </script><test-fixture id="TrivialFixture"><template><div id="Foo"></div></template></test-fixture><test-fixture id="ComplexDomFixture"><template><div id="Bar"><div id="BarChild"></div></div><div id="BarSibling"></div></template></test-fixture><test-fixture id="MultiTemplateFixture"><template><div id="Baz"></div></template><template><div id="Qux"></div><div id="QuxSibling"></div></template></test-fixture><test-fixture id="AttachedFixture"><template><x-custom></x-custom></template></test-fixture><script>
+  </script>
+  <test-fixture id="TrivialFixture">
+    <template>
+      <div id="Foo"></div>
+    </template>
+  </test-fixture>
+  <test-fixture id="ComplexDomFixture">
+    <template>
+      <div id="Bar">
+        <div id="BarChild"></div>
+      </div>
+      <div id="BarSibling"></div>
+    </template>
+  </test-fixture>
+  <test-fixture id="MultiTemplateFixture">
+    <template>
+      <div id="Baz"></div>
+    </template>
+    <template>
+      <div id="Qux"></div>
+      <div id="QuxSibling"></div>
+    </template>
+  </test-fixture>
+  <test-fixture id="AttachedFixture">
+    <template>
+      <x-custom></x-custom>
+    </template>
+  </test-fixture>
+  <script>
 describe('<test-fixture>', function () {
   var trivialFixture;
   var complexDomFixture;
@@ -145,4 +193,7 @@ describe('<test-fixture>', function () {
     });
   });
 });
-  </script></body></html>
+  </script>
+
+</body>
+</html>

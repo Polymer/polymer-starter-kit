@@ -1,0 +1,150 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html lang="en">
+<head>
+  <title>paper-tooltip demo</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="../../paper-styles/demo-pages.html">
+  <link rel="import" href="../../paper-styles/color.html">
+
+  <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../paper-tooltip.html">
+  <link rel="import" href="test-button.html">
+
+  <style is="custom-style">
+    .horizontal-section {
+      min-width: 120px;
+    }
+
+    .with-tooltip {
+      display: inline-block;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+
+    .avatar {
+      display: block;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #ccc;
+      margin: 0 auto 20px auto;
+      cursor: pointer;
+    }
+
+    .blue {
+      background-color: var(--paper-light-blue-300);
+    }
+    .red {
+      background-color: var(--paper-red-300);
+    }
+    .orange {
+      background-color: var(--paper-amber-300);
+    }
+    .green {
+      background-color: var(--paper-green-300);
+    }
+
+    paper-tooltip.custom img {
+      width: 40px;
+      padding-right: 10px;
+      padding-bottom: 10px;
+      float: left;
+    }
+
+    .custom {
+      --paper-tooltip-background: black;
+      --paper-tooltip-text-color: var(--paper-pink-100);
+      width: 160px;
+    }
+  </style>
+</head>
+<body unresolved>
+  <div class="horizontal-section-container">
+    <div>
+      <h4>Anchored to native elements</h4>
+      <div class="horizontal-section">
+        <div class="with-tooltip" tabindex="0">
+          <input type="checkbox">Oxygen
+          <paper-tooltip>Atomic number: 8</paper-tooltip>
+        </div>
+        <br>
+        <div class="with-tooltip" tabindex="0">
+          <input type="checkbox">Carbon
+          <paper-tooltip>Atomic number: 6</paper-tooltip>
+        </div>
+        <br>
+        <div class="with-tooltip" tabindex="0">
+          <input type="checkbox">Hydrogen
+          <paper-tooltip>Atomic number: 1</paper-tooltip>
+        </div>
+        <br>
+        <div class="with-tooltip" tabindex="0">
+          <input type="checkbox">Nitrogen
+          <paper-tooltip>Atomic number: 7</paper-tooltip>
+        </div>
+        <br>
+        <div class="with-tooltip" tabindex="0">
+          <input type="checkbox">Calcium
+          <paper-tooltip>Atomic number: 20</paper-tooltip>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h4>Anchored to custom elements</h4>
+      <div class="horizontal-section">
+        <test-button></test-button>
+        <paper-icon-button id="heart" icon="favorite" alt="heart"></paper-icon-button>
+        <paper-icon-button id="back" icon="arrow-back" alt="go back"></paper-icon-button>
+        <paper-icon-button id="fwd" icon="arrow-forward" alt="go forward"></paper-icon-button>
+
+        <!-- paper-icon-buttons have an inherent padding that will push the tooltip down. offset undoes it -->
+        <paper-tooltip for="heart" offset="0">&lt;3 &lt;3 &lt;3 </paper-tooltip>
+        <paper-tooltip for="back" offset="0">halp I am trapped in a tooltip</paper-tooltip>
+        <paper-tooltip for="fwd" offset="0">back to the future</paper-tooltip>
+      </div>
+    </div>
+    <div>
+      <h4>Rich-text tooltips (not Material Design)</h4>
+      <div class="horizontal-section">
+        <div id="red" class="avatar red" tabindex="0"></div>
+        <div id="blue" class="avatar blue" tabindex="0"></div>
+        <div id="green" class="avatar green" tabindex="0"></div>
+        <div id="orange" class="avatar orange" tabindex="0"></div>
+
+        <paper-tooltip for="red" class="custom" position="left" animation-delay="0">
+          <img src="http://i.imgur.com/OuUe8Da.jpg">
+          Rich-text tooltips are doable but against the Material Design spec.
+        </paper-tooltip>
+        <paper-tooltip for="blue" class="custom" position="right" animation-delay="0">
+          <img src="http://i.imgur.com/OuUe8Da.jpg">
+          Rich-text tooltips are doable but against the Material Design spec.
+        </paper-tooltip>
+        <paper-tooltip for="green" class="custom" position="top" animation-delay="0">
+          <img src="http://i.imgur.com/OuUe8Da.jpg">
+          Rich-text tooltips are doable but against the Material Design spec.
+        </paper-tooltip>
+        <paper-tooltip for="orange" class="custom" position="bottom" animation-delay="0">
+          <img src="http://i.imgur.com/OuUe8Da.jpg">
+          Rich-text tooltips are doable but against the Material Design spec.
+        </paper-tooltip>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

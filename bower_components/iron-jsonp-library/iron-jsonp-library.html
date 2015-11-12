@@ -1,4 +1,15 @@
-<link rel="import" href="../polymer/polymer.html"><script>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
 (function() {
   "use strict";
   /**
@@ -10,9 +21,13 @@
 
     You should use an HTML Import to load library dependencies
     when possible instead of using this element.
+
+    @hero hero.svg
+    @demo demo/index.html
+    @polymerBehavior
    */
   Polymer.IronJsonpLibraryBehavior = {
-    /** loads the library, and fires this.notifyEvent upon completion */
+
     properties: {
       /**
        * True if library has been successfully loaded
@@ -31,41 +46,56 @@
         value: null,
         notify: true,
         readOnly: true
-      },
+      }
+      // Following properties are to be set by behavior users
       /**
-       * @attribute libraryUrl
-       * url of the library to load. Must contain string '%%callback_name%%'
-       * This string will be substituted with automatically generated callback name
-       * for loading.
+       * Library url. Must contain string `%%callback_name%%`.
+       *
+       * `%%callback_name%%` is a placeholder for jsonp wrapper function name
+       *
        * Ex: https://maps.googleapis.com/maps/api/js?callback=%%callback%%
+       * @property libraryUrl
        */
       /**
-       * @attribute callbackName
-       * specify this attribute if library requires specific callback name.
+       * Set if library requires specific callback name.
+       * Name will be automatically generated if not set.
+       * @property callbackName
        */
       /**
-       * @attribute notifyEvent
-       * name of event to be emitted when library loads
+       * name of event to be emitted when library loads. Standard is `api-load`
+       * @property notifyEvent
        */
       /**
-       * @event 'notifyEvent'
-       * event with name specified in 'notifyEvent' attribute
-       * will fire upon successful load
+       * event with name specified in `notifyEvent` attribute
+       * will fire upon successful load2
+       * @event `notifyEvent`
        */
+    },
+
+    observers: [
+      '_libraryUrlChanged(libraryUrl)'
+    ],
+
+    _libraryUrlChanged: function(libraryUrl) {
+      // can't load before ready because notifyEvent might not be set
+      if (this._isReady && this.libraryUrl)
+        this._loadLibrary();
     },
 
     _libraryLoadCallback: function(err, result) {
       if (err) {
-        console.error("Library load failed:", err.message);
+        console.warn("Library load failed:", err.message);
         this._setLibraryErrorMessage(err.message);
       }
       else {
         this._setLibraryErrorMessage(null);
         this._setLibraryLoaded(true);
         if (this.notifyEvent)
-          this.fire( this.notifyEvent, result);
+          this.fire(this.notifyEvent, result);
       }
     },
+
+    /** loads the library, and fires this.notifyEvent upon completion */
     _loadLibrary: function() {
       LoaderMap.require(
         this.libraryUrl,
@@ -73,19 +103,22 @@
         this.callbackName
       );
     },
+
     ready: function() {
-      this._loadLibrary();
+      this._isReady = true;
+      if (this.libraryUrl)
+        this._loadLibrary();
     }
   };
 
-  /*
+  /**
    * LoaderMap keeps track of all Loaders
    */
   var LoaderMap = {
     apiMap: {}, // { hash -> Loader }
 
-    /*
-     * @param {function} notifyCallback loaded callback fn(result)
+    /**
+     * @param {Function} notifyCallback loaded callback fn(result)
      * @param {string} jsonpCallbackName name of jsonpcallback. If API does not provide it, leave empty. Optional.
      */
     require: function(url, notifyCallback, jsonpCallbackName) {
@@ -106,6 +139,7 @@
     }
   };
 
+  /** @constructor */
   var Loader = function(name, url, callbackName) {
     this.notifiers = [];  // array of notifyFn [ notifyFn* ]
 
@@ -164,7 +198,7 @@
       delete window[this.callbackName];
     },
 
-    notifyAll: function(notifyCallback) {
+    notifyAll: function() {
       this.notifiers.forEach( function(notifyCallback) {
         notifyCallback(this.error, this.result);
       }.bind(this));
@@ -180,32 +214,57 @@
     }
   };
 })();
-</script><script>
+</script>
+
+<!--
+  Loads specified jsonp library.
+
+  Example:
+
+    <iron-jsonp-library
+      library-url="https://apis.google.com/js/plusone.js?onload=%%callback%%"
+      notify-event="api-load"
+      library-loaded="{{loaded}}"></iron-jsonp-library>
+
+  Will emit 'api-load' event when loaded, and set 'loaded' to true
+
+  Implemented by  Polymer.IronJsonpLibraryBehavior. Use it
+  to create specific library loader elements.
+
+  @demo
+-->
+<script>
   Polymer({
 
     is: 'iron-jsonp-library',
 
     behaviors: [ Polymer.IronJsonpLibraryBehavior ],
+
     properties: {
       /**
-       * url of the library to load. Must contain string '%%callback_name%%'.
-       * callbackName attribute is not specified.
-       * this string will be substituted with automatically generated callback name
-       * for loading
+       * Library url. Must contain string `%%callback_name%%`.
+       *
+       * `%%callback_name%%` is a placeholder for jsonp wrapper function name
+       *
        * Ex: https://maps.googleapis.com/maps/api/js?callback=%%callback%%
        */
       libraryUrl: String,
       /**
-       * specify callbackName if library requires specific callback name.
-       * Otherwise, specify '%%callback_name%%' inside libraryUrl
+       * Set if library requires specific callback name.
+       * Name will be automatically generated if not set.
        */
       callbackName: String,
       /**
-       * @event 'notifyEvent'
        * event with name specified in 'notifyEvent' attribute
        * will fire upon successful load
        */
       notifyEvent: String
+      /**
+       * event with name specified in 'notifyEvent' attribute
+       * will fire upon successful load
+       * @event `notifyEvent`
+       */
+
     }
   });
 

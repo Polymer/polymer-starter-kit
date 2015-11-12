@@ -12,7 +12,7 @@ Example:
 ```html
 <paper-toolbar>
   <paper-icon-button icon="menu" on-tap="{{menuAction}}"></paper-icon-button>
-  <div title>Title</div>
+  <div class="title">Title</div>
   <paper-icon-button icon="more" on-tap="{{moreAction}}"></paper-icon-button>
 </paper-toolbar>
 ```
@@ -41,11 +41,20 @@ When `tall`, items can pin to either the top (default), middle or bottom.  Use
 ```html
 <paper-toolbar class="tall">
   <paper-icon-button icon="menu"></paper-icon-button>
-  <div title class="middle">Middle Title</div>
-  <div title class="bottom">Bottom Title</div>
+  <div class="title middle">Middle Title</div>
+  <div class="title bottom">Bottom Title</div>
 </paper-toolbar>
 ```
 
 For `medium-tall` toolbar, the middle and bottom contents overlap and are
 pinned to the bottom.  But `middleJustify` and `bottomJustify` attributes are
 still honored separately.
+
+To make an element completely fit at the bottom of the toolbar, use `fit` along
+with `bottom`.
+
+```html
+<paper-toolbar class="tall">
+  <div id="progressBar" class="bottom fit"></div>
+</paper-toolbar>
+```

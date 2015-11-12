@@ -1,8 +1,92 @@
-<!doctype html><html><head><title>iron-overlay-behavior tests</title><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes"><script src="../../webcomponentsjs/webcomponents-lite.js"></script><script src="../../web-component-tester/browser.js"></script><script src="../../test-fixture/test-fixture-mocha.js"></script><script src="../../iron-test-helpers/test-helpers.js"></script><link rel="import" href="../../test-fixture/test-fixture.html"><link rel="import" href="test-overlay.html"></head><body><test-fixture id="basic"><template><test-overlay>Basic Overlay</test-overlay></template></test-fixture><test-fixture id="opened"><template><test-overlay opened="">Basic Overlay</test-overlay></template></test-fixture><test-fixture id="autofocus"><template><test-overlay>Autofocus <button autofocus="">button</button></test-overlay></template></test-fixture><test-fixture id="multiple"><template><test-overlay class="overlay-1">Overlay 1</test-overlay><test-overlay class="overlay-2">Overlay 2</test-overlay><test-overlay class="overlay-3">Overlay 3</test-overlay></template></test-fixture><test-fixture id="backdrop-multiple"><template><test-overlay with-backdrop="" class="overlay-1">Overlay 1 with backdrop</test-overlay><test-overlay with-backdrop="" class="overlay-2">Overlay 2 with backdrop</test-overlay><test-overlay with-backdrop="" class="overlay-3">Overlay 3 with backdrop</test-overlay></template></test-fixture><script>
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+
+    <title>iron-overlay-behavior tests</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../test-fixture/test-fixture-mocha.js"></script>
+    <script src="../../iron-test-helpers/test-helpers.js"></script>
+
+    <link rel="import" href="../../test-fixture/test-fixture.html">
+    <link rel="import" href="test-overlay.html">
+
+  </head>
+  <body>
+
+    <test-fixture id="basic">
+      <template>
+        <test-overlay>
+          Basic Overlay
+        </test-overlay>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="opened">
+      <template>
+        <test-overlay opened>
+          Basic Overlay
+        </test-overlay>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="autofocus">
+      <template>
+        <test-overlay>
+          Autofocus
+          <button autofocus>button</button>
+        </test-overlay>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="multiple">
+      <template>
+        <test-overlay class="overlay-1">
+          Overlay 1
+        </test-overlay>
+        <test-overlay class="overlay-2">
+          Overlay 2
+        </test-overlay>
+        <test-overlay class="overlay-3">
+          Overlay 3
+        </test-overlay>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="backdrop-multiple">
+      <template>
+        <test-overlay with-backdrop class="overlay-1">
+          Overlay 1 with backdrop
+        </test-overlay>
+        <test-overlay with-backdrop class="overlay-2">
+          Overlay 2 with backdrop
+        </test-overlay>
+        <test-overlay with-backdrop class="overlay-3">
+          Overlay 3 with backdrop
+        </test-overlay>
+      </template>
+    </test-fixture>
+
+    <script>
 
       function runAfterOpen(overlay, cb) {
         overlay.addEventListener('iron-overlay-opened', function() {
-          cb();
+          Polymer.Base.async(cb, 1);
         });
         overlay.open();
       }
@@ -57,6 +141,24 @@
           });
         });
 
+        test('close an overlay in proximity to another overlay', function(done) {
+          var secondOverlay = fixture('basic');
+          // Open and close a separate overlay.
+          secondOverlay.open();
+          secondOverlay.close();
+
+          // Open the overlay we care about.
+          overlay.open();
+
+          // Wait for infinite recursion, otherwise we win:
+          overlay.addEventListener('iron-overlay-closed', function() {
+            done();
+          });
+
+          // Immediately close the first overlay:
+          overlay.close();
+        });
+
         test('clicking an overlay does not close it', function(done) {
           runAfterOpen(overlay, function() {
             overlay.addEventListener('iron-overlay-closed', function() {
@@ -79,6 +181,15 @@
 
         test('cancel an overlay by clicking outside', function(done) {
           runAfterOpen(overlay, function() {
+            overlay.addEventListener('iron-overlay-canceled', function(event) {
+              done();
+            });
+            Polymer.Base.fire.call(document, 'click');
+          });
+        });
+
+        test('close an overlay by clicking outside', function(done) {
+          runAfterOpen(overlay, function() {
             overlay.addEventListener('iron-overlay-closed', function(event) {
               assert.isTrue(event.detail.canceled, 'overlay is canceled');
               done();
@@ -87,7 +198,35 @@
           });
         });
 
+        test('cancel event can be prevented', function(done) {
+          runAfterOpen(overlay, function() {
+            overlay.addEventListener('iron-overlay-canceled', function(event) {
+              event.preventDefault();
+            });
+            var closedListener = function(event) {
+              throw new Error('iron-overlay-closed should not fire');
+            };
+            overlay.addEventListener('iron-overlay-closed', closedListener);
+            Polymer.Base.fire.call(document, 'click');
+            setTimeout(function() {
+              overlay.removeEventListener('iron-overlay-closed', closedListener);
+              done();
+            }, 10);
+          });
+        });
+
         test('cancel an overlay with esc key', function(done) {
+          runAfterOpen(overlay, function() {
+            overlay.addEventListener('iron-overlay-canceled', function(event) {
+              done();
+            });
+            fireEvent('keydown', {
+              keyCode: 27
+            }, document);
+          });
+        });
+
+        test('close an overlay with esc key', function(done) {
           runAfterOpen(overlay, function() {
             overlay.addEventListener('iron-overlay-closed', function(event) {
               assert.isTrue(event.detail.canceled, 'overlay is canceled');
@@ -224,4 +363,7 @@
 
       })
 
-    </script></body></html>
+    </script>
+
+  </body>
+</html>

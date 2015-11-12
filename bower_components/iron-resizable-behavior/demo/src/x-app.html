@@ -56,7 +56,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     },
 
     attached: function() {
-      this.async(this.resizeAction, 1);
+      this.async(this.notifyResize, 1);
     },
 
     get parent() {
@@ -71,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var x = this.x = Math.floor(this.parent.offsetWidth / 3);
       var y = this.y = Math.floor(this.parent.offsetHeight / 3);
 
-      this.translate3d(this, x + 'px', y + 'px', 0);
+      this.translate3d(x + 'px', y + 'px', 0);
     }
   });
 

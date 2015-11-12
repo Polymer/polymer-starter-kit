@@ -1,5 +1,21 @@
-iron-image
-==========
+
+<!---
+
+This README is automatically generated from the comments in these files:
+iron-image.html
+
+Edit those files, and our readme bot will duplicate them over here!
+Edit this file, and the bot will squash your changes :)
+
+-->
+
+[![Build Status](https://travis-ci.org/PolymerElements/iron-image.svg?branch=master)](https://travis-ci.org/PolymerElements/iron-image)
+
+_[Demo and API Docs](https://elements.polymer-project.org/elements/iron-image)_
+
+
+##&lt;iron-image&gt;
+
 
 `iron-image` is an element for displaying an image that provides useful sizing and
 preloading options not found on the standard `<img>` tag.
@@ -46,3 +62,9 @@ Examples:
 
     <iron-image style="width:400px; height:400px; background-color: lightgray;"
       sizing="cover" preload fade src="http://lorempixel.com/600/400"></iron-image>
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--iron-image-placeholder` | Mixin applied to #placeholder | `{}`
+
+

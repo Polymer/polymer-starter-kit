@@ -1,19 +1,31 @@
 {
   "name": "iron-image",
-  "version": "0.9.1",
+  "version": "1.0.3",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "description": "An image-displaying element with lots of convenient features",
   "private": true,
   "authors": [
     "The Polymer Authors"
   ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "media"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/iron-image.git"
+  },
   "dependencies": {
-    "iron-flex-layout": "polymerelements/iron-flex-layout#^0.9.0",
-    "polymer": "Polymer/polymer#^0.9.0"
+    "iron-flex-layout": "polymerelements/iron-flex-layout#^1.0.0",
+    "polymer": "Polymer/polymer#^1.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "polymerelements/iron-component-page#^0.9.0",
-    "test-fixture": "polymerelements/test-fixture#^0.9.0",
+    "paper-styles": "polymerelements/paper-styles#^1.0.4",
+    "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+    "test-fixture": "polymerelements/test-fixture#^1.0.0",
     "web-component-tester": "*",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
-  }
+  },
+  "main": "iron-image.html"
 }

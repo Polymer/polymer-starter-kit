@@ -1,15 +1,13 @@
 {
   "name": "iron-input",
-  "version": "0.9.7",
+  "version": "1.0.6",
   "description": "An input element with data binding",
   "authors": [
     "The Polymer Authors"
   ],
   "keywords": [
     "web-components",
-    "web-component",
     "polymer",
-    "iron",
     "input"
   ],
   "main": [
@@ -20,17 +18,18 @@
     "type": "git",
     "url": "git://github.com/PolymerElements/iron-input.git"
   },
-  "license": "MIT",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/PolymerElements/iron-input",
   "ignore": [],
   "dependencies": {
-    "iron-validatable-behavior": "PolymerElements/iron-validatable-behavior#^0.9.0",
-    "polymer": "Polymer/polymer#^0.9.0"
+    "iron-validatable-behavior": "PolymerElements/iron-validatable-behavior#^1.0.0",
+    "polymer": "Polymer/polymer#^1.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^0.9.0",
-    "iron-validator-behavior": "PolymerElements/iron-validator-behavior#^0.9.0",
-    "test-fixture": "PolymerElements/test-fixture#^0.9.0",
+    "paper-styles": "polymerelements/paper-styles#^1.0.2",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-validator-behavior": "PolymerElements/iron-validator-behavior#^1.0.0",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "web-component-tester": "*",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   }

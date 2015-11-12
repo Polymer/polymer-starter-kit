@@ -10,13 +10,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 :host {
   @apply(--paper-font-body1);
   display: block;
-  box-sizing: border-box;
   color: #212121;
-  max-width: 48em;
 }
 
 :host > header {
-  @apply(--paper-font-display1);
+  @apply(--paper-font-headline);
   margin-bottom: 18px;
 }
 
@@ -38,9 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   cursor: pointer;
   display: block;
   padding: 4px 16px;
-}
-#api #togglePrivate {
-  opacity: 0.5;
+  color: var(--paper-grey-800);
 }
 
 /* Common Formatting */
@@ -49,50 +45,85 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   padding: 4px 0;
 }
 
-#summary marked-element::shadow #content pre {
-  background-color: #fafafa;
-  border: solid #ebebeb;
+#summary .markdown-html pre {
+  background-color: var(--paper-grey-50);
+  border: solid #e5e5e5;
   border-width: 1px 0;
   overflow-x: auto;
-  padding: 12px 18px;
+  padding: 12px 24px;
+  font-size: 15px;
+  word-wrap: break-word;
 }
 
-#summary marked-element::shadow #content code {
-  @apply(--paper-font-code1);
+#summary .markdown-html table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  border-top: 1px solid #e5e5e5;
 }
 
-#summary marked-element::shadow #content p {
+#summary .markdown-html tr {
+  border-bottom: 1px solid #e5e5e5;
   padding: 0 18px;
 }
 
-#summary marked-element::shadow #content a {
-  color: black;
+#summary .markdown-html td,
+#summary .markdown-html th {
+  padding: 6px 12px;
 }
 
-#summary marked-element::shadow #content h1,
-#summary marked-element::shadow #content h2,
-#summary marked-element::shadow #content h3,
-#summary marked-element::shadow #content h4,
-#summary marked-element::shadow #content h5 {
+#summary .markdown-html td:first-child,
+#summary .markdown-html th:first-child {
+  padding-left: 24px;
+}
+
+#summary .markdown-html td:last-child,
+#summary .markdown-html th:last-child {
+  padding-right: 24px;
+}
+
+#summary .markdown-html code {
+  @apply(--paper-font-code1);
+}
+
+#summary .markdown-html p {
+  padding: 0 24px;
+}
+
+#summary .markdown-html a {
+  color: var(--paper-indigo-a200);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+#summary .markdown-html h1,
+#summary .markdown-html h2,
+#summary .markdown-html h3,
+#summary .markdown-html h4,
+#summary .markdown-html h5 {
   padding: 0 18px;
 }
 
 /* Property Sections */
 
 .card {
-  @apply(--shadow-elevation-2dp);
   background: white;
   margin-bottom: 20px;
+  border-radius: 2px;
+  border: 1px solid #e5e5e5;
 }
 
 .card > header {
-  @apply(--paper-font-title);
-  padding: 18px 16px;
-  border-bottom: 1px solid #ebebeb;
+  padding: 14px 24px;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+  @apply(--iron-doc-viewer-header);
 }
 
 iron-doc-property {
-  border-bottom: 1px solid #ebebeb;
+  border-bottom: 1px solid #e5e5e5;
 }
 iron-doc-property:last-of-type {
   border-bottom-width: 0;
@@ -110,4 +141,16 @@ iron-doc-property[private] {
 
 iron-doc-property[configuration] {
   display: none !important; /* Never. */
+}
+
+#behaviors > p {
+  border-bottom: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  display: block;
+  padding: 16px 24px;
+  cursor: pointer;
+}
+
+#behaviors > p:last-of-type {
+  border-bottom: none;
 }

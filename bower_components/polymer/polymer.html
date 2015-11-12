@@ -1,4 +1,22 @@
-<link rel="import" href="polymer-mini.html"><script>Polymer.nar = [];
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><link rel="import" href="polymer-mini.html">
+
+<script>Polymer.nar = [];
 Polymer.Annotations = {
 parseAnnotations: function (template) {
 var list = [];
@@ -9,22 +27,66 @@ return list;
 _parseNodeAnnotations: function (node, list) {
 return node.nodeType === Node.TEXT_NODE ? this._parseTextNodeAnnotation(node, list) : this._parseElementAnnotations(node, list);
 },
-_testEscape: function (value) {
-var escape = value.slice(0, 2);
-if (escape === '{{' || escape === '[[') {
-return escape;
+_bindingRegex: /([^{[]*)({{|\[\[)([^}\]]*)(?:]]|}})/g,
+_parseBindings: function (text) {
+var re = this._bindingRegex;
+var parts = [];
+var m, lastIndex;
+while ((m = re.exec(text)) !== null) {
+if (m[1]) {
+parts.push({ literal: m[1] });
+}
+var mode = m[2][0];
+var value = m[3].trim();
+var negate = false;
+if (value[0] == '!') {
+negate = true;
+value = value.substring(1).trim();
+}
+var customEvent, notifyEvent, colon;
+if (mode == '{' && (colon = value.indexOf('::')) > 0) {
+notifyEvent = value.substring(colon + 2);
+value = value.substring(0, colon);
+customEvent = true;
+}
+parts.push({
+compoundIndex: parts.length,
+value: value,
+mode: mode,
+negate: negate,
+event: notifyEvent,
+customEvent: customEvent
+});
+lastIndex = re.lastIndex;
+}
+if (lastIndex && lastIndex < text.length) {
+var literal = text.substring(lastIndex);
+if (literal) {
+parts.push({ literal: literal });
+}
+}
+if (parts.length) {
+return parts;
 }
 },
+_literalFromParts: function (parts) {
+var s = '';
+for (var i = 0; i < parts.length; i++) {
+var literal = parts[i].literal;
+s += literal || '';
+}
+return s;
+},
 _parseTextNodeAnnotation: function (node, list) {
-var v = node.textContent;
-var escape = this._testEscape(v);
-if (escape) {
-node.textContent = ' ';
+var parts = this._parseBindings(node.textContent);
+if (parts) {
+node.textContent = this._literalFromParts(parts) || ' ';
 var annote = {
 bindings: [{
 kind: 'text',
-mode: escape[0],
-value: v.slice(2, -2).trim()
+name: 'textContent',
+parts: parts,
+isCompound: parts.length !== 1
 }]
 };
 list.push(annote);
@@ -36,6 +98,9 @@ var annote = {
 bindings: [],
 events: []
 };
+if (element.localName === 'content') {
+list._hasContent = true;
+}
 this._parseChildNodesAnnotations(element, annote, list);
 if (element.attributes) {
 this._parseNodeAttributeAnnotations(element, annote, list);
@@ -53,6 +118,14 @@ if (root.firstChild) {
 for (var i = 0, node = root.firstChild; node; node = node.nextSibling, i++) {
 if (node.localName === 'template' && !node.hasAttribute('preserve-content')) {
 this._parseTemplate(node, i, list, annote);
+}
+if (node.nodeType === Node.TEXT_NODE) {
+var n = node.nextSibling;
+while (n && n.nodeType === Node.TEXT_NODE) {
+node.textContent += n.textContent;
+root.removeChild(n);
+n = n.nextSibling;
+}
 }
 var childAnnotation = this._parseNodeAnnotations(node, list, callback);
 if (childAnnotation) {
@@ -75,62 +148,50 @@ index: index
 });
 },
 _parseNodeAttributeAnnotations: function (node, annotation) {
-for (var i = node.attributes.length - 1, a; a = node.attributes[i]; i--) {
-var n = a.name, v = a.value;
-if (n === 'id' && !this._testEscape(v)) {
-annotation.id = v;
-} else if (n.slice(0, 3) === 'on-') {
+var attrs = Array.prototype.slice.call(node.attributes);
+for (var i = attrs.length - 1, a; a = attrs[i]; i--) {
+var n = a.name;
+var v = a.value;
+var b;
+if (n.slice(0, 3) === 'on-') {
 node.removeAttribute(n);
 annotation.events.push({
 name: n.slice(3),
 value: v
 });
-} else {
-var b = this._parseNodeAttributeAnnotation(node, n, v);
-if (b) {
+} else if (b = this._parseNodeAttributeAnnotation(node, n, v)) {
 annotation.bindings.push(b);
-}
+} else if (n === 'id') {
+annotation.id = v;
 }
 }
 },
-_parseNodeAttributeAnnotation: function (node, n, v) {
-var escape = this._testEscape(v);
-if (escape) {
-var customEvent;
-var name = n;
-var mode = escape[0];
-v = v.slice(2, -2).trim();
-var not = false;
-if (v[0] == '!') {
-v = v.substring(1);
-not = true;
-}
+_parseNodeAttributeAnnotation: function (node, name, value) {
+var parts = this._parseBindings(value);
+if (parts) {
+var origName = name;
 var kind = 'property';
-if (n[n.length - 1] == '$') {
-name = n.slice(0, -1);
+if (name[name.length - 1] == '$') {
+name = name.slice(0, -1);
 kind = 'attribute';
 }
-var notifyEvent, colon;
-if (mode == '{' && (colon = v.indexOf('::')) > 0) {
-notifyEvent = v.substring(colon + 2);
-v = v.substring(0, colon);
-customEvent = true;
+var literal = this._literalFromParts(parts);
+if (literal && kind == 'attribute') {
+node.setAttribute(name, literal);
 }
-if (node.localName == 'input' && n == 'value') {
-node.setAttribute(n, '');
+if (node.localName == 'input' && name == 'value') {
+node.setAttribute(origName, '');
 }
-node.removeAttribute(n);
+node.removeAttribute(origName);
 if (kind === 'property') {
 name = Polymer.CaseMap.dashToCamelCase(name);
 }
 return {
 kind: kind,
-mode: mode,
 name: name,
-value: v,
-negate: not,
-event: notifyEvent,
-customEvent: customEvent
+parts: parts,
+literal: literal,
+isCompound: parts.length !== 1
 };
 }
 },
@@ -142,7 +203,6 @@ var parent = annote.parent && Polymer.Annotations.findAnnotatedNode(root, annote
 return !parent ? root : Polymer.Annotations._localSubTree(parent, root)[annote.index];
 }
 };
-
 (function () {
 function resolveCss(cssText, ownerDocument) {
 return cssText.replace(CSS_URL_RX, function (m, pre, url, post) {
@@ -164,6 +224,9 @@ at.value = a === 'style' ? resolveCss(v, ownerDocument) : resolve(v, ownerDocume
 }
 }
 function resolve(url, ownerDocument) {
+if (url && url[0] === '#') {
+return url;
+}
 var resolver = getUrlResolver(ownerDocument);
 resolver.href = url;
 return resolver.href || url;
@@ -199,14 +262,17 @@ resolveAttrs: resolveAttrs,
 resolveUrl: resolveUrl
 };
 }());
-
 Polymer.Base._addFeature({
 _prepAnnotations: function () {
 if (!this._template) {
 this._notes = [];
 } else {
 Polymer.Annotations.prepElement = this._prepElement.bind(this);
+if (this._template._content && this._template._content._notes) {
+this._notes = this._template._content._notes;
+} else {
 this._notes = Polymer.Annotations.parseAnnotations(this._template);
+}
 this._processAnnotations(this._notes);
 Polymer.Annotations.prepElement = null;
 }
@@ -216,9 +282,14 @@ for (var i = 0; i < notes.length; i++) {
 var note = notes[i];
 for (var j = 0; j < note.bindings.length; j++) {
 var b = note.bindings[j];
-b.signature = this._parseMethod(b.value);
-if (!b.signature) {
-b.model = this._modelForPath(b.value);
+for (var k = 0; k < b.parts.length; k++) {
+var p = b.parts[k];
+if (!p.literal) {
+p.signature = this._parseMethod(p.value);
+if (!p.signature) {
+p.model = this._modelForPath(p.value);
+}
+}
 }
 }
 if (note.templateContent) {
@@ -229,10 +300,12 @@ for (var prop in pp) {
 bindings.push({
 index: note.index,
 kind: 'property',
-mode: '{',
 name: '_parent_' + prop,
+parts: [{
+mode: '{',
 model: prop,
 value: prop
+}]
 });
 }
 note.bindings = note.bindings.concat(bindings);
@@ -243,14 +316,16 @@ _discoverTemplateParentProps: function (notes) {
 var pp = {};
 notes.forEach(function (n) {
 n.bindings.forEach(function (b) {
-if (b.signature) {
-var args = b.signature.args;
+b.parts.forEach(function (p) {
+if (p.signature) {
+var args = p.signature.args;
 for (var k = 0; k < args.length; k++) {
 pp[args[k].model] = true;
 }
 } else {
-pp[b.model] = true;
+pp[p.model] = true;
 }
+});
 });
 if (n.templateContent) {
 var tpp = n.templateContent._parentProps;
@@ -270,15 +345,43 @@ this._marshalAnnotatedNodes();
 this._marshalAnnotatedListeners();
 }
 },
-_configureAnnotationReferences: function () {
-this._configureTemplateContent();
-},
-_configureTemplateContent: function () {
-this._notes.forEach(function (note, i) {
-if (note.templateContent) {
-this._nodes[i]._content = note.templateContent;
+_configureAnnotationReferences: function (config) {
+var notes = this._notes;
+var nodes = this._nodes;
+for (var i = 0; i < notes.length; i++) {
+var note = notes[i];
+var node = nodes[i];
+this._configureTemplateContent(note, node);
+this._configureCompoundBindings(note, node);
 }
-}, this);
+},
+_configureTemplateContent: function (note, node) {
+if (note.templateContent) {
+node._content = note.templateContent;
+}
+},
+_configureCompoundBindings: function (note, node) {
+var bindings = note.bindings;
+for (var i = 0; i < bindings.length; i++) {
+var binding = bindings[i];
+if (binding.isCompound) {
+var storage = node.__compoundStorage__ || (node.__compoundStorage__ = {});
+var parts = binding.parts;
+var literals = new Array(parts.length);
+for (var j = 0; j < parts.length; j++) {
+literals[j] = parts[j].literal;
+}
+var name = binding.name;
+storage[name] = literals;
+if (binding.literal && binding.kind == 'property') {
+if (node._configValue) {
+node._configValue(name, binding.literal);
+} else {
+node[name] = binding.literal;
+}
+}
+}
+}
 },
 _marshalIdNodes: function () {
 this.$ = {};
@@ -306,7 +409,6 @@ this.listen(node, e.name, e.value);
 }, this);
 }
 });
-
 Polymer.Base._addFeature({
 listeners: {},
 _listenListeners: function (listeners) {
@@ -324,32 +426,71 @@ this.listen(node, name, listeners[key]);
 }
 },
 listen: function (node, eventName, methodName) {
-this._listen(node, eventName, this._createEventHandler(node, eventName, methodName));
+var handler = this._recallEventHandler(this, eventName, node, methodName);
+if (!handler) {
+handler = this._createEventHandler(node, eventName, methodName);
+}
+if (handler._listening) {
+return;
+}
+this._listen(node, eventName, handler);
+handler._listening = true;
+},
+_boundListenerKey: function (eventName, methodName) {
+return eventName + ':' + methodName;
+},
+_recordEventHandler: function (host, eventName, target, methodName, handler) {
+var hbl = host.__boundListeners;
+if (!hbl) {
+hbl = host.__boundListeners = new WeakMap();
+}
+var bl = hbl.get(target);
+if (!bl) {
+bl = {};
+hbl.set(target, bl);
+}
+var key = this._boundListenerKey(eventName, methodName);
+bl[key] = handler;
+},
+_recallEventHandler: function (host, eventName, target, methodName) {
+var hbl = host.__boundListeners;
+if (!hbl) {
+return;
+}
+var bl = hbl.get(target);
+if (!bl) {
+return;
+}
+var key = this._boundListenerKey(eventName, methodName);
+return bl[key];
 },
 _createEventHandler: function (node, eventName, methodName) {
 var host = this;
-return function (e) {
+var handler = function (e) {
 if (host[methodName]) {
 host[methodName](e, e.detail);
 } else {
-console.warn('[%s]: event handler [%s] is null in scope (%o)', node.localName, eventName, methodName, host);
+host._warn(host._logf('_createEventHandler', 'listener method `' + methodName + '` not defined'));
 }
 };
+handler._listening = false;
+this._recordEventHandler(host, eventName, node, methodName, handler);
+return handler;
+},
+unlisten: function (node, eventName, methodName) {
+var handler = this._recallEventHandler(this, eventName, node, methodName);
+if (handler) {
+this._unlisten(node, eventName, handler);
+handler._listening = false;
+}
 },
 _listen: function (node, eventName, handler) {
 node.addEventListener(eventName, handler);
 },
-keyCodes: {
-ESC_KEY: 27,
-ENTER_KEY: 13,
-LEFT: 37,
-UP: 38,
-RIGHT: 39,
-DOWN: 40,
-SPACE: 32
+_unlisten: function (node, eventName, handler) {
+node.removeEventListener(eventName, handler);
 }
 });
-
 (function () {
 'use strict';
 var HAS_NATIVE_TA = typeof document.head.style.touchAction === 'string';
@@ -359,13 +500,27 @@ var TOUCH_ACTION = '__polymerGesturesTouchAction';
 var TAP_DISTANCE = 25;
 var TRACK_DISTANCE = 5;
 var TRACK_LENGTH = 2;
-var MOUSE_TIMEOUT = 500;
+var MOUSE_TIMEOUT = 2500;
 var MOUSE_EVENTS = [
 'mousedown',
 'mousemove',
 'mouseup',
 'click'
 ];
+var MOUSE_WHICH_TO_BUTTONS = [
+0,
+1,
+4,
+2
+];
+var MOUSE_HAS_BUTTONS = function () {
+try {
+return new MouseEvent('test', { buttons: 1 }).buttons === 1;
+} catch (e) {
+return false;
+}
+}();
+var IS_TOUCH_ONLY = navigator.userAgent.match(/iP(?:[oa]d|hone)|Android/);
 var mouseCanceller = function (mouseEvent) {
 mouseEvent[HANDLED_OBJ] = { skip: true };
 if (mouseEvent.type === 'click') {
@@ -379,34 +534,68 @@ mouseEvent.preventDefault();
 mouseEvent.stopPropagation();
 }
 };
-function ignoreMouse(set) {
-if (set && POINTERSTATE.touch.mouseIgnoreId !== -1) {
-return;
-}
+function setupTeardownMouseCanceller(setup) {
 for (var i = 0, en; i < MOUSE_EVENTS.length; i++) {
 en = MOUSE_EVENTS[i];
-if (set) {
+if (setup) {
 document.addEventListener(en, mouseCanceller, true);
 } else {
 document.removeEventListener(en, mouseCanceller, true);
 }
 }
-if (set) {
-POINTERSTATE.mouse.mouseIgnoreId = setTimeout(ignoreMouse, MOUSE_TIMEOUT);
-} else {
-POINTERSTATE.mouse.target = null;
-POINTERSTATE.touch.mouseIgnoreId = -1;
 }
+function ignoreMouse() {
+if (IS_TOUCH_ONLY) {
+return;
+}
+if (!POINTERSTATE.mouse.mouseIgnoreJob) {
+setupTeardownMouseCanceller(true);
+}
+var unset = function () {
+setupTeardownMouseCanceller();
+POINTERSTATE.mouse.target = null;
+POINTERSTATE.mouse.mouseIgnoreJob = null;
+};
+POINTERSTATE.mouse.mouseIgnoreJob = Polymer.Debounce(POINTERSTATE.mouse.mouseIgnoreJob, unset, MOUSE_TIMEOUT);
+}
+function hasLeftMouseButton(ev) {
+var type = ev.type;
+if (MOUSE_EVENTS.indexOf(type) === -1) {
+return false;
+}
+if (type === 'mousemove') {
+var buttons = ev.buttons === undefined ? 1 : ev.buttons;
+if (ev instanceof window.MouseEvent && !MOUSE_HAS_BUTTONS) {
+buttons = MOUSE_WHICH_TO_BUTTONS[ev.which] || 0;
+}
+return Boolean(buttons & 1);
+} else {
+var button = ev.button === undefined ? 0 : ev.button;
+return button === 0;
+}
+}
+function isSyntheticClick(ev) {
+if (ev.type === 'click') {
+if (ev.detail === 0) {
+return true;
+}
+var t = Gestures.findOriginalTarget(ev);
+var bcr = t.getBoundingClientRect();
+var x = ev.pageX, y = ev.pageY;
+return !(x >= bcr.left && x <= bcr.right && (y >= bcr.top && y <= bcr.bottom));
+}
+return false;
 }
 var POINTERSTATE = {
-tapPrevented: false,
-mouse: { target: null },
+mouse: {
+target: null,
+mouseIgnoreJob: null
+},
 touch: {
 x: 0,
 y: 0,
 id: -1,
-scrollDecided: false,
-mouseIgnoreId: -1
+scrollDecided: false
 }
 };
 function firstTouchAction(ev) {
@@ -421,6 +610,16 @@ break;
 }
 return ta;
 }
+function trackDocument(stateObj, movefn, upfn) {
+stateObj.movefn = movefn;
+stateObj.upfn = upfn;
+document.addEventListener('mousemove', movefn);
+document.addEventListener('mouseup', upfn);
+}
+function untrackDocument(stateObj) {
+document.removeEventListener('mousemove', stateObj.movefn);
+document.removeEventListener('mouseup', stateObj.upfn);
+}
 var Gestures = {
 gestures: {},
 recognizers: [],
@@ -434,6 +633,12 @@ node = next;
 }
 }
 return node;
+},
+findOriginalTarget: function (ev) {
+if (ev.path) {
+return ev.path[0];
+}
+return ev.target;
 },
 handleNative: function (ev) {
 var handled;
@@ -475,6 +680,16 @@ var recognizers = Gestures.recognizers;
 for (var i = 0, r; i < recognizers.length; i++) {
 r = recognizers[i];
 if (gs[r.name] && !handled[r.name]) {
+if (r.flow && r.flow.start.indexOf(ev.type) > -1) {
+if (r.reset) {
+r.reset();
+}
+}
+}
+}
+for (var i = 0, r; i < recognizers.length; i++) {
+r = recognizers[i];
+if (gs[r.name] && !handled[r.name]) {
 handled[r.name] = true;
 r[type](ev);
 }
@@ -506,6 +721,8 @@ prevent = dx > dy;
 }
 if (prevent) {
 ev.preventDefault();
+} else {
+Gestures.prevent('track');
 }
 }
 },
@@ -519,23 +736,61 @@ node[GESTURE_KEY] = gobj = {};
 }
 for (var i = 0, dep, gd; i < deps.length; i++) {
 dep = deps[i];
+if (IS_TOUCH_ONLY && MOUSE_EVENTS.indexOf(dep) > -1) {
+continue;
+}
 gd = gobj[dep];
 if (!gd) {
-gobj[dep] = gd = {};
+gobj[dep] = gd = { _count: 0 };
+}
+if (gd._count === 0) {
 node.addEventListener(dep, this.handleNative);
 }
 gd[name] = (gd[name] || 0) + 1;
+gd._count = (gd._count || 0) + 1;
 }
 node.addEventListener(evType, handler);
 if (recognizer.touchAction) {
 this.setTouchAction(node, recognizer.touchAction);
 }
 },
+remove: function (node, evType, handler) {
+var recognizer = this.gestures[evType];
+var deps = recognizer.deps;
+var name = recognizer.name;
+var gobj = node[GESTURE_KEY];
+if (gobj) {
+for (var i = 0, dep, gd; i < deps.length; i++) {
+dep = deps[i];
+gd = gobj[dep];
+if (gd && gd[name]) {
+gd[name] = (gd[name] || 1) - 1;
+gd._count = (gd._count || 1) - 1;
+if (gd._count === 0) {
+node.removeEventListener(dep, this.handleNative);
+}
+}
+}
+}
+node.removeEventListener(evType, handler);
+},
 register: function (recog) {
 this.recognizers.push(recog);
 for (var i = 0; i < recog.emits.length; i++) {
 this.gestures[recog.emits[i]] = recog;
 }
+},
+findRecognizerByEvent: function (evName) {
+for (var i = 0, r; i < this.recognizers.length; i++) {
+r = this.recognizers[i];
+for (var j = 0, n; j < r.emits.length; j++) {
+n = r.emits[j];
+if (n === evName) {
+return r;
+}
+}
+}
+return null;
 },
 setTouchAction: function (node, value) {
 if (HAS_NATIVE_TA) {
@@ -544,12 +799,23 @@ node.style.touchAction = value;
 node[TOUCH_ACTION] = value;
 },
 fire: function (target, type, detail) {
-var ev = new CustomEvent(type, {
-detail: detail,
+var ev = Polymer.Base.fire(type, detail, {
+node: target,
 bubbles: true,
 cancelable: true
 });
-target.dispatchEvent(ev);
+if (ev.defaultPrevented) {
+var se = detail.sourceEvent;
+if (se && se.preventDefault) {
+se.preventDefault();
+}
+}
+},
+prevent: function (evName) {
+var recognizer = this.findRecognizerByEvent(evName);
+if (recognizer.info) {
+recognizer.info.prevent = true;
+}
 }
 };
 Gestures.register({
@@ -559,31 +825,63 @@ deps: [
 'touchstart',
 'touchend'
 ],
+flow: {
+start: [
+'mousedown',
+'touchstart'
+],
+end: [
+'mouseup',
+'touchend'
+]
+},
 emits: [
 'down',
 'up'
 ],
+info: {
+movefn: function () {
+},
+upfn: function () {
+}
+},
+reset: function () {
+untrackDocument(this.info);
+},
 mousedown: function (e) {
-var t = e.currentTarget;
+if (!hasLeftMouseButton(e)) {
+return;
+}
+var t = Gestures.findOriginalTarget(e);
 var self = this;
-var upfn = function upfn(e) {
+var movefn = function movefn(e) {
+if (!hasLeftMouseButton(e)) {
 self.fire('up', t, e);
-document.removeEventListener('mouseup', upfn);
+untrackDocument(self.info);
+}
 };
-document.addEventListener('mouseup', upfn);
+var upfn = function upfn(e) {
+if (hasLeftMouseButton(e)) {
+self.fire('up', t, e);
+}
+untrackDocument(self.info);
+};
+trackDocument(this.info, movefn, upfn);
 this.fire('down', t, e);
 },
 touchstart: function (e) {
-this.fire('down', e.currentTarget, e.changedTouches[0]);
+this.fire('down', Gestures.findOriginalTarget(e), e.changedTouches[0]);
 },
 touchend: function (e) {
-this.fire('up', e.currentTarget, e.changedTouches[0]);
+this.fire('up', Gestures.findOriginalTarget(e), e.changedTouches[0]);
 },
 fire: function (type, target, event) {
+var self = this;
 Gestures.fire(target, type, {
 x: event.clientX,
 y: event.clientY,
-sourceEvent: event
+sourceEvent: event,
+prevent: Gestures.prevent.bind(Gestures)
 });
 }
 });
@@ -596,6 +894,16 @@ deps: [
 'touchmove',
 'touchend'
 ],
+flow: {
+start: [
+'mousedown',
+'touchstart'
+],
+end: [
+'mouseup',
+'touchend'
+]
+},
 emits: ['track'],
 info: {
 x: 0,
@@ -608,16 +916,26 @@ if (this.moves.length > TRACK_LENGTH) {
 this.moves.shift();
 }
 this.moves.push(move);
-}
 },
-clearInfo: function () {
+movefn: function () {
+},
+upfn: function () {
+},
+prevent: false
+},
+reset: function () {
 this.info.state = 'start';
 this.info.started = false;
 this.info.moves = [];
 this.info.x = 0;
 this.info.y = 0;
+this.info.prevent = false;
+untrackDocument(this.info);
 },
 hasMovedEnough: function (x, y) {
+if (this.info.prevent) {
+return false;
+}
 if (this.info.started) {
 return true;
 }
@@ -626,7 +944,10 @@ var dy = Math.abs(this.info.y - y);
 return dx >= TRACK_DISTANCE || dy >= TRACK_DISTANCE;
 },
 mousedown: function (e) {
-var t = e.currentTarget;
+if (!hasLeftMouseButton(e)) {
+return;
+}
+var t = Gestures.findOriginalTarget(e);
 var self = this;
 var movefn = function movefn(e) {
 var x = e.clientX, y = e.clientY;
@@ -636,22 +957,22 @@ self.info.addMove({
 x: x,
 y: y
 });
+if (!hasLeftMouseButton(e)) {
+self.info.state = 'end';
+untrackDocument(self.info);
+}
 self.fire(t, e);
-e.preventDefault();
 self.info.started = true;
 }
 };
 var upfn = function upfn(e) {
 if (self.info.started) {
-POINTERSTATE.tapPrevented = true;
+Gestures.prevent('tap');
 movefn(e);
 }
-self.clearInfo();
-document.removeEventListener('mousemove', movefn);
-document.removeEventListener('mouseup', upfn);
+untrackDocument(self.info);
 };
-document.addEventListener('mousemove', movefn);
-document.addEventListener('mouseup', upfn);
+trackDocument(this.info, movefn, upfn);
 this.info.x = e.clientX;
 this.info.y = e.clientY;
 },
@@ -661,7 +982,7 @@ this.info.x = ct.clientX;
 this.info.y = ct.clientY;
 },
 touchmove: function (e) {
-var t = e.currentTarget;
+var t = Gestures.findOriginalTarget(e);
 var ct = e.changedTouches[0];
 var x = ct.clientX, y = ct.clientY;
 if (this.hasMovedEnough(x, y)) {
@@ -675,10 +996,10 @@ this.info.started = true;
 }
 },
 touchend: function (e) {
-var t = e.currentTarget;
+var t = Gestures.findOriginalTarget(e);
 var ct = e.changedTouches[0];
 if (this.info.started) {
-POINTERSTATE.tapPrevented = true;
+Gestures.prevent('tap');
 this.info.state = 'end';
 this.info.addMove({
 x: ct.clientX,
@@ -686,7 +1007,6 @@ y: ct.clientY
 });
 this.fire(t, ct);
 }
-this.clearInfo();
 },
 fire: function (target, touch) {
 var secondlast = this.info.moves[this.info.moves.length - 2];
@@ -706,6 +1026,7 @@ dx: dx,
 dy: dy,
 ddx: ddx,
 ddy: ddy,
+sourceEvent: touch,
 hover: function () {
 return Gestures.deepTargetFind(touch.clientX, touch.clientY);
 }
@@ -720,46 +1041,60 @@ deps: [
 'touchstart',
 'touchend'
 ],
+flow: {
+start: [
+'mousedown',
+'touchstart'
+],
+end: [
+'click',
+'touchend'
+]
+},
 emits: ['tap'],
-start: {
-x: 0,
-y: 0
+info: {
+x: NaN,
+y: NaN,
+prevent: false
 },
 reset: function () {
-this.start.x = 0;
-this.start.y = 0;
+this.info.x = NaN;
+this.info.y = NaN;
+this.info.prevent = false;
 },
 save: function (e) {
-this.start.x = e.clientX;
-this.start.y = e.clientY;
+this.info.x = e.clientX;
+this.info.y = e.clientY;
 },
 mousedown: function (e) {
-POINTERSTATE.tapPrevented = false;
+if (hasLeftMouseButton(e)) {
 this.save(e);
+}
 },
 click: function (e) {
+if (hasLeftMouseButton(e)) {
 this.forward(e);
+}
 },
 touchstart: function (e) {
-POINTERSTATE.tapPrevented = false;
 this.save(e.changedTouches[0]);
 },
 touchend: function (e) {
 this.forward(e.changedTouches[0]);
 },
 forward: function (e) {
-var dx = Math.abs(e.clientX - this.start.x);
-var dy = Math.abs(e.clientY - this.start.y);
-if (isNaN(dx) || isNaN(dy) || dx <= TAP_DISTANCE || dy <= TAP_DISTANCE) {
-if (!POINTERSTATE.tapPrevented) {
-Gestures.fire(e.target, 'tap', {
+var dx = Math.abs(e.clientX - this.info.x);
+var dy = Math.abs(e.clientY - this.info.y);
+var t = Gestures.findOriginalTarget(e);
+if (isNaN(dx) || isNaN(dy) || dx <= TAP_DISTANCE && dy <= TAP_DISTANCE || isSyntheticClick(e)) {
+if (!this.info.prevent) {
+Gestures.fire(t, 'tap', {
 x: e.clientX,
 y: e.clientY,
 sourceEvent: e
 });
 }
 }
-this.reset();
 }
 });
 var DIRECTION_MAP = {
@@ -776,6 +1111,13 @@ Gestures.add(node, eventName, handler);
 node.addEventListener(eventName, handler);
 }
 },
+_unlisten: function (node, eventName, handler) {
+if (Gestures.gestures[eventName]) {
+Gestures.remove(node, eventName, handler);
+} else {
+node.removeEventListener(eventName, handler);
+}
+},
 setScrollDirection: function (direction, node) {
 node = node || this;
 Gestures.setTouchAction(node, DIRECTION_MAP[direction] || 'auto');
@@ -783,52 +1125,57 @@ Gestures.setTouchAction(node, DIRECTION_MAP[direction] || 'auto');
 });
 Polymer.Gestures = Gestures;
 }());
-
-Polymer.Async = function () {
-var currVal = 0;
-var lastVal = 0;
-var callbacks = [];
-var twiddle = document.createTextNode('');
-function runAsync(callback, waitTime) {
+Polymer.Async = {
+_currVal: 0,
+_lastVal: 0,
+_callbacks: [],
+_twiddleContent: 0,
+_twiddle: document.createTextNode(''),
+run: function (callback, waitTime) {
 if (waitTime > 0) {
 return ~setTimeout(callback, waitTime);
 } else {
-twiddle.textContent = currVal++;
-callbacks.push(callback);
-return currVal - 1;
+this._twiddle.textContent = this._twiddleContent++;
+this._callbacks.push(callback);
+return this._currVal++;
 }
-}
-function cancelAsync(handle) {
+},
+cancel: function (handle) {
 if (handle < 0) {
 clearTimeout(~handle);
 } else {
-var idx = handle - lastVal;
+var idx = handle - this._lastVal;
 if (idx >= 0) {
-if (!callbacks[idx]) {
+if (!this._callbacks[idx]) {
 throw 'invalid async handle: ' + handle;
 }
-callbacks[idx] = null;
+this._callbacks[idx] = null;
 }
 }
-}
-function atEndOfMicrotask() {
-var len = callbacks.length;
+},
+_atEndOfMicrotask: function () {
+var len = this._callbacks.length;
 for (var i = 0; i < len; i++) {
-var cb = callbacks[i];
+var cb = this._callbacks[i];
 if (cb) {
+try {
 cb();
+} catch (e) {
+i++;
+this._callbacks.splice(0, i);
+this._lastVal += i;
+this._twiddle.textContent = this._twiddleContent++;
+throw e;
 }
 }
-callbacks.splice(0, len);
-lastVal += len;
 }
-new (window.MutationObserver || JsMutationObserver)(atEndOfMicrotask).observe(twiddle, { characterData: true });
-return {
-run: runAsync,
-cancel: cancelAsync
+this._callbacks.splice(0, len);
+this._lastVal += len;
+}
 };
-}();
-
+new window.MutationObserver(function () {
+Polymer.Async._atEndOfMicrotask();
+}).observe(Polymer.Async._twiddle, { characterData: true });
 Polymer.Debounce = function () {
 var Async = Polymer.Async;
 var Debouncer = function (context) {
@@ -868,7 +1215,6 @@ return debouncer;
 }
 return debounce;
 }();
-
 Polymer.Base._addFeature({
 $$: function (slctr) {
 return Polymer.dom(this.root).querySelector(slctr);
@@ -911,8 +1257,35 @@ if (toElement) {
 Polymer.dom(toElement).setAttribute(name, '');
 }
 },
+getEffectiveChildNodes: function () {
+return Polymer.dom(this).getEffectiveChildNodes();
+},
+getEffectiveChildren: function () {
+var list = Polymer.dom(this).getEffectiveChildNodes();
+return list.filter(function (n) {
+return n.nodeType === Node.ELEMENT_NODE;
+});
+},
+getEffectiveTextContent: function () {
+var cn = this.getEffectiveChildNodes();
+var tc = [];
+for (var i = 0, c; c = cn[i]; i++) {
+if (c.nodeType !== Node.COMMENT_NODE) {
+tc.push(Polymer.dom(c).textContent);
+}
+}
+return tc.join('');
+},
+queryEffectiveChildren: function (slctr) {
+var e$ = Polymer.dom(this).queryDistributedElements(slctr);
+return e$ && e$[0];
+},
+queryAllEffectiveChildren: function (slctr) {
+return Polymer.dom(this).queryAllDistributedElements(slctr);
+},
 getContentChildNodes: function (slctr) {
-return Polymer.dom(Polymer.dom(this.root).querySelector(slctr || 'content')).getDistributedNodes();
+var content = Polymer.dom(this.root).querySelector(slctr || 'content');
+return content ? Polymer.dom(content).getDistributedNodes() : [];
 },
 getContentChildren: function (slctr) {
 return this.getContentChildNodes(slctr).filter(function (n) {
@@ -924,9 +1297,10 @@ options = options || Polymer.nob;
 var node = options.node || this;
 var detail = detail === null || detail === undefined ? Polymer.nob : detail;
 var bubbles = options.bubbles === undefined ? true : options.bubbles;
+var cancelable = Boolean(options.cancelable);
 var event = new CustomEvent(type, {
 bubbles: Boolean(bubbles),
-cancelable: Boolean(options.cancelable),
+cancelable: cancelable,
 detail: detail
 });
 node.dispatchEvent(event);
@@ -946,7 +1320,7 @@ if (index >= 0) {
 return path.splice(index, 1);
 }
 } else {
-var arr = this.get(path);
+var arr = this._get(path);
 index = arr.indexOf(item);
 if (index >= 0) {
 return this.splice(path, index, 1);
@@ -984,30 +1358,30 @@ elt[n] = props[n];
 }
 return elt;
 },
-mixin: function (a, b) {
-for (var i in b) {
-a[i] = b[i];
-}
+isLightDescendant: function (node) {
+return this !== node && this.contains(node) && Polymer.dom(this).getOwnerRoot() === Polymer.dom(node).getOwnerRoot();
+},
+isLocalDescendant: function (node) {
+return this.root === Polymer.dom(node).getOwnerRoot();
 }
 });
-
 Polymer.Bind = {
 prepareModel: function (model) {
 model._propertyEffects = {};
 model._bindListeners = [];
-var api = this._modelApi;
-for (var n in api) {
-model[n] = api[n];
-}
+Polymer.Base.mixin(model, this._modelApi);
 },
 _modelApi: {
 _notifyChange: function (property) {
 var eventName = Polymer.CaseMap.camelToDashCase(property) + '-changed';
-this.fire(eventName, { value: this[property] }, { bubbles: false });
+Polymer.Base.fire(eventName, { value: this[property] }, {
+bubbles: false,
+node: this
+});
 },
-_propertySet: function (property, value, effects) {
+_propertySetter: function (property, value, effects, fromAbove) {
 var old = this.__data__[property];
-if (old !== value) {
+if (old !== value && (old === old || value === value)) {
 this.__data__[property] = value;
 if (typeof value == 'object') {
 this._clearPath(property);
@@ -1016,16 +1390,25 @@ if (this._propertyChanged) {
 this._propertyChanged(property, value, old);
 }
 if (effects) {
-this._effectEffects(property, value, effects, old);
+this._effectEffects(property, value, effects, old, fromAbove);
 }
 }
 return old;
 },
-_effectEffects: function (property, value, effects, old) {
+__setProperty: function (property, value, quiet, node) {
+node = node || this;
+var effects = node._propertyEffects && node._propertyEffects[property];
+if (effects) {
+node._propertySetter(property, value, effects, quiet);
+} else {
+node[property] = value;
+}
+},
+_effectEffects: function (property, value, effects, old, fromAbove) {
 effects.forEach(function (fx) {
 var fn = Polymer.Bind['_' + fx.kind + 'Effect'];
 if (fn) {
-fn.call(this, property, value, fx.effect, old);
+fn.call(this, property, value, fx.effect, old, fromAbove);
 }
 }, this);
 },
@@ -1083,10 +1466,13 @@ return this.__data__[property];
 }
 };
 var setter = function (value) {
-this._propertySet(property, value, effects);
+this._propertySetter(property, value, effects);
 };
-if (model.getPropertyInfo && model.getPropertyInfo(property).readOnly) {
+var info = model.getPropertyInfo && model.getPropertyInfo(property);
+if (info && info.readOnly) {
+if (!info.computed) {
 model['_set' + this.upper(property)] = setter;
+}
 } else {
 defun.set = setter;
 }
@@ -1116,7 +1502,7 @@ _notedListenerFactory: function (property, path, isStructured, bogusTest) {
 return function (e, target) {
 if (!bogusTest(e, target)) {
 if (e.detail && e.detail.path) {
-this.notifyPath(this._fixPath(path, property, e.detail.path), e.detail.value);
+this._notifyPath(this._fixPath(path, property, e.detail.path), e.detail.value);
 } else {
 var value = target[property];
 if (!isStructured) {
@@ -1140,54 +1526,75 @@ node.addEventListener(info.event, inst._notifyListener.bind(inst, info.changedFn
 });
 }
 };
-
 Polymer.Base.extend(Polymer.Bind, {
 _shouldAddListener: function (effect) {
-return effect.name && effect.mode === '{' && !effect.negate && effect.kind != 'attribute';
+return effect.name && effect.kind != 'attribute' && effect.kind != 'text' && !effect.isCompound && effect.parts[0].mode === '{' && !effect.parts[0].negate;
 },
 _annotationEffect: function (source, value, effect) {
 if (source != effect.value) {
-value = this.get(effect.value);
+value = this._get(effect.value);
 this.__data__[effect.value] = value;
 }
 var calc = effect.negate ? !value : value;
 if (!effect.customEvent || this._nodes[effect.index][effect.name] !== calc) {
-return this._applyEffectValue(calc, effect);
+return this._applyEffectValue(effect, calc);
 }
 },
 _reflectEffect: function (source) {
 this.reflectPropertyToAttribute(source);
 },
-_notifyEffect: function (source) {
+_notifyEffect: function (source, value, effect, old, fromAbove) {
+if (!fromAbove) {
 this._notifyChange(source);
+}
 },
-_functionEffect: function (source, value, fn, old) {
-fn.call(this, source, value, old);
+_functionEffect: function (source, value, fn, old, fromAbove) {
+fn.call(this, source, value, old, fromAbove);
 },
 _observerEffect: function (source, value, effect, old) {
-this[effect.method](value, old);
+var fn = this[effect.method];
+if (fn) {
+fn.call(this, value, old);
+} else {
+this._warn(this._logf('_observerEffect', 'observer method `' + effect.method + '` not defined'));
+}
 },
 _complexObserverEffect: function (source, value, effect) {
+var fn = this[effect.method];
+if (fn) {
 var args = Polymer.Bind._marshalArgs(this.__data__, effect, source, value);
 if (args) {
-this[effect.method].apply(this, args);
+fn.apply(this, args);
+}
+} else {
+this._warn(this._logf('_complexObserverEffect', 'observer method `' + effect.method + '` not defined'));
 }
 },
 _computeEffect: function (source, value, effect) {
 var args = Polymer.Bind._marshalArgs(this.__data__, effect, source, value);
 if (args) {
-this[effect.property] = this[effect.method].apply(this, args);
+var fn = this[effect.method];
+if (fn) {
+this.__setProperty(effect.name, fn.apply(this, args));
+} else {
+this._warn(this._logf('_computeEffect', 'compute method `' + effect.method + '` not defined'));
+}
 }
 },
 _annotatedComputationEffect: function (source, value, effect) {
+var computedHost = this._rootDataHost || this;
+var fn = computedHost[effect.method];
+if (fn) {
 var args = Polymer.Bind._marshalArgs(this.__data__, effect, source, value);
 if (args) {
-var computedHost = this._rootDataHost || this;
-var computedvalue = computedHost[effect.method].apply(computedHost, args);
+var computedvalue = fn.apply(computedHost, args);
 if (effect.negate) {
 computedvalue = !computedvalue;
 }
-this._applyEffectValue(computedvalue, effect);
+this._applyEffectValue(effect, computedvalue);
+}
+} else {
+computedHost._warn(computedHost._logf('_annotatedComputationEffect', 'compute method `' + effect.method + '` not defined'));
 }
 },
 _marshalArgs: function (model, effect, path, value) {
@@ -1196,10 +1603,11 @@ var args = effect.args;
 for (var i = 0, l = args.length; i < l; i++) {
 var arg = args[i];
 var name = arg.name;
+var v;
 if (arg.literal) {
 v = arg.value;
 } else if (arg.structured) {
-v = Polymer.Base.get(name, model);
+v = Polymer.Base._get(name, model);
 } else {
 v = model[name];
 }
@@ -1221,7 +1629,6 @@ values[i] = v;
 return values;
 }
 });
-
 Polymer.Base._addFeature({
 _addPropertyEffect: function (property, kind, effect) {
 Polymer.Bind.addPropertyEffect(this, property, kind, effect);
@@ -1241,6 +1648,7 @@ if (prop.observer) {
 this._addObserverEffect(p, prop.observer);
 }
 if (prop.computed) {
+prop.readOnly = true;
 this._addComputedEffect(p, prop.computed);
 }
 if (prop.notify) {
@@ -1262,7 +1670,7 @@ this._addPropertyEffect(arg.model, 'compute', {
 method: sig.method,
 args: sig.args,
 trigger: arg,
-property: name
+name: name
 });
 }, this);
 },
@@ -1300,40 +1708,54 @@ this._addAnnotationEffect(binding, index);
 },
 _addAnnotationEffect: function (note, index) {
 if (Polymer.Bind._shouldAddListener(note)) {
-Polymer.Bind._addAnnotatedListener(this, index, note.name, note.value, note.event);
+Polymer.Bind._addAnnotatedListener(this, index, note.name, note.parts[0].value, note.parts[0].event);
 }
-if (note.signature) {
-this._addAnnotatedComputationEffect(note, index);
-} else {
-note.index = index;
-this._addPropertyEffect(note.model, 'annotation', note);
+for (var i = 0; i < note.parts.length; i++) {
+var part = note.parts[i];
+if (part.signature) {
+this._addAnnotatedComputationEffect(note, part, index);
+} else if (!part.literal) {
+this._addPropertyEffect(part.model, 'annotation', {
+kind: note.kind,
+index: index,
+name: note.name,
+value: part.value,
+isCompound: note.isCompound,
+compoundIndex: part.compoundIndex,
+event: part.event,
+customEvent: part.customEvent,
+negate: part.negate
+});
+}
 }
 },
-_addAnnotatedComputationEffect: function (note, index) {
-var sig = note.signature;
+_addAnnotatedComputationEffect: function (note, part, index) {
+var sig = part.signature;
 if (sig.static) {
-this.__addAnnotatedComputationEffect('__static__', index, note, sig, null);
+this.__addAnnotatedComputationEffect('__static__', index, note, part, null);
 } else {
 sig.args.forEach(function (arg) {
 if (!arg.literal) {
-this.__addAnnotatedComputationEffect(arg.model, index, note, sig, arg);
+this.__addAnnotatedComputationEffect(arg.model, index, note, part, arg);
 }
 }, this);
 }
 },
-__addAnnotatedComputationEffect: function (property, index, note, sig, trigger) {
+__addAnnotatedComputationEffect: function (property, index, note, part, trigger) {
 this._addPropertyEffect(property, 'annotatedComputation', {
 index: index,
+isCompound: note.isCompound,
+compoundIndex: part.compoundIndex,
 kind: note.kind,
-property: note.name,
-negate: note.negate,
-method: sig.method,
-args: sig.args,
+name: note.name,
+negate: part.negate,
+method: part.signature.method,
+args: part.signature.args,
 trigger: trigger
 });
 },
 _parseMethod: function (expression) {
-var m = expression.match(/(\w*)\((.*)\)/);
+var m = expression.match(/([^\s]+)\((.*)\)/);
 if (m) {
 var sig = {
 method: m[1],
@@ -1365,6 +1787,9 @@ name: arg,
 model: this._modelForPath(arg)
 };
 var fc = arg[0];
+if (fc === '-') {
+fc = arg[1];
+}
 if (fc >= '0' && fc <= '9') {
 fc = '#';
 }
@@ -1394,9 +1819,14 @@ _marshalInstanceEffects: function () {
 Polymer.Bind.prepareInstance(this);
 Polymer.Bind.setupBindListeners(this);
 },
-_applyEffectValue: function (value, info) {
+_applyEffectValue: function (info, value) {
 var node = this._nodes[info.index];
-var property = info.property || info.name || 'textContent';
+var property = info.name;
+if (info.isCompound) {
+var storage = node.__compoundStorage__[property];
+storage[info.compoundIndex] = value;
+value = storage.join('');
+}
 if (info.kind == 'attribute') {
 this.serializeValueToAttribute(value, property, node);
 } else {
@@ -1415,14 +1845,22 @@ this._effectEffects('__static__', null, this._propertyEffects.__static__);
 }
 }
 });
-
 Polymer.Base._addFeature({
 _setupConfigure: function (initialConfig) {
-this._config = initialConfig || {};
+this._config = {};
+for (var i in initialConfig) {
+if (initialConfig[i] !== undefined) {
+this._config[i] = initialConfig[i];
+}
+}
 this._handlers = [];
 },
 _marshalAttributes: function () {
 this._takeAttributesToModel(this._config);
+},
+_attributeChangedImpl: function (name) {
+var model = this._clientsReadied ? this : this._config;
+this._setAttributeToProperty(model, name);
 },
 _configValue: function (name, value) {
 this._config[name] = value;
@@ -1432,12 +1870,13 @@ this._configure();
 },
 _configure: function () {
 this._configureAnnotationReferences();
+this._aboveConfig = this.mixin({}, this._config);
 var config = {};
 this.behaviors.forEach(function (b) {
 this._configureProperties(b.properties, config);
 }, this);
 this._configureProperties(this.properties, config);
-this._mixinConfigure(config, this._config);
+this._mixinConfigure(config, this._aboveConfig);
 this._config = config;
 this._distributeConfig(this._config);
 },
@@ -1467,10 +1906,10 @@ for (var p in config) {
 var fx = fx$[p];
 if (fx) {
 for (var i = 0, l = fx.length, x; i < l && (x = fx[i]); i++) {
-if (x.kind === 'annotation') {
+if (x.kind === 'annotation' && !x.isCompound) {
 var node = this._nodes[x.effect.index];
 if (node._configValue) {
-var value = p === x.effect.value ? config[p] : this.get(x.effect.value, config);
+var value = p === x.effect.value ? config[p] : this._get(x.effect.value, config);
 node._configValue(x.effect.name, value);
 }
 }
@@ -1481,18 +1920,13 @@ node._configValue(x.effect.name, value);
 },
 _afterClientsReady: function () {
 this._executeStaticEffects();
-this._applyConfig(this._config);
+this._applyConfig(this._config, this._aboveConfig);
 this._flushHandlers();
 },
-_applyConfig: function (config) {
+_applyConfig: function (config, aboveConfig) {
 for (var n in config) {
 if (this[n] === undefined) {
-var effects = this._propertyEffects[n];
-if (effects) {
-this._propertySet(n, config[n], effects);
-} else {
-this[n] = config[n];
-}
+this.__setProperty(n, config[n], n in aboveConfig);
 }
 }
 },
@@ -1515,19 +1949,25 @@ var h$ = this._handlers;
 for (var i = 0, l = h$.length, h; i < l && (h = h$[i]); i++) {
 h[0].call(this, h[1], h[2]);
 }
+this._handlers = [];
 }
 });
-
 (function () {
 'use strict';
 Polymer.Base._addFeature({
 notifyPath: function (path, value, fromAbove) {
-var old = this._propertySet(path, value);
-if (old !== value) {
+var info = {};
+this._get(path, this, info);
+this._notifyPath(info.path, value, fromAbove);
+},
+_notifyPath: function (path, value, fromAbove) {
+var old = this._propertySetter(path, value);
+if (old !== value && (old === old || value === value)) {
 this._pathEffector(path, value);
 if (!fromAbove) {
-this._notifyPath(path, value);
+this._notifyPathUp(path, value);
 }
+return true;
 }
 },
 _getPathParts: function (path) {
@@ -1551,34 +1991,68 @@ var array;
 var last = parts[parts.length - 1];
 if (parts.length > 1) {
 for (var i = 0; i < parts.length - 1; i++) {
-prop = prop[parts[i]];
-if (array) {
+var part = parts[i];
+if (array && part[0] == '#') {
+prop = Polymer.Collection.get(array).getItem(part);
+} else {
+prop = prop[part];
+if (array && parseInt(part, 10) == part) {
 parts[i] = Polymer.Collection.get(array).getKey(prop);
+}
 }
 if (!prop) {
 return;
 }
 array = Array.isArray(prop) ? prop : null;
 }
+if (array) {
+var coll = Polymer.Collection.get(array);
+if (last[0] == '#') {
+var key = last;
+var old = coll.getItem(key);
+last = array.indexOf(old);
+coll.setItem(key, value);
+} else if (parseInt(last, 10) == last) {
+var old = prop[last];
+var key = coll.getKey(old);
+parts[i] = key;
+coll.setItem(key, value);
+}
+}
 prop[last] = value;
 if (!root) {
-this.notifyPath(parts.join('.'), value);
+this._notifyPath(parts.join('.'), value);
 }
 } else {
 prop[path] = value;
 }
 },
 get: function (path, root) {
+return this._get(path, root);
+},
+_get: function (path, root, info) {
 var prop = root || this;
 var parts = this._getPathParts(path);
-var last = parts.pop();
-while (parts.length) {
-prop = prop[parts.shift()];
+var array;
+for (var i = 0; i < parts.length; i++) {
 if (!prop) {
 return;
 }
+var part = parts[i];
+if (array && part[0] == '#') {
+prop = Polymer.Collection.get(array).getItem(part);
+} else {
+prop = prop[part];
+if (info && array && parseInt(part, 10) == part) {
+parts[i] = Polymer.Collection.get(array).getKey(prop);
 }
-return prop[last];
+}
+array = Array.isArray(prop) ? prop : null;
+}
+if (info) {
+info.path = parts.join('.');
+}
+return prop;
 },
 _pathEffector: function (path, value) {
 var model = this._modelForPath(path);
@@ -1600,9 +2074,9 @@ if (effect.value === path || effect.value.indexOf(path + '.') === 0) {
 Polymer.Bind._annotationEffect.call(this, path, value, effect);
 } else if (path.indexOf(effect.value + '.') === 0 && !effect.negate) {
 var node = this._nodes[effect.index];
-if (node && node.notifyPath) {
+if (node && node._notifyPath) {
 var p = this._fixPath(effect.name, effect.value, path);
-node.notifyPath(p, value, true);
+node._notifyPath(p, value, true);
 }
 }
 },
@@ -1630,7 +2104,7 @@ this._boundPaths = this._boundPaths || {};
 if (from) {
 this._boundPaths[to] = from;
 } else {
-this.unbindPath(to);
+this.unlinkPaths(to);
 }
 },
 unlinkPaths: function (path) {
@@ -1639,29 +2113,19 @@ delete this._boundPaths[path];
 }
 },
 _notifyBoundPaths: function (path, value) {
-var from, to;
 for (var a in this._boundPaths) {
 var b = this._boundPaths[a];
 if (path.indexOf(a + '.') == 0) {
-from = a;
-to = b;
-break;
+this._notifyPath(this._fixPath(b, a, path), value);
+} else if (path.indexOf(b + '.') == 0) {
+this._notifyPath(this._fixPath(a, b, path), value);
 }
-if (path.indexOf(b + '.') == 0) {
-from = b;
-to = a;
-break;
-}
-}
-if (from && to) {
-var p = this._fixPath(to, from, path);
-this.notifyPath(p, value);
 }
 },
 _fixPath: function (property, root, path) {
 return property + path.slice(root.length);
 },
-_notifyPath: function (path, value) {
+_notifyPathUp: function (path, value) {
 var rootName = this._modelForPath(path);
 var dashCaseName = Polymer.CaseMap.camelToDashCase(rootName);
 var eventName = dashCaseName + this._EVENT_CHANGED;
@@ -1675,66 +2139,120 @@ var dot = path.indexOf('.');
 return dot < 0 ? path : path.slice(0, dot);
 },
 _EVENT_CHANGED: '-changed',
+notifySplices: function (path, splices) {
+var info = {};
+var array = this._get(path, this, info);
+this._notifySplices(array, info.path, splices);
+},
+_notifySplices: function (array, path, splices) {
+var change = {
+keySplices: Polymer.Collection.applySplices(array, splices),
+indexSplices: splices
+};
+if (!array.hasOwnProperty('splices')) {
+Object.defineProperty(array, 'splices', {
+configurable: true,
+writable: true
+});
+}
+array.splices = change;
+this._notifyPath(path + '.splices', change);
+this._notifyPath(path + '.length', array.length);
+change.keySplices = null;
+change.indexSplices = null;
+},
 _notifySplice: function (array, path, index, added, removed) {
-var splices = [{
+this._notifySplices(array, path, [{
 index: index,
 addedCount: added,
 removed: removed,
 object: array,
 type: 'splice'
-}];
-var change = {
-keySplices: Polymer.Collection.get(array).applySplices(splices),
-indexSplices: splices
-};
-this.set(path + '.splices', change);
-if (added != removed.length) {
-this.notifyPath(path + '.length', array.length);
-}
-change.keySplices = null;
-change.indexSplices = null;
+}]);
 },
 push: function (path) {
-var array = this.get(path);
+var info = {};
+var array = this._get(path, this, info);
 var args = Array.prototype.slice.call(arguments, 1);
 var len = array.length;
 var ret = array.push.apply(array, args);
-this._notifySplice(array, path, len, args.length, []);
+if (args.length) {
+this._notifySplice(array, info.path, len, args.length, []);
+}
 return ret;
 },
 pop: function (path) {
-var array = this.get(path);
+var info = {};
+var array = this._get(path, this, info);
+var hadLength = Boolean(array.length);
 var args = Array.prototype.slice.call(arguments, 1);
-var rem = array.slice(-1);
 var ret = array.pop.apply(array, args);
-this._notifySplice(array, path, array.length, 0, rem);
+if (hadLength) {
+this._notifySplice(array, info.path, array.length, 0, [ret]);
+}
 return ret;
 },
 splice: function (path, start, deleteCount) {
-var array = this.get(path);
+var info = {};
+var array = this._get(path, this, info);
+if (start < 0) {
+start = array.length - Math.floor(-start);
+} else {
+start = Math.floor(start);
+}
+if (!start) {
+start = 0;
+}
 var args = Array.prototype.slice.call(arguments, 1);
-var rem = array.slice(start, start + deleteCount);
 var ret = array.splice.apply(array, args);
-this._notifySplice(array, path, start, args.length - 2, rem);
+var addedCount = Math.max(args.length - 2, 0);
+if (addedCount || ret.length) {
+this._notifySplice(array, info.path, start, addedCount, ret);
+}
 return ret;
 },
 shift: function (path) {
-var array = this.get(path);
+var info = {};
+var array = this._get(path, this, info);
+var hadLength = Boolean(array.length);
 var args = Array.prototype.slice.call(arguments, 1);
 var ret = array.shift.apply(array, args);
-this._notifySplice(array, path, 0, 0, [ret]);
+if (hadLength) {
+this._notifySplice(array, info.path, 0, 0, [ret]);
+}
 return ret;
 },
 unshift: function (path) {
-var array = this.get(path);
+var info = {};
+var array = this._get(path, this, info);
 var args = Array.prototype.slice.call(arguments, 1);
 var ret = array.unshift.apply(array, args);
-this._notifySplice(array, path, 0, args.length, []);
+if (args.length) {
+this._notifySplice(array, info.path, 0, args.length, []);
+}
 return ret;
+},
+prepareModelNotifyPath: function (model) {
+this.mixin(model, {
+fire: Polymer.Base.fire,
+notifyPath: Polymer.Base.notifyPath,
+_get: Polymer.Base._get,
+_EVENT_CHANGED: Polymer.Base._EVENT_CHANGED,
+_notifyPath: Polymer.Base._notifyPath,
+_notifyPathUp: Polymer.Base._notifyPathUp,
+_pathEffector: Polymer.Base._pathEffector,
+_annotationPathEffect: Polymer.Base._annotationPathEffect,
+_complexObserverPathEffect: Polymer.Base._complexObserverPathEffect,
+_annotatedComputationPathEffect: Polymer.Base._annotatedComputationPathEffect,
+_computePathEffect: Polymer.Base._computePathEffect,
+_modelForPath: Polymer.Base._modelForPath,
+_pathMatchesEffect: Polymer.Base._pathMatchesEffect,
+_notifyBoundPaths: Polymer.Base._notifyBoundPaths,
+_getPathParts: Polymer.Base._getPathParts
+});
 }
 });
 }());
-
 Polymer.Base._addFeature({
 resolveUrl: function (url) {
 var module = Polymer.DomModule.import(this.is);
@@ -1746,7 +2264,6 @@ root = Polymer.ResolveUrl.resolveUrl(assetPath, module.ownerDocument.baseURI);
 return Polymer.ResolveUrl.resolveUrl(url, root);
 }
 });
-
 Polymer.CssParse = function () {
 var api = {
 parse: function (text) {
@@ -1754,7 +2271,7 @@ text = this._clean(text);
 return this._parseCss(this._lex(text), text);
 },
 _clean: function (cssText) {
-return cssText.replace(rx.comments, '').replace(rx.port, '');
+return cssText.replace(this._rx.comments, '').replace(this._rx.port, '');
 },
 _lex: function (text) {
 var root = {
@@ -1793,15 +2310,15 @@ var ss = node.previous ? node.previous.end : node.parent.start;
 t = text.substring(ss, node.start - 1);
 t = t.substring(t.lastIndexOf(';') + 1);
 var s = node.parsedSelector = node.selector = t.trim();
-node.atRule = s.indexOf(AT_START) === 0;
+node.atRule = s.indexOf(this.AT_START) === 0;
 if (node.atRule) {
-if (s.indexOf(MEDIA_START) === 0) {
+if (s.indexOf(this.MEDIA_START) === 0) {
 node.type = this.types.MEDIA_RULE;
-} else if (s.match(rx.keyframesRule)) {
+} else if (s.match(this._rx.keyframesRule)) {
 node.type = this.types.KEYFRAMES_RULE;
 }
 } else {
-if (s.indexOf(VAR_START) === 0) {
+if (s.indexOf(this.VAR_START) === 0) {
 node.type = this.types.MIXIN_RULE;
 } else {
 node.type = this.types.STYLE_RULE;
@@ -1821,12 +2338,12 @@ text = text || '';
 var cssText = '';
 if (node.cssText || node.rules) {
 var r$ = node.rules;
-if (r$ && (preserveProperties || !hasMixinRules(r$))) {
+if (r$ && (preserveProperties || !this._hasMixinRules(r$))) {
 for (var i = 0, l = r$.length, r; i < l && (r = r$[i]); i++) {
 cssText = this.stringify(r, preserveProperties, cssText);
 }
 } else {
-cssText = preserveProperties ? node.cssText : removeCustomProps(node.cssText);
+cssText = preserveProperties ? node.cssText : this.removeCustomProps(node.cssText);
 cssText = cssText.trim();
 if (cssText) {
 cssText = '  ' + cssText + '\n';
@@ -1844,6 +2361,19 @@ text += this.CLOSE_BRACE + '\n\n';
 }
 return text;
 },
+_hasMixinRules: function (rules) {
+return rules[0].selector.indexOf(this.VAR_START) >= 0;
+},
+removeCustomProps: function (cssText) {
+cssText = this.removeCustomPropAssignment(cssText);
+return this.removeCustomPropApply(cssText);
+},
+removeCustomPropAssignment: function (cssText) {
+return cssText.replace(this._rx.customProp, '').replace(this._rx.mixinProp, '');
+},
+removeCustomPropApply: function (cssText) {
+return cssText.replace(this._rx.mixinApply, '').replace(this._rx.varApply, '');
+},
 types: {
 STYLE_RULE: 1,
 KEYFRAMES_RULE: 7,
@@ -1851,32 +2381,26 @@ MEDIA_RULE: 4,
 MIXIN_RULE: 1000
 },
 OPEN_BRACE: '{',
-CLOSE_BRACE: '}'
-};
-function hasMixinRules(rules) {
-return rules[0].selector.indexOf(VAR_START) >= 0;
-}
-function removeCustomProps(cssText) {
-return cssText.replace(rx.customProp, '').replace(rx.mixinProp, '').replace(rx.mixinApply, '').replace(rx.varApply, '');
-}
-var VAR_START = '--';
-var MEDIA_START = '@media';
-var AT_START = '@';
-var rx = {
+CLOSE_BRACE: '}',
+_rx: {
 comments: /\/\*[^*]*\*+([^\/*][^*]*\*+)*\//gim,
 port: /@import[^;]*;/gim,
-customProp: /(?:^|[\s;])--[^;{]*?:[^{};]*?;/gim,
-mixinProp: /(?:^|[\s;])--[^;{]*?:[^{;]*?{[^}]*?};?/gim,
-mixinApply: /@apply[\s]*\([^)]*?\)[\s]*;/gim,
-varApply: /[^;:]*?:[^;]*var[^;]*;/gim,
+customProp: /(?:^|[\s;])--[^;{]*?:[^{};]*?(?:[;\n]|$)/gim,
+mixinProp: /(?:^|[\s;])?--[^;{]*?:[^{;]*?{[^}]*?}(?:[;\n]|$)?/gim,
+mixinApply: /@apply[\s]*\([^)]*?\)[\s]*(?:[;\n]|$)?/gim,
+varApply: /[^;:]*?:[^;]*var[^;]*(?:[;\n]|$)?/gim,
 keyframesRule: /^@[^\s]*keyframes/
+},
+VAR_START: '--',
+MEDIA_START: '@media',
+AT_START: '@'
 };
 return api;
 }();
-
 Polymer.StyleUtil = function () {
 return {
-MODULE_STYLES_SELECTOR: 'style, link[rel=import][type~=css]',
+MODULE_STYLES_SELECTOR: 'style, link[rel=import][type~=css], template',
+INCLUDE_ATTR: 'include',
 toCssText: function (rules, callback, preserveProperties) {
 if (typeof rules === 'string') {
 rules = this.parser.parse(rules);
@@ -1887,12 +2411,14 @@ this.forEachStyleRule(rules, callback);
 return this.parser.stringify(rules, preserveProperties);
 },
 forRulesInStyles: function (styles, callback) {
+if (styles) {
 for (var i = 0, l = styles.length, s; i < l && (s = styles[i]); i++) {
 this.forEachStyleRule(this.rulesForStyle(s), callback);
 }
+}
 },
 rulesForStyle: function (style) {
-if (!style.__cssRules) {
+if (!style.__cssRules && style.textContent) {
 style.__cssRules = this.parser.parse(style.textContent);
 }
 return style.__cssRules;
@@ -1901,7 +2427,10 @@ clearStyleRules: function (style) {
 style.__cssRules = null;
 },
 forEachStyleRule: function (node, callback) {
-var s = node.selector;
+if (!node) {
+return;
+}
+var s = node.parsedSelector;
 var skipRules = false;
 if (node.type === this.ruleTypes.STYLE_RULE) {
 callback(node);
@@ -1929,32 +2458,53 @@ afterNode = n$[n$.length - 1];
 target.insertBefore(style, afterNode && afterNode.nextSibling || target.firstChild);
 return style;
 },
-cssFromModule: function (moduleId) {
+cssFromModules: function (moduleIds, warnIfNotFound) {
+var modules = moduleIds.trim().split(' ');
+var cssText = '';
+for (var i = 0; i < modules.length; i++) {
+cssText += this.cssFromModule(modules[i], warnIfNotFound);
+}
+return cssText;
+},
+cssFromModule: function (moduleId, warnIfNotFound) {
 var m = Polymer.DomModule.import(moduleId);
 if (m && !m._cssText) {
-var cssText = '';
-var e$ = Array.prototype.slice.call(m.querySelectorAll(this.MODULE_STYLES_SELECTOR));
-for (var i = 0, e; i < e$.length; i++) {
-e = e$[i];
-if (e.localName === 'style') {
-e = e.__appliedElement || e;
-e.parentNode.removeChild(e);
-} else {
-e = e.import && e.import.body;
+m._cssText = this._cssFromElement(m);
 }
-if (e) {
-cssText += Polymer.ResolveUrl.resolveCss(e.textContent, e.ownerDocument);
-}
-}
-m._cssText = cssText;
+if (!m && warnIfNotFound) {
+console.warn('Could not find style data in module named', moduleId);
 }
 return m && m._cssText || '';
 },
+_cssFromElement: function (element) {
+var cssText = '';
+var content = element.content || element;
+var e$ = Array.prototype.slice.call(content.querySelectorAll(this.MODULE_STYLES_SELECTOR));
+for (var i = 0, e; i < e$.length; i++) {
+e = e$[i];
+if (e.localName === 'template') {
+cssText += this._cssFromElement(e);
+} else {
+if (e.localName === 'style') {
+var include = e.getAttribute(this.INCLUDE_ATTR);
+if (include) {
+cssText += this.cssFromModules(include, true);
+}
+e = e.__appliedElement || e;
+e.parentNode.removeChild(e);
+cssText += this.resolveCss(e.textContent, element.ownerDocument);
+} else if (e.import && e.import.body) {
+cssText += this.resolveCss(e.import.body.textContent, e.import);
+}
+}
+}
+return cssText;
+},
+resolveCss: Polymer.ResolveUrl.resolveCss,
 parser: Polymer.CssParse,
 ruleTypes: Polymer.CssParse.types
 };
 }();
-
 Polymer.StyleTransformer = function () {
 var nativeShadow = Polymer.Settings.useNativeShadow;
 var styleUtil = Polymer.StyleUtil;
@@ -2042,27 +2592,37 @@ var p$ = rule.selector.split(COMPLEX_SELECTOR_SEP);
 for (var i = 0, l = p$.length, p; i < l && (p = p$[i]); i++) {
 p$[i] = transformer.call(this, p, scope, hostScope);
 }
-rule.selector = p$.join(COMPLEX_SELECTOR_SEP);
+rule.selector = rule.transformedSelector = p$.join(COMPLEX_SELECTOR_SEP);
 },
 _transformComplexSelector: function (selector, scope, hostScope) {
 var stop = false;
+var hostContext = false;
 var self = this;
 selector = selector.replace(SIMPLE_SELECTOR_SEP, function (m, c, s) {
 if (!stop) {
-var o = self._transformCompoundSelector(s, c, scope, hostScope);
-if (o.stop) {
-stop = true;
-}
-c = o.combinator;
-s = o.value;
+var info = self._transformCompoundSelector(s, c, scope, hostScope);
+stop = stop || info.stop;
+hostContext = hostContext || info.hostContext;
+c = info.combinator;
+s = info.value;
+} else {
+s = s.replace(SCOPE_JUMP, ' ');
 }
 return c + s;
 });
+if (hostContext) {
+selector = selector.replace(HOST_CONTEXT_PAREN, function (m, pre, paren, post) {
+return pre + paren + ' ' + hostScope + post + COMPLEX_SELECTOR_SEP + ' ' + pre + hostScope + paren + post;
+});
+}
 return selector;
 },
 _transformCompoundSelector: function (selector, combinator, scope, hostScope) {
 var jumpIndex = selector.search(SCOPE_JUMP);
-if (selector.indexOf(HOST) >= 0) {
+var hostContext = false;
+if (selector.indexOf(HOST_CONTEXT) >= 0) {
+hostContext = true;
+} else if (selector.indexOf(HOST) >= 0) {
 selector = selector.replace(HOST_PAREN, function (m, host, paren) {
 return hostScope + paren;
 });
@@ -2081,7 +2641,8 @@ stop = true;
 return {
 value: selector,
 combinator: combinator,
-stop: stop
+stop: stop,
+hostContext: hostContext
 };
 },
 _transformSimpleSelector: function (selector, scope) {
@@ -2089,20 +2650,32 @@ var p$ = selector.split(PSEUDO_PREFIX);
 p$[0] += scope;
 return p$.join(PSEUDO_PREFIX);
 },
-rootRule: function (rule) {
-this._transformRule(rule, this._transformRootSelector);
+documentRule: function (rule) {
+rule.selector = rule.parsedSelector;
+this.normalizeRootSelector(rule);
+if (!nativeShadow) {
+this._transformRule(rule, this._transformDocumentSelector);
+}
 },
-_transformRootSelector: function (selector) {
-return selector.match(SCOPE_JUMP) ? this._transformComplexSelector(selector) : selector.trim() + SCOPE_ROOT_SELECTOR;
+normalizeRootSelector: function (rule) {
+if (rule.selector === ROOT) {
+rule.selector = 'body';
+}
+},
+_transformDocumentSelector: function (selector) {
+return selector.match(SCOPE_JUMP) ? this._transformComplexSelector(selector, SCOPE_DOC_SELECTOR) : this._transformSimpleSelector(selector.trim(), SCOPE_DOC_SELECTOR);
 },
 SCOPE_NAME: 'style-scope'
 };
 var SCOPE_NAME = api.SCOPE_NAME;
-var SCOPE_ROOT_SELECTOR = ':not([' + SCOPE_NAME + '])' + ':not(.' + SCOPE_NAME + ')';
+var SCOPE_DOC_SELECTOR = ':not([' + SCOPE_NAME + '])' + ':not(.' + SCOPE_NAME + ')';
 var COMPLEX_SELECTOR_SEP = ',';
 var SIMPLE_SELECTOR_SEP = /(^|[\s>+~]+)([^\s>+~]+)/g;
 var HOST = ':host';
+var ROOT = ':root';
 var HOST_PAREN = /(\:host)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))/g;
+var HOST_CONTEXT = ':host-context';
+var HOST_CONTEXT_PAREN = /(.*)(?:\:host-context)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))(.*)/;
 var CONTENT = '::content';
 var SCOPE_JUMP = /\:\:content|\:\:shadow|\/deep\//;
 var CSS_CLASS_PREFIX = '.';
@@ -2112,7 +2685,6 @@ var PSEUDO_PREFIX = ':';
 var CLASS = 'class';
 return api;
 }();
-
 Polymer.StyleExtends = function () {
 var styleUtil = Polymer.StyleUtil;
 return {
@@ -2184,7 +2756,6 @@ STRIP: /%[^,]*$/
 }
 };
 }();
-
 (function () {
 var prepElement = Polymer.Base._prepElement;
 var nativeShadow = Polymer.Settings.useNativeShadow;
@@ -2231,8 +2802,12 @@ styles.push(style);
 return styles;
 },
 _elementAdd: function (node) {
-if (this._encapsulateStyle && !node.__styleScoped) {
+if (this._encapsulateStyle) {
+if (node.__styleScoped) {
+node.__styleScoped = false;
+} else {
 styleTransformer.dom(node, this.is, this._scopeCssViaAttr);
+}
 }
 },
 _elementRemove: function (node) {
@@ -2274,8 +2849,8 @@ return mo;
 }
 });
 }());
-
 Polymer.StyleProperties = function () {
+'use strict';
 var nativeShadow = Polymer.Settings.useNativeShadow;
 var matchesSelector = Polymer.DomApi.matchesSelector;
 var styleUtil = Polymer.StyleUtil;
@@ -2342,6 +2917,10 @@ collectPropertiesInCssText: function (cssText, props) {
 var m;
 while (m = this.rx.VAR_CAPTURE.exec(cssText)) {
 props[m[1]] = true;
+var def = m[2];
+if (def && def.match(this.rx.IS_VAR)) {
+props[def] = true;
+}
 }
 },
 reify: function (props) {
@@ -2368,7 +2947,8 @@ return property && property.trim() || '';
 },
 valueForProperties: function (property, props) {
 var parts = property.split(';');
-for (var i = 0, p, m; i < parts.length && (p = parts[i]); i++) {
+for (var i = 0, p, m; i < parts.length; i++) {
+if (p = parts[i]) {
 m = p.match(this.rx.MIXIN_MATCH);
 if (m) {
 p = this.valueForProperty(props[m[1]], props);
@@ -2378,15 +2958,16 @@ if (pp[1]) {
 pp[1] = pp[1].trim();
 pp[1] = this.valueForProperty(pp[1], props) || pp[1];
 }
-p = pp.join(': ');
+p = pp.join(':');
 }
 parts[i] = p && p.lastIndexOf(';') === p.length - 1 ? p.slice(0, -1) : p || '';
+}
 }
 return parts.join(';');
 },
 applyProperties: function (rule, props) {
 var output = '';
-if (!rule.properties) {
+if (!rule.propertyInfo) {
 this.decorateRule(rule);
 }
 if (rule.propertyInfo.cssText) {
@@ -2401,7 +2982,7 @@ styleUtil.forRulesInStyles(styles, function (rule) {
 if (!rule.propertyInfo) {
 self.decorateRule(rule);
 }
-if (element && rule.propertyInfo.properties && matchesSelector.call(element, rule.selector)) {
+if (element && rule.propertyInfo.properties && matchesSelector.call(element, rule.transformedSelector || rule.parsedSelector)) {
 self.collectProperties(rule, props);
 addToBitMask(i, o);
 }
@@ -2441,27 +3022,29 @@ return props;
 },
 transformStyles: function (element, properties, scopeSelector) {
 var self = this;
-var hostRx = new RegExp(this.rx.HOST_PREFIX + element.is + this.rx.HOST_SUFFIX);
+var hostSelector = styleTransformer._calcHostScope(element.is, element.extends);
+var rxHostSelector = element.extends ? '\\' + hostSelector.slice(0, -1) + '\\]' : hostSelector;
+var hostRx = new RegExp(this.rx.HOST_PREFIX + rxHostSelector + this.rx.HOST_SUFFIX);
 return styleTransformer.elementStyles(element, function (rule) {
 self.applyProperties(rule, properties);
 if (rule.cssText && !nativeShadow) {
-self._scopeSelector(rule, hostRx, element.is, element._scopeCssViaAttr, scopeSelector);
+self._scopeSelector(rule, hostRx, hostSelector, element._scopeCssViaAttr, scopeSelector);
 }
 });
 },
-_scopeSelector: function (rule, hostRx, is, viaAttr, scopeId) {
+_scopeSelector: function (rule, hostRx, hostSelector, viaAttr, scopeId) {
 rule.transformedSelector = rule.transformedSelector || rule.selector;
 var selector = rule.transformedSelector;
 var scope = viaAttr ? '[' + styleTransformer.SCOPE_NAME + '~=' + scopeId + ']' : '.' + scopeId;
 var parts = selector.split(',');
 for (var i = 0, l = parts.length, p; i < l && (p = parts[i]); i++) {
-parts[i] = p.match(hostRx) ? p.replace(is, is + scope) : scope + ' ' + p;
+parts[i] = p.match(hostRx) ? p.replace(hostSelector, hostSelector + scope) : scope + ' ' + p;
 }
 rule.selector = parts.join(',');
 },
 applyElementScopeSelector: function (element, selector, old, viaAttr) {
 var c = viaAttr ? element.getAttribute(styleTransformer.SCOPE_NAME) : element.className;
-v = old ? c.replace(old, selector) : (c ? c + ' ' : '') + this.XSCOPE_NAME + ' ' + selector;
+var v = old ? c.replace(old, selector) : (c ? c + ' ' : '') + this.XSCOPE_NAME + ' ' + selector;
 if (c !== v) {
 if (viaAttr) {
 element.setAttribute(styleTransformer.SCOPE_NAME, v);
@@ -2475,7 +3058,7 @@ var cssText = style ? style.textContent || '' : this.transformStyles(element, pr
 var s = element._customStyle;
 if (s && !nativeShadow && s !== style) {
 s._useCount--;
-if (s._useCount <= 0) {
+if (s._useCount <= 0 && s.parentNode) {
 s.parentNode.removeChild(s);
 }
 }
@@ -2496,13 +3079,23 @@ element._customStyle = style;
 }
 return style;
 },
+mixinCustomStyle: function (props, customStyle) {
+var v;
+for (var i in customStyle) {
+v = customStyle[i];
+if (v || v === 0) {
+props[i] = v;
+}
+}
+},
 rx: {
-VAR_ASSIGN: /(?:^|;\s*)(--[^\:;]*?):\s*?(?:([^;{]*?)|{([^}]*)})(?=;)/gim,
-MIXIN_MATCH: /(?:^|\W+)@apply[\s]*\(([^)]*)\);?/im,
-VAR_MATCH: /(^|\W+)var\([\s]*([^,)]*)[\s]*,?[\s]*((?:[^,)]*)|(?:[^;]*\([^;)]*\)))[\s]*?\)/gim,
-VAR_CAPTURE: /\([\s]*(--[^,\s)]*)(?:,[\s]*(--[^,\s)]*))?(?:\)|,)/gim,
+VAR_ASSIGN: /(?:^|[;\s{]\s*)(--[\w-]*?)\s*:\s*(?:([^;{]*)|{([^}]*)})(?:(?=[;\s}])|$)/gi,
+MIXIN_MATCH: /(?:^|\W+)@apply[\s]*\(([^)]*)\)/i,
+VAR_MATCH: /(^|\W+)var\([\s]*([^,)]*)[\s]*,?[\s]*((?:[^,)]*)|(?:[^;]*\([^;)]*\)))[\s]*?\)/gi,
+VAR_CAPTURE: /\([\s]*(--[^,\s)]*)(?:,[\s]*(--[^,\s)]*))?(?:\)|,)/gi,
+IS_VAR: /^--/,
 BRACKETED: /\{[^}]*\}/g,
-HOST_PREFIX: '(?:^|[^.])',
+HOST_PREFIX: '(?:^|[^.#[:])',
 HOST_SUFFIX: '($|[.:[\\s>+~])'
 },
 HOST_SELECTORS: [':host'],
@@ -2515,37 +3108,6 @@ var v = 1 << n % 32;
 bits[o] = (bits[o] || 0) | v;
 }
 }();
-
-Polymer.StyleDefaults = function () {
-var styleProperties = Polymer.StyleProperties;
-var styleUtil = Polymer.StyleUtil;
-var style = document.createElement('style');
-var api = {
-style: style,
-_styles: [style],
-_properties: null,
-applyCss: function (cssText) {
-this.style.textContent += cssText;
-styleUtil.clearStyleRules(this.style);
-this._properties = null;
-},
-get _styleProperties() {
-if (!this._properties) {
-styleProperties.decorateStyles(this._styles);
-this._styles._scopeStyleProperties = null;
-this._properties = styleProperties.scopePropertiesFromStyles(this._styles);
-}
-return this._properties;
-},
-_needsStyleProperties: function () {
-},
-_computeStyleProperties: function () {
-return this._styleProperties;
-}
-};
-return api;
-}();
-
 (function () {
 Polymer.StyleCache = function () {
 this.cache = {};
@@ -2576,8 +3138,10 @@ clear: function () {
 this.cache = {};
 },
 _objectsEqual: function (target, source) {
+var t, s;
 for (var i in target) {
-if (target[i] !== source[i]) {
+t = target[i], s = source[i];
+if (!(typeof t === 'object' && t ? this._objectsStrictlyEqual(t, s) : t === s)) {
 return false;
 }
 }
@@ -2585,11 +3149,57 @@ if (Array.isArray(target)) {
 return target.length === source.length;
 }
 return true;
+},
+_objectsStrictlyEqual: function (target, source) {
+return this._objectsEqual(target, source) && this._objectsEqual(source, target);
 }
 };
 }());
-
+Polymer.StyleDefaults = function () {
+var styleProperties = Polymer.StyleProperties;
+var styleUtil = Polymer.StyleUtil;
+var StyleCache = Polymer.StyleCache;
+var api = {
+_styles: [],
+_properties: null,
+customStyle: {},
+_styleCache: new StyleCache(),
+addStyle: function (style) {
+this._styles.push(style);
+this._properties = null;
+},
+get _styleProperties() {
+if (!this._properties) {
+styleProperties.decorateStyles(this._styles);
+this._styles._scopeStyleProperties = null;
+this._properties = styleProperties.scopePropertiesFromStyles(this._styles);
+styleProperties.mixinCustomStyle(this._properties, this.customStyle);
+styleProperties.reify(this._properties);
+}
+return this._properties;
+},
+_needsStyleProperties: function () {
+},
+_computeStyleProperties: function () {
+return this._styleProperties;
+},
+updateStyles: function (properties) {
+this._properties = null;
+if (properties) {
+Polymer.Base.mixin(this.customStyle, properties);
+}
+this._styleCache.clear();
+for (var i = 0, s; i < this._styles.length; i++) {
+s = this._styles[i];
+s = s.__importElement || s;
+s._apply();
+}
+}
+};
+return api;
+}();
 (function () {
+'use strict';
 var serializeValueToAttribute = Polymer.Base.serializeValueToAttribute;
 var propertyUtils = Polymer.StyleProperties;
 var styleTransformer = Polymer.StyleTransformer;
@@ -2600,6 +3210,7 @@ Polymer.Base._addFeature({
 _prepStyleProperties: function () {
 this._ownStylePropertyNames = this._styles ? propertyUtils.decorateStyles(this._styles) : [];
 },
+customStyle: {},
 _setupStyleProperties: function () {
 this.customStyle = {};
 },
@@ -2611,12 +3222,23 @@ if (!this._scopeSelector && this._needsStyleProperties()) {
 this._updateStyleProperties();
 }
 },
+_findStyleHost: function () {
+var e = this, root;
+while (root = Polymer.dom(e).getOwnerRoot()) {
+if (Polymer.isInstance(root.host)) {
+return root.host;
+}
+e = root.host;
+}
+return styleDefaults;
+},
 _updateStyleProperties: function () {
-var info, scope = this.domHost || styleDefaults;
+var info, scope = this._findStyleHost();
 if (!scope._styleCache) {
 scope._styleCache = new Polymer.StyleCache();
 }
 var scopeData = propertyUtils.propertyDataFromStyles(scope._styles, this);
+scopeData.key.customStyle = this.customStyle;
 info = scope._styleCache.retrieve(this.is, scopeData.key, this._styles);
 var scopeCached = Boolean(info);
 if (scopeCached) {
@@ -2629,17 +3251,16 @@ if (!scopeCached) {
 info = styleCache.retrieve(this.is, this._ownStyleProperties, this._styles);
 }
 var globalCached = Boolean(info) && !scopeCached;
-style = this._applyStyleProperties(info);
+var style = this._applyStyleProperties(info);
 if (!scopeCached) {
-var cacheableStyle = style;
-if (nativeShadow) {
-cacheableStyle = style.cloneNode ? style.cloneNode(true) : Object.create(style || null);
-}
+style = style && nativeShadow ? style.cloneNode(true) : style;
 info = {
-style: cacheableStyle,
+style: style,
 _scopeSelector: this._scopeSelector,
 _styleProperties: this._styleProperties
 };
+scopeData.key.customStyle = {};
+this.mixin(scopeData.key.customStyle, this.customStyle);
 scope._styleCache.store(this.is, info, scopeData.key, this._styles);
 if (!globalCached) {
 styleCache.store(this.is, Object.create(info), this._ownStyleProperties, this._styles);
@@ -2647,7 +3268,7 @@ styleCache.store(this.is, Object.create(info), this._ownStyleProperties, this._s
 }
 },
 _computeStyleProperties: function (scopeProps) {
-var scope = this.domHost || styleDefaults;
+var scope = this._findStyleHost();
 if (!scope._styleProperties) {
 scope._computeStyleProperties();
 }
@@ -2656,7 +3277,7 @@ this.mixin(props, propertyUtils.hostPropertiesFromStyles(this._styles));
 scopeProps = scopeProps || propertyUtils.propertyDataFromStyles(scope._styles, this).properties;
 this.mixin(props, scopeProps);
 this.mixin(props, propertyUtils.scopePropertiesFromStyles(this._styles));
-this.mixin(props, this.customStyle);
+propertyUtils.mixinCustomStyle(props, this.customStyle);
 propertyUtils.reify(props);
 this._styleProperties = props;
 },
@@ -2672,15 +3293,15 @@ _scopeCount: 0,
 _applyStyleProperties: function (info) {
 var oldScopeSelector = this._scopeSelector;
 this._scopeSelector = info ? info._scopeSelector : this.is + '-' + this.__proto__._scopeCount++;
-style = propertyUtils.applyElementStyle(this, this._styleProperties, this._scopeSelector, info && info.style);
-if ((style || oldScopeSelector) && !nativeShadow) {
+var style = propertyUtils.applyElementStyle(this, this._styleProperties, this._scopeSelector, info && info.style);
+if (!nativeShadow) {
 propertyUtils.applyElementScopeSelector(this, this._scopeSelector, oldScopeSelector, this._scopeCssViaAttr);
 }
-return style || {};
+return style;
 },
 serializeValueToAttribute: function (value, attribute, node) {
 node = node || this;
-if (attribute === 'class') {
+if (attribute === 'class' && !nativeShadow) {
 var host = node === this ? this.domHost || this.dataHost : this;
 if (host) {
 value = host._scopeElementClass(node, value);
@@ -2695,8 +3316,11 @@ selector += (selector ? ' ' : '') + SCOPE_NAME + ' ' + this.is + (element._scope
 }
 return selector;
 },
-updateStyles: function () {
+updateStyles: function (properties) {
 if (this.isAttached) {
+if (properties) {
+this.mixin(this.customStyle, properties);
+}
 if (this._needsStyleProperties()) {
 this._updateStyleProperties();
 } else {
@@ -2720,8 +3344,8 @@ c.updateStyles();
 }
 }
 });
-Polymer.updateStyles = function () {
-styleDefaults._styleCache.clear();
+Polymer.updateStyles = function (properties) {
+styleDefaults.updateStyles(properties);
 Polymer.Base._updateRootStyles(document);
 };
 var styleCache = new Polymer.StyleCache();
@@ -2729,12 +3353,10 @@ Polymer.customStyleCache = styleCache;
 var SCOPE_NAME = styleTransformer.SCOPE_NAME;
 var XSCOPE_NAME = propertyUtils.XSCOPE_NAME;
 }());
-
 Polymer.Base._addFeature({
 _registerFeatures: function () {
 this._prepIs();
 this._prepAttributes();
-this._prepExtends();
 this._prepConstructor();
 this._prepTemplate();
 this._prepStyles();
@@ -2758,9 +3380,9 @@ this._pushHost();
 this._stampTemplate();
 this._popHost();
 this._marshalAnnotationReferences();
-this._marshalHostAttributes();
 this._setupDebouncers();
 this._marshalInstanceEffects();
+this._marshalHostAttributes();
 this._marshalBehaviors();
 this._marshalAttributes();
 this._tryReady();
@@ -2769,70 +3391,73 @@ _marshalBehavior: function (b) {
 this._listenListeners(b.listeners);
 }
 });
-
 (function () {
 var nativeShadow = Polymer.Settings.useNativeShadow;
 var propertyUtils = Polymer.StyleProperties;
 var styleUtil = Polymer.StyleUtil;
+var cssParse = Polymer.CssParse;
 var styleDefaults = Polymer.StyleDefaults;
+var styleTransformer = Polymer.StyleTransformer;
 Polymer({
 is: 'custom-style',
 extends: 'style',
-created: function () {
-this._appliesToDocument = this.parentNode.localName !== 'dom-module';
-if (this._appliesToDocument) {
+properties: { include: String },
+ready: function () {
+this._tryApply();
+},
+attached: function () {
+this._tryApply();
+},
+_tryApply: function () {
+if (!this._appliesToDocument) {
+if (this.parentNode && this.parentNode.localName !== 'dom-module') {
+this._appliesToDocument = true;
 var e = this.__appliedElement || this;
-var rules = styleUtil.rulesForStyle(e);
-propertyUtils.decorateStyles([e]);
-this._rulesToDefaultProperties(rules);
-this.async(this._applyStyle);
+styleDefaults.addStyle(e);
+if (e.textContent || this.include) {
+this._apply();
+} else {
+var observer = new MutationObserver(function () {
+observer.disconnect();
+this._apply();
+}.bind(this));
+observer.observe(e, { childList: true });
+}
+}
 }
 },
-_applyStyle: function () {
+_apply: function () {
 var e = this.__appliedElement || this;
+if (this.include) {
+e.textContent = styleUtil.cssFromModules(this.include, true) + e.textContent;
+}
+if (e.textContent) {
+styleUtil.forEachStyleRule(styleUtil.rulesForStyle(e), function (rule) {
+styleTransformer.documentRule(rule);
+});
+this._applyCustomProperties(e);
+}
+},
+_applyCustomProperties: function (element) {
 this._computeStyleProperties();
 var props = this._styleProperties;
-var self = this;
-e.textContent = styleUtil.toCssText(styleUtil.rulesForStyle(e), function (rule) {
-if (rule.selector === ':root') {
-rule.selector = 'body';
-}
+var rules = styleUtil.rulesForStyle(element);
+element.textContent = styleUtil.toCssText(rules, function (rule) {
 var css = rule.cssText = rule.parsedCssText;
-if (rule.propertyInfo.cssText) {
-css = css.replace(propertyUtils.rx.VAR_ASSIGN, '');
+if (rule.propertyInfo && rule.propertyInfo.cssText) {
+css = cssParse.removeCustomPropAssignment(css);
 rule.cssText = propertyUtils.valueForProperties(css, props);
 }
-if (!nativeShadow) {
-Polymer.StyleTransformer.rootRule(rule);
-}
 });
-},
-_rulesToDefaultProperties: function (rules) {
-styleUtil.forEachStyleRule(rules, function (rule) {
-if (!rule.propertyInfo.properties) {
-rule.cssText = '';
-}
-});
-var cssText = styleUtil.parser.stringify(rules, true);
-if (cssText) {
-styleDefaults.applyCss(cssText);
-}
 }
 });
 }());
-
 Polymer.Templatizer = {
-properties: { _hideTemplateChildren: { observer: '_hideTemplateChildrenChanged' } },
-_templatizerStatic: {
-count: 0,
-callbacks: {},
-debouncer: null
-},
+properties: { __hideTemplateChildren__: { observer: '_showHideChildren' } },
 _instanceProps: Polymer.nob,
-created: function () {
-this._templatizerId = this._templatizerStatic.count++;
-},
+_parentPropPrefix: '_parent_',
 templatize: function (template) {
+this._templatized = template;
 if (!template._content) {
 template._content = template.content;
 }
@@ -2843,14 +3468,15 @@ return;
 }
 var archetype = Object.create(Polymer.Base);
 this._customPrepAnnotations(archetype, template);
+this._prepParentProperties(archetype, template);
 archetype._prepEffects();
 this._customPrepEffects(archetype);
 archetype._prepBehaviors();
 archetype._prepBindings();
-this._prepParentProperties(archetype, template);
-archetype._notifyPath = this._notifyPathImpl;
+archetype._notifyPathUp = this._notifyPathUpImpl;
 archetype._scopeElementClass = this._scopeElementClassImpl;
 archetype.listen = this._listenImpl;
+archetype._showHideChildren = this._showHideChildrenImpl;
 var _constructor = this._constructorImpl;
 var ctor = function TemplateInstance(model, host) {
 _constructor.call(this, model, host);
@@ -2863,31 +3489,43 @@ this.ctor = ctor;
 _getRootDataHost: function () {
 return this.dataHost && this.dataHost._rootDataHost || this.dataHost;
 },
-_hideTemplateChildrenChanged: function (hidden) {
-if (this._hideChildren) {
-this._hideChildren(hidden);
+_showHideChildrenImpl: function (hide) {
+var c = this._children;
+for (var i = 0; i < c.length; i++) {
+var n = c[i];
+if (Boolean(hide) != Boolean(n.__hideTemplateChildren__)) {
+if (n.nodeType === Node.TEXT_NODE) {
+if (hide) {
+n.__polymerTextContent__ = n.textContent;
+n.textContent = '';
+} else {
+n.textContent = n.__polymerTextContent__;
+}
+} else if (n.style) {
+if (hide) {
+n.__polymerDisplay__ = n.style.display;
+n.style.display = 'none';
+} else {
+n.style.display = n.__polymerDisplay__;
+}
+}
+}
+n.__hideTemplateChildren__ = hide;
 }
 },
 _debounceTemplate: function (fn) {
-this._templatizerStatic.callbacks[this._templatizerId] = fn.bind(this);
-this._templatizerStatic.debouncer = Polymer.Debounce(this._templatizerStatic.debouncer, this._flushTemplates.bind(this, true));
+Polymer.dom.addDebouncer(this.debounce('_debounceTemplate', fn));
 },
 _flushTemplates: function (debouncerExpired) {
-var db = this._templatizerStatic.debouncer;
-while (debouncerExpired || db && db.finish) {
-db.stop();
-var cbs = this._templatizerStatic.callbacks;
-this._templatizerStatic.callbacks = {};
-for (var id in cbs) {
-cbs[id]();
-}
-debouncerExpired = false;
-}
+Polymer.dom.flush();
 },
 _customPrepEffects: function (archetype) {
 var parentProps = archetype._parentProps;
 for (var prop in parentProps) {
 archetype._addPropertyEffect(prop, 'function', this._createHostPropEffector(prop));
+}
+for (var prop in this._instanceProps) {
+archetype._addPropertyEffect(prop, 'function', this._createInstancePropEffector(prop));
 }
 },
 _customPrepAnnotations: function (archetype, template) {
@@ -2917,9 +3555,10 @@ delete parentProps[prop];
 proto = archetype._parentPropProto = Object.create(null);
 if (template != this) {
 Polymer.Bind.prepareModel(proto);
+Polymer.Base.prepareModelNotifyPath(proto);
 }
 for (prop in parentProps) {
-var parentProp = '_parent_' + prop;
+var parentProp = this._parentPropPrefix + prop;
 var effects = [
 {
 kind: 'function',
@@ -2935,6 +3574,7 @@ Polymer.Bind.prepareInstance(template);
 template._forwardParentProp = this._forwardParentProp.bind(this);
 }
 this._extendTemplate(template, proto);
+template._pathEffector = this._pathEffectorImpl.bind(this);
 }
 },
 _createForwardPropEffector: function (prop) {
@@ -2943,8 +3583,16 @@ this._forwardParentProp(prop, value);
 };
 },
 _createHostPropEffector: function (prop) {
+var prefix = this._parentPropPrefix;
 return function (source, value) {
-this.dataHost['_parent_' + prop] = value;
+this.dataHost._templatized[prefix + prop] = value;
+};
+},
+_createInstancePropEffector: function (prop) {
+return function (source, value, old, fromAbove) {
+if (!fromAbove) {
+this.dataHost._forwardInstanceProp(this, prop, value);
+}
 };
 },
 _extendTemplate: function (template, proto) {
@@ -2953,34 +3601,43 @@ var val = template[n];
 var pd = Object.getOwnPropertyDescriptor(proto, n);
 Object.defineProperty(template, n, pd);
 if (val !== undefined) {
-template._propertySet(n, val);
+template._propertySetter(n, val);
 }
 });
 },
+_showHideChildren: function (hidden) {
+},
 _forwardInstancePath: function (inst, path, value) {
 },
-_notifyPathImpl: function (path, value) {
+_forwardInstanceProp: function (inst, prop, value) {
+},
+_notifyPathUpImpl: function (path, value) {
 var dataHost = this.dataHost;
 var dot = path.indexOf('.');
 var root = dot < 0 ? path : path.slice(0, dot);
 dataHost._forwardInstancePath.call(dataHost, this, path, value);
 if (root in dataHost._parentProps) {
-dataHost.notifyPath('_parent_' + path, value);
+dataHost._templatized.notifyPath(dataHost._parentPropPrefix + path, value);
 }
 },
-_pathEffector: function (path, value, fromAbove) {
+_pathEffectorImpl: function (path, value, fromAbove) {
 if (this._forwardParentPath) {
-if (path.indexOf('_parent_') === 0) {
-this._forwardParentPath(path.substring(8), value);
+if (path.indexOf(this._parentPropPrefix) === 0) {
+var subPath = path.substring(this._parentPropPrefix.length);
+var model = this._modelForPath(subPath);
+if (model in this._parentProps) {
+this._forwardParentPath(subPath, value);
 }
 }
-Polymer.Base._pathEffector.apply(this, arguments);
+}
+Polymer.Base._pathEffector.call(this._templatized, path, value, fromAbove);
 },
 _constructorImpl: function (model, host) {
 this._rootDataHost = host._getRootDataHost();
 this._setupConfigure(model);
 this._pushHost(host);
 this.root = this.instanceTemplate(this._template);
+this.root.__noContent = !this._notes._hasContent;
 this.root.__styleScoped = true;
 this._popHost();
 this._marshalAnnotatedNodes();
@@ -2992,6 +3649,9 @@ children.push(n);
 n._templateInstance = this;
 }
 this._children = children;
+if (host.__hideTemplateChildren__) {
+this._showHideChildren(true);
+}
 this._tryReady();
 },
 _listenImpl: function (node, eventName, methodName) {
@@ -3013,14 +3673,28 @@ return host._scopeElementClass(node, value);
 stamp: function (model) {
 model = model || {};
 if (this._parentProps) {
+var templatized = this._templatized;
 for (var prop in this._parentProps) {
-model[prop] = this['_parent_' + prop];
+model[prop] = templatized[this._parentPropPrefix + prop];
 }
 }
 return new this.ctor(model, this);
+},
+modelForElement: function (el) {
+var model;
+while (el) {
+if (model = el._templateInstance) {
+if (model.dataHost != this) {
+el = model.dataHost;
+} else {
+return model;
+}
+} else {
+el = el.parentNode;
+}
+}
 }
 };
-
 Polymer({
 is: 'dom-template',
 extends: 'template',
@@ -3029,7 +3703,6 @@ ready: function () {
 this.templatize(this);
 }
 });
-
 Polymer._collections = new WeakMap();
 Polymer.Collection = function (userArray) {
 Polymer._collections.set(userArray, this);
@@ -3059,14 +3732,15 @@ this.omap.set(item, key);
 } else {
 this.pmap[item] = key;
 }
-return key;
+return '#' + key;
 },
 removeKey: function (key) {
+key = this._parseKey(key);
 this._removeFromMap(this.store[key]);
 delete this.store[key];
 },
 _removeFromMap: function (item) {
-if (typeof item == 'object') {
+if (item && typeof item == 'object') {
 this.omap.delete(item);
 } else {
 delete this.pmap[item];
@@ -3078,19 +3752,42 @@ this.removeKey(key);
 return key;
 },
 getKey: function (item) {
-if (typeof item == 'object') {
-return this.omap.get(item);
+var key;
+if (item && typeof item == 'object') {
+key = this.omap.get(item);
 } else {
-return this.pmap[item];
+key = this.pmap[item];
+}
+if (key != undefined) {
+return '#' + key;
 }
 },
 getKeys: function () {
-return Object.keys(this.store);
+return Object.keys(this.store).map(function (key) {
+return '#' + key;
+});
 },
-setItem: function (key, value) {
-this.store[key] = value;
+_parseKey: function (key) {
+if (key[0] == '#') {
+return key.slice(1);
+}
+throw new Error('unexpected key ' + key);
+},
+setItem: function (key, item) {
+key = this._parseKey(key);
+var old = this.store[key];
+if (old) {
+this._removeFromMap(old);
+}
+if (item && typeof item == 'object') {
+this.omap.set(item, key);
+} else {
+this.pmap[item] = key;
+}
+this.store[key] = item;
 },
 getItem: function (key) {
+key = this._parseKey(key);
 return this.store[key];
 },
 getItems: function () {
@@ -3100,36 +3797,46 @@ items.push(store[key]);
 }
 return items;
 },
-applySplices: function (splices) {
-var keySplices = [];
-for (var i = 0; i < splices.length; i++) {
-var j, o, key, s = splices[i];
+_applySplices: function (splices) {
+var keyMap = {}, key, i;
+splices.forEach(function (s) {
+s.addedKeys = [];
+for (i = 0; i < s.removed.length; i++) {
+key = this.getKey(s.removed[i]);
+keyMap[key] = keyMap[key] ? null : -1;
+}
+for (i = 0; i < s.addedCount; i++) {
+var item = this.userArray[s.index + i];
+key = this.getKey(item);
+key = key === undefined ? this.add(item) : key;
+keyMap[key] = keyMap[key] ? null : 1;
+s.addedKeys.push(key);
+}
+}, this);
 var removed = [];
-for (j = 0; j < s.removed.length; j++) {
-o = s.removed[j];
-key = this.remove(o);
+var added = [];
+for (var key in keyMap) {
+if (keyMap[key] < 0) {
+this.removeKey(key);
 removed.push(key);
 }
-var added = [];
-for (j = 0; j < s.addedCount; j++) {
-o = this.userArray[s.index + j];
-key = this.add(o);
+if (keyMap[key] > 0) {
 added.push(key);
 }
-keySplices.push({
-index: s.index,
-removed: removed,
-removedItems: s.removed,
-added: added
-});
 }
-return keySplices;
+return [{
+removed: removed,
+added: added
+}];
 }
 };
 Polymer.Collection.get = function (userArray) {
 return Polymer._collections.get(userArray) || new Polymer.Collection(userArray);
 };
-
+Polymer.Collection.applySplices = function (userArray, splices) {
+var coll = Polymer._collections.get(userArray);
+return coll ? coll._applySplices(splices) : null;
+};
 Polymer({
 is: 'dom-repeat',
 extends: 'template',
@@ -3159,13 +3866,19 @@ delay: Number
 },
 behaviors: [Polymer.Templatizer],
 observers: ['_itemsChanged(items.*)'],
+created: function () {
+this._instances = [];
+},
 detached: function () {
-if (this.rows) {
-for (var i = 0; i < this.rows.length; i++) {
+for (var i = 0; i < this._instances.length; i++) {
 this._detachRow(i);
 }
+},
+attached: function () {
+var parentNode = Polymer.dom(this).parentNode;
+for (var i = 0; i < this._instances.length; i++) {
+Polymer.dom(parentNode).insertBefore(this._instances[i].root, this);
 }
-this.rows = null;
 },
 ready: function () {
 this._instanceProps = { __key__: true };
@@ -3181,7 +3894,7 @@ var sort = this.sort;
 this._sortFn = sort && (typeof sort == 'function' ? sort : function () {
 return dataHost[sort].apply(dataHost, arguments);
 });
-this._fullRefresh = true;
+this._needFullRefresh = true;
 if (this.items) {
 this._debounceTemplate(this._render);
 }
@@ -3192,7 +3905,7 @@ var filter = this.filter;
 this._filterFn = filter && (typeof filter == 'function' ? filter : function () {
 return dataHost[filter].apply(dataHost, arguments);
 });
-this._fullRefresh = true;
+this._needFullRefresh = true;
 if (this.items) {
 this._debounceTemplate(this._render);
 }
@@ -3202,12 +3915,20 @@ this._observePaths = this.observe && this.observe.replace('.*', '.').split(' ');
 },
 _itemsChanged: function (change) {
 if (change.path == 'items') {
-this.collection = this.items ? Polymer.Collection.get(this.items) : null;
-this._splices = [];
-this._fullRefresh = true;
+if (Array.isArray(this.items)) {
+this.collection = Polymer.Collection.get(this.items);
+} else if (!this.items) {
+this.collection = null;
+} else {
+this._error(this._logf('dom-repeat', 'expected array for `items`,' + ' found', this.items));
+}
+this._keySplices = [];
+this._indexSplices = [];
+this._needFullRefresh = true;
 this._debounceTemplate(this._render);
 } else if (change.path == 'items.splices') {
-this._splices = this._splices.concat(change.value.keySplices);
+this._keySplices = this._keySplices.concat(change.value.keySplices);
+this._indexSplices = this._indexSplices.concat(change.value.indexSplices);
 this._debounceTemplate(this._render);
 } else {
 var subpath = change.path.slice(6);
@@ -3221,7 +3942,7 @@ path = path.substring(path.indexOf('.') + 1);
 var paths = this._observePaths;
 for (var i = 0; i < paths.length; i++) {
 if (path.indexOf(paths[i]) === 0) {
-this._fullRefresh = true;
+this._needFullRefresh = true;
 if (this.delay) {
 this.debounce('render', this._render, this.delay);
 } else {
@@ -3233,102 +3954,115 @@ return;
 }
 },
 render: function () {
-this._fullRefresh = true;
-this.debounce('render', this._render);
+this._needFullRefresh = true;
+this._debounceTemplate(this._render);
 this._flushTemplates();
 },
 _render: function () {
 var c = this.collection;
-if (!this._fullRefresh) {
+if (this._needFullRefresh) {
+this._applyFullRefresh();
+this._needFullRefresh = false;
+} else {
 if (this._sortFn) {
-this._applySplicesViewSort(this._splices);
+this._applySplicesUserSort(this._keySplices);
 } else {
 if (this._filterFn) {
-this._fullRefresh = true;
+this._applyFullRefresh();
 } else {
-this._applySplicesArraySort(this._splices);
+this._applySplicesArrayOrder(this._indexSplices);
 }
 }
 }
-if (this._fullRefresh) {
-this._sortAndFilter();
-this._fullRefresh = false;
+this._keySplices = [];
+this._indexSplices = [];
+var keyToIdx = this._keyToInstIdx = {};
+for (var i = 0; i < this._instances.length; i++) {
+var inst = this._instances[i];
+keyToIdx[inst.__key__] = i;
+inst.__setProperty(this.indexAs, i, true);
 }
-this._splices = [];
-var rowForKey = this._rowForKey = {};
-var keys = this._orderedKeys;
-this.rows = this.rows || [];
-for (var i = 0; i < keys.length; i++) {
-var key = keys[i];
-var item = c.getItem(key);
-var row = this.rows[i];
-rowForKey[key] = i;
-if (!row) {
-this.rows.push(row = this._insertRow(i, null, item));
-}
-row[this.as] = item;
-row.__key__ = key;
-row[this.indexAs] = i;
-}
-for (; i < this.rows.length; i++) {
-this._detachRow(i);
-}
-this.rows.splice(keys.length, this.rows.length - keys.length);
 this.fire('dom-change');
 },
-_sortAndFilter: function () {
+_applyFullRefresh: function () {
 var c = this.collection;
-if (!this._sortFn) {
-this._orderedKeys = [];
+var keys;
+if (this._sortFn) {
+keys = c ? c.getKeys() : [];
+} else {
+keys = [];
 var items = this.items;
 if (items) {
 for (var i = 0; i < items.length; i++) {
-this._orderedKeys.push(c.getKey(items[i]));
+keys.push(c.getKey(items[i]));
 }
 }
-} else {
-this._orderedKeys = c ? c.getKeys() : [];
 }
 if (this._filterFn) {
-this._orderedKeys = this._orderedKeys.filter(function (a) {
+keys = keys.filter(function (a) {
 return this._filterFn(c.getItem(a));
 }, this);
 }
 if (this._sortFn) {
-this._orderedKeys.sort(function (a, b) {
+keys.sort(function (a, b) {
 return this._sortFn(c.getItem(a), c.getItem(b));
 }.bind(this));
 }
+for (var i = 0; i < keys.length; i++) {
+var key = keys[i];
+var inst = this._instances[i];
+if (inst) {
+inst.__setProperty('__key__', key, true);
+inst.__setProperty(this.as, c.getItem(key), true);
+} else {
+this._instances.push(this._insertRow(i, key));
+}
+}
+for (; i < this._instances.length; i++) {
+this._detachRow(i);
+}
+this._instances.splice(keys.length, this._instances.length - keys.length);
 },
 _keySort: function (a, b) {
 return this.collection.getKey(a) - this.collection.getKey(b);
 },
-_applySplicesViewSort: function (splices) {
+_numericSort: function (a, b) {
+return a - b;
+},
+_applySplicesUserSort: function (splices) {
 var c = this.collection;
-var keys = this._orderedKeys;
-var rows = this.rows;
-var removedRows = [];
-var addedKeys = [];
+var instances = this._instances;
+var keyMap = {};
 var pool = [];
 var sortFn = this._sortFn || this._keySort.bind(this);
 splices.forEach(function (s) {
 for (var i = 0; i < s.removed.length; i++) {
-var idx = this._rowForKey[s.removed[i]];
-if (idx != null) {
-removedRows.push(idx);
-}
+var key = s.removed[i];
+keyMap[key] = keyMap[key] ? null : -1;
 }
 for (var i = 0; i < s.added.length; i++) {
-addedKeys.push(s.added[i]);
+var key = s.added[i];
+keyMap[key] = keyMap[key] ? null : 1;
 }
 }, this);
-if (removedRows.length) {
-removedRows.sort();
-for (var i = removedRows.length - 1; i >= 0; i--) {
-var idx = removedRows[i];
+var removedIdxs = [];
+var addedKeys = [];
+for (var key in keyMap) {
+if (keyMap[key] === -1) {
+removedIdxs.push(this._keyToInstIdx[key]);
+}
+if (keyMap[key] === 1) {
+addedKeys.push(key);
+}
+}
+if (removedIdxs.length) {
+removedIdxs.sort(this._numericSort);
+for (var i = removedIdxs.length - 1; i >= 0; i--) {
+var idx = removedIdxs[i];
+if (idx !== undefined) {
 pool.push(this._detachRow(idx));
-rows.splice(idx, 1);
-keys.splice(idx, 1);
+instances.splice(idx, 1);
+}
 }
 }
 if (addedKeys.length) {
@@ -3342,19 +4076,19 @@ return this._sortFn(c.getItem(a), c.getItem(b));
 }.bind(this));
 var start = 0;
 for (var i = 0; i < addedKeys.length; i++) {
-start = this._insertRowIntoViewSort(start, addedKeys[i], pool);
+start = this._insertRowUserSort(start, addedKeys[i], pool);
 }
 }
 },
-_insertRowIntoViewSort: function (start, key, pool) {
+_insertRowUserSort: function (start, key, pool) {
 var c = this.collection;
 var item = c.getItem(key);
-var end = this.rows.length - 1;
+var end = this._instances.length - 1;
 var idx = -1;
 var sortFn = this._sortFn || this._keySort.bind(this);
 while (start <= end) {
 var mid = start + end >> 1;
-var midKey = this._orderedKeys[mid];
+var midKey = this._instances[mid].__key__;
 var cmp = sortFn(c.getItem(midKey), item);
 if (cmp < 0) {
 start = mid + 1;
@@ -3368,118 +4102,111 @@ break;
 if (idx < 0) {
 idx = end + 1;
 }
-this._orderedKeys.splice(idx, 0, key);
-this.rows.splice(idx, 0, this._insertRow(idx, pool, c.getItem(key)));
+this._instances.splice(idx, 0, this._insertRow(idx, key, pool));
 return idx;
 },
-_applySplicesArraySort: function (splices) {
-var keys = this._orderedKeys;
+_applySplicesArrayOrder: function (splices) {
 var pool = [];
-splices.forEach(function (s) {
-for (var i = 0; i < s.removed.length; i++) {
-pool.push(this._detachRow(s.index + i));
-}
-this.rows.splice(s.index, s.removed.length);
-}, this);
 var c = this.collection;
 splices.forEach(function (s) {
-var args = [
-s.index,
-s.removed.length
-].concat(s.added);
-keys.splice.apply(keys, args);
-for (var i = 0; i < s.added.length; i++) {
-var item = c.getItem(s.added[i]);
-var row = this._insertRow(s.index + i, pool, item);
-this.rows.splice(s.index + i, 0, row);
+for (var i = 0; i < s.removed.length; i++) {
+var inst = this._detachRow(s.index + i);
+if (!inst.isPlaceholder) {
+pool.push(inst);
+}
+}
+this._instances.splice(s.index, s.removed.length);
+for (var i = 0; i < s.addedKeys.length; i++) {
+var inst = {
+isPlaceholder: true,
+key: s.addedKeys[i]
+};
+this._instances.splice(s.index + i, 0, inst);
 }
 }, this);
+for (var i = this._instances.length - 1; i >= 0; i--) {
+var inst = this._instances[i];
+if (inst.isPlaceholder) {
+this._instances[i] = this._insertRow(i, inst.key, pool, true);
+}
+}
 },
 _detachRow: function (idx) {
-var row = this.rows[idx];
+var inst = this._instances[idx];
+if (!inst.isPlaceholder) {
 var parentNode = Polymer.dom(this).parentNode;
-for (var i = 0; i < row._children.length; i++) {
-var el = row._children[i];
-Polymer.dom(row.root).appendChild(el);
+for (var i = 0; i < inst._children.length; i++) {
+var el = inst._children[i];
+Polymer.dom(inst.root).appendChild(el);
 }
-return row;
+}
+return inst;
 },
-_insertRow: function (idx, pool, item) {
-var row = pool && pool.pop() || this._generateRow(idx, item);
-var beforeRow = this.rows[idx];
+_insertRow: function (idx, key, pool, replace) {
+var inst;
+if (inst = pool && pool.pop()) {
+inst.__setProperty(this.as, this.collection.getItem(key), true);
+inst.__setProperty('__key__', key, true);
+} else {
+inst = this._generateRow(idx, key);
+}
+var beforeRow = this._instances[replace ? idx + 1 : idx];
 var beforeNode = beforeRow ? beforeRow._children[0] : this;
 var parentNode = Polymer.dom(this).parentNode;
-Polymer.dom(parentNode).insertBefore(row.root, beforeNode);
-return row;
+Polymer.dom(parentNode).insertBefore(inst.root, beforeNode);
+return inst;
 },
-_generateRow: function (idx, item) {
-var model = { __key__: this.collection.getKey(item) };
-model[this.as] = item;
+_generateRow: function (idx, key) {
+var model = { __key__: key };
+model[this.as] = this.collection.getItem(key);
 model[this.indexAs] = idx;
-var row = this.stamp(model);
-return row;
+var inst = this.stamp(model);
+return inst;
 },
-_hideChildren: function (hidden) {
-if (this.rows) {
-for (var i = 0; i < this.rows.length; i++) {
-var c$ = this.rows[i]._children;
-for (var j = 0; j < c$.length; j++) {
-var c = c$[j];
-if (c.style) {
-c.style.display = hidden ? 'none' : '';
-}
-c._hideTemplateChildren = hidden;
-}
-}
+_showHideChildren: function (hidden) {
+for (var i = 0; i < this._instances.length; i++) {
+this._instances[i]._showHideChildren(hidden);
 }
 },
-_forwardInstancePath: function (row, path, value) {
+_forwardInstanceProp: function (inst, prop, value) {
+if (prop == this.as) {
+var idx;
+if (this._sortFn || this._filterFn) {
+idx = this.items.indexOf(this.collection.getItem(inst.__key__));
+} else {
+idx = inst[this.indexAs];
+}
+this.set('items.' + idx, value);
+}
+},
+_forwardInstancePath: function (inst, path, value) {
 if (path.indexOf(this.as + '.') === 0) {
-this.notifyPath('items.' + row.__key__ + '.' + path.slice(this.as.length + 1), value);
-return true;
+this._notifyPath('items.' + inst.__key__ + '.' + path.slice(this.as.length + 1), value);
 }
 },
 _forwardParentProp: function (prop, value) {
-if (this.rows) {
-this.rows.forEach(function (row) {
-row[prop] = value;
+this._instances.forEach(function (inst) {
+inst.__setProperty(prop, value, true);
 }, this);
-}
 },
 _forwardParentPath: function (path, value) {
-if (this.rows) {
-this.rows.forEach(function (row) {
-row.notifyPath(path, value, true);
+this._instances.forEach(function (inst) {
+inst._notifyPath(path, value, true);
 }, this);
-}
 },
 _forwardItemPath: function (path, value) {
-if (this._rowForKey) {
+if (this._keyToInstIdx) {
 var dot = path.indexOf('.');
 var key = path.substring(0, dot < 0 ? path.length : dot);
-var idx = this._rowForKey[key];
-var row = this.rows[idx];
-if (row) {
+var idx = this._keyToInstIdx[key];
+var inst = this._instances[idx];
+if (inst) {
 if (dot >= 0) {
 path = this.as + '.' + path.substring(dot + 1);
-row.notifyPath(path, value, true);
+inst._notifyPath(path, value, true);
 } else {
-row[this.as] = value;
+inst.__setProperty(this.as, value, true);
 }
-}
-}
-},
-modelForElement: function (el) {
-var model;
-while (el) {
-if (model = el._templateInstance) {
-if (model.dataHost != this) {
-el = model.dataHost;
-} else {
-return model;
-}
-} else {
-el = el.parentNode;
 }
 }
 },
@@ -3496,91 +4223,113 @@ var instance = this.modelForElement(el);
 return instance && instance[this.indexAs];
 }
 });
-
 Polymer({
 is: 'array-selector',
 properties: {
 items: {
 type: Array,
-observer: '_itemsChanged'
+observer: 'clearSelection'
+},
+multi: {
+type: Boolean,
+value: false,
+observer: 'clearSelection'
 },
 selected: {
 type: Object,
 notify: true
 },
-toggle: Boolean,
-multi: Boolean
+selectedItem: {
+type: Object,
+notify: true
 },
-_itemsChanged: function () {
+toggle: {
+type: Boolean,
+value: false
+}
+},
+clearSelection: function () {
 if (Array.isArray(this.selected)) {
 for (var i = 0; i < this.selected.length; i++) {
 this.unlinkPaths('selected.' + i);
 }
 } else {
 this.unlinkPaths('selected');
+this.unlinkPaths('selectedItem');
 }
 if (this.multi) {
+if (!this.selected || this.selected.length) {
 this.selected = [];
+this._selectedColl = Polymer.Collection.get(this.selected);
+}
 } else {
 this.selected = null;
+this._selectedColl = null;
+}
+this.selectedItem = null;
+},
+isSelected: function (item) {
+if (this.multi) {
+return this._selectedColl.getKey(item) !== undefined;
+} else {
+return this.selected == item;
 }
 },
 deselect: function (item) {
 if (this.multi) {
-var scol = Polymer.Collection.get(this.selected);
-var sidx = this.selected.indexOf(item);
-if (sidx >= 0) {
-var skey = scol.getKey(item);
-this.splice('selected', sidx, 1);
+if (this.isSelected(item)) {
+var skey = this._selectedColl.getKey(item);
+this.arrayDelete('selected', item);
 this.unlinkPaths('selected.' + skey);
-return true;
 }
 } else {
 this.selected = null;
+this.selectedItem = null;
 this.unlinkPaths('selected');
+this.unlinkPaths('selectedItem');
 }
 },
 select: function (item) {
 var icol = Polymer.Collection.get(this.items);
 var key = icol.getKey(item);
 if (this.multi) {
-var scol = Polymer.Collection.get(this.selected);
-var skey = scol.getKey(item);
-if (skey >= 0) {
+if (this.isSelected(item)) {
+if (this.toggle) {
 this.deselect(item);
-} else if (this.toggle) {
+}
+} else {
 this.push('selected', item);
-this.async(function () {
-skey = scol.getKey(item);
+var skey = this._selectedColl.getKey(item);
 this.linkPaths('selected.' + skey, 'items.' + key);
-});
 }
 } else {
 if (this.toggle && item == this.selected) {
 this.deselect();
 } else {
-this.linkPaths('selected', 'items.' + key);
 this.selected = item;
+this.selectedItem = item;
+this.linkPaths('selected', 'items.' + key);
+this.linkPaths('selectedItem', 'items.' + key);
 }
 }
 }
 });
-
 Polymer({
 is: 'dom-if',
 extends: 'template',
 properties: {
 'if': {
 type: Boolean,
-value: false
+value: false,
+observer: '_queueRender'
 },
 restamp: {
 type: Boolean,
-value: false
+value: false,
+observer: '_queueRender'
 }
 },
 behaviors: [Polymer.Templatizer],
-observers: ['_queueRender(if, restamp)'],
 _queueRender: function () {
 this._debounceTemplate(this._render);
 },
@@ -3598,16 +4347,15 @@ this._flushTemplates();
 _render: function () {
 if (this.if) {
 if (!this.ctor) {
-this._wrapTextNodes(this._content || this.content);
 this.templatize(this);
 }
 this._ensureInstance();
-this._hideTemplateChildren = false;
+this._showHideChildren();
 } else if (this.restamp) {
 this._teardownInstance();
 }
 if (!this.restamp && this._instance) {
-this._hideTemplateChildren = !this.if;
+this._showHideChildren();
 }
 if (this.if != this._lastIf) {
 this.fire('dom-change');
@@ -3634,24 +4382,10 @@ parent.removeChild(n);
 this._instance = null;
 }
 },
-_wrapTextNodes: function (root) {
-for (var n = root.firstChild; n; n = n.nextSibling) {
-if (n.nodeType === Node.TEXT_NODE) {
-var s = document.createElement('span');
-root.insertBefore(s, n);
-s.appendChild(n);
-n = s;
-}
-}
-},
-_hideChildren: function (hidden) {
+_showHideChildren: function () {
+var hidden = this.__hideTemplateChildren__ || !this.if;
 if (this._instance) {
-var c$ = this._instance._children;
-for (var i = 0; i < c$.length; i++) {
-var c = c$[i];
-c.style.display = hidden ? 'none' : '';
-c._hideTemplateChildren = hidden;
-}
+this._instance._showHideChildren(hidden);
 }
 },
 _forwardParentProp: function (prop, value) {
@@ -3661,46 +4395,26 @@ this._instance[prop] = value;
 },
 _forwardParentPath: function (path, value) {
 if (this._instance) {
-this._instance.notifyPath(path, value, true);
+this._instance._notifyPath(path, value, true);
 }
 }
 });
-
-Polymer.ImportStatus = {
-_ready: false,
-_callbacks: [],
-whenLoaded: function (cb) {
-if (this._ready) {
-cb();
-} else {
-this._callbacks.push(cb);
-}
-},
-_importsLoaded: function () {
-this._ready = true;
-this._callbacks.forEach(function (cb) {
-cb();
-});
-this._callbacks = [];
-}
-};
-window.addEventListener('load', function () {
-Polymer.ImportStatus._importsLoaded();
-});
-if (window.HTMLImports) {
-HTMLImports.whenReady(function () {
-Polymer.ImportStatus._importsLoaded();
-});
-}
-
 Polymer({
 is: 'dom-bind',
 extends: 'template',
 created: function () {
-Polymer.ImportStatus.whenLoaded(this._readySelf.bind(this));
+Polymer.RenderStatus.whenReady(this._markImportsReady.bind(this));
+},
+_ensureReady: function () {
+if (!this._readied) {
+this._readySelf();
+}
+},
+_markImportsReady: function () {
+this._importsReady = true;
+this._ensureReady();
 },
 _registerFeatures: function () {
-this._prepExtends();
 this._prepConstructor();
 },
 _insertChildren: function () {
@@ -3723,20 +4437,34 @@ return this.dataHost._scopeElementClass(element, selector);
 return selector;
 }
 },
+_prepConfigure: function () {
+var config = {};
+for (var prop in this._propertyEffects) {
+config[prop] = this[prop];
+}
+this._setupConfigure = this._setupConfigure.bind(this, config);
+},
 attached: function () {
+if (this._importsReady) {
+this.render();
+}
+},
+detached: function () {
+this._removeChildren();
+},
+render: function () {
+this._ensureReady();
 if (!this._children) {
 this._template = this;
 this._prepAnnotations();
 this._prepEffects();
 this._prepBehaviors();
+this._prepConfigure();
 this._prepBindings();
 Polymer.Base._initFeatures.call(this);
 this._children = Array.prototype.slice.call(this.root.childNodes);
 }
 this._insertChildren();
 this.fire('dom-change');
-},
-detached: function () {
-this._removeChildren();
 }
 });</script>

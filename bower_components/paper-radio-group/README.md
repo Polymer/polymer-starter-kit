@@ -8,11 +8,13 @@ previously checked radio button within the same group. Use
 
 Example:
 
-    <paper-radio-group selected="small">
-      <paper-radio-button name="small" label="Small"></paper-radio-button>
-      <paper-radio-button name="medium" label="Medium"></paper-radio-button>
-      <paper-radio-button name="large" label="Large"></paper-radio-button>
-    </paper-radio-group>
+```html
+<paper-radio-group selected="small">
+  <paper-radio-button name="small">Small</paper-radio-button>
+  <paper-radio-button name="medium">Medium</paper-radio-button>
+  <paper-radio-button name="large">Large</paper-radio-button>
+</paper-radio-group>
+```
 
-See <a href="paper-radio-button.html">paper-radio-button</a> for more
+See <a href="https://github.com/PolymerElements/paper-radio-button">paper-radio-button</a> for more
 information about `paper-radio-button`.

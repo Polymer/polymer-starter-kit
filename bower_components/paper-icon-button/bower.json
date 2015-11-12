@@ -1,7 +1,8 @@
 {
   "name": "paper-icon-button",
   "private": true,
-  "version": "0.9.2",
+  "version": "1.0.5",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "description": "A material design icon button",
   "main": "paper-icon-button.html",
   "author": [
@@ -10,22 +11,27 @@
   "keywords": [
     "web-components",
     "polymer",
-    "paper",
-    "button"
+    "button",
+    "icon",
+    "control"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/paper-icon-button.git"
+  },
   "dependencies": {
-    "iron-flex-layout": "polymerelements/iron-flex-layout#^0.9.0",
-    "iron-icon": "polymerelements/iron-icon#^0.9.0",
-    "iron-icons": "polymerelements/iron-icons#^0.9.0",
-    "paper-behaviors": "polymerelements/paper-behaviors#^0.9.3",
-    "paper-ripple": "polymerelements/paper-ripple#^0.9.0",
-    "paper-styles": "polymerelements/paper-styles#^0.9.0",
-    "polymer": "Polymer/polymer#^0.9.0"
+    "polymer": "Polymer/polymer#^1.1.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^1.0.0",
+    "paper-behaviors": "PolymerElements/paper-behaviors#^1.0.0",
+    "paper-ripple": "PolymerElements/paper-ripple#^1.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "polymerelements/iron-component-page#^0.9.0",
-    "test-fixture": "polymerelements/test-fixture#^0.9.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "web-component-tester": "*",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0"
   }
 }

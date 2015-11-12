@@ -38,8 +38,13 @@ scope.defaults = {
   },
 };
 
+// See Tero Tolonen's answer at
+// http://stackoverflow.com/questions/17575790/environment-detection-node-js-or-browser
+/*jshint -W054 */
+var isNode = new Function('try {return this===global;}catch(e){return false;}');
+
 // For Stacky-in-Node, we default to colored stacks.
-if (typeof require === 'function') {
+if (isNode()) {
   var chalk = require('chalk');
 
   scope.defaults.styles = {
@@ -47,9 +52,10 @@ if (typeof require === 'function') {
     location:    chalk.blue,
     line:        chalk.cyan,
     column:      chalk.cyan,
-    unimportant: chalk.dim,
+    unimportant: chalk.dim
   };
 }
+
 
 function pretty(stackOrParsed, options) {
   options = mergeDefaults(options || {}, scope.defaults);

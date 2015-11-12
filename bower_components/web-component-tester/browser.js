@@ -1,6 +1,6 @@
 (function () { 'use strict';
 
-  var util = {
+  var util_js = {
     get whenFrameworksReady () { return whenFrameworksReady; },
     get pluralizedStat () { return pluralizedStat; },
     get loadScript () { return loadScript; },
@@ -36,28 +36,42 @@
       callback();
     };
 
-    function importsReady() {
-      window.removeEventListener('WebComponentsReady', importsReady);
-      debug('WebComponentsReady');
-
+    function componentsReady() {
+      // handle Polymer 0.5 readiness
       if (window.Polymer && Polymer.whenReady) {
-        Polymer.whenReady(function() {
-          debug('polymer-ready');
-          done();
-        });
+        Polymer.whenReady(done);
       } else {
         done();
       }
     }
 
     // All our supported framework configurations depend on imports.
-    if (!window.HTMLImports) {
-      done();
-    } else if (HTMLImports.ready) {
-      importsReady();
+    if (window.WebComponents) {
+      if (WebComponents.whenReady) {
+        WebComponents.whenReady(function() {
+          debug('WebComponents Ready');
+          componentsReady();
+        });
+      } else {
+        whenWebComponentsReady(componentsReady);
+      }
+    } else if (window.HTMLImports) {
+      HTMLImports.whenReady(function() {
+        debug('HTMLImports Ready');
+        componentsReady();
+      });
     } else {
-      window.addEventListener('WebComponentsReady', importsReady);
+      done();
     }
+  }
+
+  function whenWebComponentsReady(cb) {
+    var after = function after() {
+      window.removeEventListener('WebComponentsReady', after);
+      debug('WebComponentsReady');
+      cb();
+    };
+    window.addEventListener('WebComponentsReady', after);
   }
 
   /**
@@ -107,7 +121,7 @@
    *     configuration option is true.
    */
   function debug(var_args) {
-    if (!config.get('verbose')) return;
+    if (!config_js.get('verbose')) return;
     var args = [window.location.pathname];
     args.push.apply(args, arguments);
     (console.debug || console.log).apply(console, args);
@@ -316,19 +330,19 @@
    * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
    */
   function ChildRunner(url, parentScope) {
-    var urlBits = util.parseUrl(url);
-    util.mergeParams(
-        urlBits.params, util.getParams(parentScope.location.search));
+    var urlBits = util_js.parseUrl(url);
+    util_js.mergeParams(
+        urlBits.params, util_js.getParams(parentScope.location.search));
     delete urlBits.params.cli_browser_id;
 
-    this.url         = urlBits.base + util.paramsToQuery(urlBits.params);
+    this.url         = urlBits.base + util_js.paramsToQuery(urlBits.params);
     this.parentScope = parentScope;
 
     this.state = 'initializing';
   }
 
   // ChildRunners get a pretty generous load timeout by default.
-  ChildRunner.loadTimeout = 30000;
+  ChildRunner.loadTimeout = 60000;
 
   // We can't maintain properties on iframe elements in Firefox/Safari/???, so we
   // track childRunners by URL.
@@ -366,7 +380,7 @@
    * @param {function} done Node-style callback.
    */
   ChildRunner.prototype.run = function(done) {
-    util.debug('ChildRunner#run', this.url);
+    util_js.debug('ChildRunner#run', this.url);
     this.state = 'loading';
     this.onRunComplete = done;
 
@@ -401,7 +415,7 @@
    * @param {*} error The error that occured, if any.
    */
   ChildRunner.prototype.loaded = function(error) {
-    util.debug('ChildRunner#loaded', this.url, error);
+    util_js.debug('ChildRunner#loaded', this.url, error);
 
     // Not all targets have WCT loaded (compatiblity mode)
     if (this.iframe.contentWindow.WCT) {
@@ -421,7 +435,7 @@
    * @param {*} error The error that occured, if any.
    */
   ChildRunner.prototype.ready = function(error) {
-    util.debug('ChildRunner#ready', this.url, error);
+    util_js.debug('ChildRunner#ready', this.url, error);
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
@@ -433,8 +447,10 @@
 
   /** Called when the sub suite's tests are complete, so that it can clean up. */
   ChildRunner.prototype.done = function done() {
-    util.debug('ChildRunner#done', this.url, arguments);
+    util_js.debug('ChildRunner#done', this.url, arguments);
 
+    // make sure to clear that timeout
+    this.ready();
     this.signalRunComplete();
 
     if (!this.iframe) return;
@@ -453,7 +469,7 @@
     this.onRunComplete = null;
   };
 
-  var config = {
+  var config_js = {
     get _config () { return _config; },
     get setup () { return setup; },
     get get () { return get; }
@@ -485,6 +501,7 @@
       'chai/chai.js',
       'sinonjs/sinon.js',
       'sinon-chai/lib/sinon-chai.js',
+      'accessibility-developer-tools/dist/js/axs_testing.js'
     ],
 
     /** Absolute root for client scripts. Detected in `setup()` if not set. */
@@ -492,6 +509,11 @@
 
     /** By default, we wait for any web component frameworks to load. */
     waitForFrameworks: true,
+
+    /** Alternate callback for waiting for tests.
+     * `this` for the callback will be the window currently running tests.
+     */
+    waitFor: null,
 
     /** How many `.html` suites that can be concurrently loaded & run. */
     numConcurrentSuites: 1,
@@ -528,8 +550,8 @@
 
     if (!_config.root) {
       // Sibling dependencies.
-      var root = util.scriptPrefix('browser.js');
-      _config.root = util.basePath(root.substr(0, root.length - 1));
+      var root = util_js.scriptPrefix('browser.js');
+      _config.root = util_js.basePath(root.substr(0, root.length - 1));
       if (!_config.root) {
         throw new Error('Unable to detect root URL for WCT sources. Please set WCT.root before including browser.js');
       }
@@ -558,9 +580,9 @@
     });
   }
 
-  var suites = {
-    get htmlSuites () { return suites__htmlSuites; },
-    get jsSuites () { return suites__jsSuites; },
+  var suites_js = {
+    get htmlSuites () { return suites_js__htmlSuites; },
+    get jsSuites () { return suites_js__jsSuites; },
     get loadSuites () { return loadSuites; },
     get activeChildSuites () { return activeChildSuites; },
     get loadJsSuites () { return loadJsSuites; },
@@ -576,11 +598,11 @@
    * Code distributed by Google as part of the polymer project is also
    * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
    */
-  var suites__htmlSuites = [];
-  var suites__jsSuites   = [];
+  var suites_js__htmlSuites = [];
+  var suites_js__jsSuites   = [];
 
   // We process grep ourselves to avoid loading suites that will be filtered.
-  var GREP = util.getParam('grep');
+  var GREP = util_js.getParam('grep');
 
   /**
    * Loads suites of tests, supporting both `.js` and `.html` files.
@@ -590,9 +612,9 @@
   function loadSuites(files) {
     files.forEach(function(file) {
       if (/\.js(\?.*)?$/.test(file)) {
-        suites__jsSuites.push(file);
+        suites_js__jsSuites.push(file);
       } else if (/\.html(\?.*)?$/.test(file)) {
-        suites__htmlSuites.push(file);
+        suites_js__htmlSuites.push(file);
       } else {
         throw new Error('Unknown resource type: ' + file);
       }
@@ -604,11 +626,11 @@
    *     those that would not match `GREP`.
    */
   function activeChildSuites() {
-    var subsuites = suites__htmlSuites;
+    var subsuites = suites_js__htmlSuites;
     if (GREP) {
       var cleanSubsuites = [];
       for (var i = 0, subsuite; subsuite = subsuites[i]; i++) {
-        if (GREP.indexOf(util.cleanLocation(subsuite)) !== -1) {
+        if (GREP.indexOf(util_js.cleanLocation(subsuite)) !== -1) {
           cleanSubsuites.push(subsuite);
         }
       }
@@ -624,14 +646,14 @@
    * @param {function} done
    */
   function loadJsSuites(reporter, done) {
-    util.debug('loadJsSuites', suites__jsSuites);
+    util_js.debug('loadJsSuites', suites_js__jsSuites);
 
-    var loaders = suites__jsSuites.map(function(file) {
+    var loaders = suites_js__jsSuites.map(function(file) {
       // We only support `.js` dependencies for now.
-      return util.loadScript.bind(util, file);
+      return util_js.loadScript.bind(util_js, file);
     });
 
-    util.parallel(loaders, done);
+    util_js.parallel(loaders, done);
   }
 
   /**
@@ -640,7 +662,7 @@
    * @param {function} done
    */
   function runSuites(reporter, childSuites, done) {
-    util.debug('runSuites');
+    util_js.debug('runSuites');
 
     var suiteRunners = [
       // Run the local tests (if any) first, not stopping on error;
@@ -660,7 +682,7 @@
       });
     });
 
-    util.parallel(suiteRunners, config.get('numConcurrentSuites'), function(error) {
+    util_js.parallel(suiteRunners, config_js.get('numConcurrentSuites'), function(error) {
       reporter.done();
       done(error);
     });
@@ -673,11 +695,12 @@
    * @param {function} done A callback fired, _no error is passed_.
    */
   function _runMocha(reporter, done, waited) {
-    if (config.get('waitForFrameworks') && !waited) {
-      util.whenFrameworksReady(_runMocha.bind(null, reporter, done, true));
+    if (config_js.get('waitForFrameworks') && !waited) {
+      var waitFor = (config_js.get('waitFor') || util_js.whenFrameworksReady).bind(window);
+      waitFor(_runMocha.bind(null, reporter, done, true));
       return;
     }
-    util.debug('_runMocha');
+    util_js.debug('_runMocha');
     var mocha = window.mocha;
     var Mocha = window.Mocha;
 
@@ -812,12 +835,12 @@
     logGroup('Test Results', 'results');
 
     if (this.stats.failures > 0) {
-      log(util.pluralizedStat(this.stats.failures, 'failing'), 'failing');
+      log(util_js.pluralizedStat(this.stats.failures, 'failing'), 'failing');
     }
     if (this.stats.pending > 0) {
-      log(util.pluralizedStat(this.stats.pending, 'pending'), 'pending');
+      log(util_js.pluralizedStat(this.stats.pending, 'pending'), 'pending');
     }
-    log(util.pluralizedStat(this.stats.passes, 'passing'));
+    log(util_js.pluralizedStat(this.stats.passes, 'passing'));
 
     if (!this.stats.failures) {
       log('test suite passed', 'passing');
@@ -928,6 +951,7 @@
     'pass',
     'fail',
     'pending',
+    'childRunner end'
   ];
 
   // Until a suite has loaded, we assume this many tests in it.
@@ -948,7 +972,7 @@
     }.bind(this));
 
     this.parent = parent;
-    this.basePath = parent && parent.basePath || util.basePath(window.location);
+    this.basePath = parent && parent.basePath || util_js.basePath(window.location);
 
     this.total = numSuites * ESTIMATED_TESTS_PER_SUITE;
     // Mocha reporters assume a stream of events, so we have to be careful to only
@@ -998,7 +1022,7 @@
    *     estimate of `numSuites`.
    */
   MultiReporter.prototype.emitOutOfBandTest = function emitOutOfBandTest(title, opt_error, opt_suiteTitle, opt_estimated) {
-    util.debug('MultiReporter#emitOutOfBandTest(', arguments, ')');
+    util_js.debug('MultiReporter#emitOutOfBandTest(', arguments, ')');
     var root = new Mocha.Suite();
     root.title = opt_suiteTitle || '';
     var test = new Mocha.Test(title, function() {
@@ -1030,8 +1054,8 @@
    * @return {string}
    */
   MultiReporter.prototype.suiteTitle = function suiteTitle(location) {
-    var path = util.relativeLocation(location, this.basePath);
-    path = util.cleanLocation(path);
+    var path = util_js.relativeLocation(location, this.basePath);
+    path = util_js.cleanLocation(path);
     return path;
   };
 
@@ -1062,7 +1086,7 @@
       this.pendingEvents.push(arguments);
       return;
     }
-    util.debug('MultiReporter#proxyEvent(', arguments, ')');
+    util_js.debug('MultiReporter#proxyEvent(', arguments, ')');
 
     // This appears to be a Mocha bug: Tests failed by passing an error to their
     // done function don't set `err` properly.
@@ -1124,14 +1148,14 @@
 
   /** @param {!Mocha.runners.Base} runner */
   MultiReporter.prototype.onRunnerStart = function onRunnerStart(runner) {
-    util.debug('MultiReporter#onRunnerStart:', runner.name);
+    util_js.debug('MultiReporter#onRunnerStart:', runner.name);
     this.total = this.total - ESTIMATED_TESTS_PER_SUITE + runner.total;
     this.currentRunner = runner;
   };
 
   /** @param {!Mocha.runners.Base} runner */
   MultiReporter.prototype.onRunnerEnd = function onRunnerEnd(runner) {
-    util.debug('MultiReporter#onRunnerEnd:', runner.name);
+    util_js.debug('MultiReporter#onRunnerEnd:', runner.name);
     this.currentRunner = null;
     this.flushPendingEvents();
   };
@@ -1182,9 +1206,9 @@
   /** Updates the document title with a summary of current stats. */
   Title.prototype.updateTitle = function updateTitle() {
     if (this.stats.failures > 0) {
-      document.title = util.pluralizedStat(this.stats.failures, 'failing');
+      document.title = util_js.pluralizedStat(this.stats.failures, 'failing');
     } else {
-      document.title = util.pluralizedStat(this.stats.passes, 'passing');
+      document.title = util_js.pluralizedStat(this.stats.passes, 'passing');
     }
   };
 
@@ -1279,7 +1303,7 @@
       });
     }
 
-    if (suites.htmlSuites.length > 0 || suites.jsSuites.length > 0) {
+    if (suites_js.htmlSuites.length > 0 || suites_js.jsSuites.length > 0) {
       reporters.push(HTML);
     }
 
@@ -1306,7 +1330,7 @@
     klass.prototype = newPrototype;
   }
 
-  var environment = {
+  var environment_js = {
     get loadSync () { return loadSync; },
     get ensureDependenciesPresent () { return ensureDependenciesPresent; }
   };
@@ -1321,14 +1345,21 @@
    * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
    */
   function loadSync() {
-    util.debug('Loading environment scripts:');
-    config.get('environmentScripts').forEach(function(path) {
-      var url = util.expandUrl(path, config.get('root'));
-      util.debug('Loading environment script:', url);
+    util_js.debug('Loading environment scripts:');
+    var a11ySuite = 'web-component-tester/data/a11ySuite.js';
+    var scripts = config_js.get('environmentScripts');
+    var a11ySuiteWillBeLoaded = window.__generatedByWct || scripts.indexOf(a11ySuite) > -1;
+    if (!a11ySuiteWillBeLoaded) {
+      // wct is running as a bower dependency, load a11ySuite from data/
+      scripts.push(a11ySuite);
+    }
+    scripts.forEach(function(path) {
+      var url = util_js.expandUrl(path, config_js.get('root'));
+      util_js.debug('Loading environment script:', url);
       // Synchronous load.
       document.write('<script src="' + encodeURI(url) + '"></script>'); // jshint ignore:line
     });
-    util.debug('Environment scripts loaded');
+    util_js.debug('Environment scripts loaded');
   }
 
   /**
@@ -1348,15 +1379,17 @@
     }
     _reporters.injectMocha(Mocha);
     // Magic loading of mocha's stylesheet
-    var mochaPrefix = util.scriptPrefix('mocha.js');
-    if (mochaPrefix) { // Not the end of the world, if not.
-      util.loadStyle(mochaPrefix + 'mocha.css');
+    var mochaPrefix = util_js.scriptPrefix('mocha.js');
+    // only load mocha stylesheet for the test runner output
+    // Not the end of the world, if it doesn't load.
+    if (mochaPrefix && window.top === window.self) {
+      util_js.loadStyle(mochaPrefix + 'mocha.css');
     }
   }
 
   function _checkChai() {
     if (!window.chai) {
-      util.debug('Chai not present; not registering shorthands');
+      util_js.debug('Chai not present; not registering shorthands');
       return;
     }
 
@@ -1364,7 +1397,7 @@
     window.expect = window.chai.expect;
   }
 
-  var errors = {
+  var errors_js = {
     get globalErrors () { return globalErrors; },
     get listenForErrors () { return listenForErrors; }
   };
@@ -1393,7 +1426,7 @@
     var origError   = console.error;
     console.error = function wctShimmedError() {
       origError.apply(origConsole, arguments);
-      if (config.get('trackConsoleError')) {
+      if (config_js.get('trackConsoleError')) {
         throw 'console.error: ' + Array.prototype.join.call(arguments, ' ');
       }
     };
@@ -1468,7 +1501,7 @@
    * @param {string} alternate The matching method in the opposite interface.
    */
   function _setupMocha(ui, key, alternate) {
-    var mochaOptions = config.get('mochaOptions');
+    var mochaOptions = config_js.get('mochaOptions');
     if (mochaOptions.ui && mochaOptions.ui !== ui) {
       var message = 'Mixing ' + mochaOptions.ui + ' and ' + ui + ' Mocha styles is not supported. ' +
                     'You called "' + key + '". Did you mean ' + alternate + '?';
@@ -1562,12 +1595,12 @@
    * @param {function(*, CLISocket)} done Node-style callback.
    */
   CLISocket.init = function init(done) {
-    var browserId = util.getParam('cli_browser_id');
+    var browserId = util_js.getParam('cli_browser_id');
     if (!browserId) return done();
     // Only fire up the socket for root runners.
     if (ChildRunner.current()) return done();
 
-    util.loadScript(SOCKETIO_LIBRARY, function(error) {
+    util_js.loadScript(SOCKETIO_LIBRARY, function(error) {
       if (error) return done(error);
 
       var socket = io(SOCKETIO_ENDPOINT);
@@ -1626,7 +1659,7 @@
 
   // Make sure that we use native timers, in case they're being stubbed out.
   var setInterval           = window.setInterval;           // jshint ignore:line
-  var helpers__setTimeout            = window.setTimeout;            // jshint ignore:line
+  var helpers_js__setTimeout            = window.setTimeout;            // jshint ignore:line
   var requestAnimationFrame = window.requestAnimationFrame; // jshint ignore:line
 
   /**
@@ -1711,8 +1744,8 @@
    * @param {function()} callback
    */
   window.flush = function flush(callback) {
-    // Ideally, this function would be a call to Polymer.flush, but that doesn't
-    // support a callback yet (https://github.com/Polymer/polymer-dev/issues/115),
+    // Ideally, this function would be a call to Polymer.dom.flush, but that doesn't
+    // support a callback yet (https://github.com/Polymer/polymer-dev/issues/851),
     // ...and there's cross-browser flakiness to deal with.
 
     // Make sure that we're invoking the callback with no arguments so that the
@@ -1726,19 +1759,26 @@
       var reallyDone = done;
       done = function doneIE() {
         Platform.performMicrotaskCheckpoint();
-        helpers__setTimeout(reallyDone, 0);
+        helpers_js__setTimeout(reallyDone, 0);
       };
     }
 
     // Everyone else gets a regular flush.
-    var scope = window.Polymer || window.WebComponents;
-    if (scope && scope.flush) {
+    var scope;
+    if (window.Polymer && window.Polymer.dom && window.Polymer.dom.flush) {
+      scope = window.Polymer.dom;
+    } else if (window.Polymer && window.Polymer.flush) {
+      scope = window.Polymer;
+    } else if (window.WebComponents && window.WebComponents.flush) {
+      scope = window.WebComponents;
+    }
+    if (scope) {
       scope.flush();
     }
 
     // Ensure that we are creating a new _task_ to allow all active microtasks to
     // finish (the code you're testing may be using endOfMicrotask, too).
-    helpers__setTimeout(done, 0);
+    helpers_js__setTimeout(done, 0);
   };
 
   /**
@@ -1781,7 +1821,7 @@
             waitFor(fn, next, intervalOrMutationEl, timeout, timeoutTime);
           });
         } else {
-          helpers__setTimeout(function() {
+          helpers_js__setTimeout(function() {
             waitFor(fn, next, intervalOrMutationEl, timeout, timeoutTime);
           }, intervalOrMutationEl);
         }
@@ -1803,7 +1843,7 @@
   /**
    * This file is the entry point into `web-component-tester`'s browser client.
    */
-  config.setup(window.WCT);
+  config_js.setup(window.WCT);
 
   // Maybe some day we'll expose WCT as a module to whatever module registry you
   // are using (aka the UMD approach), or as an es6 module.
@@ -1813,7 +1853,7 @@
   WCT.share = {};
   // Until then, we get to rely on it to expose parent runners to their children.
   WCT._ChildRunner = ChildRunner;
-  WCT._config      = config._config;
+  WCT._config      = config_js._config;
 
 
   // Public Interface
@@ -1823,20 +1863,20 @@
    *
    * @param {!Array.<string>} files The files to load.
    */
-  WCT.loadSuites = suites.loadSuites;
+  WCT.loadSuites = suites_js.loadSuites;
 
 
   // Load Process
 
-  errors.listenForErrors();
+  errors_js.listenForErrors();
   _mocha.stubInterfaces();
-  environment.loadSync();
+  environment_js.loadSync();
 
   // Give any scripts on the page a chance to declare tests and muck with things.
   document.addEventListener('DOMContentLoaded', function() {
-    util.debug('DOMContentLoaded');
+    util_js.debug('DOMContentLoaded');
 
-    environment.ensureDependenciesPresent();
+    environment_js.ensureDependenciesPresent();
 
     // We need the socket built prior to building its reporter.
     CLISocket.init(function(error, socket) {
@@ -1845,26 +1885,26 @@
       // Are we a child of another run?
       var current = ChildRunner.current();
       var parent  = current && current.parentScope.WCT._reporter;
-      util.debug('parentReporter:', parent);
+      util_js.debug('parentReporter:', parent);
 
-      var childSuites    = suites.activeChildSuites();
+      var childSuites    = suites_js.activeChildSuites();
       var reportersToUse = _reporters.determineReporters(socket, parent);
       // +1 for any local tests.
       var reporter = new MultiReporter(childSuites.length + 1, reportersToUse, parent);
       WCT._reporter = reporter; // For environment/compatibility.js
 
       // We need the reporter so that we can report errors during load.
-      suites.loadJsSuites(reporter, function(error) {
+      suites_js.loadJsSuites(reporter, function(error) {
         // Let our parent know that we're about to start the tests.
         if (current) current.ready(error);
         if (error) throw error;
 
         // Emit any errors we've encountered up til now
-        errors.globalErrors.forEach(function onError(error) {
+        errors_js.globalErrors.forEach(function onError(error) {
           reporter.emitOutOfBandTest('Test Suite Initialization', error);
         });
 
-        suites.runSuites(reporter, childSuites, function(error) {
+        suites_js.runSuites(reporter, childSuites, function(error) {
           // Make sure to let our parent know that we're done.
           if (current) current.done();
           if (error) throw error;

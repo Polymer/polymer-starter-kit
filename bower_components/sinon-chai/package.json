@@ -9,25 +9,28 @@
     "stubs",
     "mocks"
   ],
-  "version": "2.7.0",
+  "version": "2.8.0",
   "author": "Domenic Denicola <d@domenic.me> (https://domenic.me/)",
-  "license": "WTFPL",
+  "license": "(BSD-2-Clause OR WTFPL)",
   "repository": "domenic/sinon-chai",
   "main": "./lib/sinon-chai.js",
   "files": [
     "lib"
   ],
   "scripts": {
-    "test": "mocha",
+    "test": "npm run test-chai-1-9-2 && npm run test-chai-2-3-0 && npm run test-chai-3-0-0",
+    "test-chai-1-9-2": "npm install chai@1.9.2 && mocha",
+    "test-chai-2-3-0": "npm install chai@2.3.0 && mocha",
+    "test-chai-3-0-0": "npm install chai@3.0.0 && mocha",
     "lint": "jshint ./lib",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha && opener ./coverage/lcov-report/lib/sinon-chai.js.html"
   },
   "peerDependencies": {
-    "chai": ">=1.9.2 <3",
+    "chai": ">=1.9.2 <4",
     "sinon": ">=1.4.0 <2"
   },
   "devDependencies": {
-    "chai": "^1.9.2",
+    "chai": "^3.0.0",
     "coffee-script": "~1.8.0",
     "istanbul": "~0.3.2",
     "jshint": "^2.5.6",

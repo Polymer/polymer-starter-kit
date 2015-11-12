@@ -1,9 +1,10 @@
 {
   "name": "iron-test-helpers",
-  "version": "0.9.5",
+  "version": "1.0.6",
   "authors": [
     "The Polymer Authors"
   ],
+  "description": "Utility classes to help make testing easier",
   "keywords": [
     "web-components",
     "web-component",
@@ -15,11 +16,11 @@
     "type": "git",
     "url": "git://github.com/PolymerElements/iron-test-helpers"
   },
-  "license": "MIT",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/PolymerElements/iron-test-helpers",
   "ignore": [],
   "dependencies": {
-    "polymer": "Polymer/polymer#^0.9.0"
+    "polymer": "Polymer/polymer#^1.0.0"
   },
   "devDependencies": {
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"

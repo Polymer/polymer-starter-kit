@@ -6,15 +6,17 @@ children "pages".
 
 Example:
 
-    <iron-pages selected="0">
-      <div>One</div>
-      <div>Two</div>
-      <div>Three</div>
-    </iron-pages>
+```html
+<iron-pages selected="0">
+  <div>One</div>
+  <div>Two</div>
+  <div>Three</div>
+</iron-pages>
 
-    <script>
-      document.addEventListener('click', function(e) {
-        var pages = document.querySelector('iron-pages');
-        pages.selectNext();
-      });
-    </script>
+<script>
+  document.addEventListener('click', function(e) {
+    var pages = document.querySelector('iron-pages');
+    pages.selectNext();
+  });
+</script>
+```

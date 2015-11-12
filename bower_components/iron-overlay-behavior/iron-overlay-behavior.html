@@ -1,6 +1,22 @@
-<link rel="import" href="../polymer/polymer.html"><link rel="import" href="../iron-fit-behavior/iron-fit-behavior.html"><link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html"><link rel="import" href="iron-overlay-backdrop.html"><link rel="import" href="iron-overlay-manager.html"><script>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
 
-/*
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-fit-behavior/iron-fit-behavior.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="iron-overlay-backdrop.html">
+<link rel="import" href="iron-overlay-manager.html">
+
+<script>
+
+/**
 Use `Polymer.IronOverlayBehavior` to implement an element that can be hidden or shown, and displays
 on top of other content. It includes an optional backdrop, and can be used to implement a variety
 of UI controls including dialogs and drop downs. Multiple overlays may be displayed at once.
@@ -12,7 +28,8 @@ intent. Closing generally implies that the user acknowledged the content on the 
 it will cancel whenever the user taps outside it or presses the escape key. This behavior is
 configurable with the `no-cancel-on-esc-key` and the `no-cancel-on-outside-click` properties.
 `close()` should be called explicitly by the implementer when the user interacts with a control
-in the overlay element.
+in the overlay element. When the dialog is canceled, the overlay fires an 'iron-overlay-canceled'
+event. Call `preventDefault` on this event to prevent the overlay from closing.
 
 ### Positioning
 
@@ -31,6 +48,7 @@ The element is styled to appear on top of other content by setting its `z-index`
 must ensure no element has a stacking context with a higher `z-index` than its parent stacking
 context. You should place this element as a child of `<body>` whenever possible.
 
+@demo demo/index.html
 @polymerBehavior Polymer.IronOverlayBehavior
 */
 
@@ -44,7 +62,8 @@ context. You should place this element as a child of `<body>` whenever possible.
       opened: {
         observer: '_openedChanged',
         type: Boolean,
-        value: false
+        value: false,
+        notify: true
       },
 
       /**
@@ -121,7 +140,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     },
 
     listeners: {
-      'click': '_onClick',
+      'tap': '_onClick',
       'iron-resize': '_onIronResize'
     },
 
@@ -181,7 +200,12 @@ context. You should place this element as a child of `<body>` whenever possible.
      * Cancels the overlay.
      */
     cancel: function() {
-      this.opened = false,
+      var cancelEvent = this.fire('iron-overlay-canceled', undefined, {cancelable: true});
+      if (cancelEvent.defaultPrevented) {
+        return;
+      }
+
+      this.opened = false;
       this._setCanceled(true);
     },
 
@@ -221,7 +245,7 @@ context. You should place this element as a child of `<body>` whenever possible.
         // overlay becomes visible here
         this.style.display = '';
         // force layout to ensure transitions will go
-        this.offsetWidth;
+        /** @suppress {suspiciousCode} */ this.offsetWidth;
         if (this.opened) {
           this._renderOpened();
         } else {
@@ -239,8 +263,16 @@ context. You should place this element as a child of `<body>` whenever possible.
 
     _toggleListener: function(enable, node, event, boundListener, capture) {
       if (enable) {
+        // enable document-wide tap recognizer
+        if (event === 'tap') {
+          Polymer.Gestures.add(document, 'tap', null);
+        }
         node.addEventListener(event, boundListener, capture);
       } else {
+        // disable document-wide tap recognizer
+        if (event === 'tap') {
+          Polymer.Gestures.remove(document, 'tap', null);
+        }
         node.removeEventListener(event, boundListener, capture);
       }
     },
@@ -251,10 +283,10 @@ context. You should place this element as a child of `<body>` whenever possible.
       }
       // async so we don't auto-close immediately via a click.
       this._toggleListenersAsync = this.async(function() {
-        this._toggleListener(this.opened, document, 'click', this._boundOnCaptureClick, true);
+        this._toggleListener(this.opened, document, 'tap', this._boundOnCaptureClick, true);
         this._toggleListener(this.opened, document, 'keydown', this._boundOnCaptureKeydown, true);
         this._toggleListenersAsync = null;
-      });
+      }, 1);
     },
 
     // tasks which must occur before opening; e.g. making the element visible
@@ -341,11 +373,11 @@ context. You should place this element as a child of `<body>` whenever possible.
       this.style.display = '';
     },
 
-    _finishPositioning: function(target) {
+    _finishPositioning: function() {
       this.style.display = 'none';
       this.style.transform = this.style.webkitTransform = '';
       // force layout to avoid application of transform
-      this.offsetWidth;
+      /** @suppress {suspiciousCode} */ this.offsetWidth;
       this.style.transition = this.style.webkitTransition = '';
     },
 
@@ -396,20 +428,20 @@ context. You should place this element as a child of `<body>` whenever possible.
       }
     }
 
+/**
+ * Fired after the `iron-overlay` opens.
+ * @event iron-overlay-opened
+ */
+
+/**
+ * Fired after the `iron-overlay` closes.
+ * @event iron-overlay-closed
+ * @param {{canceled: (boolean|undefined)}} set to the `closingReason` attribute
+ */
   };
 
+  /** @polymerBehavior */
   Polymer.IronOverlayBehavior = [Polymer.IronFitBehavior, Polymer.IronResizableBehavior, Polymer.IronOverlayBehaviorImpl];
 
-/*
-Fired after the `iron-overlay` opens.
-@event iron-overlay-opened
-*/
-
-/*
-Fired after the `iron-overlay` closes.
-@event iron-overlay-closed
-@param {Object} detail
-@param {Object} detail.canceled True if the overlay was canceled
-*/
 
 </script>

@@ -1,34 +1,34 @@
 {
   "name": "paper-spinner",
-  "version": "0.9.3",
+  "version": "1.0.4",
   "description": "A material design spinner",
   "authors": [
     "The Polymer Authors"
   ],
   "keywords": [
     "web-components",
-    "web-component",
     "polymer",
-    "paper",
-    "spinner"
+    "spinner",
+    "loading"
   ],
-  "main": "index.html",
   "private": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/PolymerElements/paper-spinner"
   },
-  "license": "MIT",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/PolymerElements/paper-spinner",
   "ignore": [],
   "dependencies": {
-    "iron-flex-layout": "PolymerElements/iron-flex-layout#^0.9.0",
-    "polymer": "Polymer/polymer#^0.9.0"
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.0",
+    "polymer": "Polymer/polymer#^1.1.0"
   },
   "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "web-component-tester": "*",
-    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^0.9.0",
-    "test-fixture": "PolymerElements/test-fixture#^0.9.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
-  }
+  },
+  "main": "paper-spinner.html"
 }

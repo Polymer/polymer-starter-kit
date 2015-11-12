@@ -1,6 +1,6 @@
 {
   "name": "hydrolysis",
-  "private": true,
+  "main": "hydrolysis.js",
   "ignore": [
     "lib/",
     "examples/",
@@ -10,10 +10,14 @@
     "gulpfile.js",
     "package.json"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Polymer/hydrolysis.git"
+  },
   "devDependencies": {
-    "polymer": "Polymer/polymer#0.8-preview",
+    "polymer": "Polymer/polymer#^0.9.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "web-component-tester": "*"
   },
-  "version": "1.8.1"
+  "version": "1.19.3"
 }
