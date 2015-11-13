@@ -11,7 +11,7 @@
 * Unit testing with [Web Component Tester](https://github.com/Polymer/web-component-tester)
 * Optional offline setup through [Platinum](https://elements.polymer-project.org/browse?package=platinum-elements) Service Worker elements
 * End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
-* [Recipes](/docs/README.md/) for ES2015 support, Polymer performance and using Chrome Dev Editor
+* [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor, Deploying to GitHub Pages and Deploying to Firebase
 
 ### Demo
 See latest Polymer Starter Kit Demo (from master) at http://polymerelements.github.io/polymer-starter-kit
@@ -155,12 +155,17 @@ Polymer uses [Bower](http://bower.io) for package management. This makes it easy
 ## Deploy
 
 ### Github Pages
+
 1. Uncomment this line  `// app.baseUrl = '/polymer-starter-kit/';` in app.js near the top
 2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `bobs-awesome-site`)
-3. Run `build-deploy-gh-pages` from command line
+3. Run `gulp build-deploy-gh-pages` from command line
 4. To see changes wait 1-2 minutes then load Github pages for your app (ex: http://polymerelements.github.io/polymer-starter-kit)
 
 [See more details](/docs/deploy-to-github-pages.md/)
+
+### Firebase
+
+[See detail recipe](/docs/deploy-to-firebase-pretty-urls.md/)
 
 ## Service Worker
 
