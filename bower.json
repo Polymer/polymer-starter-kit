@@ -10,7 +10,6 @@
     "polymer": "Polymer/polymer#^1.2.0"
   },
   "devDependencies": {
-    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "web-component-tester": "*"
   },
   "ignore": []
