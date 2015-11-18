@@ -4,9 +4,9 @@ addons:
   firefox: '42.0'
   apt:
     sources:
-    - google-chrome
+      - google-chrome
     packages:
-    - google-chrome-stable
+      - google-chrome-stable
 node_js:
   - '4.1'
 before_script:
