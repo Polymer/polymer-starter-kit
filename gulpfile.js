@@ -235,7 +235,7 @@ gulp.task('cache-config', function(callback) {
 
 // Clean output directory
 gulp.task('clean', function() {
-  return del(['.tmp', 'dist']);
+  return del(['.tmp', dist()]);
 });
 
 // Watch files for changes & reload
@@ -316,7 +316,7 @@ gulp.task('build-deploy-gh-pages', function(cb) {
 
 // Deploy to GitHub pages gh-pages branch
 gulp.task('deploy-gh-pages', function() {
-  return gulp.src('./dist/**/*')
+  return gulp.src(dist('**/*'))
     .pipe($.ghPages());
 });
 
