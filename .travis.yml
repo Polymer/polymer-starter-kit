@@ -16,5 +16,4 @@ before_script:
   - npm i -g bower gulp
   - bower i
 script:
-  - npm run lint
-  - npm test
+  - ./travis-runner.sh

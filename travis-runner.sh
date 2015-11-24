@@ -12,4 +12,5 @@ then
   rm app/scripts/app.js.tmp
 else
   npm run lint
+  npm test
 fi
