@@ -9,6 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-behaviors/iron-control-state.html">
 <link rel="import" href="../iron-behaviors/iron-button-state.html">
@@ -70,9 +71,7 @@ Custom property | Description | Default
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
       transition: opacity 0.1s cubic-bezier(0.4, 0.0, 1, 1);
-      @apply(--layout-horizontal);
-      @apply(--layout-center-center);
-      @apply(--layout-flex-auto);
+
       @apply(--paper-tab-content);
     }
 
@@ -105,7 +104,7 @@ Custom property | Description | Default
 
   <template>
 
-    <div class="tab-content">
+    <div class="tab-content flex-auto center-center horizontal layout">
       <content></content>
     </div>
 

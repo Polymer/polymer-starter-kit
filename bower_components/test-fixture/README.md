@@ -9,8 +9,6 @@ Edit this file, and the bot will squash your changes :)
 
 -->
 
-[![Build Status](https://travis-ci.org/PolymerElements/test-fixture.svg?branch=master)](https://travis-ci.org/PolymerElements/test-fixture)
-
 
 ##&lt;test-fixture&gt;
 
@@ -27,7 +25,7 @@ resetting a test suite's DOM. To use it, wrap the test suite's DOM as a template
 </test-fixture>
 ```
 
-Now, the `<test-fixture>` element can be used to generate a copy of its
+Now, the `<test-fixture>` element can be used to generate a copy if its
 template:
 
 ```html

@@ -1,6 +1,6 @@
 {
   "name": "iron-ajax",
-  "version": "1.1.1",
+  "version": "1.0.8",
   "description": "Makes it easy to make ajax calls and parse the response",
   "private": true,
   "authors": [
@@ -25,10 +25,11 @@
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+    "iron-flex-layout": "polymerelements/iron-flex-layout#^1.0.0",
     "iron-image": "polymerelements/iron-image#^1.0.0",
     "paper-styles": "polymerelements/paper-styles#^1.0.0",
     "test-fixture": "polymerelements/test-fixture#^1.0.0",
-    "web-component-tester": "polymer/web-component-tester#^3.4.0",
+    "web-component-tester": "*",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   }
 }

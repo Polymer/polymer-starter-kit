@@ -25,7 +25,7 @@ be reused with a new model at any time. Particularly, any state that may change
 as the result of a user interaction with the list item must be bound to the model
 to avoid view state inconsistency.
 
-__Important:__ `iron-list` must either be explicitly sized, or delegate scrolling to an
+__Important:__ `iron-list` must ether be explicitly sized, or delegate scrolling to an
 explicitly sized parent. By "explicitly sized", we mean it either has an explicit
 CSS `height` property set via a class or inline style, or else is sized by other
 layout means (e.g. the `flex` or `fit` classes).
@@ -49,45 +49,39 @@ For example, given the following `data` array:
 
 ##### data.json
 
-```js
-[
-  {"name": "Bob"},
-  {"name": "Tim"},
-  {"name": "Mike"}
-]
-```
+    [
+      {"name": "Bob"},
+      {"name": "Tim"},
+      {"name": "Mike"}
+    ]
 
 The following code would render the list (note the name and checked properties are
 bound from the model object provided to the template scope):
 
-```html
-<template is="dom-bind">
-  <iron-ajax url="data.json" last-response="{{data}}" auto></iron-ajax>
-  <iron-list items="[[data]]" as="item">
-    <template>
-      <div>
-        Name: <span>[[item.name]]</span>
-      </div>
+    <template is="dom-bind">
+      <iron-ajax url="data.json" last-response="{{data}}" auto></iron-ajax>
+      <iron-list items="[[data]]" as="item">
+        <template>
+          <div>
+            Name: <span>[[item.name]]</span>
+          </div>
+        </template>
+      </iron-list>
     </template>
-  </iron-list>
-</template>
-```
 
 ### Styling
 
 Use the `--iron-list-items-container` mixin to style the container of items, e.g.
 
-```css
-iron-list {
- --iron-list-items-container: {
-    margin: auto;
-  };
-}
-```
+    iron-list {
+     --iron-list-items-container: {
+        margin: auto;
+      };
+    }
 
 ### Resizing
 
-`iron-list` lays out the items when it receives a notification via the `iron-resize` event.
+`iron-list` lays out the items when it recives a notification via the `iron-resize` event.
 This event is fired by any element that implements `IronResizableBehavior`.
 
 By default, elements such as `iron-pages`, `paper-tabs` or `paper-dialog` will trigger
@@ -95,21 +89,8 @@ this event automatically. If you hide the list manually (e.g. you use `display: 
 you might want to implement `IronResizableBehavior` or fire this event manually right
 after the list became visible again. e.g.
 
-```js
-document.querySelector('iron-list').fire('iron-resize');
-```
+    document.querySelector('iron-list').fire('iron-resize');
 
-### When should `<iron-list>` be used?
-
-`iron-list` should be used when a page has significantly more DOM nodes than the ones
-visible on the screen. e.g. the page has 500 nodes, but only 20 are visible at the time.
-This is why we refer to it as a `virtual` list. In this case, a `dom-repeat` will still
-create 500 nodes which could slow down the web app, but `iron-list` will only create 20.
-
-However, having an `iron-list` does not mean that you can load all the data at once. 
-Say, you have a million records in the database, you want to split the data into pages
-so you can bring a page at the time. The page could contain 500 items, and iron-list
-will only render 20.
 
 @group Iron Element
 @element iron-list
@@ -164,7 +145,7 @@ will only render 20.
 
   var IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
   var IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
-  var DEFAULT_PHYSICAL_COUNT = 3;
+  var DEFAULT_PHYSICAL_COUNT = 20;
   var MAX_PHYSICAL_COUNT = 500;
 
   Polymer({
@@ -347,7 +328,7 @@ will only render 20.
     _scrollHeight: 0,
 
     /**
-     * The height of the list. This is referred as the viewport in the context of list.
+     * The size of the viewport
      */
     _viewportSize: 0,
 
@@ -381,16 +362,6 @@ will only render 20.
      * after attached.
      */
     _itemsRendered: false,
-
-    /**
-     * The page that is currently rendered.
-     */
-    _lastPage: null,
-
-    /**
-     * The max number of pages to render. One page is equivalent to the height of the list.
-     */
-    _maxPages: 3,
 
     /**
      * The bottom of the physical content.
@@ -464,7 +435,7 @@ will only render 20.
      * to a viewport of physical items above and below the user's viewport.
      */
     get _optPhysicalSize() {
-      return this._viewportSize * this._maxPages;
+      return this._viewportSize * 3;
     },
 
    /**
@@ -565,7 +536,7 @@ will only render 20.
       // IE 10|11 scrollTop may go above `_maxScrollTop`
       // iOS `scrollTop` may go below 0 and above `_maxScrollTop`
       var scrollTop = Math.max(0, Math.min(this._maxScrollTop, this._scroller.scrollTop));
-      var tileHeight, tileTop, kth, recycledTileSet, scrollBottom, physicalBottom;
+      var tileHeight, tileTop, kth, recycledTileSet, scrollBottom;
       var ratio = this._ratio;
       var delta = scrollTop - this._scrollPosition;
       var recycledTiles = 0;
@@ -580,7 +551,6 @@ will only render 20.
       this._firstVisibleIndexVal = null;
 
       scrollBottom = this._scrollBottom;
-      physicalBottom = this._physicalBottom;
 
       // random access
       if (Math.abs(delta) > this._physicalSize) {
@@ -591,6 +561,7 @@ will only render 20.
       else if (delta < 0) {
         var topSpace = scrollTop - this._physicalTop;
         var virtualStart = this._virtualStart;
+        var physicalBottom = this._physicalBottom;
 
         recycledTileSet = [];
 
@@ -622,7 +593,7 @@ will only render 20.
       }
       // scroll down
       else if (delta > 0) {
-        var bottomSpace = physicalBottom - scrollBottom;
+        var bottomSpace = this._physicalBottom - scrollBottom;
         var virtualEnd = this._virtualEnd;
         var lastVirtualItemIndex = this._virtualCount-1;
 
@@ -657,8 +628,9 @@ will only render 20.
         // If the list ever reach this case, the physical average is not significant enough
         // to create all the items needed to cover the entire viewport.
         // e.g. A few items have a height that differs from the average by serveral order of magnitude.
-        if (physicalBottom < scrollBottom || this._physicalTop > scrollTop) {
-          this.async(this._increasePool.bind(this, 1));
+        if (this._increasePoolIfNeeded()) {
+          // yield and set models to the new items
+          this.async(this._update);
         }
       } else {
         this._virtualStart = this._virtualStart + recycledTiles;
@@ -690,8 +662,11 @@ will only render 20.
       // set the scroller size
       this._updateScrollerSize();
 
-      // increase the pool of physical items
-      this._increasePoolIfNeeded();
+      // increase the pool of physical items if needed
+      if (this._increasePoolIfNeeded()) {
+        // yield set models to the new items
+        this.async(this._update);
+      }
     },
 
     /**
@@ -704,6 +679,7 @@ will only render 20.
 
       for (var i = 0; i < size; i++) {
         var inst = this.stamp(null);
+
         // First element child is item; Safari doesn't support children[0]
         // on a doc fragment
         physicalItems[i] = inst.root.querySelector('*');
@@ -716,25 +692,20 @@ will only render 20.
     /**
      * Increases the pool of physical items only if needed.
      * This function will allocate additional physical items
-     * if the physical size is shorter than `_optPhysicalSize`
+     * (limited by `MAX_PHYSICAL_COUNT`) if the content size is shorter than
+     * `_optPhysicalSize`
+     *
+     * @return boolean
      */
     _increasePoolIfNeeded: function() {
-      if (this._viewportSize !== 0 && this._physicalSize < this._optPhysicalSize) {
-        // 0 <= `currentPage` <= `_maxPages`
-        var currentPage = Math.floor(this._physicalSize / this._viewportSize);
-
-        if (currentPage === 0) {
-          // fill the first page
-          this.async(this._increasePool.bind(this, Math.round(this._physicalCount * 0.5)));
-        } else if (this._lastPage !== currentPage) {
-          // once a page is filled up, paint it and defer the next increase
-          requestAnimationFrame(this._increasePool.bind(this, 1));
-        } else {
-          // fill the rest of the pages
-          this.async(this._increasePool.bind(this, 1));
-        }
-        this._lastPage = currentPage;
-        return true;
+      if (this._physicalAverage === 0) {
+        return false;
+      }
+      if (this._physicalBottom < this._scrollBottom || this._physicalTop > this._scrollPosition) {
+        return this._increasePool(1);
+      }
+      if (this._physicalSize < this._optPhysicalSize) {
+        return this._increasePool(Math.round((this._optPhysicalSize - this._physicalSize) * 1.2 / this._physicalAverage));
       }
       return false;
     },
@@ -749,17 +720,20 @@ will only render 20.
           this._virtualCount,
           MAX_PHYSICAL_COUNT
         );
+
       var prevPhysicalCount = this._physicalCount;
       var delta = nextPhysicalCount - prevPhysicalCount;
 
-      if (delta > 0) {
-        [].push.apply(this._physicalItems, this._createPool(delta));
-        [].push.apply(this._physicalSizes, new Array(delta));
-
-        this._physicalCount = prevPhysicalCount + delta;
-        // tail call
-        return this._update();
+      if (delta <= 0) {
+        return false;
       }
+
+      [].push.apply(this._physicalItems, this._createPool(delta));
+      [].push.apply(this._physicalSizes, new Array(delta));
+
+      this._physicalCount = prevPhysicalCount + delta;
+
+      return true;
     },
 
     /**
@@ -769,8 +743,7 @@ will only render 20.
     _render: function() {
       var requiresUpdate = this._virtualCount > 0 || this._physicalCount > 0;
 
-      if (this.isAttached && !this._itemsRendered && this._isVisible && requiresUpdate) {
-        this._lastPage = 0;
+      if (this.isAttached && !this._itemsRendered && this._isVisible && requiresUpdate)  {
         this._update();
         this._itemsRendered = true;
       }
@@ -1134,7 +1107,7 @@ will only render 20.
       var hiddenContentSize = this._hiddenContentSize;
 
       // scroll to the item as much as we can
-      while (currentVirtualItem < idx && targetOffsetTop < hiddenContentSize) {
+      while (currentVirtualItem !== idx && targetOffsetTop < hiddenContentSize) {
         targetOffsetTop = targetOffsetTop + this._physicalSizes[currentTopItem];
         currentTopItem = (currentTopItem + 1) % this._physicalCount;
         currentVirtualItem++;
@@ -1150,8 +1123,10 @@ will only render 20.
       this._resetScrollPosition(this._physicalTop + targetOffsetTop + 1);
 
       // increase the pool of physical items if needed
-      this._increasePoolIfNeeded();
-
+      if (this._increasePoolIfNeeded()) {
+        // yield set models to the new items
+        this.async(this._update);
+      }
       // clear cached visible index
       this._firstVisibleIndexVal = null;
     },
