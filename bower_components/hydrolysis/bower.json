@@ -19,5 +19,5 @@
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "web-component-tester": "*"
   },
-  "version": "1.19.3"
+  "version": "1.21.4"
 }

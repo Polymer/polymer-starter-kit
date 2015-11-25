@@ -29,7 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <test-fixture id="trivialList">
     <template>
-      <x-list></x-list>
+      <x-list item-height="10"></x-list>
     </template>
   </test-fixture>
 
@@ -320,7 +320,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           assert.isFalse(list._physicalItems[0]._templateInstance.selected);
           assert.isTrue(list._physicalItems[10]._templateInstance.selected);
-
 
           done();
         });

@@ -18,12 +18,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // HTML imports. Not important for now as neither of those browsers support
     // service worker yet.
     var currentScript = (document.currentScript || {}).baseURI;
-
     var SCOPE = new URL('./$$platinum-push-messaging$$/', currentScript).href;
-    var WORKER_URL = new URL('./service-worker.js', currentScript).href;
-
     var BASE_URL = new URL('./', document.location.href).href;
-
     var SUPPORTED = 'serviceWorker' in navigator &&
         'PushManager' in window  &&
         'Notification' in window;
@@ -128,7 +124,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         supported: {
           readOnly: true,
           type: Boolean,
-          value: SUPPORTED
+          value: function() { return SUPPORTED; }
         },
 
         /**
@@ -151,6 +147,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: false
         },
 
+        /**
+         * The location of the service worker script required by the element.
+         * The script is distributed alongside the main HTML import file for the
+         * element, so the location can normally be determined automatically.
+         * However, if you vulcanize your project you will need to include the
+         * script in your built project manually and use this property to let
+         * the element know how to load it.
+         */
+        workerUrl: {
+          type: String,
+          value: function() {
+            return new URL('./service-worker.js', currentScript).href;
+          }
+        },
 
         /**
          * A URL from which message information can be retrieved.
@@ -295,7 +305,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @return {Promise<ServiceWorkerRegistration>}
        */
       _getRegistration: function() {
-        return navigator.serviceWorker.getRegistration(SCOPE);
+        return navigator.serviceWorker.getRegistration(SCOPE).then(function(registration) {
+          // If we have a service worker whose scope is a superset of the push
+          // scope then getRegistration will return that if our own worker is
+          // not registered. Check that the registration we have is really ours
+          if (registration && registration.scope === SCOPE) {
+            return registration;
+          }
+
+          return;
+        });
       },
 
       /**
@@ -394,7 +413,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           baseUrl: BASE_URL
         });
 
-        return WORKER_URL + '?' + options;
+        return this.workerUrl + '?' + options;
       },
 
       /**

@@ -15,36 +15,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../iron-ajax.html">
   <link rel="import" href="../../iron-image/iron-image.html">
-  <link rel="import" href="../../paper-styles/classes/typography.html">
-  <link rel="import" href="../../iron-flex-layout/classes/iron-flex-layout.html">
-  <link rel="stylesheet" href="../../paper-styles/demo.css">
+  <link rel="import" href="../../paper-styles/demo-pages.html">
   <style>
     iron-image {
       background-color: lightgray;
       margin: 1em;
     }
+    .horizontal-section {
+      max-width: 300px;
+      margin-bottom: 24px;
+    }
   </style>
 </head>
-<body>
+<body unresolved>
+  <h1>Video Feed</h1>
+  <div class="horizontal-section-container">
+    <template is="dom-bind" id="app">
+      <iron-ajax auto
+          url="https://www.googleapis.com/youtube/v3/search"
+          params='{"part":"snippet", "q":"polymer", "key": "AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI", "type": "video"}'
+          handle-as="json"
+          last-response="{{ajaxResponse}}"></iron-ajax>
 
-  <template is="dom-bind" id="app">
-    <iron-ajax auto
-        url="https://www.googleapis.com/youtube/v3/search"
-        params='{"part":"snippet", "q":"polymer", "key": "AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI", "type": "video"}'
-        handle-as="json"
-        last-response="{{ajaxResponse}}"></iron-ajax>
+        <template is="dom-repeat" items="[[ajaxResponse.items]]">
+          <div class="horizontal-section">
+            <h2><a href="[[url(item.id.videoId)]]" target="_blank">[[item.snippet.title]]</a></h2>
+            <iron-image src="[[item.snippet.thumbnails.high.url]]" width="256" height="256" sizing="cover" preload fade></iron-image>
+            <p>[[item.snippet.description]]</p>
+          </div>
+        </template>
 
-    <h1>Video Feed</h1>
-    <section class="flex layout horizontal wrap">
-      <template is="dom-repeat" items="[[ajaxResponse.items]]">
-        <div>
-          <h2><a href="[[url(item.id.videoId)]]" target="_blank">[[item.snippet.title]]</a></h2>
-          <iron-image src="[[item.snippet.thumbnails.high.url]]" width="256" height="256" sizing="cover" preload fade></iron-image>
-          <p>[[item.snippet.description]]</p>
-        </div>
-      </template>
-    </section>
-  </template>
+    </template>
+  </div>
 
   <script>
     var app = document.querySelector('#app');

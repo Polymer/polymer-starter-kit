@@ -2,12 +2,14 @@
 <!---
 
 This README is automatically generated from the comments in these files:
-all-imports.html  paper-icon-item.html  paper-item-body.html  paper-item-shared-styles.html  paper-item.html
+paper-icon-item.html  paper-item-body.html  paper-item.html
 
 Edit those files, and our readme bot will duplicate them over here!
 Edit this file, and the bot will squash your changes :)
 
 -->
+
+[![Build Status](https://travis-ci.org/PolymerElements/paper-item.svg?branch=master)](https://travis-ci.org/PolymerElements/paper-item)
 
 _[Demo and API Docs](https://elements.polymer-project.org/elements/paper-item)_
 

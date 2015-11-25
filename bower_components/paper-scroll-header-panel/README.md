@@ -29,33 +29,40 @@ __Important:__ The `paper-scroll-header-panel` will not display if its parent do
 
 Using [layout classes](https://www.polymer-project.org/1.0/docs/migration.html#layout-attributes) or custom properties, you can easily make the `paper-scroll-header-panel` fill the screen
 
-    <body class="fullbleed layout vertical">
-      <paper-scroll-header-panel class="flex">
-        <paper-toolbar>
-          <div>Hello World!</div>
-        </paper-toolbar>
-      </paper-scroll-header-panel>
-    </body>
+```html
+<body class="fullbleed layout vertical">
+  <paper-scroll-header-panel class="flex">
+    <paper-toolbar>
+      <div>Hello World!</div>
+    </paper-toolbar>
+  </paper-scroll-header-panel>
+</body>
+```
 
 or, if you would prefer to do it in CSS, just give `html`, `body`, and `paper-scroll-header-panel` a height of 100%:
 
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
-    paper-scroll-header-panel {
-      height: 100%;
-    }
+```css
+html, body {
+  height: 100%;
+  margin: 0;
+}
+paper-scroll-header-panel {
+  height: 100%;
+}
+```
 
 `paper-scroll-header-panel` works well with `paper-toolbar` but can use any element
 that represents a header by adding a `paper-header` class to it.
 
-    <paper-scroll-header-panel>
-      <paper-toolbar>Header</paper-toolbar>
-      <div>Content goes here...</div>
-    </paper-scroll-header-panel>
+```html
+<paper-scroll-header-panel>
+  <paper-toolbar>Header</paper-toolbar>
+  <div>Content goes here...</div>
+</paper-scroll-header-panel>
+```
 
 ### Styling
+=======
 
 The following custom properties and mixins are available for styling:
 

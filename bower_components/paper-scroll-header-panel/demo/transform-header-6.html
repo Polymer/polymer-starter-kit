@@ -24,6 +24,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../iron-icons/av-icons.html">
   <link rel="import" href="../../paper-toolbar/paper-toolbar.html">
   <link rel="import" href="../../paper-input/paper-input.html">
+  <link rel="import" href="../../paper-styles/color.html">
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
   <link rel="import" href="sample-content.html">
 
   <link rel="stylesheet" href="../../paper-styles/demo.css">
@@ -41,7 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       /* background for toolbar when it is at its full size */
       --paper-scroll-header-panel-full-header: {
-        background-image: url(images/bg9.jpg);
+        background-image: url(images/bg2.jpg);
       };
 
       /* background for toolbar when it is condensed */
@@ -54,20 +56,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       background-color: transparent;
     }
 
-    .field {
+    .search-box {
       background-color: #fff;
       border: 1px solid #eee;
       box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
       height: 40px;
     }
 
-    .field iron-icon {
+    .search-box iron-icon {
       color: var(--google-grey-700);
       fill: var(--google-grey-700);
       margin: 0 8px;
     }
     
-    .field input {
+    .search-box input {
       font-size: 20px;
       outline: 0;
       border: none;
@@ -76,6 +78,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     .content {
       padding: 8px;
+    }
+
+    .search-box {
+      @apply(--layout-flex);
+      @apply(--layout-center);
+      @apply(--layout-horizontal);
+    }
+
+    .search-box input {
+      @apply(--layout-flex);
     }
 
   </style>
@@ -89,9 +101,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <paper-toolbar class="medium-tall">
       
-      <div class="flex center horizontal layout bottom field">
+      <div class="search-box bottom">
         <iron-icon icon="menu"></iron-icon>
-        <input class="flex">
+        <input>
         <iron-icon icon="av:mic"></iron-icon>
       </div>
     </paper-toolbar>

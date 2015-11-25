@@ -12,15 +12,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <html>
   <head>
 
-    <title>paper-tabs</title>
+    <title>paper-tabs demo</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-    <link rel="import" href="../../iron-flex-layout/classes/iron-flex-layout.html">
-
+    <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
     <link rel="import" href="../../paper-toolbar/paper-toolbar.html">
 
     <link rel="import" href="../paper-tabs.html">
@@ -32,6 +31,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style is="custom-style" include="paper-tabs-demo-styles"></style>
 
   </head>
+  <style is="custom-style">
+    .link {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-center);
+    }
+    .flex {
+      @apply(--layout-flex);
+    }
+    .self-end {
+      @apply(--layout-self-end);
+    }
+  </style>
   <body unresolved>
 
     <h3>A. No ink effect and no sliding bar</h3>
@@ -118,9 +129,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <paper-tabs selected="0">
 
-      <paper-tab link><a href="#item1" class="horizontal center-center layout">ITEM ONE</a></paper-tab>
-      <paper-tab link><a href="#item2" class="horizontal center-center layout">ITEM TWO</a></paper-tab>
-      <paper-tab link><a href="#item3" class="horizontal center-center layout">ITEM THREE</a></paper-tab>
+      <paper-tab link><a href="#item1" class="link">ITEM ONE</a></paper-tab>
+      <paper-tab link><a href="#item2" class="link">ITEM TWO</a></paper-tab>
+      <paper-tab link><a href="#item3" class="link">ITEM THREE</a></paper-tab>
 
     </paper-tabs>
 
@@ -162,7 +173,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-tabs>
     </template>
 
-    <h3>J. Controlling content</h3>
+    <h3>K. Controlling content</h3>
 
     <tabs-with-content-example></tabs-with-content-example>
 

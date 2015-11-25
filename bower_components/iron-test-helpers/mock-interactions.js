@@ -107,14 +107,16 @@
   }
 
   function focus(target) {
-    Polymer.Base.fire.call(target, 'focus', {}, {
-      bubbles: false
+    Polymer.Base.fire('focus', {}, {
+      bubbles: false,
+      node: target
     });
   }
 
   function blur(target) {
-    Polymer.Base.fire.call(target, 'blur', {}, {
-      bubbles: false
+    Polymer.Base.fire('blur', {}, {
+      bubbles: false,
+      node: target
     });
   }
 

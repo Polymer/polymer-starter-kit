@@ -31,7 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../iron-list.html">
 
 </head>
-<body unresolved>
+<body class="fullbleed" unresolved>
 
 <dom-module id="x-collapse">
   <template>
@@ -40,6 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--layout-fit);
         @apply(--layout-vertical);
         @apply(--paper-font-common-base);
+        background-color: var(--paper-grey-200, #eee);
       }
 
       paper-toolbar {
@@ -54,9 +55,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       iron-list {
-        background-color: var(--paper-grey-200, #eee);
         padding-top: 1px;
         padding-bottom: 16px;
+        -webkit-flex: 1 1;
+        flex: 1 1;
+
         --iron-list-items-container: {
           max-width: 800px;
           margin: auto;
@@ -124,6 +127,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .item.expanded:hover .longText::after {
         content: ' [–]';
+      }
+      
+      @media (max-width: 460px) {
+        paper-toolbar .bottom.title {
+          font-size: 14px;
+        }
       }
     </style>
     <iron-ajax url="data/contacts.json" last-response="{{items}}" auto></iron-ajax>

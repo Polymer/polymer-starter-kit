@@ -20,7 +20,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../paper-card.html">
   <link rel="import" href="../../paper-button/paper-button.html">
   <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../iron-collapse/iron-collapse.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../iron-icons/hardware-icons.html">
   <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
   <link rel="import" href="../../paper-styles/color.html">
 
@@ -126,6 +128,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="card-actions">
         <paper-button>Nay</paper-button>
         <paper-button>Yay!</paper-button>
+        <template is="dom-bind" id="expand-demo">
+          <paper-icon-button
+              icon="hardware:keyboard-arrow-down"
+              title="more info"
+              on-tap="_toggleMoreInfo"
+              style="float: right;">
+          </paper-icon-button>
+          <iron-collapse id="more-info">
+            Pro saepe pertinax ei, ad pri animal labores suscipiantur. Modus commodo minimum eum te, vero utinam assueverit per eu, zril oportere suscipiantur pri te. Partem percipitur deterruisset ad sea, at eam suas luptatum dissentiunt. No error alienum pro, erant senserit ex mei, pri semper alterum no. Ut habemus menandri vulputate mea. Feugiat verterem ut sed. Dolores maiestatis id per. Pro saepe pertinax ei, ad pri animal labores suscipiantur. Modus commodo minimum eum te, vero utinam assueverit per eu, zril oportere suscipiantur pri te. Partem percipitur deterruisset ad sea, at eam suas luptatum dissentiunt. No error alienum pro, erant senserit ex mei, pri semper alterum no. Ut habemus menandri vulputate mea. Feugiat verterem ut sed. Dolores maiestatis id per.
+          </iron-collapse>
+        </template>
       </div>
     </paper-card>
 
@@ -173,15 +186,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </div>
 
   <script>
-   function decreaseShadow() {
-     var card = document.querySelector('#shadow_demo');
-     card.elevation = card.elevation > 0 ? card.elevation - 1 : 0;
-   }
+    function decreaseShadow() {
+      var card = document.querySelector('#shadow_demo');
+      card.elevation = card.elevation > 0 ? card.elevation - 1 : 0;
+    }
 
-   function increaseShadow() {
-     var card = document.querySelector('#shadow_demo');
-     card.elevation = card.elevation < 5 ? card.elevation + 1 : 5;
-   }
+    function increaseShadow() {
+      var card = document.querySelector('#shadow_demo');
+      card.elevation = card.elevation < 5 ? card.elevation + 1 : 5;
+    }
+
+    var expandDemo = document.getElementById('expand-demo');
+
+    expandDemo._toggleMoreInfo = function(event) {
+      var moreInfo = document.getElementById('more-info');
+      var iconButton = Polymer.dom(event).localTarget;
+      iconButton.icon = moreInfo.opened ? 'hardware:keyboard-arrow-down'
+                                        : 'hardware:keyboard-arrow-up';
+      moreInfo.toggle();
+    };
  </script>
 
 </body>

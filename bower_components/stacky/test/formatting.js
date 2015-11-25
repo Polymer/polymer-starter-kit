@@ -21,16 +21,12 @@ describe('formatting', function() {
   describe('.pretty', function() {
     var pretty = formatting.pretty;
 
-    beforeEach(function() {
-      chalk.enabled = false;
-    });
-
     it('lines up methods', function() {
-      expect(pretty(
+      expect(chalk.stripColor(pretty(
         'short@bar.js:1:2\n' +
         'pretty damn long@bar.js:3:4\n' +
         'sorta long@bar.js:5:6'
-      )).to.deep.eq(
+      ))).to.deep.eq(
         '           short at bar.js:1:2\n' +
         'pretty damn long at bar.js:3:4\n' +
         '      sorta long at bar.js:5:6'
@@ -38,11 +34,11 @@ describe('formatting', function() {
     });
 
     it('honors maxMethodPadding', function() {
-      expect(pretty(
+      expect(chalk.stripColor(pretty(
         'short@bar.js:1:2\n' +
         'pretty damn long@bar.js:3:4\n' +
         'sorta long@bar.js:5:6',
-      {maxMethodPadding: 10})).to.deep.eq(
+      {maxMethodPadding: 10}))).to.deep.eq(
         '     short at bar.js:1:2\n' +
         'pretty damn long at bar.js:3:4\n' +
         'sorta long at bar.js:5:6'
@@ -50,7 +46,6 @@ describe('formatting', function() {
     });
 
     it('honors chalk.enabled', function() {
-      chalk.enabled = true;
       expect(pretty(
         'short@bar.js:1:2\n' +
         'pretty damn long@baz.js:3:4\n' +
@@ -65,10 +60,10 @@ describe('formatting', function() {
     });
 
     it('replaces missing methods', function() {
-      expect(pretty(
+      expect(chalk.stripColor(pretty(
         '@bar.js:1:2\n' +
         'thing@bar.js:3:4\n',
-      {maxMethodPadding: 10})).to.deep.eq(
+      {maxMethodPadding: 10}))).to.deep.eq(
         '<unknown> at bar.js:1:2\n' +
         '    thing at bar.js:3:4'
       );

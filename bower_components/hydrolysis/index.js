@@ -23,6 +23,7 @@ module.exports = {
   NoopResolver:      require('./lib/loader/noop-resolver'),
   RedirectResolver:  require('./lib/loader/redirect-resolver'),
   XHRResolver:       require('./lib/loader/xhr-resolver'),
+  StringResolver:    require('./lib/loader/string-resolver'),
   _jsParse:          require('./lib/ast-utils/js-parse'),
   _importParse:      require('./lib/ast-utils/import-parse'),
 };

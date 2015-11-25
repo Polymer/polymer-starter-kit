@@ -16,9 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src="../../webcomponentsjs/webcomponents.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../test-fixture/test-fixture-mocha.js"></script>
-
-  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../iron-localstorage.html">
 
 </head>
@@ -65,6 +62,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       test('delete', function() {
         storage.value = null;
+        storage.flushDebouncer('save');
+        var v = window.localStorage.getItem(storage.name);
+        assert.isNull(v);
+        storage.value = undefined;
         storage.flushDebouncer('save');
         var v = window.localStorage.getItem(storage.name);
         assert.isNull(v);

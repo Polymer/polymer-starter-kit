@@ -19,10 +19,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../iron-icons/iron-icons.html">
   <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
   <link rel="import" href="../paper-toolbar.html">
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 
-  <style>
+  <style is="custom-style">
     paper-toolbar + paper-toolbar {
       margin-top: 20px;
+    }
+    paper-toolbar.red {
+      --paper-toolbar-background: red;
+    }
+    .spacer {
+      @apply(--layout-flex);
     }
   </style>
 
@@ -32,6 +39,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <paper-toolbar>
     <paper-icon-button icon="menu"></paper-icon-button>
     <span class="title">Toolbar</span>
+    <paper-icon-button icon="refresh"></paper-icon-button>
+    <paper-icon-button icon="add">+</paper-icon-button>
+  </paper-toolbar>
+
+  <paper-toolbar class="red">
+    <paper-icon-button icon="menu"></paper-icon-button>
+    <span class="title">Toolbar: custom background color</span>
     <paper-icon-button icon="refresh"></paper-icon-button>
     <paper-icon-button icon="add">+</paper-icon-button>
   </paper-toolbar>
@@ -52,7 +66,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <paper-toolbar class="medium-tall">
     <paper-icon-button icon="menu"></paper-icon-button>
-    <span class="flex"></span>
+    <span class="spacer"></span>
     <paper-icon-button icon="refresh"></paper-icon-button>
     <paper-icon-button icon="add">+</paper-icon-button>
     <span class="bottom title">Toolbar: medium-tall with label aligns to the bottom</span>
@@ -60,7 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <paper-toolbar class="tall">
     <paper-icon-button icon="menu"></paper-icon-button>
-    <div class="flex"></div>
+    <div class="spacer"></div>
     <paper-icon-button icon="refresh"></paper-icon-button>
     <paper-icon-button icon="add">+</paper-icon-button>
     <div class="middle title">label aligns to the middle</div>
@@ -69,7 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <paper-toolbar class="tall">
     <paper-icon-button icon="menu"></paper-icon-button>
-    <div class="flex"></div>
+    <div class="spacer"></div>
     <paper-icon-button icon="refresh"></paper-icon-button>
     <paper-icon-button icon="add">+</paper-icon-button>
     <div class="middle title">element (e.g. progress) fits at the bottom of the toolbar</div>

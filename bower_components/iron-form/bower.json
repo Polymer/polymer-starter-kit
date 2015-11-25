@@ -1,6 +1,6 @@
 {
   "name": "iron-form",
-  "version": "1.0.11",
+  "version": "1.0.13",
   "description": "Makes it easier to manage forms",
   "keywords": [
     "web-components",
@@ -27,7 +27,7 @@
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "iron-form-element-behavior": "PolymerElements/iron-form-element-behavior#^1.0.0",
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",
-    "web-component-tester": "*",
+    "web-component-tester": "polymer/web-component-tester#^3.4.0",
     "webcomponentsjs": "^0.7.0",
     "paper-input": "PolymerElements/paper-input#^1.0.0",
     "paper-checkbox": "PolymerElements/paper-checkbox#^1.0.0",
