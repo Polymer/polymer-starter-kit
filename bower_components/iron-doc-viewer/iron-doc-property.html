@@ -7,23 +7,24 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<link rel="import" href="../marked-element/marked-element.html">
-<link rel="import" href="../paper-styles/typography.html">
+
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../marked-element/marked-element.html">
+<link rel="import" href="iron-doc-property-styles.html">
 
 <!--
 Renders documentation describing a specific property of an element.
 
 Give it a hydrolysis `PropertyDescriptor` (via `descriptor`), and watch it go!
 -->
+
 <dom-module id="iron-doc-property">
-
-  <link rel="import" type="css" href="iron-doc-property.css">
-
   <template>
+    <style include="iron-doc-property-styles"></style>
+
     <div id="transitionMask">
       <div id="signature">
-        <span class="name">{{descriptor.name}}</span><span class="params">(<span>{{_paramText}}</span>)</span>
+        <a id="{{descriptor.name}}" href$="#{{descriptor.name}}" class="name deeplink">{{descriptor.name}}</a><span class="params">(<span>{{_paramText}}</span>)</span>
         <span class="return" hidden$="{{!descriptor.return}}">➙ <span class="type">{{descriptor.return.type}}</span></span>
       </div>
       <div id="details">
@@ -54,7 +55,6 @@ Give it a hydrolysis `PropertyDescriptor` (via `descriptor`), and watch it go!
       </div>
     </div>
   </template>
-
 </dom-module>
 
 <script>

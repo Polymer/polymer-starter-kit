@@ -1,6 +1,6 @@
 {
   "name": "paper-header-panel",
-  "version": "1.0.5",
+  "version": "1.1.1",
   "description": "A header and content wrapper for layout with headers",
   "authors": [
     "The Polymer Authors"
@@ -10,9 +10,7 @@
     "polymer",
     "layout"
   ],
-  "main": [
-    "paper-header-panel.html"
-  ],
+  "main": "paper-header-panel.html",
   "repository": {
     "type": "git",
     "url": "git://github.com/PolymerElements/paper-header-panel.git"
@@ -23,13 +21,13 @@
   "ignore": [],
   "dependencies": {
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
-    "polymer": "Polymer/polymer#^1.0.0"
+    "polymer": "Polymer/polymer#^1.1.0"
   },
   "devDependencies": {
-    "web-component-tester": "*",
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.0",
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
-    "paper-styles": "PolymerElements/paper-styles#^1.0.0"
+    "web-component-tester": "*",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   }
 }

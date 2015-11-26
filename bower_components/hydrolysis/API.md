@@ -13,6 +13,9 @@
 <dd><p>Change <code>localPath</code> from a sibling of <code>basePath</code> to be a child of
 <code>basePath</code> joined with <code>redirect</code>.</p>
 </dd>
+<dt><a href="#ProtocolRedirect">ProtocolRedirect(config)</a></dt>
+<dd><p>A single redirect configuration</p>
+</dd>
 </dl>
 <a name="hydrolysis"></a>
 ## hydrolysis : <code>object</code>
@@ -34,6 +37,8 @@ Static analysis for Polymer.
       * [.parsedScripts](#hydrolysis.Analyzer+parsedScripts) : <code>Object.&lt;string, Array.&lt;ParsedJS&gt;&gt;</code>
       * [._content](#hydrolysis.Analyzer+_content) : <code>Object</code>
       * [._getDependencies(href, [found], [transitive])](#hydrolysis.Analyzer+_getDependencies) ⇒ <code>Array.&lt;string&gt;</code>
+      * [.elementsForFolder(href)](#hydrolysis.Analyzer+elementsForFolder) ⇒ <code>Array.&lt;ElementDescriptor&gt;</code>
+      * [.behaviorsForFolder(href)](#hydrolysis.Analyzer+behaviorsForFolder) ⇒ <code>Array.&lt;BehaviorDescriptor&gt;</code>
       * [.metadataTree(href)](#hydrolysis.Analyzer+metadataTree) ⇒ <code>Promise</code>
       * [.getLoadedAst(href, [loaded])](#hydrolysis.Analyzer+getLoadedAst) ⇒ <code>Promise.&lt;DocumentAST&gt;</code>
       * [.nodeWalkDocuments(predicate)](#hydrolysis.Analyzer+nodeWalkDocuments) ⇒ <code>Object</code>
@@ -51,6 +56,8 @@ Static analysis for Polymer.
   * [.NoopResolver](#hydrolysis.NoopResolver)
     * [new NoopResolver(config)](#new_hydrolysis.NoopResolver_new)
     * [.accept(uri, deferred)](#hydrolysis.NoopResolver+accept) ⇒ <code>boolean</code>
+  * [.RedirectResolver](#hydrolysis.RedirectResolver)
+    * [new RedirectResolver(config, redirects)](#new_hydrolysis.RedirectResolver_new)
   * [.XHRResolver](#hydrolysis.XHRResolver)
     * [new XHRResolver(config)](#new_hydrolysis.XHRResolver_new)
   * [.DocumentAST](#hydrolysis.DocumentAST) : <code>Object</code>
@@ -81,6 +88,8 @@ Static analysis for Polymer.
     * [.parsedScripts](#hydrolysis.Analyzer+parsedScripts) : <code>Object.&lt;string, Array.&lt;ParsedJS&gt;&gt;</code>
     * [._content](#hydrolysis.Analyzer+_content) : <code>Object</code>
     * [._getDependencies(href, [found], [transitive])](#hydrolysis.Analyzer+_getDependencies) ⇒ <code>Array.&lt;string&gt;</code>
+    * [.elementsForFolder(href)](#hydrolysis.Analyzer+elementsForFolder) ⇒ <code>Array.&lt;ElementDescriptor&gt;</code>
+    * [.behaviorsForFolder(href)](#hydrolysis.Analyzer+behaviorsForFolder) ⇒ <code>Array.&lt;BehaviorDescriptor&gt;</code>
     * [.metadataTree(href)](#hydrolysis.Analyzer+metadataTree) ⇒ <code>Promise</code>
     * [.getLoadedAst(href, [loaded])](#hydrolysis.Analyzer+getLoadedAst) ⇒ <code>Promise.&lt;DocumentAST&gt;</code>
     * [.nodeWalkDocuments(predicate)](#hydrolysis.Analyzer+nodeWalkDocuments) ⇒ <code>Object</code>
@@ -160,6 +169,26 @@ List all the html dependencies for the document at `href`.
 | href | <code>string</code> | The href to get dependencies for. |
 | [found] | <code>Object.&lt;string, boolean&gt;</code> | An object keyed by URL of the     already resolved dependencies. |
 | [transitive] | <code>boolean</code> | Whether to load transitive     dependencies. Defaults to true. |
+
+<a name="hydrolysis.Analyzer+elementsForFolder"></a>
+#### analyzer.elementsForFolder(href) ⇒ <code>Array.&lt;ElementDescriptor&gt;</code>
+Returns the elements defined in the folder containing `href`.
+
+**Kind**: instance method of <code>[Analyzer](#hydrolysis.Analyzer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| href | <code>string</code> | path to search. |
+
+<a name="hydrolysis.Analyzer+behaviorsForFolder"></a>
+#### analyzer.behaviorsForFolder(href) ⇒ <code>Array.&lt;BehaviorDescriptor&gt;</code>
+Returns the behaviors defined in the folder containing `href`.
+
+**Kind**: instance method of <code>[Analyzer](#hydrolysis.Analyzer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| href | <code>string</code> | path to search. |
 
 <a name="hydrolysis.Analyzer+metadataTree"></a>
 #### analyzer.metadataTree(href) ⇒ <code>Promise</code>
@@ -317,6 +346,20 @@ A resolver that resolves to null any uri matching config.
 | uri | <code>string</code> | The absolute URI being requested. |
 | deferred | <code>Deferred</code> | The deferred promise that should be resolved if     this resolver handles the URI. |
 
+<a name="hydrolysis.RedirectResolver"></a>
+### hydrolysis.RedirectResolver
+**Kind**: static class of <code>[hydrolysis](#hydrolysis)</code>  
+<a name="new_hydrolysis.RedirectResolver_new"></a>
+#### new RedirectResolver(config, redirects)
+Resolves protocol://hostname/path to the local filesystem.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| config | <code>Object</code> | configuration options. |
+| config.root | <code>string</code> | Filesystem root to search. Defaults to the     current working directory. |
+| redirects | <code>[Array.&lt;ProtocolRedirect&gt;](#ProtocolRedirect)</code> | A list of protocol redirects     for the resolver. They are checked for matching first-to-last. |
+
 <a name="hydrolysis.XHRResolver"></a>
 ### hydrolysis.XHRResolver
 **Kind**: static class of <code>[hydrolysis](#hydrolysis)</code>  
@@ -430,3 +473,44 @@ Change `localPath` from a sibling of `basePath` to be a child of
 `basePath` joined with `redirect`.
 
 **Kind**: global function  
+<a name="ProtocolRedirect"></a>
+## ProtocolRedirect(config)
+A single redirect configuration
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| config | <code>Object</code> | The configuration object |
+| config.protocol | <code>string</code> | The protocol this redirect matches. |
+| config.hostname | <code>string</code> | The host name this redirect matches. |
+| config.path | <code>string</code> | The part of the path to match and                                     replace with 'redirectPath' |
+| config.redirectPath | <code>string</code> | The local filesystem path that should                                     replace "protocol://hosname/path/" |
+
+
+* [ProtocolRedirect(config)](#ProtocolRedirect)
+  * [.protocol](#ProtocolRedirect+protocol) : <code>string</code>
+  * [.hostname](#ProtocolRedirect+hostname) : <code>string</code>
+  * [.path](#ProtocolRedirect+path) : <code>string</code>
+  * [.redirectPath](#ProtocolRedirect+redirectPath) : <code>string</code>
+
+<a name="ProtocolRedirect+protocol"></a>
+### protocolRedirect.protocol : <code>string</code>
+The protocol this redirect matches.
+
+**Kind**: instance property of <code>[ProtocolRedirect](#ProtocolRedirect)</code>  
+<a name="ProtocolRedirect+hostname"></a>
+### protocolRedirect.hostname : <code>string</code>
+The host name this redirect matches.
+
+**Kind**: instance property of <code>[ProtocolRedirect](#ProtocolRedirect)</code>  
+<a name="ProtocolRedirect+path"></a>
+### protocolRedirect.path : <code>string</code>
+The part of the path to match and replace with 'redirectPath'
+
+**Kind**: instance property of <code>[ProtocolRedirect](#ProtocolRedirect)</code>  
+<a name="ProtocolRedirect+redirectPath"></a>
+### protocolRedirect.redirectPath : <code>string</code>
+The local filesystem path that should replace "protocol://hosname/path/"
+
+**Kind**: instance property of <code>[ProtocolRedirect](#ProtocolRedirect)</code>  

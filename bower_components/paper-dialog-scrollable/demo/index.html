@@ -20,36 +20,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="../paper-dialog-scrollable.html">
+  <link rel="import" href="../../paper-styles/typography.html">
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 
-  <link rel="import" href="../../paper-styles/classes/typography.html">
-  <link rel="import" href="../../iron-flex-layout/classes/iron-flex-layout.html">
-
-  <style>
+  <style is="custom-style">
+    body {
+      @apply(--layout-fullbleed);
+    }
 
     section {
       height: 100%;
+      @apply(--layout-vertical);
     }
 
-    .header, .footer {
+    .header {
       padding: 8px 24px;
+      @apply(--paper-font-title);
     }
 
     .footer {
+      padding: 8px 24px;
       text-align: right;
+      @apply(--paper-font-subhead);
+    }
+
+    paper-dialog-scrollable {
+      @apply(--layout-flex);
+      @apply(--paper-font-body1);
     }
 
   </style>
 
 </head>
-<body class="fullbleed">
+<body unresolved>
 
-  <section class="layout vertical">
+  <section>
 
-    <div class="header paper-font-title">
+    <div class="header">
       Alice in Wonderland
     </div>
 
-    <paper-dialog-scrollable class="flex paper-font-body1">
+    <paper-dialog-scrollable>
 
         <p>Alice was beginning to get very tired of sitting by her sister
       on the bank, and of having nothing to do: once or twice she had
@@ -280,7 +291,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </paper-dialog-scrollable>
 
-    <div class="footer paper-font-subhead">
+    <div class="footer">
       Lewis Carroll
     </div>
 

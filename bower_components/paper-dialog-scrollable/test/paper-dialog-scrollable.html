@@ -20,16 +20,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
     <script src="../../web-component-tester/browser.js"></script>
-    <script src="../../test-fixture/test-fixture-mocha.js"></script>
-
-    <link rel="import" href="../../test-fixture/test-fixture.html">
     <link rel="import" href="../paper-dialog-scrollable.html">
+    <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 
-    <link rel="import" href="../../iron-flex-layout/classes/iron-flex-layout.html">
-
-    <style>
+    <style is="custom-style">
       .fixed-height {
         height: 400px;
+        @apply(--layout-vertical);
+      }
+      paper-dialog-scrollable {
+        @apply(--layout-flex)
       }
     </style>
 
@@ -38,9 +38,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <test-fixture id="basic">
       <template>
-        <section class="fixed-height layout vertical">
+        <section class="fixed-height vertical">
           <div class="header">Header</div>
-          <paper-dialog-scrollable class="flex">
+          <paper-dialog-scrollable>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -57,8 +57,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <test-fixture id="only-child">
       <template>
-        <section class="fixed-height layout vertical">
-          <paper-dialog-scrollable class="flex">
+        <section class="fixed-height">
+          <paper-dialog-scrollable>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -74,9 +74,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <test-fixture id="short">
       <template>
-        <section class="fixed-height layout vertical">
+        <section class="fixed-height">
           <div class="header">Header</div>
-          <paper-dialog-scrollable class="flex">
+          <paper-dialog-scrollable>
             <p>Hello world!</p>
           </paper-dialog-scrollable>
           <div class="footer">Footer</div>

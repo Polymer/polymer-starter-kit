@@ -13,10 +13,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src="../../webcomponentsjs/webcomponents.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../iron-request.html">
 </head>
 <body>
@@ -41,6 +39,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           200,
           jsonResponseHeaders,
           '{"success":true}'
+        ]);
+
+        server.respondWith('GET', '/responds_to_get_with_prefixed_json', [
+          200,
+          jsonResponseHeaders,
+          '])}while(1);</x>{"success":true}'
         ]);
 
         server.respondWith('GET', '/responds_to_get_with_500', [
@@ -133,6 +137,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           return request.completes.then(function() {
             expect(request.response).to.be.an('object');
+          });
+        });
+
+        test('setting jsonPrefix correctly strips it from the response', function () {
+          var options = {
+            url: '/responds_to_get_with_prefixed_json',
+            handleAs: 'json',
+            jsonPrefix: '])}while(1);</x>'
+          };
+
+          request.send(options);
+          expect(server.requests.length).to.be.equal(1);
+          expect(server.requests[0].requestHeaders['accept']).to.be.equal(
+              'application/json');
+          server.respond();
+
+          return request.completes.then(function() {
+            expect(request.response).to.deep.eq({success: true});
           });
         });
 

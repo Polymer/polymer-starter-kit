@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Generated from http://github.com/GoogleChrome/accessibility-developer-tools/tree/220ad7a9cab0b0daa769c747bcbc9f54afcbb47c
+ * Generated from http://github.com/GoogleChrome/accessibility-developer-tools/tree/404ede0f2186682fbbef624141e76ec2b601317d
  *
  * See project README for build steps.
  */
- 
+
 // AUTO-GENERATED CONTENT BELOW: DO NOT EDIT! See above for details.
 
-var COMPILED = !0, goog = goog || {};
+var fn = (function() {
+  var COMPILED = !0, goog = goog || {};
 goog.global = this;
 goog.isDef = function(a) {
   return void 0 !== a;
@@ -421,7 +422,7 @@ goog.scope = function(a) {
 var axs = {};
 axs.browserUtils = {};
 axs.browserUtils.matchSelector = function(a, b) {
-  return a.webkitMatchesSelector ? a.webkitMatchesSelector(b) : a.mozMatchesSelector ? a.mozMatchesSelector(b) : a.msMatchesSelector ? a.msMatchesSelector(b) : !1;
+  return a.matches ? a.matches(b) : a.webkitMatchesSelector ? a.webkitMatchesSelector(b) : a.mozMatchesSelector ? a.mozMatchesSelector(b) : a.msMatchesSelector ? a.msMatchesSelector(b) : !1;
 };
 axs.constants = {};
 axs.constants.ARIA_ROLES = {alert:{namefrom:["author"], parent:["region"]}, alertdialog:{namefrom:["author"], namerequired:!0, parent:["alert", "dialog"]}, application:{namefrom:["author"], namerequired:!0, parent:["landmark"]}, article:{namefrom:["author"], parent:["document", "region"]}, banner:{namefrom:["author"], parent:["landmark"]}, button:{childpresentational:!0, namefrom:["contents", "author"], namerequired:!0, parent:["command"], properties:["aria-expanded", "aria-pressed"]}, checkbox:{namefrom:["contents", 
@@ -436,7 +437,7 @@ parent:["checkbox", "option"]}, radiogroup:{mustcontain:["radio"], namefrom:["au
 row:{mustcontain:["columnheader", "gridcell", "rowheader"], namefrom:["contents", "author"], parent:["group", "widget"], properties:["aria-level", "aria-selected"], scope:["grid", "rowgroup", "treegrid"]}, rowgroup:{mustcontain:["row"], namefrom:["contents", "author"], parent:["group"], scope:["grid"]}, rowheader:{namefrom:["contents", "author"], namerequired:!0, parent:["gridcell", "sectionhead", "widget"], properties:["aria-sort"], scope:["row"]}, search:{namefrom:["author"], parent:["landmark"]}, 
 section:{"abstract":!0, namefrom:["contents", "author"], parent:["structure"], properties:["aria-expanded"]}, sectionhead:{"abstract":!0, namefrom:["contents", "author"], parent:["structure"], properties:["aria-expanded"]}, select:{"abstract":!0, namefrom:["author"], parent:["composite", "group", "input"]}, separator:{childpresentational:!0, namefrom:["author"], parent:["structure"], properties:["aria-expanded", "aria-orientation"]}, scrollbar:{childpresentational:!0, namefrom:["author"], namerequired:!1, 
 parent:["input", "range"], requiredProperties:["aria-controls", "aria-orientation", "aria-valuemax", "aria-valuemin", "aria-valuenow"], properties:["aria-controls", "aria-orientation", "aria-valuemax", "aria-valuemin", "aria-valuenow"]}, slider:{childpresentational:!0, namefrom:["author"], namerequired:!0, parent:["input", "range"], requiredProperties:["aria-valuemax", "aria-valuemin", "aria-valuenow"], properties:["aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-orientation"]}, spinbutton:{namefrom:["author"], 
-namerequired:!0, parent:["input", "range"], requiredProperties:["aria-valuemax", "aria-valuemin", "aria-valuenow"], properties:["aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-required"]}, status:{parent:["region"]}, structure:{"abstract":!0, parent:["roletype"]}, tab:{namefrom:["contents", "author"], parent:["sectionhead", "widget"], properties:["aria-selected"]}, tablist:{mustcontain:["tab"], namefrom:["author"], parent:["composite", "directory"], properties:["aria-level"], scope:["tablist"]}, 
+namerequired:!0, parent:["input", "range"], requiredProperties:["aria-valuemax", "aria-valuemin", "aria-valuenow"], properties:["aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-required"]}, status:{parent:["region"]}, structure:{"abstract":!0, parent:["roletype"]}, tab:{namefrom:["contents", "author"], parent:["sectionhead", "widget"], properties:["aria-selected"], scope:["tablist"]}, tablist:{mustcontain:["tab"], namefrom:["author"], parent:["composite", "directory"], properties:["aria-level"]}, 
 tabpanel:{namefrom:["author"], namerequired:!0, parent:["region"]}, textbox:{namefrom:["author"], namerequired:!0, parent:["input"], properties:["aria-activedescendant", "aria-autocomplete", "aria-multiline", "aria-readonly", "aria-required"]}, timer:{namefrom:["author"], namerequired:!0, parent:["status"]}, toolbar:{namefrom:["author"], parent:["group"]}, tooltip:{namerequired:!0, parent:["section"]}, tree:{mustcontain:["group", "treeitem"], namefrom:["author"], namerequired:!0, parent:["select"], 
 properties:["aria-multiselectable", "aria-required"]}, treegrid:{mustcontain:["row"], namefrom:["author"], namerequired:!0, parent:["grid", "tree"]}, treeitem:{namefrom:["contents", "author"], namerequired:!0, parent:["listitem", "option"], scope:["group", "tree"]}, widget:{"abstract":!0, parent:["roletype"]}, window:{"abstract":!0, namefrom:[" author"], parent:["roletype"], properties:["aria-expanded"]}};
 axs.constants.WIDGET_ROLES = {};
@@ -480,7 +481,18 @@ describedby:{type:"property", valueType:"idref_list"}, disabled:{defaultValue:"f
 multiline:{defaultValue:"false", type:"property", valueType:"boolean"}, multiselectable:{defaultValue:"false", type:"property", valueType:"boolean"}, orientation:{defaultValue:"vertical", type:"property", valueType:"token", values:["horizontal", "vertical"]}, owns:{type:"property", valueType:"idref_list"}, posinset:{type:"property", valueType:"integer"}, pressed:{defaultValue:"undefined", type:"state", valueType:"token", values:["true", "false", "mixed", "undefined"]}, readonly:{defaultValue:"false", 
 type:"property", valueType:"boolean"}, relevant:{defaultValue:"additions text", type:"property", valueType:"token_list", values:["additions", "removals", "text", "all"]}, required:{defaultValue:"false", type:"property", valueType:"boolean"}, selected:{defaultValue:"undefined", type:"state", valueType:"token", values:["true", "false", "undefined"]}, setsize:{type:"property", valueType:"integer"}, sort:{defaultValue:"none", type:"property", valueType:"token", values:["ascending", "descending", "none", 
 "other"]}, valuemax:{type:"property", valueType:"decimal"}, valuemin:{type:"property", valueType:"decimal"}, valuenow:{type:"property", valueType:"decimal"}, valuetext:{type:"property", valueType:"string"}};
-axs.constants.GLOBAL_PROPERTIES = axs.constants.ARIA_ROLES.roletype.properties;
+(function() {
+  for (var a in axs.constants.ARIA_PROPERTIES) {
+    var b = axs.constants.ARIA_PROPERTIES[a];
+    if (b.values) {
+      for (var c = {}, d = 0;d < b.values.length;d++) {
+        c[b.values[d]] = !0;
+      }
+      b.valuesSet = c;
+    }
+  }
+})();
+axs.constants.GLOBAL_PROPERTIES = axs.constants.ARIA_ROLES.roletype.propertiesSet;
 axs.constants.NO_ROLE_NAME = " ";
 axs.constants.WIDGET_ROLE_TO_NAME = {alert:"aria_role_alert", alertdialog:"aria_role_alertdialog", button:"aria_role_button", checkbox:"aria_role_checkbox", columnheader:"aria_role_columnheader", combobox:"aria_role_combobox", dialog:"aria_role_dialog", grid:"aria_role_grid", gridcell:"aria_role_gridcell", link:"aria_role_link", listbox:"aria_role_listbox", log:"aria_role_log", marquee:"aria_role_marquee", menu:"aria_role_menu", menubar:"aria_role_menubar", menuitem:"aria_role_menuitem", menuitemcheckbox:"aria_role_menuitemcheckbox", 
 menuitemradio:"aria_role_menuitemradio", option:axs.constants.NO_ROLE_NAME, progressbar:"aria_role_progressbar", radio:"aria_role_radio", radiogroup:"aria_role_radiogroup", rowheader:"aria_role_rowheader", scrollbar:"aria_role_scrollbar", slider:"aria_role_slider", spinbutton:"aria_role_spinbutton", status:"aria_role_status", tab:"aria_role_tab", tabpanel:"aria_role_tabpanel", textbox:"aria_role_textbox", timer:"aria_role_timer", toolbar:"aria_role_toolbar", tooltip:"aria_role_tooltip", treeitem:"aria_role_treeitem"};
@@ -494,20 +506,10 @@ submit:"input_type_submit", tel:"input_type_tel", text:"input_type_text", url:"i
 axs.constants.TAG_TO_INFORMATION_TABLE_VERBOSE_MSG = {A:"tag_link", BUTTON:"tag_button", H1:"tag_h1", H2:"tag_h2", H3:"tag_h3", H4:"tag_h4", H5:"tag_h5", H6:"tag_h6", LI:"tag_li", OL:"tag_ol", SELECT:"tag_select", TEXTAREA:"tag_textarea", UL:"tag_ul", SECTION:"tag_section", NAV:"tag_nav", ARTICLE:"tag_article", ASIDE:"tag_aside", HGROUP:"tag_hgroup", HEADER:"tag_header", FOOTER:"tag_footer", TIME:"tag_time", MARK:"tag_mark"};
 axs.constants.TAG_TO_INFORMATION_TABLE_BRIEF_MSG = {BUTTON:"tag_button", SELECT:"tag_select", TEXTAREA:"tag_textarea"};
 axs.constants.MIXED_VALUES = {"true":!0, "false":!0, mixed:!0};
-(function() {
-  for (var a in axs.constants.ARIA_PROPERTIES) {
-    var b = axs.constants.ARIA_PROPERTIES[a];
-    if (b.values) {
-      for (var c = {}, d = 0;d < b.values.length;d++) {
-        c[b.values[d]] = !0;
-      }
-      b.valuesSet = c;
-    }
-  }
-})();
 axs.constants.Severity = {INFO:"Info", WARNING:"Warning", SEVERE:"Severe"};
 axs.constants.AuditResult = {PASS:"PASS", FAIL:"FAIL", NA:"NA"};
 axs.constants.InlineElements = {TT:!0, I:!0, B:!0, BIG:!0, SMALL:!0, EM:!0, STRONG:!0, DFN:!0, CODE:!0, SAMP:!0, KBD:!0, VAR:!0, CITE:!0, ABBR:!0, ACRONYM:!0, A:!0, IMG:!0, OBJECT:!0, BR:!0, SCRIPT:!0, MAP:!0, Q:!0, SUB:!0, SUP:!0, SPAN:!0, BDO:!0, INPUT:!0, SELECT:!0, TEXTAREA:!0, LABEL:!0, BUTTON:!0};
+axs.constants.NATIVELY_DISABLEABLE = {BUTTON:!0, INPUT:!0, SELECT:!0, TEXTAREA:!0, FIELDSET:!0, OPTGROUP:!0, OPTION:!0};
 axs.constants.ARIA_TO_HTML_ATTRIBUTE = {"aria-checked":"checked", "aria-disabled":"disabled", "aria-hidden":"hidden", "aria-expanded":"open", "aria-valuemax":"max", "aria-valuemin":"min", "aria-readonly":"readonly", "aria-required":"required", "aria-selected":"selected", "aria-valuenow":"value"};
 axs.constants.TAG_TO_IMPLICIT_SEMANTIC_INFO = {A:[{role:"link", allowed:"button checkbox menuitem menuitemcheckbox menuitemradio tab treeitem".split(" "), selector:"a[href]"}], ADDRESS:[{role:"", allowed:["contentinfo", "presentation"]}], AREA:[{role:"link", selector:"area[href]"}], ARTICLE:[{role:"article", allowed:["presentation", "article", "document", "application", "main"]}], ASIDE:[{role:"complementary", allowed:["note", "complementary", "search", "presentation"]}], AUDIO:[{role:"", allowed:["application", 
 "presentation"]}], BASE:[{role:"", reserved:!0}], BODY:[{role:"document", allowed:["presentation"]}], BUTTON:[{role:"button", allowed:["link", "menuitem", "menuitemcheckbox", "menuitemradio", "radio"], selector:'button:not([aria-pressed]):not([type="menu"])'}, {role:"button", allowed:["button"], selector:"button[aria-pressed]"}, {role:"button", attributes:{"aria-haspopup":!0}, allowed:["link", "menuitem", "menuitemcheckbox", "menuitemradio", "radio"], selector:'button[type="menu"]'}], CAPTION:[{role:"", 
@@ -517,12 +519,12 @@ BLOCKQUOTE:[{role:"", allowed:["*"]}], H1:[{role:"heading"}], H2:[{role:"heading
 "img", "presentation", "group"], selector:"iframe[seamless]"}], IMG:[{role:"presentation", reserved:!0, selector:'img[alt=""]'}, {role:"img", allowed:["*"], selector:'img[alt]:not([alt=""])'}], INPUT:[{role:"button", allowed:["link", "menuitem", "menuitemcheckbox", "menuitemradio", "radio"], selector:'input[type="button"]:not([aria-pressed])'}, {role:"button", allowed:["button"], selector:'input[type="button"][aria-pressed]'}, {role:"checkbox", allowed:["checkbox"], selector:'input[type="checkbox"]'}, 
 {role:"", selector:'input[type="color"]'}, {role:"", selector:'input[type="date"]'}, {role:"", selector:'input[type="datetime"]'}, {role:"textbox", selector:'input[type="email"]:not([list])'}, {role:"", selector:'input[type="file"]'}, {role:"", reserved:!0, selector:'input[type="hidden"]'}, {role:"button", allowed:["button"], selector:'input[type="image"][aria-pressed]'}, {role:"button", allowed:["link", "menuitem", "menuitemcheckbox", "menuitemradio", "radio"], selector:'input[type="image"]:not([aria-pressed])'}, 
 {role:"", selector:'input[type="month"]'}, {role:"", selector:'input[type="number"]'}, {role:"textbox", selector:'input[type="password"]'}, {role:"radio", allowed:["menuitemradio"], selector:'input[type="radio"]'}, {role:"slider", selector:'input[type="range"]'}, {role:"button", selector:'input[type="reset"]'}, {role:"combobox", selector:'input[type="search"][list]'}, {role:"textbox", selector:'input[type="search"]:not([list])'}, {role:"button", selector:'input[type="submit"]'}, {role:"combobox", 
-selector:'input[type="tel"][list]'}, {role:"textbox", selector:'input[type="tel"]:not([list])'}, {role:"combobox", selector:'input[type="text"][list]'}, {role:"", selector:'input[type="text"]:not([list])'}, {role:"", selector:'input[type="time"]'}, {role:"combobox", selector:'input[type="url"][list]'}, {role:"textbox", selector:'input[type="url"]:not([list])'}, {role:"", selector:'input[type="week"]'}], INS:[{role:"", allowed:["*"]}], KEYGEN:[{role:""}], LABEL:[{role:"", allowed:["presentation"]}], 
-LI:[{role:"listitem", allowed:"menuitem menuitemcheckbox menuitemradio option tab treeitem presentation".split(" "), selector:'ol:not([role="presentation"])>li, ul:not([role="presentation"])>li'}, {role:"listitem", allowed:"listitem menuitem menuitemcheckbox menuitemradio option tab treeitem presentation".split(" "), selector:'ol[role="presentation"]>li, ul[role="presentation"]>li'}], LINK:[{role:"link", reserved:!0, selector:"link[href]"}], MAIN:[{role:"", allowed:["main", "presentation"]}], MAP:[{role:"", 
-reserved:!0}], MATH:[{role:"", allowed:["presentation"]}], MENU:[{role:"toolbar", selector:'menu[type="toolbar"]'}], MENUITEM:[{role:"menuitem", selector:'menuitem[type="command"]'}, {role:"menuitemcheckbox", selector:'menuitem[type="checkbox"]'}, {role:"menuitemradio", selector:'menuitem[type="radio"]'}], META:[{role:"", reserved:!0}], METER:[{role:"progressbar", allowed:["presentation"]}], NAV:[{role:"navigation", allowed:["navigation", "presentation"]}], NOSCRIPT:[{role:"", reserved:!0}], OBJECT:[{role:"", 
-allowed:["application", "document", "img", "presentation"]}], OL:[{role:"list", allowed:"directory group listbox menu menubar tablist toolbar tree presentation".split(" ")}], OPTGROUP:[{role:"", allowed:["presentation"]}], OPTION:[{role:"option"}], OUTPUT:[{role:"status", allowed:["*"]}], PARAM:[{role:"", reserved:!0}], PICTURE:[{role:"", reserved:!0}], PROGRESS:[{role:"progressbar", allowed:["presentation"]}], SCRIPT:[{role:"", reserved:!0}], SECTION:[{role:"region", allowed:"alert alertdialog application contentinfo dialog document log marquee search status presentation".split(" ")}], 
-SELECT:[{role:"listbox"}], SOURCE:[{role:"", reserved:!0}], SPAN:[{role:"", allowed:["*"]}], STYLE:[{role:"", reserved:!0}], SVG:[{role:"", allowed:["application", "document", "img", "presentation"]}], SUMMARY:[{role:"", allowed:["presentation"]}], TABLE:[{role:"", allowed:["*"]}], TEMPLATE:[{role:"", reserved:!0}], TEXTAREA:[{role:"textbox"}], TBODY:[{role:"rowgroup", allowed:["*"]}], THEAD:[{role:"rowgroup", allowed:["*"]}], TFOOT:[{role:"rowgroup", allowed:["*"]}], TITLE:[{role:"", reserved:!0}], 
-TD:[{role:"", allowed:["*"]}], TH:[{role:"", allowed:["*"]}], TR:[{role:"", allowed:["*"]}], TRACK:[{role:"", reserved:!0}], UL:[{role:"list", allowed:"directory group listbox menu menubar tablist toolbar tree presentation".split(" ")}], VIDEO:[{role:"", allowed:["application", "presentation"]}]};
+selector:'input[type="tel"][list]'}, {role:"textbox", selector:'input[type="tel"]:not([list])'}, {role:"combobox", selector:'input[type="text"][list]'}, {role:"textbox", selector:'input[type="text"]:not([list])'}, {role:"textbox", selector:"input:not([type])"}, {role:"", selector:'input[type="time"]'}, {role:"combobox", selector:'input[type="url"][list]'}, {role:"textbox", selector:'input[type="url"]:not([list])'}, {role:"", selector:'input[type="week"]'}], INS:[{role:"", allowed:["*"]}], KEYGEN:[{role:""}], 
+LABEL:[{role:"", allowed:["presentation"]}], LI:[{role:"listitem", allowed:"menuitem menuitemcheckbox menuitemradio option tab treeitem presentation".split(" "), selector:'ol:not([role="presentation"])>li, ul:not([role="presentation"])>li'}, {role:"listitem", allowed:"listitem menuitem menuitemcheckbox menuitemradio option tab treeitem presentation".split(" "), selector:'ol[role="presentation"]>li, ul[role="presentation"]>li'}], LINK:[{role:"link", reserved:!0, selector:"link[href]"}], MAIN:[{role:"", 
+allowed:["main", "presentation"]}], MAP:[{role:"", reserved:!0}], MATH:[{role:"", allowed:["presentation"]}], MENU:[{role:"toolbar", selector:'menu[type="toolbar"]'}], MENUITEM:[{role:"menuitem", selector:'menuitem[type="command"]'}, {role:"menuitemcheckbox", selector:'menuitem[type="checkbox"]'}, {role:"menuitemradio", selector:'menuitem[type="radio"]'}], META:[{role:"", reserved:!0}], METER:[{role:"progressbar", allowed:["presentation"]}], NAV:[{role:"navigation", allowed:["navigation", "presentation"]}], 
+NOSCRIPT:[{role:"", reserved:!0}], OBJECT:[{role:"", allowed:["application", "document", "img", "presentation"]}], OL:[{role:"list", allowed:"directory group listbox menu menubar tablist toolbar tree presentation".split(" ")}], OPTGROUP:[{role:"", allowed:["presentation"]}], OPTION:[{role:"option"}], OUTPUT:[{role:"status", allowed:["*"]}], PARAM:[{role:"", reserved:!0}], PICTURE:[{role:"", reserved:!0}], PROGRESS:[{role:"progressbar", allowed:["presentation"]}], SCRIPT:[{role:"", reserved:!0}], 
+SECTION:[{role:"region", allowed:"alert alertdialog application contentinfo dialog document log marquee search status presentation".split(" ")}], SELECT:[{role:"listbox"}], SOURCE:[{role:"", reserved:!0}], SPAN:[{role:"", allowed:["*"]}], STYLE:[{role:"", reserved:!0}], SVG:[{role:"", allowed:["application", "document", "img", "presentation"]}], SUMMARY:[{role:"", allowed:["presentation"]}], TABLE:[{role:"", allowed:["*"]}], TEMPLATE:[{role:"", reserved:!0}], TEXTAREA:[{role:"textbox"}], TBODY:[{role:"rowgroup", 
+allowed:["*"]}], THEAD:[{role:"rowgroup", allowed:["*"]}], TFOOT:[{role:"rowgroup", allowed:["*"]}], TITLE:[{role:"", reserved:!0}], TD:[{role:"", allowed:["*"]}], TH:[{role:"", allowed:["*"]}], TR:[{role:"", allowed:["*"]}], TRACK:[{role:"", reserved:!0}], UL:[{role:"list", allowed:"directory group listbox menu menubar tablist toolbar tree presentation".split(" ")}], VIDEO:[{role:"", allowed:["application", "presentation"]}]};
 axs.color = {};
 axs.color.Color = function(a, b, c, d) {
   this.red = a;
@@ -554,6 +556,9 @@ axs.color.luminanceRatio = function(a, b) {
   return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
 };
 axs.color.parseColor = function(a) {
+  if ("transparent" === a) {
+    return new axs.color.Color(0, 0, 0, 0);
+  }
   var b = a.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
   if (b) {
     a = parseInt(b[1], 10);
@@ -681,49 +686,97 @@ axs.color.YELLOW = new axs.color.Color(255, 255, 0, 1);
 axs.color.YELLOW_YCC = axs.color.toYCbCr(axs.color.YELLOW);
 axs.color.YCC_CUBE_FACES_BLACK = [{p0:axs.color.BLACK_YCC, p1:axs.color.RED_YCC, p2:axs.color.GREEN_YCC}, {p0:axs.color.BLACK_YCC, p1:axs.color.GREEN_YCC, p2:axs.color.BLUE_YCC}, {p0:axs.color.BLACK_YCC, p1:axs.color.BLUE_YCC, p2:axs.color.RED_YCC}];
 axs.color.YCC_CUBE_FACES_WHITE = [{p0:axs.color.WHITE_YCC, p1:axs.color.CYAN_YCC, p2:axs.color.MAGENTA_YCC}, {p0:axs.color.WHITE_YCC, p1:axs.color.MAGENTA_YCC, p2:axs.color.YELLOW_YCC}, {p0:axs.color.WHITE_YCC, p1:axs.color.YELLOW_YCC, p2:axs.color.CYAN_YCC}];
-axs.utils = {};
-axs.utils.FOCUSABLE_ELEMENTS_SELECTOR = "input:not([type=hidden]):not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),a[href],iframe,[tabindex]";
-axs.utils.parentElement = function(a) {
+axs.dom = {};
+axs.dom.parentElement = function(a) {
   if (!a) {
     return null;
   }
-  if (a.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-    return a.host;
-  }
-  var b = a.parentElement;
-  if (b) {
-    return b;
-  }
-  a = a.parentNode;
+  a = axs.dom.composedParentNode(a);
   if (!a) {
     return null;
   }
   switch(a.nodeType) {
     case Node.ELEMENT_NODE:
       return a;
-    case Node.DOCUMENT_FRAGMENT_NODE:
-      return a.host;
     default:
-      return null;
+      return axs.dom.parentElement(a);
   }
 };
-axs.utils.asElement = function(a) {
+axs.dom.shadowHost = function(a) {
+  return "host" in a ? a.host : null;
+};
+axs.dom.composedParentNode = function(a) {
+  if (!a) {
+    return null;
+  }
+  if (a.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+    return axs.dom.shadowHost(a);
+  }
+  var b = a.parentNode;
+  if (!b) {
+    return null;
+  }
+  if (b.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+    return axs.dom.shadowHost(b);
+  }
+  if (!b.shadowRoot) {
+    return b;
+  }
+  a = a.getDestinationInsertionPoints();
+  return 0 < a.length ? axs.dom.composedParentNode(a[a.length - 1]) : null;
+};
+axs.dom.asElement = function(a) {
   switch(a.nodeType) {
     case Node.COMMENT_NODE:
-      return null;
+      break;
     case Node.ELEMENT_NODE:
-      if ("script" == a.tagName.toLowerCase()) {
-        return null;
+      if ("script" == a.localName || "template" == a.localName) {
+        break;
       }
-      break;
+      return a;
+    case Node.DOCUMENT_FRAGMENT_NODE:
+      return a.host;
     case Node.TEXT_NODE:
-      a = axs.utils.parentElement(a);
-      break;
+      return axs.dom.parentElement(a);
     default:
-      return console.warn("Unhandled node type: ", a.nodeType), null;
+      console.warn("Unhandled node type: ", a.nodeType);
   }
-  return a;
+  return null;
 };
+axs.dom.composedTreeSearch = function(a, b, c, d) {
+  if (a === b) {
+    return !0;
+  }
+  if (a.nodeType == Node.ELEMENT_NODE) {
+    var e = a
+  }
+  var f = !1;
+  if (e && c.preorder && !c.preorder(e)) {
+    return f;
+  }
+  if (e) {
+    var g = e.shadowRoot || e.webkitShadowRoot;
+    if (g) {
+      return f = axs.dom.composedTreeSearch(g, b, c, g), e && c.postorder && !f && c.postorder(e), f;
+    }
+  }
+  if (e && "content" == e.localName) {
+    a = e.getDistributedNodes();
+    for (g = 0;g < a.length && !f;g++) {
+      f = axs.dom.composedTreeSearch(a[g], b, c, d);
+    }
+    e && c.postorder && !f && c.postorder.call(null, e);
+    return f;
+  }
+  for (a = a.firstChild;null != a && !f;) {
+    f = axs.dom.composedTreeSearch(a, b, c, d), a = a.nextSibling;
+  }
+  e && c.postorder && !f && c.postorder.call(null, e);
+  return f;
+};
+axs.utils = {};
+axs.utils.FOCUSABLE_ELEMENTS_SELECTOR = "input:not([type=hidden]):not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),a[href],iframe,[tabindex]";
+axs.utils.LABELABLE_ELEMENTS_SELECTOR = "button,input:not([type=hidden]),keygen,meter,output,progress,select,textarea";
 axs.utils.elementIsTransparent = function(a) {
   return "0" == a.style.opacity;
 };
@@ -733,32 +786,45 @@ axs.utils.elementHasZeroArea = function(a) {
   return a.right - a.left && b ? !1 : !0;
 };
 axs.utils.elementIsOutsideScrollArea = function(a) {
-  for (var b = axs.utils.parentElement(a), c = a.ownerDocument.defaultView;b != c.document.body;) {
+  for (var b = axs.dom.parentElement(a), c = a.ownerDocument.defaultView;b != c.document.body;) {
     if (axs.utils.isClippedBy(a, b)) {
       return !0;
     }
     if (axs.utils.canScrollTo(a, b) && !axs.utils.elementIsOutsideScrollArea(b)) {
       return !1;
     }
-    b = axs.utils.parentElement(b);
+    b = axs.dom.parentElement(b);
   }
   return !axs.utils.canScrollTo(a, c.document.body);
 };
 axs.utils.canScrollTo = function(a, b) {
-  var c = a.getBoundingClientRect(), d = b.getBoundingClientRect(), e = d.top, f = d.left, g = e - b.scrollTop, e = e - b.scrollTop + b.scrollHeight, h = f - b.scrollLeft + b.scrollWidth;
-  if (c.right < f - b.scrollLeft || c.bottom < g || c.left > h || c.top > e) {
+  var c = a.getBoundingClientRect(), d = b.getBoundingClientRect();
+  if (b == b.ownerDocument.body) {
+    var e = d.top, f = d.left
+  } else {
+    e = d.top - b.scrollTop, f = d.left - b.scrollLeft;
+  }
+  var g = e + b.scrollHeight, h = f + b.scrollWidth;
+  if (c.right < f || c.bottom < e || c.left > h || c.top > g) {
     return !1;
   }
-  f = a.ownerDocument.defaultView;
-  g = f.getComputedStyle(b);
-  return c.left > d.right || c.top > d.bottom ? "scroll" == g.overflow || "auto" == g.overflow || b instanceof f.HTMLBodyElement : !0;
+  e = a.ownerDocument.defaultView;
+  f = e.getComputedStyle(b);
+  return c.left > d.right || c.top > d.bottom ? "scroll" == f.overflow || "auto" == f.overflow || b instanceof e.HTMLBodyElement : !0;
 };
 axs.utils.isClippedBy = function(a, b) {
   var c = a.getBoundingClientRect(), d = b.getBoundingClientRect(), e = d.top - b.scrollTop, f = d.left - b.scrollLeft, g = a.ownerDocument.defaultView.getComputedStyle(b);
   return (c.right < d.left || c.bottom < d.top || c.left > d.right || c.top > d.bottom) && "hidden" == g.overflow ? !0 : c.right < f || c.bottom < e ? "visible" != g.overflow : !1;
 };
 axs.utils.isAncestor = function(a, b) {
-  return null == b ? !1 : b === a ? !0 : axs.utils.isAncestor(a, b.parentNode);
+  if (null == b) {
+    return !1;
+  }
+  if (b === a) {
+    return !0;
+  }
+  var c = axs.dom.composedParentNode(b);
+  return axs.utils.isAncestor(a, c);
 };
 axs.utils.overlappingElements = function(a) {
   if (axs.utils.elementHasZeroArea(a)) {
@@ -827,7 +893,7 @@ axs.utils.getBgColor = function(a, b) {
 axs.utils.getParentBgColor = function(a) {
   var b = a;
   a = [];
-  for (var c = null;b = axs.utils.parentElement(b);) {
+  for (var c = null;b = axs.dom.parentElement(b);) {
     var d = window.getComputedStyle(b, null);
     if (d) {
       var e = axs.color.parseColor(d.backgroundColor);
@@ -906,11 +972,28 @@ axs.utils.hasLabel = function(a) {
   if (a.hasAttribute("aria-label") || a.hasAttribute("title") || "img" == b && a.hasAttribute("alt") || "input" == b && "image" == c && a.hasAttribute("alt") || "input" == b && ("submit" == c || "reset" == c) || a.hasAttribute("aria-labelledby") || a.hasAttribute("id") && 0 < document.querySelectorAll('label[for="' + a.id + '"]').length) {
     return !0;
   }
-  for (b = axs.utils.parentElement(a);b;) {
+  for (b = axs.dom.parentElement(a);b;) {
     if ("label" == b.tagName.toLowerCase() && b.control == a) {
       return !0;
     }
-    b = axs.utils.parentElement(b);
+    b = axs.dom.parentElement(b);
+  }
+  return !1;
+};
+axs.utils.isNativelyDisableable = function(a) {
+  return a.tagName.toUpperCase() in axs.constants.NATIVELY_DISABLEABLE;
+};
+axs.utils.isElementDisabled = function(a) {
+  if (axs.browserUtils.matchSelector(a, "[aria-disabled=true], [aria-disabled=true] *")) {
+    return !0;
+  }
+  if (!axs.utils.isNativelyDisableable(a) || axs.browserUtils.matchSelector(a, "fieldset>legend:first-of-type *")) {
+    return !1;
+  }
+  for (;null !== a;a = axs.dom.parentElement(a)) {
+    if (axs.utils.isNativelyDisableable(a) && a.hasAttribute("disabled")) {
+      return !0;
+    }
   }
   return !1;
 };
@@ -925,7 +1008,7 @@ axs.utils.isElementHidden = function(a) {
   return "none" == c.display || "hidden" == c.visibility ? !0 : a.hasAttribute("aria-hidden") && "true" == a.getAttribute("aria-hidden").toLowerCase() ? !b : !1;
 };
 axs.utils.isElementOrAncestorHidden = function(a) {
-  return axs.utils.isElementHidden(a) ? !0 : axs.utils.parentElement(a) ? axs.utils.isElementOrAncestorHidden(axs.utils.parentElement(a)) : !1;
+  return axs.utils.isElementHidden(a) ? !0 : axs.dom.parentElement(a) ? axs.utils.isElementOrAncestorHidden(axs.dom.parentElement(a)) : !1;
 };
 axs.utils.isInlineElement = function(a) {
   a = a.tagName.toUpperCase();
@@ -967,16 +1050,22 @@ axs.utils.getAriaPropertyValue = function(a, b, c) {
       }
       return d;
     case "integer":
-    ;
-    case "decimal":
       c = axs.utils.isValidNumber(b);
       if (!c.valid) {
         return d.valid = !1, d.reason = c.reason, d;
       }
-      Math.floor(c.value) != c.value ? (d.valid = !1, d.reason = "" + b + " is not a whole integer") : (d.valid = !0, d.value = c.value);
+      Math.floor(c.value) !== c.value ? (d.valid = !1, d.reason = "" + b + " is not a whole integer") : (d.valid = !0, d.value = c.value);
       return d;
+    case "decimal":
+    ;
     case "number":
-      c = axs.utils.isValidNumber(b), c.valid && (d.valid = !0, d.value = c.value);
+      c = axs.utils.isValidNumber(b);
+      d.valid = c.valid;
+      if (!c.valid) {
+        return d.reason = c.reason, d;
+      }
+      d.value = c.value;
+      return d;
     case "string":
       return d.valid = !0, d.value = b, d;
     case "token":
@@ -1016,12 +1105,15 @@ axs.utils.isValidIDRefValue = function(a, b) {
   return 0 == a.length ? {valid:!0, idref:a} : b.ownerDocument.getElementById(a) ? {valid:!0, idref:a} : {valid:!1, idref:a, reason:'No element with ID "' + a + '"'};
 };
 axs.utils.isValidNumber = function(a) {
-  try {
-    var b = JSON.parse(a);
-  } catch (c) {
-    return {valid:!1, value:a, reason:'"' + a + '" is not a number'};
+  var b = {valid:!1, value:a, reason:'"' + a + '" is not a number'};
+  if (!a) {
+    return b;
   }
-  return "number" != typeof b ? {valid:!1, value:a, reason:'"' + a + '" is not a number'} : {valid:!0, value:b};
+  if (/^0x/i.test(a)) {
+    return b.reason = '"' + a + '" is not a decimal number', b;
+  }
+  a *= 1;
+  return isFinite(a) ? {valid:!0, value:a} : b;
 };
 axs.utils.isElementImplicitlyFocusable = function(a) {
   var b = a.ownerDocument.defaultView;
@@ -1089,16 +1181,59 @@ axs.utils.getQuerySelectorText = function(a) {
   }
   return "";
 };
-axs.utils.getIdReferrers = function(a, b) {
+axs.utils.getAriaIdReferrers = function(a, b) {
+  var c = function(a) {
+    var b = axs.constants.ARIA_PROPERTIES[a];
+    if (b) {
+      if ("idref" === b.valueType) {
+        return "[aria-" + a + "='" + d + "']";
+      }
+      if ("idref_list" === b.valueType) {
+        return "[aria-" + a + "~='" + d + "']";
+      }
+    }
+    return "";
+  };
+  if (!a) {
+    return null;
+  }
+  var d = a.id;
+  if (!d) {
+    return null;
+  }
+  d = d.replace(/'/g, "\\'");
+  if (b) {
+    var e = b.replace(/^aria-/, ""), f = c(e);
+    if (f) {
+      return a.ownerDocument.querySelectorAll(f);
+    }
+  } else {
+    var g = [];
+    for (e in axs.constants.ARIA_PROPERTIES) {
+      (f = c(e)) && g.push(f);
+    }
+    return a.ownerDocument.querySelectorAll(g.join(","));
+  }
+  return null;
+};
+axs.utils.getHtmlIdReferrers = function(a) {
+  if (!a) {
+    return null;
+  }
+  var b = a.id;
   if (!b) {
     return null;
   }
-  var c = b.id, d = a.replace(/^aria-/, ""), d = axs.constants.ARIA_PROPERTIES[d];
-  if (!c || !d) {
-    return null;
-  }
-  d = d.valueType;
-  return "idref_list" === d || "idref" === d ? (c = c.replace(/'/g, "\\'"), b.ownerDocument.querySelectorAll("[" + a + "~='" + c + "']")) : null;
+  var b = b.replace(/'/g, "\\'"), c = "[contextmenu='{id}'] [itemref~='{id}'] button[form='{id}'] button[menu='{id}'] fieldset[form='{id}'] input[form='{id}'] input[list='{id}'] keygen[form='{id}'] label[for='{id}'] label[form='{id}'] menuitem[command='{id}'] object[form='{id}'] output[for~='{id}'] output[form='{id}'] select[form='{id}'] td[headers~='{id}'] textarea[form='{id}'] tr[headers~='{id}']".split(" ").map(function(a) {
+    return a.replace("{id}", b);
+  });
+  return a.ownerDocument.querySelectorAll(c.join(","));
+};
+axs.utils.getIdReferrers = function(a) {
+  var b = [], c = axs.utils.getHtmlIdReferrers(a);
+  c && (b = b.concat(Array.prototype.slice.call(c)));
+  (c = axs.utils.getAriaIdReferrers(a)) && (b = b.concat(Array.prototype.slice.call(c)));
+  return b;
 };
 axs.utils.getIdReferents = function(a, b) {
   var c = [], d = a.replace(/^aria-/, ""), d = axs.constants.ARIA_PROPERTIES[d];
@@ -1175,7 +1310,7 @@ axs.properties.getHiddenReason = function(a) {
     var b = !0
   }
   var c = window.getComputedStyle(a, null);
-  return "none" == c.display ? {property:"display: none", on:a} : "hidden" == c.visibility ? {property:"visibility: hidden", on:a} : a.hasAttribute("aria-hidden") && "true" == a.getAttribute("aria-hidden").toLowerCase() && !b ? {property:"aria-hidden", on:a} : axs.properties.getHiddenReason(axs.utils.parentElement(a));
+  return "none" == c.display ? {property:"display: none", on:a} : "hidden" == c.visibility ? {property:"visibility: hidden", on:a} : a.hasAttribute("aria-hidden") && "true" == a.getAttribute("aria-hidden").toLowerCase() && !b ? {property:"aria-hidden", on:a} : axs.properties.getHiddenReason(axs.dom.parentElement(a));
 };
 axs.properties.getColorProperties = function(a) {
   var b = {};
@@ -1184,25 +1319,24 @@ axs.properties.getColorProperties = function(a) {
 };
 axs.properties.hasDirectTextDescendant = function(a) {
   function b() {
-    for (var b = d.evaluate(axs.properties.TEXT_CONTENT_XPATH, a, null, XPathResult.ANY_TYPE, null), c = b.iterateNext();null != c;c = b.iterateNext()) {
-      if (c === a) {
+    for (var b = c.evaluate(axs.properties.TEXT_CONTENT_XPATH, a, null, XPathResult.ANY_TYPE, null), e = b.iterateNext();null != e;e = b.iterateNext()) {
+      if (e === a) {
         return !0;
       }
     }
     return !1;
   }
-  function c() {
-    for (var b = d.createTreeWalker(a, NodeFilter.SHOW_TEXT, null, !1);b.nextNode();) {
-      var c = b.currentNode, g = c.parentNode.tagName.toLowerCase();
-      if (c.nodeValue.trim() && "script" !== g && a !== c) {
+  var c;
+  c = a.nodeType == Node.DOCUMENT_NODE ? a : a.ownerDocument;
+  return c.evaluate ? b() : function() {
+    for (var b = c.createTreeWalker(a, NodeFilter.SHOW_TEXT, null, !1);b.nextNode();) {
+      var e = b.currentNode, f = e.parentNode.tagName.toLowerCase();
+      if (e.nodeValue.trim() && "script" !== f && a !== e) {
         return !0;
       }
     }
     return !1;
-  }
-  var d;
-  d = a.nodeType == Node.DOCUMENT_NODE ? a : a.ownerDocument;
-  return d.evaluate ? b() : c();
+  }();
 };
 axs.properties.getContrastRatioProperties = function(a) {
   if (!axs.properties.hasDirectTextDescendant(a)) {
@@ -1232,8 +1366,8 @@ axs.properties.getContrastRatioProperties = function(a) {
 };
 axs.properties.findTextAlternatives = function(a, b, c, d) {
   var e = c || !1;
-  c = axs.utils.asElement(a);
-  if (!c || !e && !d && axs.utils.isElementOrAncestorHidden(c)) {
+  c = axs.dom.asElement(a);
+  if (!c || !d && axs.utils.isElementOrAncestorHidden(c)) {
     return null;
   }
   if (a.nodeType == Node.TEXT_NODE) {
@@ -1241,17 +1375,23 @@ axs.properties.findTextAlternatives = function(a, b, c, d) {
   }
   a = null;
   e || (a = axs.properties.getTextFromAriaLabelledby(c, b));
-  c.hasAttribute("aria-label") && (d = {type:"text"}, d.text = c.getAttribute("aria-label"), d.lastWord = axs.properties.getLastWord(d.text), a ? d.unused = !0 : e && axs.utils.elementIsHtmlControl(c) || (a = d.text), b.ariaLabel = d);
+  if (c.hasAttribute("aria-label")) {
+    var f = {type:"text"};
+    f.text = c.getAttribute("aria-label");
+    f.lastWord = axs.properties.getLastWord(f.text);
+    a ? f.unused = !0 : e && axs.utils.elementIsHtmlControl(c) || (a = f.text);
+    b.ariaLabel = f;
+  }
   c.hasAttribute("role") && "presentation" == c.getAttribute("role") || (a = axs.properties.getTextFromHostLanguageAttributes(c, b, a, e));
   if (e && axs.utils.elementIsHtmlControl(c)) {
-    d = c.ownerDocument.defaultView;
-    if (c instanceof d.HTMLInputElement) {
-      var f = c;
-      "text" == f.type && f.value && 0 < f.value.length && (b.controlValue = {text:f.value});
-      "range" == f.type && (b.controlValue = {text:f.value});
+    f = c.ownerDocument.defaultView;
+    if (c instanceof f.HTMLInputElement) {
+      var g = c;
+      "text" == g.type && g.value && 0 < g.value.length && (b.controlValue = {text:g.value});
+      "range" == g.type && (b.controlValue = {text:g.value});
     }
-    c instanceof d.HTMLSelectElement && (b.controlValue = {text:c.value});
-    b.controlValue && (d = b.controlValue, a ? d.unused = !0 : a = d.text);
+    c instanceof f.HTMLSelectElement && (b.controlValue = {text:c.value});
+    b.controlValue && (f = b.controlValue, a ? f.unused = !0 : a = f.text);
   }
   if (e && axs.utils.elementIsAriaWidget(c)) {
     e = c.getAttribute("role");
@@ -1260,43 +1400,39 @@ axs.properties.findTextAlternatives = function(a, b, c, d) {
       c.hasAttribute("aria-valuetext") ? b.controlValue = {text:c.getAttribute("aria-valuetext")} : c.hasAttribute("aria-valuenow") && (b.controlValue = {value:c.getAttribute("aria-valuenow"), text:"" + c.getAttribute("aria-valuenow")});
     }
     if ("menu" == e) {
-      var g = c.querySelectorAll("[role=menuitemcheckbox], [role=menuitemradio]");
-      d = [];
-      for (f = 0;f < g.length;f++) {
-        "true" == g[f].getAttribute("aria-checked") && d.push(g[f]);
+      for (var h = c.querySelectorAll("[role=menuitemcheckbox], [role=menuitemradio]"), f = [], g = 0;g < h.length;g++) {
+        "true" == h[g].getAttribute("aria-checked") && f.push(h[g]);
       }
-      if (0 < d.length) {
-        g = "";
-        for (f = 0;f < d.length;f++) {
-          g += axs.properties.findTextAlternatives(d[f], {}, !0), f < d.length - 1 && (g += ", ");
+      if (0 < f.length) {
+        h = "";
+        for (g = 0;g < f.length;g++) {
+          h += axs.properties.findTextAlternatives(f[g], {}, !0), g < f.length - 1 && (h += ", ");
         }
-        b.controlValue = {text:g};
+        b.controlValue = {text:h};
       }
     }
     if ("combobox" == e || "select" == e) {
       b.controlValue = {text:"TODO"};
     }
-    b.controlValue && (d = b.controlValue, a ? d.unused = !0 : a = d.text);
+    b.controlValue && (f = b.controlValue, a ? f.unused = !0 : a = f.text);
   }
-  d = !0;
-  c.hasAttribute("role") && (e = c.getAttribute("role"), (e = axs.constants.ARIA_ROLES[e]) && (!e.namefrom || 0 > e.namefrom.indexOf("contents")) && (d = !1));
-  (e = axs.properties.getTextFromDescendantContent(c)) && d && (d = {type:"text"}, d.text = e, d.lastWord = axs.properties.getLastWord(d.text), a ? d.unused = !0 : a = e, b.content = d);
-  c.hasAttribute("title") && (e = {type:"string", valid:!0}, e.text = c.getAttribute("title"), e.lastWord = axs.properties.getLastWord(e.lastWord), a ? e.unused = !0 : a = e.text, b.title = e);
+  f = !0;
+  c.hasAttribute("role") && (e = c.getAttribute("role"), (e = axs.constants.ARIA_ROLES[e]) && (!e.namefrom || 0 > e.namefrom.indexOf("contents")) && (f = !1));
+  (d = axs.properties.getTextFromDescendantContent(c, d)) && f && (e = {type:"text"}, e.text = d, e.lastWord = axs.properties.getLastWord(e.text), a ? e.unused = !0 : a = d, b.content = e);
+  c.hasAttribute("title") && (d = {type:"string", valid:!0}, d.text = c.getAttribute("title"), d.lastWord = axs.properties.getLastWord(d.lastWord), a ? d.unused = !0 : a = d.text, b.title = d);
   return 0 == Object.keys(b).length && null == a ? null : a;
 };
-axs.properties.getTextFromDescendantContent = function(a) {
-  var b = a.childNodes;
-  a = [];
-  for (var c = 0;c < b.length;c++) {
-    var d = axs.properties.findTextAlternatives(b[c], {}, !0);
-    d && a.push(d.trim());
+axs.properties.getTextFromDescendantContent = function(a, b) {
+  for (var c = a.childNodes, d = [], e = 0;e < c.length;e++) {
+    var f = axs.properties.findTextAlternatives(c[e], {}, !0, b);
+    f && d.push(f.trim());
   }
-  if (a.length) {
-    b = "";
-    for (c = 0;c < a.length;c++) {
-      b = [b, a[c]].join(" ").trim();
+  if (d.length) {
+    c = "";
+    for (e = 0;e < d.length;e++) {
+      c = [c, d[e]].join(" ").trim();
     }
-    return b;
+    return c;
   }
   return null;
 };
@@ -1309,7 +1445,7 @@ axs.properties.getTextFromAriaLabelledby = function(a, b) {
     var k = {type:"element"}, m = d[h];
     k.value = m;
     var l = document.getElementById(m);
-    l ? (k.valid = !0, k.text = axs.properties.findTextAlternatives(l, {}, !0), k.lastWord = axs.properties.getLastWord(k.text), f.push(l.textContent.trim()), k.element = l) : (k.valid = !1, e.valid = !1, k.errorMessage = {messageKey:"noElementWithId", args:[m]});
+    l ? (k.valid = !0, k.text = axs.properties.findTextAlternatives(l, {}, !0, !0), k.lastWord = axs.properties.getLastWord(k.text), f.push(k.text), k.element = l) : (k.valid = !1, e.valid = !1, k.errorMessage = {messageKey:"noElementWithId", args:[m]});
     g.push(k);
   }
   0 < g.length && (g[g.length - 1].last = !0, e.values = g, e.text = f.join(" "), e.lastWord = axs.properties.getLastWord(e.text), c = e.text, b.ariaLabelledby = e);
@@ -1333,7 +1469,7 @@ axs.properties.getTextFromHostLanguageAttributes = function(a, b, c, d) {
       }
       0 < f.length && (f[f.length - 1].last = !0, e.values = f, e.text = g.join(" "), e.lastWord = axs.properties.getLastWord(e.text), c ? e.unused = !0 : c = e.text, b.labelFor = e);
     }
-    d = axs.utils.parentElement(a);
+    d = axs.dom.parentElement(a);
     for (e = {};d;) {
       if ("label" == d.tagName.toLowerCase() && (f = d, f.control == a)) {
         e.type = "element";
@@ -1342,9 +1478,10 @@ axs.properties.getTextFromHostLanguageAttributes = function(a, b, c, d) {
         e.element = f;
         break;
       }
-      d = axs.utils.parentElement(d);
+      d = axs.dom.parentElement(d);
     }
     e.text && (c ? e.unused = !0 : c = e.text, b.labelWrapped = e);
+    axs.browserUtils.matchSelector(a, 'input[type="image"]') && a.hasAttribute("alt") && (e = {type:"string", valid:!0}, e.text = a.getAttribute("alt"), c ? e.unused = !0 : c = e.text, b.alt = e);
     Object.keys(b).length || (b.noLabel = !0);
   }
   return c;
@@ -1358,7 +1495,7 @@ axs.properties.getLastWord = function(a) {
 };
 axs.properties.getTextProperties = function(a) {
   var b = {}, c = axs.properties.findTextAlternatives(a, b, !1, !0);
-  if (0 == Object.keys(b).length && ((a = axs.utils.asElement(a)) && axs.browserUtils.matchSelector(a, "img") && (b.alt = {valid:!1, errorMessage:"No alt value provided"}, a = a.src, "string" == typeof a && (c = a.split("/").pop(), b.filename = {text:c})), !c)) {
+  if (0 == Object.keys(b).length && ((a = axs.dom.asElement(a)) && axs.browserUtils.matchSelector(a, "img") && (b.alt = {valid:!1, errorMessage:"No alt value provided"}, a = a.src, "string" == typeof a && (c = a.split("/").pop(), b.filename = {text:c})), !c)) {
     return null;
   }
   b.hasProperties = Boolean(Object.keys(b).length);
@@ -1396,11 +1533,11 @@ axs.properties.getAriaProperties = function(a) {
   return 0 < Object.keys(b).length ? b : null;
 };
 axs.properties.getGlobalAriaProperties = function(a) {
-  for (var b = {}, c = 0;c < axs.constants.GLOBAL_PROPERTIES.length;c++) {
-    var d = axs.constants.GLOBAL_PROPERTIES[c];
-    if (a.hasAttribute(d)) {
-      var e = a.getAttribute(d);
-      b[d] = axs.utils.getAriaPropertyValue(d, e, a);
+  var b = {}, c;
+  for (c in axs.constants.GLOBAL_PROPERTIES) {
+    if (a.hasAttribute(c)) {
+      var d = a.getAttribute(c);
+      b[c] = axs.utils.getAriaPropertyValue(c, d, a);
     }
   }
   return b;
@@ -1435,7 +1572,7 @@ axs.properties.getTrackElements = function(a, b) {
   return d;
 };
 axs.properties.getAllProperties = function(a) {
-  var b = axs.utils.asElement(a);
+  var b = axs.dom.asElement(a);
   if (!b) {
     return {};
   }
@@ -1544,61 +1681,32 @@ axs.AuditRule.prototype.addElement = function(a, b) {
   a.push(b);
 };
 axs.AuditRule.collectMatchingElements = function(a, b, c, d) {
-  if (a.nodeType == Node.ELEMENT_NODE) {
-    var e = a
-  }
-  e && b.call(null, e) && c.push(e);
-  if (e) {
-    var f = e.shadowRoot || e.webkitShadowRoot;
-    if (f) {
-      axs.AuditRule.collectMatchingElements(f, b, c, f);
-      return;
-    }
-  }
-  if (e && "content" == e.localName) {
-    for (var f = e.getDistributedNodes(), g = 0;g < f.length;g++) {
-      axs.AuditRule.collectMatchingElements(f[g], b, c, d);
-    }
-  } else {
-    if (e && "shadow" == e.localName) {
-      if (f = e, d) {
-        for (f = f.getDistributedNodes(), g = 0;g < f.length;g++) {
-          axs.AuditRule.collectMatchingElements(f[g], b, c, d);
+  axs.dom.composedTreeSearch(a, null, {preorder:function(a) {
+    if (d) {
+      for (var f = 0;f < d.length;f++) {
+        if (axs.browserUtils.matchSelector(a, d[f])) {
+          return !1;
         }
-      } else {
-        console.warn("ShadowRoot not provided for", e);
       }
     }
-    e && "iframe" == e.localName && e.contentDocument && axs.AuditRule.collectMatchingElements(e.contentDocument, b, c, d);
-    for (a = a.firstChild;null != a;) {
-      axs.AuditRule.collectMatchingElements(a, b, c, d), a = a.nextSibling;
-    }
-  }
+    b(a) && c.push(a);
+    return !0;
+  }});
 };
 axs.AuditRule.prototype.run = function(a) {
   a = a || {};
-  var b = "ignoreSelectors" in a ? a.ignoreSelectors : [], c = "maxResults" in a ? a.maxResults : null, d = [];
-  axs.AuditRule.collectMatchingElements("scope" in a ? a.scope : document, this.relevantElementMatcher_, d);
-  var e = [];
-  if (!d.length) {
+  var b = "maxResults" in a ? a.maxResults : null, c = [];
+  axs.AuditRule.collectMatchingElements("scope" in a ? a.scope : document, this.relevantElementMatcher_, c, a.ignoreSelectors);
+  var d = [];
+  if (!c.length) {
     return {result:axs.constants.AuditResult.NA};
   }
-  for (var f = 0;f < d.length && !(null != c && e.length >= c);f++) {
-    var g = d[f], h;
-    a: {
-      h = g;
-      for (var k = 0;k < b.length;k++) {
-        if (axs.browserUtils.matchSelector(h, b[k])) {
-          h = !0;
-          break a;
-        }
-      }
-      h = !1;
-    }
-    !h && this.test_(g, a.config) && this.addElement(e, g);
+  for (var e = 0;e < c.length && !(null != b && d.length >= b);e++) {
+    var f = c[e];
+    this.test_(f, a.config) && this.addElement(d, f);
   }
-  a = {result:e.length ? axs.constants.AuditResult.FAIL : axs.constants.AuditResult.PASS, elements:e};
-  f < d.length && (a.resultsTruncated = !0);
+  a = {result:d.length ? axs.constants.AuditResult.FAIL : axs.constants.AuditResult.PASS, elements:d};
+  e < c.length && (a.resultsTruncated = !0);
   return a;
 };
 axs.AuditRules = {};
@@ -1667,11 +1775,15 @@ axs.AuditResults.prototype.toString = function() {
 };
 goog.exportProperty(axs.AuditResults.prototype, "toString", axs.AuditResults.prototype.toString);
 axs.Audit = {};
-axs.AuditConfiguration = function() {
+axs.AuditConfiguration = function(a) {
+  null == a && (a = {});
   this.rules_ = {};
   this.maxResults = this.auditRulesToIgnore = this.auditRulesToRun = this.scope = null;
   this.withConsoleApi = !1;
   this.showUnsupportedRulesWarning = !0;
+  for (var b in this) {
+    this.hasOwnProperty(b) && b in a && (this[b] = a[b]);
+  }
   goog.exportProperty(this, "scope", this.scope);
   goog.exportProperty(this, "auditRulesToRun", this.auditRulesToRun);
   goog.exportProperty(this, "auditRulesToIgnore", this.auditRulesToIgnore);
@@ -1789,13 +1901,13 @@ axs.AuditRules.addRule({name:"ariaRoleNotScoped", heading:"Elements with ARIA ro
   if (!b || 0 === b.length) {
     return !1;
   }
-  for (var c = a;c = c.parentNode;) {
+  for (var c = a;c = axs.dom.parentElement(c);) {
     var d = axs.utils.getRoles(c, !0);
     if (d && d.applied && 0 <= b.indexOf(d.applied.name)) {
       return !1;
     }
   }
-  if (a = axs.utils.getIdReferrers("aria-owns", a)) {
+  if (a = axs.utils.getAriaIdReferrers(a, "aria-owns")) {
     for (c = 0;c < a.length;c++) {
       if ((d = axs.utils.getRoles(a[c], !0)) && d.applied && 0 <= b.indexOf(d.applied.name)) {
         return !1;
@@ -1857,23 +1969,25 @@ axs.AuditRules.addRule({name:"controlsWithoutLabel", heading:"Controls and media
   if (0 <= a.tabIndex) {
     return !0;
   }
-  for (a = axs.utils.parentElement(a);null != a;a = axs.utils.parentElement(a)) {
+  for (a = axs.dom.parentElement(a);null != a;a = axs.dom.parentElement(a)) {
     if (axs.utils.elementIsAriaWidget(a)) {
       return !1;
     }
   }
   return !0;
 }, test:function(a) {
-  return axs.utils.isElementOrAncestorHidden(a) || "input" == a.tagName.toLowerCase() && "button" == a.type && a.value.length || "button" == a.tagName.toLowerCase() && a.textContent.replace(/^\s+|\s+$/g, "").length ? !1 : axs.utils.hasLabel(a) ? !1 : !0;
-}, code:"AX_TEXT_01", ruleName:"Controls and media elements should have labels"});
-axs.AuditRules.addRule({name:"duplicateId", heading:"An element's ID must be unique in the DOM", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_html_02", severity:axs.constants.Severity.SEVERE, relevantElementMatcher:function(a) {
-  return axs.browserUtils.matchSelector(a, "[id]");
-}, test:function(a) {
-  var b = a.id;
-  if (!b) {
+  if (axs.utils.isElementOrAncestorHidden(a) || "input" == a.tagName.toLowerCase() && "button" == a.type && a.value.length || "button" == a.tagName.toLowerCase() && a.textContent.replace(/^\s+|\s+$/g, "").length || axs.utils.hasLabel(a)) {
     return !1;
   }
-  b = "[id='" + b.replace(/'/g, "\\'") + "']";
+  a = axs.properties.findTextAlternatives(a, {});
+  return null === a || "" === a.trim() ? !0 : !1;
+}, code:"AX_TEXT_01", ruleName:"Controls and media elements should have labels"});
+axs.AuditRules.addRule({name:"duplicateId", heading:"Any ID referred to via an IDREF must be unique in the DOM", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_html_02", severity:axs.constants.Severity.SEVERE, relevantElementMatcher:function(a) {
+  return a.hasAttribute("id") ? axs.utils.getIdReferrers(a).some(function(a) {
+    return !axs.utils.isElementOrAncestorHidden(a);
+  }) : !1;
+}, test:function(a) {
+  var b = "[id='" + a.id.replace(/'/g, "\\'") + "']";
   return 1 < a.ownerDocument.querySelectorAll(b).length;
 }, code:"AX_HTML_02"});
 axs.AuditRules.addRule({name:"focusableElementNotVisibleAndNotAriaHidden", heading:"These elements are focusable but either invisible or obscured by another element", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_focus_01", severity:axs.constants.Severity.WARNING, relevantElementMatcher:function(a) {
@@ -1883,12 +1997,13 @@ axs.AuditRules.addRule({name:"focusableElementNotVisibleAndNotAriaHidden", headi
   if (0 <= a.tabIndex) {
     return !0;
   }
-  for (var b = axs.utils.parentElement(a);null != b;b = axs.utils.parentElement(b)) {
+  for (var b = axs.dom.parentElement(a);null != b;b = axs.dom.parentElement(b)) {
     if (axs.utils.elementIsAriaWidget(b)) {
       return !1;
     }
   }
-  return (a = axs.properties.findTextAlternatives(a, {})) && "" !== a.trim() ? !0 : !1;
+  a = axs.properties.findTextAlternatives(a, {});
+  return null === a || "" === a.trim() ? !1 : !0;
 }, test:function(a) {
   if (axs.utils.isElementOrAncestorHidden(a)) {
     return !1;
@@ -1912,7 +2027,7 @@ axs.AuditRules.addRule({name:"imagesWithoutAltText", heading:"Images should have
   return 0 == Object.keys(b).length ? !0 : !1;
 }, code:"AX_TEXT_02"});
 axs.AuditRules.addRule({name:"linkWithUnclearPurpose", heading:"The purpose of each link should be clear from the link text", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_text_04", severity:axs.constants.Severity.WARNING, relevantElementMatcher:function(a) {
-  return axs.browserUtils.matchSelector(a, "a");
+  return axs.browserUtils.matchSelector(a, "a[href]") && !axs.utils.isElementOrAncestorHidden(a);
 }, test:function(a, b) {
   for (var c = b || {}, d = c.blacklistPhrases || [], e = /\s+/, f = 0;f < d.length;f++) {
     var g = "^\\s*" + d[f].trim().replace(e, "\\s*") + "s*[^a-z]$";
@@ -1921,7 +2036,10 @@ axs.AuditRules.addRule({name:"linkWithUnclearPurpose", heading:"The purpose of e
     }
   }
   c = c.stopwords || "click tap go here learn more this page link about".split(" ");
-  d = a.textContent;
+  d = axs.properties.findTextAlternatives(a, {});
+  if (null === d || "" === d.trim()) {
+    return !0;
+  }
   d = d.replace(/[^a-zA-Z ]/g, "");
   for (f = 0;f < c.length;f++) {
     if (d = d.replace(new RegExp("\\b" + c[f] + "\\b", "ig"), ""), "" == d.trim()) {
@@ -1931,7 +2049,7 @@ axs.AuditRules.addRule({name:"linkWithUnclearPurpose", heading:"The purpose of e
   return !1;
 }, code:"AX_TEXT_04"});
 axs.AuditRules.addRule({name:"lowContrastElements", heading:"Text elements should have a reasonable contrast ratio", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_color_01", severity:axs.constants.Severity.WARNING, relevantElementMatcher:function(a) {
-  return axs.properties.hasDirectTextDescendant(a);
+  return axs.properties.hasDirectTextDescendant(a) && !axs.utils.isElementDisabled(a);
 }, test:function(a) {
   var b = window.getComputedStyle(a, null);
   return (a = axs.utils.getContrastRatioForElementWithComputedStyle(b, a)) && axs.utils.isLowContrast(a, b);
@@ -1964,9 +2082,16 @@ axs.AuditRules.addRule({name:"multipleAriaOwners", heading:"An element's ID must
   return axs.browserUtils.matchSelector(a, "[aria-owns]");
 }, test:function(a) {
   return axs.utils.getIdReferents("aria-owns", a).some(function(a) {
-    return 1 < axs.utils.getIdReferrers("aria-owns", a).length;
+    return 1 < axs.utils.getAriaIdReferrers(a, "aria-owns").length;
   });
 }, code:"AX_ARIA_07"});
+axs.AuditRules.addRule({name:"multipleLabelableElementsPerLabel", heading:"A label element may not have labelable descendants other than its labeled control.", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#-ax_text_03--labels-should-only-contain-one-labelable-element", severity:axs.constants.Severity.SEVERE, relevantElementMatcher:function(a) {
+  return axs.browserUtils.matchSelector(a, "label");
+}, test:function(a) {
+  if (1 < a.querySelectorAll(axs.utils.LABELABLE_ELEMENTS_SELECTOR).length) {
+    return !0;
+  }
+}, code:"AX_TEXT_03"});
 axs.AuditRules.addRule({name:"nonExistentAriaRelatedElement", heading:"ARIA attributes which refer to other elements by ID should refer to elements which exist in the DOM", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_aria_02", severity:axs.constants.Severity.SEVERE, relevantElementMatcher:function(a) {
   var b = axs.utils.getAriaPropertiesByValueType(["idref", "idref_list"]), b = axs.utils.getSelectorForAriaProperties(b);
   return axs.browserUtils.matchSelector(a, b);
@@ -2038,6 +2163,11 @@ axs.AuditRules.addRule({name:"requiredAriaAttributeMissing", heading:"Elements w
     return !0;
   }, code:"AX_ARIA_08"});
 })();
+axs.AuditRules.addRule({name:"roleTooltipRequiresDescribedby", heading:"Elements with role=tooltip should have a corresponding element with aria-describedby", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_aria_02", severity:axs.constants.Severity.SEVERE, relevantElementMatcher:function(a) {
+  return axs.browserUtils.matchSelector(a, "[role=tooltip]") && !axs.utils.isElementOrAncestorHidden(a);
+}, test:function(a) {
+  return 0 === axs.utils.getAriaIdReferrers(a, "aria-describedby").length;
+}, code:"AX_TOOLTIP_01"});
 axs.AuditRules.addRule({name:"tabIndexGreaterThanZero", heading:"Avoid positive integer values for tabIndex", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_focus_03", severity:axs.constants.Severity.WARNING, relevantElementMatcher:function(a) {
   return axs.browserUtils.matchSelector(a, "[tabindex]");
 }, test:function(a) {
@@ -2045,6 +2175,67 @@ axs.AuditRules.addRule({name:"tabIndexGreaterThanZero", heading:"Avoid positive 
     return !0;
   }
 }, code:"AX_FOCUS_03"});
+(function() {
+  axs.AuditRules.addRule({name:"tableHasAppropriateHeaders", heading:"Tables should have appropriate headers", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_table_01", severity:axs.constants.Severity.SEVERE, relevantElementMatcher:function(a) {
+    return axs.browserUtils.matchSelector(a, "table");
+  }, test:function(a) {
+    if ("presentation" == a.getAttribute("role")) {
+      return 0 != a.querySelectorAll("th").length;
+    }
+    a = a.querySelectorAll("tr");
+    var b;
+    a: {
+      b = a[0].children;
+      for (var c = 0;c < b.length;c++) {
+        if ("TH" != b[c].tagName) {
+          b = !0;
+          break a;
+        }
+      }
+      b = !1;
+    }
+    if (b) {
+      a: {
+        for (b = 0;b < a.length;b++) {
+          if ("TH" != a[b].children[0].tagName) {
+            b = !0;
+            break a;
+          }
+        }
+        b = !1;
+      }
+    }
+    if (b) {
+      a: {
+        b = a[0].children;
+        for (c = 1;c < b.length;c++) {
+          if ("TH" != b[c].tagName) {
+            b = !0;
+            break a;
+          }
+        }
+        for (c = 1;c < a.length;c++) {
+          if ("TH" != a[c].children[0].tagName) {
+            b = !0;
+            break a;
+          }
+        }
+        b = !1;
+      }
+    }
+    return b;
+  }, code:"AX_TABLE_01"});
+})();
+(function() {
+  axs.AuditRules.addRule({name:"uncontrolledTabpanel", heading:"A tabpanel should be related to a tab via aria-controls or aria-labelledby", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_aria_13", severity:axs.constants.Severity.WARNING, relevantElementMatcher:function(a) {
+    return axs.browserUtils.matchSelector(a, '[role="tabpanel"]');
+  }, test:function(a) {
+    var b;
+    b = document.querySelectorAll('[role="tab"][aria-controls="' + a.id + '"]');
+    (b = a.id && 1 === b.length) || (a.hasAttribute("aria-labelledby") ? (a = document.querySelectorAll("#" + a.getAttribute("aria-labelledby")), b = 1 === a.length && "tab" === a[0].getAttribute("role")) : b = !1);
+    return !b;
+  }, code:"AX_ARIA_13"});
+})();
 axs.AuditRules.addRule({name:"unfocusableElementsWithOnClick", heading:"Elements with onclick handlers must be focusable", url:"https://github.com/GoogleChrome/accessibility-developer-tools/wiki/Audit-Rules#ax_focus_02", severity:axs.constants.Severity.WARNING, opt_requiresConsoleAPI:!0, relevantElementMatcher:function(a) {
   return a instanceof a.ownerDocument.defaultView.HTMLBodyElement || axs.utils.isElementOrAncestorHidden(a) ? !1 : "click" in getEventListeners(a) ? !0 : !1;
 }, test:function(a) {
@@ -2075,4 +2266,13 @@ axs.AuditRules.addRule({name:"videoWithoutCaptions", heading:"Video elements sho
   return !a.querySelectorAll("track[kind=captions]").length;
 }, code:"AX_VIDEO_01"});
 
+  return axs;
+});
+
+// Define AMD module if possible, export globals otherwise.
+if (typeof define !== 'undefined' && define.amd) {
+  define([], fn);
+} else {
+  var axs = fn.call(this);
+}
 

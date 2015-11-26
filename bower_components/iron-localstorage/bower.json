@@ -1,6 +1,6 @@
 {
   "name": "iron-localstorage",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Provides access to local storage",
   "keywords": [
     "web-component",
@@ -20,9 +20,10 @@
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",
-    "web-component-tester": "*",
+    "web-component-tester": "polymer/web-component-tester#^3.4.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "paper-styles": "PolymerElements/paper-styles#^1.0.2",
     "paper-checkbox": "PolymerElements/paper-checkbox#^1.0.1"
-  }
+  },
+  "ignore": []
 }

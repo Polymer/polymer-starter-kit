@@ -28,9 +28,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <test-fixture id="trivialList">
     <template>
-      <x-list item-height="2" list-height="300"></x-list>
+      <x-list list-height="100" item-height="2"></x-list>
     </template>
   </test-fixture>
+
+  <test-fixture id="trivialListSmall">
+    <template>
+      <x-list list-height="2" item-height="2"></x-list>
+    </template>
+  </test-fixture>
+
 
   <script>
 
@@ -40,45 +47,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       setup(function() {
         container = fixture('trivialList');
         list = container.list;
+        list.items = buildDataSet(200);
       });
 
       test('increase pool size', function(done) {
-        list.items = buildDataSet(1000);
-
-        flush(function() {
+        setTimeout(function() {
           var lastItem = getLastItemFromList(list);
           var lastItemHeight = lastItem.offsetHeight;
-          var expectedFinalItem = list.offsetHeight/lastItemHeight;
-
+          var expectedFinalItem = container.listHeight/lastItemHeight;
+          
+          assert.equal(list.offsetHeight, container.listHeight);
           assert.equal(lastItemHeight, 2);
           assert.equal(getLastItemFromList(list).textContent, expectedFinalItem);
           done();
-        });
+        }, 100);
+      });
+    });
+
+    suite('iron-resize', function() {
+      var list, container;
+
+      setup(function() {
+        container = fixture('trivialListSmall');
+        list = container.list;
+        list.items = buildDataSet(200);
+
       });
 
-      test('increase pool size on resize', function(done) {
-        list.items = buildDataSet(1000);
-
+      test('increase pool size after resizing the list', function(done) {
         flush(function() {
-          // change the height of the list
-          container.listHeight = 500;
-          // resize
           list.fire('iron-resize');
-
-          flush(function() {
+          setTimeout(function() {
             var lastItem = getLastItemFromList(list);
             var lastItemHeight = lastItem.offsetHeight;
-            var expectedFinalItem = list.offsetHeight/lastItemHeight;
-
+            var expectedFinalItem = container.listHeight/lastItemHeight;
+            
+            assert.equal(list.offsetHeight, container.listHeight);
             assert.equal(lastItemHeight, 2);
             assert.equal(getLastItemFromList(list).textContent, expectedFinalItem);
             done();
-          });
+          }, 100);
         });
       });
-
     });
-
   </script>
 
 </body>

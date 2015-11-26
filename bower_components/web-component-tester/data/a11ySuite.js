@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-(function(Mocha, axs) {
+(function(Mocha, chai, axs) {
 
   Object.keys(Mocha.interfaces).forEach(function(iface) {
     var orig = Mocha.interfaces[iface];
@@ -86,4 +86,37 @@
       });
     };
   });
-})(window.Mocha, window.axs);
+
+  chai.use(function(chai, util) {
+    var Assertion = chai.Assertion;
+
+    // assert
+    chai.assert.a11yLabel = function(node, exp, msg){
+      new Assertion(node).to.have.a11yLabel(exp, msg);
+    };
+
+    // expect / should
+    Assertion.addMethod('a11yLabel', function(str, msg) {
+      if (msg) {
+        util.flag(this, 'message', msg);
+      }
+
+      var node = this._obj;
+
+      // obj must be a Node
+      new Assertion(node).to.be.instanceOf(Node);
+
+      // vind the text alternative with the help of accessibility dev tools
+      var textAlternative = axs.properties.findTextAlternatives(node, {});
+
+      this.assert(
+        textAlternative === str,
+        'expected #{this} to have text alternative #{exp} but got #{act}',
+        'expected #{this} to not have text alternative #{act}',
+        str,
+        textAlternative,
+        true
+      );
+    });
+  });
+})(window.Mocha, window.chai, window.axs);

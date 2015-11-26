@@ -1,6 +1,6 @@
 {
   "name": "stacky",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Stacky parses stack traces from various sources, and formats them in readable ways.",
   "main": "lib",
   "files": [
@@ -30,22 +30,22 @@
   },
   "homepage": "https://github.com/PolymerLabs/stacky",
   "devDependencies": {
-    "chai": "^1.9.1",
+    "chai": "^3.4.1",
     "event-stream": "^3.1.7",
     "gulp": "^3.8.7",
-    "gulp-coverage": "^0.2.26",
+    "gulp-coverage": "^0.3.38",
     "gulp-coveralls": "^0.1.2",
     "gulp-jshint": "^1.8.4",
-    "gulp-mocha": "^1.0.0",
-    "gulp-notify": "^1.5.0",
-    "gulp-plumber": "^0.6.5",
-    "gulp-watch": "^0.6.9",
-    "jshint-stylish": "^0.4.0",
-    "lazypipe": "^0.2.2",
-    "mocha": "^1.21.4"
+    "gulp-mocha": "^2.2.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-watch": "^4.3.5",
+    "jshint-stylish": "^2.1.0",
+    "lazypipe": "^1.0.1",
+    "mocha": "^2.3.4"
   },
   "dependencies": {
-    "chalk": "^0.5.1",
+    "chalk": "^1.1.1",
     "lodash": "^3.0.0"
   }
 }

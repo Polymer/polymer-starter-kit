@@ -1,0 +1,182 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../paper-styles/typography.html">
+
+<dom-module id="iron-doc-viewer-styles">
+  <template>
+    <style>
+      :host {
+        @apply(--paper-font-body1);
+
+        color: #212121;
+        display: block;
+      }
+
+      :host > header {
+        @apply(--paper-font-headline);
+
+        margin-bottom: 18px;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      .deeplink {
+        color: currentcolor;
+        text-decoration: none;
+      }
+
+      .deeplink:hover {
+        text-decoration: underline;
+      }
+
+      #api {
+        display: flex;
+        align-items: center;
+      }
+
+      #api header {
+        @apply(--paper-font-subhead);
+
+        flex: 1;
+        padding-left: 16px;
+      }
+
+      #api a {
+        @apply(--paper-font-button);
+
+        color: var(--paper-grey-800);
+        cursor: pointer;
+        display: block;
+        padding: 4px 16px;
+      }
+
+      /* Common Formatting */
+
+      #summary {
+        padding: 4px 0;
+      }
+
+      #summary .markdown-html pre {
+        background-color: var(--paper-grey-50);
+        border-width: 1px 0;
+        border: solid #e5e5e5;
+        font-size: 15px;
+        overflow-x: auto;
+        padding: 12px 24px;
+        word-wrap: break-word;
+      }
+
+      #summary .markdown-html table {
+        border-collapse: collapse;
+        border-top: 1px solid #e5e5e5;
+        margin: 12px 0;
+        width: 100%;
+      }
+
+      #summary .markdown-html tr {
+        border-bottom: 1px solid #e5e5e5;
+        padding: 0 18px;
+      }
+
+      #summary .markdown-html td,
+      #summary .markdown-html th {
+        padding: 6px 12px;
+      }
+
+      #summary .markdown-html td:first-child,
+      #summary .markdown-html th:first-child {
+        padding-left: 24px;
+      }
+
+      #summary .markdown-html td:last-child,
+      #summary .markdown-html th:last-child {
+        padding-right: 24px;
+      }
+
+      #summary .markdown-html code {
+        @apply(--paper-font-code1);
+      }
+
+      #summary .markdown-html p {
+        padding: 0 24px;
+      }
+
+      #summary .markdown-html a {
+        color: var(--paper-indigo-a200);
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      #summary .markdown-html h1,
+      #summary .markdown-html h2,
+      #summary .markdown-html h3,
+      #summary .markdown-html h4,
+      #summary .markdown-html h5 {
+        padding: 0 18px;
+      }
+
+      /* Property Sections */
+
+      .card {
+        background: white;
+        border-radius: 2px;
+        border: 1px solid #e5e5e5;
+        margin-bottom: 20px;
+      }
+
+      .card > header {
+        border-bottom: 1px solid #e5e5e5;
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 28px;
+        padding: 14px 24px;
+
+        @apply(--iron-doc-viewer-header);
+      }
+
+      iron-doc-property {
+        border-bottom: 1px solid #e5e5e5;
+      }
+
+      iron-doc-property:last-of-type {
+        border-bottom-width: 0;
+      }
+
+      /* Private Properties */
+
+      iron-doc-property[private] {
+        display: none;
+      }
+
+      :host(.show-private) iron-doc-property[private] {
+        display: block;
+      }
+
+      iron-doc-property[configuration] {
+        display: none !important; /* Never. */
+      }
+
+      #behaviors > p {
+        border-bottom: 1px solid #e5e5e5;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        padding: 16px 24px;
+      }
+
+      #behaviors > p:last-of-type {
+        border-bottom: none;
+      }
+    </style>
+  </template>
+</dom-module>

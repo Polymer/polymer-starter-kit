@@ -1,6 +1,6 @@
 {
   "name": "test-fixture",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "license": "http://polymer.github.io/LICENSE.txt",
   "description": "A simple element to fixture DOM for tests",
   "keywords": [
@@ -8,9 +8,6 @@
     "polymer",
     "testing"
   ],
-  "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0"
-  },
   "devDependencies": {
     "web-component-tester": "*",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"

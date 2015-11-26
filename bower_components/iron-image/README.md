@@ -66,5 +66,7 @@ Examples:
 Custom property | Description | Default
 ----------------|-------------|----------
 `--iron-image-placeholder` | Mixin applied to #placeholder | `{}`
+`--iron-image-width` | Sets the width of the wrapped image | `auto`
+`--iron-image-height` | Sets the height of the wrapped image | `auto`
 
 

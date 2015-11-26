@@ -1,6 +1,6 @@
 {
   "name": "iron-doc-viewer",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "authors": [
     "The Polymer Authors"
   ],
@@ -23,15 +23,15 @@
   ],
   "dependencies": {
     "marked-element": "PolymerElements/marked-element#^1.0.0",
-    "paper-styles": "PolymerElements/paper-styles#^1.0.0",
     "paper-button": "PolymerElements/paper-button#^1.0.0",
-    "polymer": "Polymer/polymer#^1.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.0",
+    "polymer": "Polymer/polymer#^1.1.0",
     "prism-element": "PolymerElements/prism-element#^1.0.2"
   },
   "devDependencies": {
-    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
-    "web-component-tester": "*"
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "web-component-tester": "*",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   }
 }

@@ -22,6 +22,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../paper-toolbar/paper-toolbar.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
   <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../paper-styles/color.html">
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
   <link rel="import" href="sample-content.html">
 
   <link rel="stylesheet" href="../../paper-styles/demo.css">
@@ -38,13 +40,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       /* background for toolbar when it is at its full size */
       --paper-scroll-header-panel-full-header: {
-        background-image: url(images/bg6.jpg);
+        background-image: url(images/bg1.jpg);
+        background-position: left center;
       };
 
       /* background for toolbar when it is condensed */
       --paper-scroll-header-panel-condensed-header: {
-        background-color: var(--paper-deep-orange-500, #ff5722);
+        background-color: var(--paper-deep-purple-500);
       };
+    }
+
+    paper-icon-button {
+      --paper-icon-button-ink-color: white;
     }
 
     paper-toolbar.tall {
@@ -63,6 +70,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       padding: 8px;
     }
 
+    .spacer {
+      @apply(--layout-flex);
+    }
+
   </style>
 
 </head>
@@ -71,13 +82,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <paper-scroll-header-panel condenses>
 
     <paper-toolbar class="tall">
-
       <paper-icon-button icon="arrow-back"></paper-icon-button>
-      <div class="flex"></div>
+      <div class="spacer"></div>
       <paper-icon-button icon="search"></paper-icon-button>
       <paper-icon-button icon="more-vert"></paper-icon-button>
       <div class="bottom title">Title</div>
-
     </paper-toolbar>
 
     <div class="content">

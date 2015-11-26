@@ -1,12 +1,64 @@
-## 2.10.0 - 2015-07-24
+## 2.10.0 - 2015-11-13
 
-## 2.9.0 - 2015-07-24
+## 2.10.0-rc.1 - 2015-10-19
+
+### Bug fixes:
+
+* `linkWithUnclearPurpose` should only look at links, not `<a>` without `href`. (#245)
+
+## 2.10.0-rc.0 - 2015-10-09
+
+### New rules
+* A tabpanel should be related to a tab via aria-controls or aria-labelledby (`src/audits/UncontrolledTabpanel.js`)
+* A data table must identify row and column headers (`src/audits/TableHasAppropriateHeaders.js`)
+* A tooltip element should have an aria-describedby referring to it (`src/audits/RoleTooltipRequiresDescribedBy.js`).
+
+### Enhancements
+
+* Pull DOM-related functionality out into `DOMUtils.js`
+
+### Bug fixes:
+
+* Fix `findTextAlternatives` not always correctly ignoring hidden elements (#217).
+* `findTextAlternatives` now honors `alt` attribute of input type image
+* Revert #150 which was causing the extension not to work.
+* AX_HTML_02 (duplicate IDs) now only audits elements that are referenced by an IDREF (#141);
+* Fix #171 by being smarter about finding the composed parent node.
+* Tweak in canScrollTo to handle the (common) case where the container is `document.body` (#243).
+
+## 2.9.0 - 2015-09-04
+
+## 2.9.0-rc.0 - 2015-08-21
+
+### New rules
+
+* A label element may not have labelable descendants other than its labeled control (`src/audits/MultipleLabelableElementsPerLabel.js`)
+
+### Enhancements
+
+* Implement support for specifying audit configuration options through an object when initializing audits (#165).
+* Implement support for AMD loaders.
+
+### Bug fixes:
+
+* Fix `badAriaAttributeValue` not correctly handling decimal values (#182).
+* Work around null pointer exception caused by closure compiler issue (#183).
+* Add a special case to handle color `"transparent"` to fix (#180).
+* Fix `matchSelector` not working properly in browser environments without vendor prefixes (#189).
+* Fix false positives on elements with no role for Unsupported ARIA Attribute rule (#178 and #199).
+* Fix ARIA `tablist` and ARIA `tab` scope (#204)
+* Fix link with clear purpose with text alternative (#156);
+* Handle edge cases in number parser, e.g. "+1", ".1", "01"
+* HTML button containing img with alt attribute now passes controlsWithoutLabel (#202)
+* Disabled elements should be ignored by low contrast audit (#205)
+* Fix input of type "text" did not find correct implied role (#225)
+* Hidden links are no longer relevant for meaningful link text rule.
 
 ## 2.8.0 - 2015-07-24
 
 ## 2.8.0-rc.0 - 2015-07-10
 
-# Enhancements:
+### Enhancements:
 * Pull color code into separate file.
 * Improve color suggestion algorithm.
 * Descend into iframes when collecting matching elements.

@@ -36,15 +36,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @apply(--layout-fit);
       @apply(--layout-vertical);
       @apply(--paper-font-common-base);
+      background-color: var(--paper-grey-200, #eee);
     }
 
     paper-toolbar.tall .title {
       font-size: 40px;
       margin-left: 60px;
+      overflow: visible;
 
       -webkit-transform-origin: left center;
       transform-origin: left center;
-      overflow: visible;
     }
 
     paper-toolbar paper-icon-button {
@@ -52,7 +53,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     iron-list {
-      background-color: var(--paper-grey-200, #eee);
       padding-bottom: 16px;
     }
 
@@ -101,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </style>
 
 </head>
-<body unresolved>
+<body class="fullbleed" unresolved>
 
   <template is="dom-bind">
     <iron-ajax url="data/contacts.json" last-response="{{data}}" auto></iron-ajax>

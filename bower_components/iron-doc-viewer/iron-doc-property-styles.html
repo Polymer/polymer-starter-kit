@@ -1,0 +1,202 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../paper-styles/typography.html">
+
+<dom-module id="iron-doc-property-styles">
+  <template>
+    <style>
+      :host {
+        @apply(--paper-font-body1);
+
+        box-sizing: border-box;
+        display: block;
+        padding: 16px 24px;
+      }
+
+      #transitionMask {
+        overflow: hidden;
+        position: relative;
+      }
+
+      [hidden] {
+        display: none;
+      }
+
+      .deeplink {
+        color: currentcolor;
+        text-decoration: none;
+      }
+
+      .deeplink:hover {
+        text-decoration: underline;
+      }
+
+      #signature {
+        @apply(--paper-font-code1);
+
+        float: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 260px;
+      }
+
+      #signature .name {
+        @apply(--paper-font-code2);
+      }
+
+      :host([function]) #signature {
+        position: static;
+        width: 100%;
+      }
+
+      :host:not([function]) #signature .params {
+        display: none;
+      }
+
+      :host([function]) #type {
+        display: none;
+      }
+
+      #details {
+        flex: 1;
+        font-size: 12px;
+        margin-left: 260px;
+      }
+
+      /* Metadata */
+
+      #type {
+        @apply(--paper-font-code1);
+
+        font-style: italic;
+      }
+
+      .annotation {
+        color: #666;
+        float: right;
+      }
+
+      .annotation > span::before {
+        content: "  &middot;  ";
+      }
+
+      .annotation > span:first-child::before {
+        content: "" !important;
+      }
+
+      #default .value {
+        color: #999;
+        font-size: 12px;
+      }
+
+      /* Function Parameters */
+
+      #params {
+        list-style: none;
+        margin: 8px -8px 0 -8px;
+        padding: 0 8px;
+      }
+
+      #params .type {
+        @apply(--paper-font-code1);
+      }
+
+      #params li {
+        padding: 4px 0;
+      }
+
+      #params li:first-child {
+        padding-top: 8px;
+      }
+
+      #params li:last-child {
+        padding-bottom: 8px;
+      }
+
+      marked-element {
+        display: inline-block;
+      }
+
+      #params .markdown-html p {
+        margin: 0;
+      }
+
+      /* Description */
+
+      #desc {
+        clear: both;
+        display: block;
+      }
+
+      #desc .markdown-html > :first-child {
+        margin-top: 0;
+      }
+
+      #desc .markdown-html > :last-child {
+        margin-bottom: 0;
+      }
+
+      #desc .markdown-html code {
+        @apply(--paper-font-code1);
+      }
+
+      .return {
+        font-size: 14px;
+      }
+
+      /* State Transitions */
+
+      #transitionMask {
+        transition: height ease-in-out 150ms;
+      }
+      #meta {
+        transition: opacity ease-in-out 150ms;
+      }
+      #desc {
+        transition: transform ease-in-out 150ms, opacity  ease-in-out 150ms;
+      }
+
+      .name {
+        font-size: 14px;
+      }
+
+      /* Collapsed State */
+
+      :host([_collapsed]) #transitionMask {
+        height: 20px; /* 1 line of text */
+        overflow: hidden;
+      }
+
+      :host([_collapsed]) #meta {
+        opacity: 0;
+      }
+
+      :host([_collapsed]) #desc {
+        transform: translateY(-34px);
+      }
+
+      :host([_collapsed][function]) #desc {
+        opacity: 0;
+      }
+
+      @media (max-width: 600px) {
+        #details {
+          margin-left: 0;
+        }
+
+        .annotation {
+          display: block;
+          float: none;
+        }
+      }
+    </style>
+  </template>
+</dom-module>

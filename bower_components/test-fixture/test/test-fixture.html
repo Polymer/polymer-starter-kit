@@ -55,6 +55,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div id="QuxSibling"></div>
     </template>
   </test-fixture>
+  <test-fixture id="CommentedSingleChildFixture">
+    <template>
+      <!-- comment -->
+      <!-- comment -->
+      <div id="Foo"></div>
+      <!-- comment -->
+    </template>
+  </test-fixture>
+  <test-fixture id="CommentedMultiChildFixture">
+    <template>
+      <!-- comment -->
+      <div id="Bar">
+        <div id="BarChild"></div>
+      </div>
+      <!-- comment -->
+      <!-- comment -->
+      <div id="BarSibling"></div>
+      <!-- comment -->
+      <div id="Baz"></div>
+    </template>
+  </test-fixture>
   <test-fixture id="AttachedFixture">
     <template>
       <x-custom></x-custom>
@@ -65,17 +86,23 @@ describe('<test-fixture>', function () {
   var trivialFixture;
   var complexDomFixture;
   var multiTemplateFixture;
+  var commentedSingleChildFixture;
+  var commentedMultiChildFixture;
 
   beforeEach(function () {
     trivialFixture = document.getElementById('TrivialFixture');
     complexDomFixture = document.getElementById('ComplexDomFixture');
     multiTemplateFixture = document.getElementById('MultiTemplateFixture');
+    commentedSingleChildFixture = document.getElementById('CommentedSingleChildFixture');
+    commentedMultiChildFixture = document.getElementById('CommentedMultiChildFixture');
   });
 
   afterEach(function () {
     trivialFixture.restore();
     complexDomFixture.restore();
     multiTemplateFixture.restore();
+    commentedSingleChildFixture.restore();
+    commentedMultiChildFixture.restore();
   });
 
   describe('an stamped-out fixture', function () {
@@ -177,6 +204,25 @@ describe('<test-fixture>', function () {
         expect(groups[1]).to.be.instanceOf(Array);
         expect(groups[1][0]).to.be.instanceOf(HTMLElement);
         expect(groups[1][1]).to.be.instanceOf(HTMLElement);
+      });
+    });
+
+    describe('when there are comments in the template', function() {
+      var el;
+      var els;
+
+      beforeEach(function () {
+        el = commentedSingleChildFixture.create();
+        els = commentedMultiChildFixture.create();
+      });
+
+      it('returns a single element if the template has a single child', function() {
+        expect(el).to.be.instanceOf(HTMLElement);
+      });
+
+      it('returns multiple elements if the template has multiple children', function() {
+        expect(els).to.be.instanceOf(Array);
+        expect(els.length).to.equal(3);
       });
     });
   });

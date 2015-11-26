@@ -1,12 +1,10 @@
 {
   "name": "paper-toolbar",
-  "version": "1.0.4",
+  "version": "1.1.1",
   "license": "http://polymer.github.io/LICENSE.txt",
   "description": "A material design toolbar that is easily customizable",
   "private": true,
-  "main": [
-    "paper-toolbar.html"
-  ],
+  "main": "paper-toolbar.html",
   "authors": [
     "The Polymer Authors"
   ],
@@ -22,14 +20,16 @@
   },
   "dependencies": {
     "paper-styles": "PolymerElements/paper-styles#^1.0.0",
-    "polymer": "Polymer/polymer#^1.0.0"
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "polymer": "Polymer/polymer#^1.2.0"
   },
   "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "iron-icons": "PolymerElements/iron-icons#^1.0.0",
     "paper-icon-button": "PolymerElements/paper-icon-button#^1.0.0",
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "web-component-tester": "*",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
-  }
+  },
+  "ignore": []
 }

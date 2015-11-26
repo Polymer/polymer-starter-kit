@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <html>
 <head>
 
-  <title>Selection</title>
+  <title>Select contacts</title>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
@@ -50,6 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background: var(--paper-pink-500);
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
         font-weight: bold;
+        z-index: 1;
       }
 
       .toolbar paper-icon-button {
@@ -68,17 +69,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-bottom: 1px solid #DDD;
       }
 
+      .item:hover {
+        background-color: var(--google-grey-100);
+      }
+
       .item:focus,
       .item.selected:focus {
         outline: 0;
-        background-color: #ddd;
+     /*   background-color: #ddd;*/
       }
 
       .item.selected .star {
         color: var(--paper-blue-600);
       }
 
-      .item.selected:not(:focus) {
+      .item.selected {
         background-color: var(--google-grey-100);
       }
 
@@ -170,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <iron-ajax url="data/contacts.json" last-response="{{data}}" auto></iron-ajax>
 
       <paper-toolbar class="toolbar">
-        <div class="flex">Inbox</div>
+        <div class="flex">Selection using iron-list</div>
         <div style="position: relative;">
           <paper-icon-button icon="icons:star" alt="Starred" on-tap="_toggleStarredView"></paper-icon-button>
           <paper-badge label$="[[selectedItems.length]]"></paper-badge>
@@ -267,7 +272,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 
 </head>
-<body unresolved>
+<body class="fullbleed" unresolved>
 
   <x-app></x-app>
 

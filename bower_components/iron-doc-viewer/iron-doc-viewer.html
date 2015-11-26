@@ -7,15 +7,16 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<link rel="import" href="../marked-element/marked-element.html">
-<link rel="import" href="../paper-styles/typography.html">
-<link rel="import" href="../paper-styles/shadow.html">
-<link rel="import" href="../paper-styles/color.html">
-<link rel="import" href="../paper-button/paper-button.html">
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../prism-element/prism-highlighter.html">
 
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../marked-element/marked-element.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-styles/color.html">
+<link rel="import" href="../paper-styles/shadow.html">
+<link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="../prism-element/prism-highlighter.html">
 <link rel="import" href="iron-doc-property.html">
+<link rel="import" href="iron-doc-viewer-styles.html">
 
 <!--
 Renders documentation describing an element's API.
@@ -45,11 +46,11 @@ property.
 
 @demo demo/index.html Basic Demo
 -->
+
 <dom-module id="iron-doc-viewer">
-
-  <link rel="import" type="css" href="iron-doc-viewer.css">
-
   <template>
+    <style include="iron-doc-viewer-styles"></style>
+
     <prism-highlighter></prism-highlighter>
 
     <section id="summary" class="card" hidden$="[[!descriptor.desc]]">
@@ -65,33 +66,32 @@ property.
     </nav>
 
     <section id="properties" class="card" hidden$="{{_noneToShow(_showPrivate,_properties)}}">
-      <header>Properties</header>
+      <header><a href="#properties" class="deeplink">Properties</a></header>
       <template is="dom-repeat" items="{{_properties}}" hidden$="{{!_properties.length}}">
         <iron-doc-property descriptor="{{item}}"></iron-doc-property>
       </template>
     </section>
 
     <section id="methods" class="card"  hidden$="{{_noneToShow(_showPrivate,_methods)}}">
-      <header>Methods</header>
+      <header><a href="#methods" class="deeplink">Methods</a></header>
       <template is="dom-repeat" items="{{_methods}}">
         <iron-doc-property descriptor="{{item}}"></iron-doc-property>
       </template>
     </section>
 
     <section id="events" class="card" hidden$="{{_noneToShow(_showPrivate,_events)}}">
-      <header>Events</header>
+      <header><a href="#events" class="deeplink">Events</a></header>
       <template is="dom-repeat" items="{{_events}}">
         <iron-doc-property descriptor="{{item}}"></iron-doc-property>
       </template>
     </section>
 
     <section id="behaviors" class="card" hidden$="{{_hideBehaviors(_behaviors)}}">
-      <header>Behaviors</header>
+      <header><a href="#behaviors" class="deeplink">Behaviors</a></header>
       <template is="dom-repeat" items="{{_behaviors}}">
         <p on-click="_broadcastBehavior">{{item}}</p>
       </template>
     </section>
-
   </template>
 
 </dom-module>

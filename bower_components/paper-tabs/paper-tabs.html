@@ -10,7 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../iron-menu-behavior/iron-menubar-behavior.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
@@ -58,16 +57,23 @@ To use links in tabs, add `link` attribute to `paper-tab` and put an `<a>`
 element in `paper-tab`.
 
 Example:
+    <style is="custom-style">
+      .link {
+        @apply(--layout-horizontal);
+        @apply(--layout-center-center);
+      }
+    }
+    </style>
 
     <paper-tabs selected="0">
       <paper-tab link>
-        <a href="#link1" class="horizontal center-center layout">TAB ONE</a>
+        <a href="#link1" class="link">TAB ONE</a>
       </paper-tab>
       <paper-tab link>
-        <a href="#link2" class="horizontal center-center layout">TAB TWO</a>
+        <a href="#link2" class="link">TAB TWO</a>
       </paper-tab>
       <paper-tab link>
-        <a href="#link3" class="horizontal center-center layout">TAB THREE</a>
+        <a href="#link3" class="link">TAB THREE</a>
       </paper-tab>
     </paper-tabs>
 
@@ -114,6 +120,7 @@ Custom property | Description | Default
       height: 100%;
       white-space: nowrap;
       overflow: hidden;
+      @apply(--layout-flex);
     }
 
     #tabsContent {
@@ -123,6 +130,10 @@ Custom property | Description | Default
     #tabsContent.scrollable {
       position: absolute;
       white-space: nowrap;
+    }
+
+    #tabsContent.horizontal {
+      @apply(--layout-horizontal);
     }
 
     .hidden {
@@ -183,7 +194,7 @@ Custom property | Description | Default
 
     <paper-icon-button icon="paper-tabs:chevron-left" class$="[[_computeScrollButtonClass(_leftHidden, scrollable, hideScrollButtons)]]" on-up="_onScrollButtonUp" on-down="_onLeftScrollButtonDown" tabindex="-1"></paper-icon-button>
 
-    <div id="tabsContainer" class="flex" on-track="_scroll" on-down="_down">
+    <div id="tabsContainer" on-track="_scroll" on-down="_down">
 
       <div id="tabsContent" class$="[[_computeTabsContentClass(scrollable)]]">
 
@@ -356,7 +367,7 @@ Custom property | Description | Default
     },
 
     _computeTabsContentClass: function(scrollable) {
-      return scrollable ? 'scrollable' : 'horizontal layout';
+      return scrollable ? 'scrollable' : 'horizontal';
     },
 
     _computeSelectionBarClass: function(noBar, alignBottom) {

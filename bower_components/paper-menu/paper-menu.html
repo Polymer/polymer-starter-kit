@@ -9,10 +9,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-menu-behavior/iron-menu-behavior.html">
-<link rel="import" href="../paper-styles/paper-styles.html">
+<link rel="import" href="../paper-styles/default-theme.html">
+<link rel="import" href="../paper-styles/color.html">
+<link rel="import" href="paper-menu-shared-styles.html">
 
 <!--
+Material design: [Menus](https://www.google.com/design/spec/components/menus.html)
+
 `<paper-menu>` implements an accessible menu control with Material Design styling. The focused item
 is highlighted, and the selected item has bolded text.
 
@@ -43,7 +48,7 @@ The following custom properties and mixins are available for styling:
 Custom property | Description | Default
 ----------------|-------------|----------
 `--paper-menu-background-color`   | Menu background color                                            | `--primary-background-color`
-`--paper-menu-color`               | Menu foreground color                                            | `--primary-text-color`
+`--paper-menu-color`              | Menu foreground color                                            | `--primary-text-color`
 `--paper-menu-disabled-color`     | Foreground color for a disabled item                             | `--disabled-text-color`
 `--paper-menu`                    | Mixin applied to the menu                                        | `{}`
 `--paper-menu-selected-item`      | Mixin applied to the selected item                               | `{}`
@@ -64,43 +69,34 @@ of a menu item will also focus it.
 -->
 
 <dom-module id="paper-menu">
-  <link rel="import" type="css" href="paper-menu-shared.css">
-
-  <style>
-    :host {
-      display: block;
-      padding: 8px 0;
-
-      background: var(--paper-menu-background-color, --primary-background-color);
-      color: var(--paper-menu-color, --primary-text-color);
-
-      @apply(--paper-menu);
-    }
-  </style>
   <template>
+    <style include="paper-menu-shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+        padding: 8px 0;
+
+        background: var(--paper-menu-background-color, --primary-background-color);
+        color: var(--paper-menu-color, --primary-text-color);
+
+        @apply(--paper-menu);
+      }
+    </style>
 
     <div class="selectable-content">
       <content></content>
     </div>
-
   </template>
 
+  <script>
+    (function() {
+      Polymer({
+        is: 'paper-menu',
+
+        behaviors: [
+          Polymer.IronMenuBehavior
+        ]
+      });
+    })();
+  </script>
 </dom-module>
-
-<script>
-
-(function() {
-
-  Polymer({
-
-    is: 'paper-menu',
-
-    behaviors: [
-      Polymer.IronMenuBehavior
-    ]
-
-  });
-
-})();
-
-</script>

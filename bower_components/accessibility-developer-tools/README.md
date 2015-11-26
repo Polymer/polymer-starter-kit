@@ -15,10 +15,10 @@ To include just the javascript rules, require the following file:
 
     https://raw.github.com/GoogleChrome/accessibility-developer-tools/stable/dist/js/axs_testing.js
 
-  `git 1.6.5` or later: 
+  `git 1.6.5` or later:
 
     % git clone --recursive https://github.com/GoogleChrome/accessibility-developer-tools.git
-    
+
   Before `git 1.6.5`:
 
     % git clone https://github.com/GoogleChrome/accessibility-developer-tools.git
@@ -55,7 +55,7 @@ Work is underway to include the library in WebDriver and other automated testing
 
 ## The `axs.Audit.run()` method
 
-Once you have included `axs_testing.js`, you can call call `axs.Audit.run()`. This returns an object in the following form:
+Once you have included `axs_testing.js`, you can call `axs.Audit.run()`. This returns an object in the following form:
 
     {
       /** @type {axs.constants.AuditResult} */
@@ -83,7 +83,7 @@ The runner will load the specified file or URL in a headless browser, inject axs
        "accessibility-developer-tools/stable/dist/js/axs_testing.js").mkString)
      val report = js.executeScript("var results = axs.Audit.run();return axs.Audit.createReport(results);")
      println(report)
-    
+
 ### Run audit from Selenium WebDriver (Scala)(with caching):
      val cache = collection.mutable.Map[String, String]()
      val driver = org.openqa.selenium.firefox.FirefoxDriver //use driver of your choice
@@ -99,7 +99,7 @@ The runner will load the specified file or URL in a headless browser, inject axs
        "accessibility-developer-tools/stable/dist/js/axs_testing.js"))
      val report = js.executeScript("var results = axs.Audit.run();return axs.Audit.createReport(results);")
      println(report)
-    
+
 If println() outputs nothing, check if you need to set DesiredCapabilities for your WebDriver (such as loggingPrefs):
 https://code.google.com/p/selenium/wiki/DesiredCapabilities
 
@@ -182,7 +182,18 @@ You can set a `scope` on the `AuditConfiguration` object like this:
     var configuration = new axs.AuditConfiguration();
     configuration.scope = document.querySelector('main');  // or however you wish to choose your scope element
     axs.Audit.run(configuration);
-    
+
+You may also specify a configuration payload while instantiating the `axs.AuditConfiguration`,
+which allows you to provide multiple configuration options at once.
+
+    var configuration = new axs.AuditConfiguration({
+      auditRulesToRun: ['badAriaRole'],
+      scope: document.querySelector('main'),
+      maxResults: 5
+    });
+
+    axs.Audit.run(configuration);
+
 ## License
 
 Copyright 2013 Google Inc. All Rights Reserved.

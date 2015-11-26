@@ -22,6 +22,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../paper-toolbar/paper-toolbar.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
   <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../paper-styles/color.html">
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
   <link rel="import" href="sample-content.html">
 
   <link rel="stylesheet" href="../../paper-styles/demo.css">
@@ -49,6 +51,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       padding: 8px;
     }
 
+    paper-icon-button {
+      --paper-icon-button-ink-color: white;
+    }
+
+    .spacer {
+      @apply(--layout-flex);
+    }
   </style>
 
 </head>
@@ -59,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-toolbar>
 
       <paper-icon-button icon="arrow-back"></paper-icon-button>
-      <div class="flex title">Title</div>
+      <div class="spacer title">Title</div>
       <paper-icon-button icon="search"></paper-icon-button>
       <paper-icon-button icon="more-vert"></paper-icon-button>
 

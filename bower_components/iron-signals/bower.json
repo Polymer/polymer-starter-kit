@@ -1,6 +1,6 @@
 {
   "name": "iron-signals",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Basic publish-subscribe functionality",
   "keywords": [
     "web-component",
@@ -24,5 +24,6 @@
     "paper-styles": "PolymerElements/paper-styles#^1.0.2",
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
-  }
+  },
+  "ignore": []
 }

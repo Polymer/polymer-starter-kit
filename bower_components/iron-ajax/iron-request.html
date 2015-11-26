@@ -56,7 +56,7 @@ iron-request can be used to perform XMLHttpRequests.
         notify: true,
         readOnly: true,
         value: function() {
-         return null;
+          return null;
         }
       },
 
@@ -177,6 +177,7 @@ iron-request can be used to perform XMLHttpRequests.
      *   body: (ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string|undefined|Object),
      *   headers: (Object|undefined),
      *   handleAs: (string|undefined),
+     *   jsonPrefix: (string|undefined),
      *   withCredentials: (boolean|undefined)}} options -
      *     url The url to which the request is sent.
      *     method The HTTP method to use, default is GET.
@@ -269,17 +270,29 @@ iron-request can be used to perform XMLHttpRequests.
         );
       }, this);
 
-      var body = this._encodeBodyObject(options.body, headers['content-type']);
-
-      // In IE, `xhr.responseType` is an empty string when the response
-      // returns. Hence, caching it as `xhr._responseType`.
       if (options.async !== false) {
-        xhr.responseType = xhr._responseType = (options.handleAs || 'text');
+        var handleAs = options.handleAs;
+
+        // If a JSON prefix is present, the responseType must be 'text' or the
+        // browser won’t be able to parse the response.
+        if (!!options.jsonPrefix || !handleAs) {
+          handleAs = 'text';
+        }
+
+        // In IE, `xhr.responseType` is an empty string when the response
+        // returns. Hence, caching it as `xhr._responseType`.
+        xhr.responseType = xhr._responseType = handleAs;
+
+        // Cache the JSON prefix, if it exists.
+        if (!!options.jsonPrefix) {
+          xhr._jsonPrefix = options.jsonPrefix;
+        }
       }
+
       xhr.withCredentials = !!options.withCredentials;
       xhr.timeout = options.timeout;
 
-
+      var body = this._encodeBodyObject(options.body, headers['content-type']);
 
       xhr.send(
         /** @type {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|
@@ -301,6 +314,7 @@ iron-request can be used to perform XMLHttpRequests.
       var xhr = this.xhr;
       var responseType = xhr.responseType || xhr._responseType;
       var preferResponseText = !this.xhr.responseType;
+      var prefixLen = (xhr._jsonPrefix && xhr._jsonPrefix.length) || 0;
 
       try {
         switch (responseType) {
@@ -315,7 +329,7 @@ iron-request can be used to perform XMLHttpRequests.
               // That is to say, we try to parse as JSON, but if anything goes
               // wrong return null.
               try {
-                return JSON.parse(xhr.responseText);;
+                return JSON.parse(xhr.responseText);
               } catch (_) {
                 return null;
               }
@@ -329,8 +343,20 @@ iron-request can be used to perform XMLHttpRequests.
           case 'arraybuffer':
             return xhr.response;
           case 'text':
-          default:
+          default: {
+            // If `prefixLen` is set, it implies the response should be parsed
+            // as JSON once the prefix of length `prefixLen` is stripped from
+            // it. Emulate the behavior above where null is returned on failure
+            // to parse.
+            if (prefixLen) {
+              try {
+                return JSON.parse(xhr.responseText.substring(prefixLen));
+              } catch (_) {
+                return null;
+              }
+            }
             return xhr.responseText;
+          }
         }
       } catch (e) {
         this.rejectCompletes(new Error('Could not parse response. ' + e.message));

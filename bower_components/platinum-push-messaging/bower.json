@@ -33,5 +33,6 @@
     "paper-material": "PolymerElements/paper-material#^1.0.0",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.0.0",
     "paper-item": "PolymerElements/paper-item#^1.0.0"
-  }
+  },
+  "main": "platinum-push-messaging.html"
 }

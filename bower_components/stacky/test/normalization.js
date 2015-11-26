@@ -27,12 +27,10 @@ describe('normalization', function() {
   describe('.normalize', function() {
     var normalize = normalization.normalize;
 
-    beforeEach(function() {
-      chalk.enabled = false;
-    });
-
     it('hides columns by default', function() {
-      expect(normalize(FULL_ERROR)).to.deep.equal({
+      var err = normalize(FULL_ERROR);
+      err.stack = chalk.stripColor(err.stack);
+      expect(err).to.deep.equal({
         message: 'ReferenceError: FAIL is not defined',
         stack: 'ReferenceError: FAIL is not defined\n' +
                '    Constraint.execute at deltablue.js:525\n' +
@@ -55,7 +53,9 @@ describe('normalization', function() {
     });
 
     it('supports modern errors', function() {
-      expect(normalize(FULL_ERROR, {showColumns: true})).to.deep.equal({
+      var err = normalize(FULL_ERROR, {showColumns: true});
+      err.stack = chalk.stripColor(err.stack);
+      expect(err).to.deep.equal({
         message: 'ReferenceError: FAIL is not defined',
         stack: 'ReferenceError: FAIL is not defined\n' +
                '    Constraint.execute at deltablue.js:525:2\n' +
@@ -87,7 +87,10 @@ describe('normalization', function() {
         columnNumber: 27,
       };
 
-      expect(normalize(error, {showColumns: true})).to.deep.equal({
+      var err = normalize(error, {showColumns: true});
+      err.stack = chalk.stripColor(err.stack);
+
+      expect(err).to.deep.equal({
         message: 'Something brokeded',
         stack: 'Something brokeded\n' +
                '<unknown> at some/file.js:123:27',
