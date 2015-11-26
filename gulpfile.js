@@ -320,7 +320,7 @@ gulp.task('deploy-gh-pages', function() {
     // Check if running task from Travis Cl, if so run using GH_TOKEN
     // otherwise run using ghPages defaults.
     .pipe($.if(process.env.TRAVIS === 'true', $.ghPages({
-      remoteUrl: 'https://$GH_TOKEN@github.com/proplanr/polymer-starter-kit.git',
+      remoteUrl: 'https://$GH_TOKEN@github.com/polymerelements/polymer-starter-kit.git',
       silent: true,
       branch: 'gh-pages'
     }), $.ghPages()));
