@@ -193,7 +193,15 @@ gulp.task('vulcanize', function() {
       inlineCss: true,
       inlineScripts: true
     }))
-    .pipe($.minifyInline())
+    .pipe($.minifyInline({
+      js: {
+        output: {
+          // jshint ignore:start
+          inline_script: true // jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
+          // jshint ignore:end
+        }
+      }
+    }))
     .pipe(gulp.dest(DEST_DIR))
     .pipe($.size({title: 'vulcanize'}));
 });
