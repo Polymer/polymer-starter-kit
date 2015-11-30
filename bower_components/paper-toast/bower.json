@@ -1,6 +1,6 @@
 {
   "name": "paper-toast",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A material design notification toast",
   "private": true,
   "license": "http://polymer.github.io/LICENSE.txt",
@@ -20,7 +20,7 @@
   "main": "paper-toast.html",
   "dependencies": {
     "iron-a11y-announcer": "PolymerElements/iron-a11y-announcer#^1.0.0",
-    "iron-overlay-behavior": "PolymerElements/iron-overlay-behavior#~1.0.9",
+    "iron-overlay-behavior": "PolymerElements/iron-overlay-behavior#^1.0.9",
     "paper-styles": "PolymerElements/paper-styles#^1.0.0",
     "polymer": "Polymer/polymer#^1.1.0"
   },

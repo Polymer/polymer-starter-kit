@@ -16,7 +16,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!--
 Material design: [Snackbards & toasts](https://www.google.com/design/spec/components/snackbars-toasts.html)
 
-`paper-toast` provides a subtle notification toast.
+`paper-toast` provides a subtle notification toast. Only one `paper-toast` will
+be visible on screen.
+
+Use `opened` to show the toast:
+
+Example:
+
+    <paper-toast text="Hello world!" opened></paper-toast>
+
+Also `open()` or `show()` can be used to show the toast:
+
+Example:
+
+    <paper-toast id="toast0" text="Welcome back!"></paper-toast>
+    <button onclick="document.querySelector('#toast0').open()">Login</button>
+
+Set `duration` to 0, a negative number or Infinity to persist the toast on screen:
+
+Example:
+
+    <paper-toast text="Terms and conditions" opened duration="0">
+      <a href="#">Show more</a>
+    </paper-toast>
+
+
+### Styling
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--paper-toast-background-color` | The paper-toast background-color | `#323232`
+`--paper-toast-color` | The paper-toast color | `#f1f1f1`
 
 @group Paper Elements
 @element paper-toast
@@ -30,9 +61,8 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
       :host {
         display: block;
         position: fixed;
-
-        background: #323232;
-        color: #f1f1f1;
+        background-color: var(--paper-toast-background-color, #323232);
+        color: var(--paper-toast-color, #f1f1f1);
         min-height: 48px;
         min-width: 288px;
         padding: 16px 24px 12px;
@@ -40,17 +70,16 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
         border-radius: 2px;
         left: 0;
+        bottom: 0;
         margin: 12px;
         font-size: 14px;
         cursor: default;
         -webkit-transition: visibility 0.3s, -webkit-transform 0.3s, opacity 0.3s;
         transition: visibility 0.3s, transform 0.3s, opacity 0.3s;
-
         visibility: hidden;
-        bottom: -100px;
         opacity: 0;
-        -webkit-transform: translateY(0px);
-        transform: translateY(0px);
+        -webkit-transform: translateY(100px);
+        transform: translateY(100px);
       }
 
       :host(.capsule) {
@@ -67,8 +96,8 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
       :host(.paper-toast-open) {
         visibility: visible;
         opacity: 1;
-        -webkit-transform: translateY(-100px);
-        transform: translateY(-100px);
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
       }
     </style>
 
@@ -78,7 +107,10 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
 
   <script>
     (function() {
-      var PaperToast = Polymer({
+      // Keeps track of the toast currently opened.
+      var currentToast = null;
+
+      Polymer({
         is: 'paper-toast',
 
         behaviors: [
@@ -88,6 +120,8 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
         properties: {
           /**
            * The duration in milliseconds to show the toast.
+           * Set to `0`, a negative number, or `Infinity`, to disable the
+           * toast auto-closing.
            */
           duration: {
             type: Number,
@@ -103,6 +137,7 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
           },
 
           /**
+           * Overridden from `IronOverlayBehavior`.
            * Set to false to enable closing of the toast by clicking outside it.
            */
           noCancelOnOutsideClick: {
@@ -111,9 +146,22 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
           },
         },
 
+        /**
+         * Read-only. Deprecated. Use `opened` from `IronOverlayBehavior`.
+         * @property visible
+         * @deprecated
+         */
         get visible() {
           console.warn('`visible` is deprecated, use `opened` instead');
           return this.opened;
+        },
+
+        /**
+         * Read-only. Can auto-close if duration is a positive finite number.
+         * @property _canAutoClose
+         */
+        get _canAutoClose() {
+          return this.duration > 0 && this.duration !== Infinity;
         },
 
         created: function() {
@@ -121,15 +169,14 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
         },
 
         /**
-         * Show the toast.
-         * @method show
+         * Show the toast. Same as `open()` from `IronOverlayBehavior`.
          */
         show: function() {
           this.open();
         },
 
         /**
-         * Hide the toast
+         * Hide the toast. Same as `close()` from `IronOverlayBehavior`.
          */
         hide: function() {
           this.close();
@@ -141,19 +188,18 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
          */
         _openedChanged: function() {
           if (this.opened) {
-            if (PaperToast.currentToast && PaperToast.currentToast !== this) {
-              PaperToast.currentToast.close();
+            if (currentToast && currentToast !== this) {
+              currentToast.close();
             }
-            PaperToast.currentToast = this;
+            currentToast = this;
             this.fire('iron-announce', {
               text: this.text
             });
-            // auto-close if duration is a positive finite number
-            if (this.duration > 0 && this.duration !== Infinity) {
+            if (this._canAutoClose) {
               this.debounce('close', this.close, this.duration);
             }
-          } else if (PaperToast.currentToast === this) {
-            PaperToast.currentToast = null;
+          } else if (currentToast === this) {
+            currentToast = null;
           }
           Polymer.IronOverlayBehaviorImpl._openedChanged.apply(this, arguments);
         },
@@ -164,6 +210,7 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
         _renderOpened: function() {
           this.classList.add('paper-toast-open');
         },
+
         /**
          * Overridden from `IronOverlayBehavior`.
          */
@@ -176,13 +223,21 @@ Material design: [Snackbards & toasts](https://www.google.com/design/spec/compon
          * iron-fit-behavior will set the inline style position: static, which
          * causes the toast to be rendered incorrectly when opened by default.
          */
-        _onIronResize: function(){
+        _onIronResize: function() {
           Polymer.IronOverlayBehaviorImpl._onIronResize.apply(this, arguments);
           if (this.opened) {
             // Make sure there is no inline style for position.
             this.style.position = '';
           }
         }
+
+        /**
+         * Fired when `paper-toast` is opened.
+         *
+         * @event 'iron-announce'
+         * @param {Object} detail
+         * @param {String} detail.text The text that will be announced.
+         */
       });
     })();
   </script>

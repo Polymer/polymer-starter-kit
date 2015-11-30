@@ -39,20 +39,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
 
+  <style is="custom-style">
+    #toast3 {
+      --paper-toast-background-color: red;
+      --paper-toast-color: white;
+    }
+  </style>
+
 </head>
 <body>
 
-  <paper-toast class="fit-bottom" text="hi there!" opened></paper-toast>
 
-  <paper-button raised onclick="document.querySelector('#toast1').show()">Discard Draft</paper-button>
+  <paper-button raised onclick="openToast('#toast1')">Discard Draft</paper-button>
 
-  <paper-button raised onclick="document.querySelector('#toast2').show()">Get Messages</paper-button>
+  <paper-button raised onclick="openToast('#toast2')">Get Messages</paper-button>
+
+  <paper-button raised onclick="openToast('#toast3')">Get an error</paper-button>
+
+  <paper-toast id="toast0" class="fit-bottom" text="Hi there! This toast will stay opened until you open another toast." opened duration="0"></paper-toast>
 
   <paper-toast id="toast1" text="Your draft has been discarded."></paper-toast>
 
-  <paper-toast id="toast2" text="Connection timed out. Showing limited messages." duration="0" onclick="this.hide()">
-    <span role="button" tabindex="0" style="color: #eeff41;margin: 10px" onclick="console.log('RETRY')">Retry</span>
+  <paper-toast id="toast2" text="Connection timed out. Showing limited messages.">
+    <span role="button" tabindex="0" style="color: #eeff41;margin: 10px" onclick="closeToast('#toast2')">Retry</span>
   </paper-toast>
+
+  <paper-toast id="toast3" text="This paper toast has color!"></paper-toast>
+
+  <script>
+    function openToast(selector) {
+      console.log('opening ' + selector);
+      document.querySelector(selector).open();
+    }
+    function closeToast(selector) {
+      console.log('closing ' + selector);
+      document.querySelector(selector).close();
+    }
+  </script>
 
 </body>
 </html>
