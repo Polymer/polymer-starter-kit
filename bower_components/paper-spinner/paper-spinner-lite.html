@@ -17,13 +17,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!--
 Material design: [Progress & activity](https://www.google.com/design/spec/components/progress-activity.html)
 
-Element providing a multiple color material design circular spinner.
+Element providing a single color material design circular spinner.
 
-    <paper-spinner active></paper-spinner>
+    <paper-spinner-lite active></paper-spinner-lite>
 
-The default spinner cycles between four layers of colors; by default they are
-blue, red, yellow and green. It can be customized to cycle between four different
-colors. Use <paper-spinner-lite> for single color spinners.
+The default spinner is blue. It can be customized to be a different color.
 
 ### Accessibility
 
@@ -32,7 +30,7 @@ it defaults to 'loading'.
 Empty alt can be provided to mark the element as decorative if alternative content is provided
 in another form (e.g. a text block following the spinner).
 
-    <paper-spinner alt="Loading contacts list" active></paper-spinner>
+    <paper-spinner-lite alt="Loading contacts list" active></paper-spinner-lite>
 
 ### Styling
 
@@ -40,53 +38,20 @@ The following custom properties and mixins are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--paper-spinner-layer-1-color` | Color of the first spinner rotation | `--google-blue-500`
-`--paper-spinner-layer-2-color` | Color of the second spinner rotation | `--google-red-500`
-`--paper-spinner-layer-3-color` | Color of the third spinner rotation | `--google-yellow-500`
-`--paper-spinner-layer-4-color` | Color of the fourth spinner rotation | `--google-green-500`
+`--paper-spinner-color` | Color of the spinner | `--google-blue-500`
 
 @group Paper Elements
-@element paper-spinner
+@element paper-spinner-lite
 @hero hero.svg
 @demo demo/index.html
 -->
 
-<dom-module id="paper-spinner">
+<dom-module id="paper-spinner-lite">
   <template>
     <style include="paper-spinner-styles"></style>
 
     <div id="spinnerContainer" class-name="[[__computeContainerClasses(active, __coolingDown)]]">
-      <div class="spinner-layer layer-1">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div><div class="gap-patch">
-          <div class="circle"></div>
-        </div><div class="circle-clipper right">
-          <div class="circle"></div>
-        </div>
-      </div>
-
-      <div class="spinner-layer layer-2">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div><div class="gap-patch">
-          <div class="circle"></div>
-        </div><div class="circle-clipper right">
-          <div class="circle"></div>
-        </div>
-      </div>
-
-      <div class="spinner-layer layer-3">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div><div class="gap-patch">
-          <div class="circle"></div>
-        </div><div class="circle-clipper right">
-          <div class="circle"></div>
-        </div>
-      </div>
-
-      <div class="spinner-layer layer-4">
+      <div class="spinner-layer">
         <div class="circle-clipper left">
           <div class="circle"></div>
         </div><div class="gap-patch">
@@ -100,7 +65,7 @@ Custom property | Description | Default
 
   <script>
     Polymer({
-      is: 'paper-spinner',
+      is: 'paper-spinner-lite',
 
       behaviors: [
         Polymer.PaperSpinnerBehavior

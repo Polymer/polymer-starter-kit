@@ -56,28 +56,9 @@ element in `paper-tab`.
 
 Example:
 
-    <paper-tabs selected="0">
-      <paper-tab link>
-        <a href="#link1" class="horizontal center-center layout">TAB ONE</a>
-      </paper-tab>
-      <paper-tab link>
-        <a href="#link2" class="horizontal center-center layout">TAB TWO</a>
-      </paper-tab>
-      <paper-tab link>
-        <a href="#link3" class="horizontal center-center layout">TAB THREE</a>
-      </paper-tab>
-    </paper-tabs>
-
-### Styling
-
-The following custom properties and mixins are available for styling:
-
-Custom property | Description | Default
-----------------|-------------|----------
-`--paper-tabs-selection-bar-color` | Color for the selection bar | `--paper-yellow-a100`
-`--paper-tabs` | Mixin applied to the tabs | `{}`
-
-
+    <style is="custom-style">
+      .link {
+        
 
 ##&lt;paper-tab&gt;
 

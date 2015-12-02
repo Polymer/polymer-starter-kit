@@ -67,6 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 100%;
         opacity: 0;
         white-space: nowrap;
+        border-color: var(--paper-spinner-color, --google-blue-500);
       }
 
       .layer-1 {
@@ -98,6 +99,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * specific properties properly, treats them as -webkit-animation, and overrides the
        * other animation rules. See https://github.com/Polymer/platform/issues/53.
        */
+      .active .spinner-layer {
+        /* durations: 4 * ARCTIME */
+        -webkit-animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        opacity: 1;
+      }
+
       .active .spinner-layer.layer-1 {
         /* durations: 4 * ARCTIME */
         -webkit-animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both, layer-1-fade-in-out 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;

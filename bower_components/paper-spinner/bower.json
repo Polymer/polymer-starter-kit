@@ -1,6 +1,6 @@
 {
   "name": "paper-spinner",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "A material design spinner",
   "authors": [
     "The Polymer Authors"
@@ -30,5 +30,8 @@
     "web-component-tester": "*",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
-  "main": "paper-spinner.html"
+  "main": [
+    "paper-spinner.html",
+    "paper-spinner-lite.html"
+  ]
 }

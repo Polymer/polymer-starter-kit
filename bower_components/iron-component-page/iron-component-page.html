@@ -170,10 +170,10 @@ documentation page including demos (if available).
         display: none;
       }
 
-      :host([_catalog]) [catalog-only] {
+      :host([catalog]) [catalog-only] {
         display: block;
       }
-      :host([_catalog]) [catalog-hidden] {
+      :host([catalog]) [catalog-hidden] {
         display: none;
       }
 
@@ -370,7 +370,7 @@ documentation page including demos (if available).
            * Toggle flag to be used when this element is being displayed in the
            * Polymer Elements catalog.
            */
-          _catalog: {
+          catalog: {
             type: Boolean,
             value: false,
             reflectToAttribute: true
@@ -435,7 +435,7 @@ documentation page including demos (if available).
             this._loading  = false;
           } else {
             // Make sure our change handlers trigger in all cases.
-            if (!this.src && !this._catalog) {
+            if (!this.src && !this.catalog) {
               this._srcChanged();
             }
           }

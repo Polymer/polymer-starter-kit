@@ -16,45 +16,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="../../paper-styles/demo-pages.html">
     <link rel="import" href="../paper-spinner.html">
+    <link rel="import" href="../paper-spinner-lite.html">
 
     <style is="custom-style">
       .horizontal-section {
         width: 100px;
       }
 
-      paper-spinner, button {
+      paper-spinner, paper-spinner-lite, button {
         display: block;
         margin-bottom: 24px;
         margin-left: auto;
         margin-right: auto;
       }
 
-      paper-spinner.blue {
-        --paper-spinner-layer-1-color: var(--paper-light-blue-500);
-        --paper-spinner-layer-2-color: var(--paper-light-blue-500);
-        --paper-spinner-layer-3-color: var(--paper-light-blue-500);
-        --paper-spinner-layer-4-color: var(--paper-light-blue-500);
+      paper-spinner.multi {
+        --paper-spinner-layer-1-color: var(--paper-purple-500);
+        --paper-spinner-layer-2-color: var(--paper-cyan-500);
+        --paper-spinner-layer-3-color: var(--paper-blue-grey-500);
+        --paper-spinner-layer-4-color: var(--paper-amber-500);
       }
 
-      paper-spinner.red {
-        --paper-spinner-layer-1-color: var(--paper-red-500);
-        --paper-spinner-layer-2-color: var(--paper-red-500);
-        --paper-spinner-layer-3-color: var(--paper-red-500);
-        --paper-spinner-layer-4-color: var(--paper-red-500);
+      paper-spinner-lite.red {
+        --paper-spinner-color: var(--google-red-500);
       }
 
-      paper-spinner.orange {
-        --paper-spinner-layer-1-color: var(--paper-orange-500);
-        --paper-spinner-layer-2-color: var(--paper-orange-500);
-        --paper-spinner-layer-3-color: var(--paper-orange-500);
-        --paper-spinner-layer-4-color: var(--paper-orange-500);
+      paper-spinner-lite.orange {
+        --paper-spinner-color: var(--google-yellow-500);
       }
 
-      paper-spinner.green {
-        --paper-spinner-layer-1-color: var(--paper-green-500);
-        --paper-spinner-layer-2-color: var(--paper-green-500);
-        --paper-spinner-layer-3-color: var(--paper-green-500);
-        --paper-spinner-layer-4-color: var(--paper-green-500);
+      paper-spinner-lite.green {
+        --paper-spinner-color: var(--google-green-500);
       }
     </style>
   </head>
@@ -62,23 +54,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <body unresolved>
     <div class="horizontal-section-container">
       <div>
-        <h4>Default</h4>
+        <h4>&lt;paper-spinner&gt;</h4>
         <div class="horizontal-section">
           <paper-spinner></paper-spinner>
           <paper-spinner active></paper-spinner>
-          <paper-spinner></paper-spinner>
-          <paper-spinner active></paper-spinner>
+          <paper-spinner class="multi"></paper-spinner>
+          <paper-spinner class="multi" active></paper-spinner>
           <button onclick="toggle(event)">Toggle</button>
         </div>
       </div>
 
       <div>
-        <h4>Color</h4>
+        <h4>&lt;paper-spinner-lite&gt;</h4>
         <div class="horizontal-section">
-          <paper-spinner class="blue" active></paper-spinner>
-          <paper-spinner class="red" active></paper-spinner>
-          <paper-spinner class="orange" active></paper-spinner>
-          <paper-spinner class="green" active></paper-spinner>
+          <paper-spinner-lite active></paper-spinner-lite>
+          <paper-spinner-lite class="red" active></paper-spinner-lite>
+          <paper-spinner-lite class="orange" active></paper-spinner-lite>
+          <paper-spinner-lite class="green" active></paper-spinner-lite>
           <button onclick="toggle(event)">Toggle</button>
         </div>
       </div>
@@ -86,7 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <script>
       function toggle(event) {
-        var spinners = event.target.parentElement.querySelectorAll('paper-spinner');
+        var spinners = event.target.parentElement.querySelectorAll('paper-spinner, paper-spinner-lite');
         Array.prototype.forEach.call(spinners, function(spinner) {
           spinner.active = !spinner.active;
         });
