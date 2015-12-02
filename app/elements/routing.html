@@ -27,28 +27,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       next();
     }
 
+    function closeDrawer(ctx, next) {
+      app.closeDrawer();
+      next();
+    }
+
     // Routes
-    page('/', scrollToTop, function() {
+    page('*', scrollToTop, closeDrawer, function(ctx, next) {
+      next();
+    });
+
+    page('/', function() {
       app.route = 'home';
     });
 
-    page(app.baseUrl, scrollToTop, function() {
+    page(app.baseUrl, function() {
       app.route = 'home';
     });
 
-    page('/users', scrollToTop, function() {
+    page('/users', function() {
       app.route = 'users';
     });
 
-    page('/users/:name', scrollToTop, function(data) {
+    page('/users/:name', function(data) {
       app.route = 'user-info';
       app.params = data.params;
     });
 
-    page('/contact', scrollToTop, function() {
+    page('/contact', function() {
       app.route = 'contact';
     });
 
+    // 404
     page('*', function() {
       app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
       app.$.toast.show();

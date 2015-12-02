@@ -11,10 +11,18 @@
 * Unit testing with [Web Component Tester](https://github.com/Polymer/web-component-tester)
 * Optional offline setup through [Platinum](https://elements.polymer-project.org/browse?package=platinum-elements) Service Worker elements
 * End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
-* [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor and Mobile Chrome Apps
+* [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor,  Deploying to GitHub Pages, Deploying to Firebase and Mobile Chrome Apps
 
 ### Demo
 See latest Polymer Starter Kit Demo (from master) at http://polymerelements.github.io/polymer-starter-kit
+
+### Tutorials
+
+Check out the Polymer Starter Kit tutorials on [polymer-project.org](https://polymer-project.org):
+
+* [Set up the PSK](https://www.polymer-project.org/1.0/docs/start/psk/set-up.html)
+* [Create a page](https://www.polymer-project.org/1.0/docs/start/psk/create-a-page.html)
+* [Deploy the PSK to the web](https://www.polymer-project.org/1.0/docs/start/psk/deploy.html)
 
 ## Getting Started
 
@@ -155,12 +163,17 @@ Polymer uses [Bower](http://bower.io) for package management. This makes it easy
 ## Deploy
 
 ### Github Pages
+
 1. Uncomment this line  `// app.baseUrl = '/polymer-starter-kit/';` in app.js near the top
 2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `bobs-awesome-site`)
-3. Run `build-deploy-gh-pages` from command line
+3. Run `gulp build-deploy-gh-pages` from command line
 4. To see changes wait 1-2 minutes then load Github pages for your app (ex: http://polymerelements.github.io/polymer-starter-kit)
 
 [See more details](/docs/deploy-to-github-pages.md/)
+
+### Firebase
+
+[See detail recipe](/docs/deploy-to-firebase-pretty-urls.md/)
 
 ## Service Worker
 
