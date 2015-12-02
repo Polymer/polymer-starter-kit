@@ -23,6 +23,8 @@ var glob = require('glob-all');
 var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
+var ensureFiles = require('./tasks/ensure-files.js');
+
 // var ghPages = require('gulp-gh-pages');
 
 var AUTOPREFIXER_BROWSERS = [
@@ -103,8 +105,19 @@ gulp.task('elements', function() {
   return styleTask('elements', ['**/*.css']);
 });
 
+// Ensure that we are not missing required files for the project
+// "dot" files are specifically tricky due to them being hidden on
+// some systems.
+gulp.task('ensureFiles', function(cb) {
+  var requiredFiles = ['.jscsrc', '.jshintrc', '.bowerrc'];
+
+  ensureFiles(requiredFiles.map(function(p) {
+    return path.join(__dirname, p);
+  }), cb);
+});
+
 // Lint JavaScript
-gulp.task('lint', function() {
+gulp.task('lint', ['ensureFiles'], function() {
   return gulp.src([
       'app/scripts/**/*.js',
       'app/elements/**/*.js',
