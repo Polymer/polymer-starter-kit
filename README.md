@@ -199,7 +199,7 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
                         skip-waiting
                         on-service-worker-installed="displayInstalledToast">
     <platinum-sw-cache default-cache-strategy="networkFirst"
-                       cache-config-file="precache.json">
+                       cache-config-file="cache-config.json">
     </platinum-sw-cache>
   </platinum-sw-register>
   -->
