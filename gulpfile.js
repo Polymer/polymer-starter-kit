@@ -114,7 +114,8 @@ gulp.task('lintfilesExist', function(cb) {
 
   var checked = 0;
   necessaryFiles.forEach(function(file) {
-    fs.stat(__dirname + '/' + file, function(err, stats) {
+    var filePath = path.join(__dirname, file);
+    fs.stat(filePath, function(err, stats) {
       if (err || !stats.isFile()) {
         filesMissing.push(file);
       }
