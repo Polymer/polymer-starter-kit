@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 Material design: [Toolbars](https://www.google.com/design/spec/components/toolbars.html)
 
 `paper-toolbar` is a horizontal bar containing items that can be used for
-label, navigation, search and actions.  The items place inside the
+label, navigation, search and actions.  The items placed inside the
 `paper-toolbar` are projected into a `class="horizontal center layout"` container inside of
 `paper-toolbar`'s Shadow DOM.  You can use flex attributes to control the items'
 sizing.
@@ -85,6 +85,7 @@ Custom property | Description | Default
 `--paper-toolbar-height`     | Custom height for toolbar    | `64px`
 `--paper-toolbar-sm-height`  | Custom height for small screen toolbar | `56px`
 `--paper-toolbar`            | Mixin applied to the toolbar | `{}`
+`--paper-toolbar-content`    | Mixin applied to the content section of the toolbar | `{}`
 `--paper-toolbar-medium`     | Mixin applied to medium height toolbar | `{}`
 `--paper-toolbar-tall`       | Mixin applied to tall height toolbar | `{}`
 
@@ -137,13 +138,14 @@ be used as the label of the toolbar via `aria-labelledby`.
         pointer-events: none;
         @apply(--layout-horizontal);
         @apply(--layout-center);
+        @apply(--paper-toolbar-content);
       }
 
       /*
        * TODO: Where should media query breakpoints live so they can be shared between elements?
        */
 
-      @media (max-width: 639px) {
+      @media (max-width: 600px) {
         :host {
           height: var(--paper-toolbar-sm-height, 56px);
         }
@@ -293,10 +295,6 @@ be used as the label of the toolbar via `aria-labelledby`.
          * Controls how the items are aligned horizontally when they are placed
          * at the bottom.
          * Options are `start`, `center`, `end`, `justified` and `around`.
-         *
-         * @attribute bottomJustify
-         * @type string
-         * @default ''
          */
         bottomJustify: {
           type: String,
@@ -306,10 +304,6 @@ be used as the label of the toolbar via `aria-labelledby`.
         /**
          * Controls how the items are aligned horizontally.
          * Options are `start`, `center`, `end`, `justified` and `around`.
-         *
-         * @attribute justify
-         * @type string
-         * @default ''
          */
         justify: {
           type: String,
@@ -320,10 +314,6 @@ be used as the label of the toolbar via `aria-labelledby`.
          * Controls how the items are aligned horizontally when they are placed
          * in the middle.
          * Options are `start`, `center`, `end`, `justified` and `around`.
-         *
-         * @attribute middleJustify
-         * @type string
-         * @default ''
          */
         middleJustify: {
           type: String,

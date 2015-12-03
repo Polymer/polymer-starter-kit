@@ -1,0 +1,141 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<!--
+`<iron-label>` provides a version of the `<label>` element that works with Custom Elements as well as native elements.
+
+All text in the `iron-label` will be applied to the target element as a screen-reader accessible description.
+
+There are three ways to use `iron-label` to target an element:
+
+1. place an element inside iron-label and some text:
+
+        <iron-label>
+          Label for the Button
+          <paper-button>button</paper-button>
+        </iron-label>
+
+2. place some elements inside iron-label and target one with the `iron-label-target` attribute.
+The other elements will provide the label for that element
+Note: This is not necessary if the element you want to label is the first
+element child of iron-label:
+
+        <iron-label>
+          <span>Label for the Button</span>
+          <paper-button iron-label-target>button</paper-button>
+        </iron-label>
+
+        <iron-label>
+          <paper-button>button</paper-button>
+          <span>Label for the Button</span>
+        </iron-label>
+
+3. Set the `for` attribute on the `iron-label` element with the id of the target
+element in the same document or ShadowRoot:
+
+        <iron-label for="foo">
+          Context for the button with the "foo" class"
+        </iron-label>
+        <paper-button id="foo">Far away button</paper-button>
+
+All taps on the `iron-label` will be forwarded to the "target" element.
+
+@group Iron Elements
+@element iron-label
+@demo demo/index.html
+@homepage polymer.github.io
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="iron-label">
+  <script>
+    Polymer.IronLabel = Polymer({
+      is: 'iron-label',
+
+      listeners: {
+        'tap': '_tapHandler'
+      },
+
+      properties: {
+        /**
+          * An ID reference to another element that needs to be
+          * labelled by this `iron-label` element.
+          */
+        for: {
+          type: String,
+          value: '',
+          reflectToAttribute: true,
+          observer: '_forChanged'
+        },
+        _forElement: Object
+      },
+
+      attached: function() {
+        this._forChanged();
+      },
+
+      ready: function() {
+        this._generateLabelId();
+      },
+
+      // generate a unique id for this element
+      _generateLabelId: function() {
+        if (!this.id) {
+          var id = 'iron-label-' + Polymer.IronLabel._labelNumber++;
+          Polymer.dom(this).setAttribute('id', id);
+        }
+      },
+
+      _findTarget: function() {
+        if (this.for) {
+          // external target
+          var scope = Polymer.dom(this).getOwnerRoot();
+          return Polymer.dom(scope).querySelector('#' + this.for);
+        } else {
+          // explicit internal target
+          var el = Polymer.dom(this).querySelector('[iron-label-target]');
+          if (!el) {
+            // implicit internal target
+            el = Polymer.dom(this).firstElementChild;
+          }
+          return el;
+        }
+      },
+
+      _tapHandler: function(ev) {
+        if (!this._forElement) {
+          return;
+        }
+        var target = Polymer.dom(ev).localTarget;
+        if (target === this._forElement) {
+          return;
+        }
+        this._forElement.focus();
+        this._forElement.click();
+      },
+
+      _applyLabelledBy: function() {
+        if (this._forElement) {
+          Polymer.dom(this._forElement).setAttribute('aria-labelledby', this.id);
+        }
+      },
+
+      _forChanged: function() {
+        if (this._forElement) {
+          Polymer.dom(this._forElement).removeAttribute('aria-labelledby');
+        }
+        this._forElement = this._findTarget();
+        this._applyLabelledBy();
+      }
+    });
+
+    // global counter for unique label ids
+    Polymer.IronLabel._labelNumber = 0;
+  </script>
+</dom-module>

@@ -17,94 +17,96 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <link rel="import" href="../../paper-styles/demo-pages.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
   <link rel="import" href="../../paper-styles/color.html">
   <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../iron-icons/social-icons.html">
+  <link rel="import" href="../../iron-icons/communication-icons.html">
   <link rel="import" href="../paper-badge.html">
   <link rel="import" href="test-button.html">
 
-  <style is="custom-style">
-    .horizontal-section {
-      min-width: 120px;
+  <style is="custom-style" include="demo-pages-shared-styles">
+    .vertical-section-container {
+      max-width: 550px;
     }
-
-    .with-badge {
-      display: inline-block;
-      margin-bottom: 30px;
-      overflow: hidden;
-    }
-
-    .red {
-      --paper-badge-background: var(--paper-red-300);
-    }
-    .orange {
-      --paper-badge-background: var(--paper-amber-300);
-    }
-    .green {
-      --paper-badge-background: var(--paper-green-300);
-    }
-
     paper-icon-button, test-button {
-      background-color: #ddd;
       padding: 3px;
       border-radius: 3px;
-      margin-left: 10px;
-      margin-right: 10px;
-    }
-
-    .with-badge > paper-badge {
-      --paper-badge-margin-left: 20px;
-      --paper-badge-margin-bottom: 0px;
+      margin-left: 30px;
+      margin-right: 30px;
     }
   </style>
 </head>
 <body unresolved>
-  <div class="horizontal-section-container">
-    <div>
-      <h4>Badging direct sibling</h4>
-      <div class="horizontal-section">
-        <div class="with-badge" tabindex="0">
-          <span>Oxygen</span>
-          <paper-badge label="8"></paper-badge>
-        </div>
-        <br>
-        <div class="with-badge" tabindex="0">
-          <span>Carbon</span>
-          <paper-badge label="6"></paper-badge>
-        </div>
-        <br>
-        <div class="with-badge" tabindex="0">
-          <span>Hydrogen</span>
-          <paper-badge label="1"></paper-badge>
-        </div>
-        <br>
-        <div class="with-badge" tabindex="0">
-          <span>Nitrogen</span>
-          <paper-badge label="7"></paper-badge>
-        </div>
-        <br>
-        <div class="with-badge" tabindex="0">
-          <span>Calcium</span>
-          <paper-badge label="20"></paper-badge>
-        </div>
-      </div>
-    </div>
-    <div>
-      <h4>Badging element by id</h4>
-      <div class="horizontal-section">
-        <test-button></test-button>
+  <div class="vertical-section-container centered">
+    <h3>Badges can be applied to specific elements</h3>
+    <demo-snippet class="centered-demo">
+      <template>
+        <paper-icon-button id="number" icon="communication:email" alt="inbox">
+        </paper-icon-button>
+        <paper-badge for="number" label="4">
+        </paper-badge>
 
-        <paper-icon-button id="heart" icon="favorite" alt="heart"></paper-icon-button>
-        <paper-badge class="red" for="heart" label="♣︎"></paper-badge>
+        <paper-icon-button id="icon" icon="account-box" alt="person">
+        </paper-icon-button>
+        <paper-badge icon="social:mood" for="icon" label="happy">
+        </paper-badge>
+      </template>
+    </demo-snippet>
 
-        <paper-icon-button id="back" icon="arrow-back" alt="go back"></paper-icon-button>
-        <paper-badge class="orange" for="back" label="♥︎"></paper-badge>
+    <h3>Badges can be applied to direct siblings</h3>
+    <demo-snippet class="centered-demo">
+      <template>
+        <div class="container" tabindex="0">
+          <span>Inbox</span>
+          <paper-badge label="4"></paper-badge>
+        </div>
 
-        <paper-icon-button id="fwd" icon="arrow-forward" alt="go forward"></paper-icon-button>
-        <paper-badge class="green" for="fwd" label="♦︎"></paper-badge>
-      </div>
-    </div>
+        <div class="container" tabindex="0">
+          <span>Mood</span>
+          <paper-badge icon="social:mood" label="happy"></paper-badge>
+        </div>
+
+        <style is="custom-style">
+          .container {
+            display: inline-block;
+            margin-left: 30px;
+            margin-right: 30px;
+          }
+          /* Need to position the badge to look like a text superscript */
+          .container > paper-badge {
+            --paper-badge-margin-left: 20px;
+            --paper-badge-margin-bottom: 0px;
+          }
+        </style>
+      </template>
+    </demo-snippet>
+
+    <h3>Badges can be customized using custom properties</h3>
+    <demo-snippet class="centered-demo">
+      <template>
+        <paper-icon-button id="number2" icon="communication:email" alt="inbox">
+        </paper-icon-button>
+        <paper-badge for="number2" label="4" class="red">
+        </paper-badge>
+
+        <paper-icon-button id="icon2" icon="account-box" alt="account-box">
+        </paper-icon-button>
+        <paper-badge icon="social:mood" for="icon2" label="happy" class="blue">
+        </paper-badge>
+
+        <style is="custom-style">
+          .red {
+            --paper-badge-background: var(--paper-red-300);
+          }
+          .blue {
+            --paper-badge-background: var(--paper-light-blue-300);
+          }
+        </style>
+      </template>
+    </demo-snippet>
   </div>
 </body>
 </html>
