@@ -29,7 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <link rel="import" href="../paper-dropdown-menu.html">
 
-  <style>
+  <style is="custom-style">
     paper-dropdown-menu {
       text-align: left;
       margin: auto;
@@ -46,6 +46,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     .horizontal-section {
       text-align: center;
+    }
+
+    .nounderline {
+      --paper-input-container-underline: {
+        display: none;
+      };
     }
   </style>
 
@@ -116,6 +122,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="horizontal-section-container">
       <div>
+        <h4>No underline (menu from bottom)</h4>
+        <div class="horizontal-section">
+          <paper-dropdown-menu class="nounderline" label="Letters" vertical-align="bottom">
+            <paper-listbox class="dropdown-content">
+              <template is="dom-repeat" items="[[letters]]" as="letter">
+                <paper-item>[[letter]]</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-section-container">
+      <div>
         <h4>No Label Float</h4>
         <div class="horizontal-section">
           <paper-dropdown-menu class="letters" label="Letters" no-label-float>
@@ -143,6 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </div>
     </div>
+
   </template>
 
   <script>

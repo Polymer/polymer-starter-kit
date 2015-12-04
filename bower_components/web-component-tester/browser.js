@@ -492,9 +492,7 @@
      */
     environmentScripts: [
       // https://github.com/PolymerLabs/stacky/issues/2
-      'stacky/lib/parsing.js',
-      'stacky/lib/formatting.js',
-      'stacky/lib/normalization.js',
+      'stacky/browser.js',
       'async/lib/async.js',
       'lodash/lodash.js',
       'mocha/mocha.js',
@@ -1574,7 +1572,9 @@
           // After each test...
           teardown(function() {
             // Restore the stubbed version of `Polymer.Base.instanceTemplate`:
-            Polymer.Base.instanceTemplate.restore();
+            if (Polymer.Base.instanceTemplate.isSinonProxy) {
+              Polymer.Base.instanceTemplate.restore();
+            }
           });
         }
       };

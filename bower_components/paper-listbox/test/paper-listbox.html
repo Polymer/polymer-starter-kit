@@ -18,11 +18,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-
     <script src="../../web-component-tester/browser.js"></script>
-    <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
-    <link rel="import" href="../../test-fixture/test-fixture.html">
     <link rel="import" href="../paper-listbox.html">
 
   </head>
@@ -31,9 +28,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <test-fixture id="basic">
       <template>
         <paper-listbox selected="0">
-          <div>item 1</div>
-          <div>item 2</div>
-          <div>item 3</div>
+          <div role="option">item 1</div>
+          <div role="option">item 2</div>
+          <div role="option">item 3</div>
         </paper-listbox>
       </template>
     </test-fixture>
@@ -48,12 +45,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         test('selected item has an appropriate className', function() {
-          assert(listbox.selectedItem.classList.contains('iron-selected'));
+          Polymer.Base.async(function() {
+            assert(listbox.selectedItem.classList.contains('iron-selected'));
+          }, 1);
         });
 
         test('has listbox aria role', function() {
           assert(listbox.getAttribute('role') === 'listbox');
         });
+
+        a11ySuite('basic');
       });
 
     </script>

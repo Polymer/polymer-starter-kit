@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :root {
-        --paper-toolbar-background: #00bcd4;
+        --paper-toolbar-background: var(--paper-blue-900);
       }
 
       body {
@@ -23,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-tabs, paper-toolbar {
-        background-color: #00bcd4;
+        background-color: var(--paper-blue-900);
         color: #fff;
         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
       }
@@ -38,6 +38,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       paper-tabs[align-bottom] {
         box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.15);
+      }
+
+      paper-tabs a {
+        color: #fff;
       }
 
       h3 {
