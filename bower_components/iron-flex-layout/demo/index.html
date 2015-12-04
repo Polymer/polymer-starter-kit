@@ -52,12 +52,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex {
+          #demo1 {
             @apply(--layout-horizontal);
           }
         </style>
 
-        <div class="container flex">
+        <div class="container" id="demo1">
           <div>one</div>
           <div>two</div>
           <div>three</div>
@@ -71,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-horizontal {
+          #demo2 {
             @apply(--layout-horizontal);
           }
           .flexchild {
@@ -79,7 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         </style>
 
-        <div class="container flex-horizontal">
+        <div class="container" id="demo2">
           <div>one</div>
           <div class="flexchild">two (flex)</div>
           <div>three</div>
@@ -93,18 +93,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-vertical {
+          #demo3 {
             @apply(--layout-vertical);
-            height: 220px;
           }
-          .flexchild-vertical {
+          .flexchild {
             @apply(--layout-flex);
           }
         </style>
 
-        <div class="container flex-vertical">
+        <div class="container" id="demo3">
           <div>one</div>
-          <div class="flexchild-vertical">two (flex)</div>
+          <div class="flexchild">two (flex)</div>
           <div>three</div>
         </div>
       </template>
@@ -116,7 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-horizontal-with-ratios {
+          #demo4 {
             @apply(--layout-horizontal);
           }
           .flexchild {
@@ -130,28 +129,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         </style>
 
-        <div class="container flex-horizontal-with-ratios">
+        <div class="container" id="demo4">
           <div class="flex3child">one</div>
           <div class="flexchild">two</div>
           <div class="flex2child">three</div>
-        </div>
-      </template>
-    </demo-snippet>
-  </div>
-
-  <h4>Cross-axis stretch alignment (default)</h4>
-  <div class="vertical-section">
-    <demo-snippet>
-      <template>
-        <style is="custom-style">
-          .flex-stretch-align {
-            @apply(--layout-horizontal);
-            height: 120px;
-          }
-        </style>
-
-        <div class="container flex-stretch-align">
-          <div>stretch</div>
         </div>
       </template>
     </demo-snippet>
@@ -162,14 +143,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-center-align {
+          #demo5 {
             @apply(--layout-horizontal);
             @apply(--layout-center);
             height: 120px;
           }
         </style>
 
-        <div class="container flex-center-align">
+        <div class="container" id="demo5">
           <div>center</div>
         </div>
       </template>
@@ -181,14 +162,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-start-align {
+          #demo6 {
             @apply(--layout-horizontal);
             @apply(--layout-start);
             height: 120px;
           }
         </style>
 
-        <div class="container flex-start-align">
+        <div class="container" id="demo6">
           <div>start</div>
         </div>
       </template>
@@ -200,14 +181,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-end-align {
+          #demo7 {
             @apply(--layout-horizontal);
             @apply(--layout-end);
             height: 120px;
           }
         </style>
 
-        <div class="container flex-end-align">
+        <div class="container" id="demo7">
           <div>end</div>
         </div>
       </template>
@@ -219,13 +200,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-start-justified {
+          #demo8 {
             @apply(--layout-horizontal);
             @apply(--layout-start-justified);
           }
         </style>
 
-        <div class="container flex-start-justified">
+        <div class="container" id="demo8">
           <div>start-justified</div>
         </div>
       </template>
@@ -237,13 +218,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-center-justified {
+          #demo9 {
             @apply(--layout-horizontal);
             @apply(--layout-center-justified);
           }
         </style>
 
-        <div class="container flex-center-justified">
+        <div class="container" id="demo9">
           <div>center-justified</div>
         </div>
       </template>
@@ -255,13 +236,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-end-justified {
+          #demo10 {
             @apply(--layout-horizontal);
             @apply(--layout-end-justified);
           }
         </style>
 
-        <div class="container flex-end-justified">
+        <div class="container" id="demo10">
           <div>end-justified</div>
         </div>
       </template>
@@ -273,13 +254,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-equal-justified {
+          #demo10 {
             @apply(--layout-horizontal);
             @apply(--layout-justified);
           }
         </style>
 
-        <div class="container flex-equal-justified">
+        <div class="container" id="demo10">
           <div>justified</div>
           <div>justified</div>
           <div>justified</div>
@@ -293,13 +274,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-equal-around-justified {
+          #demo11 {
             @apply(--layout-horizontal);
             @apply(--layout-around-justified);
           }
         </style>
 
-        <div class="container flex-equal-around-justified">
+        <div class="container" id="demo11">
           <div>around-justified</div>
           <div>around-justified</div>
         </div>
@@ -312,12 +293,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-self-align {
+          #demo12 {
             @apply(--layout-horizontal);
             @apply(--layout-justified);
             height: 120px;
           }
-          .flex-self-align div {
+          #demo12 div {
             @apply(--layout-flex);
           }
           .child1 {
@@ -334,7 +315,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         </style>
 
-        <div class="container flex-self-align">
+        <div class="container" id="demo12">
           <div class="child1">one</div>
           <div class="child2">two</div>
           <div class="child3">three</div>
@@ -349,34 +330,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .flex-wrap {
+          #demo13 {
             @apply(--layout-horizontal);
             @apply(--layout-wrap);
             width: 200px;
           }
         </style>
 
-        <div class="container flex-wrap">
-          <div>one</div>
-          <div>two</div>
-          <div>three</div>
-          <div>four</div>
-        </div>
-      </template>
-    </demo-snippet>
-  </div>
-
-  <h4>Reversed layouts</h4>
-  <div class="vertical-section">
-    <demo-snippet>
-      <template>
-        <style is="custom-style">
-          .flex-reversed {
-            @apply(--layout-horizontal-reverse);
-          }
-        </style>
-
-        <div class="container flex-reversed">
+        <div class="container" id="demo13">
           <div>one</div>
           <div>two</div>
           <div>three</div>
@@ -391,10 +352,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .general {
+          #demo14 {
             width: 100%;
           }
-          .general > div {
+          #demo14 > div {
             background-color: #ccc;
             padding: 4px;
             margin: 12px;
@@ -413,7 +374,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         </style>
 
-        <div class="general">
+        <div id="demo14">
           <div>Before <span>[A Span]</span> After</div>
           <div>Before <span class="block">[A Block Span]</span> After</div>
           <div>Before invisible span <span class="invisible">Not displayed</span> After invisible span</div>
