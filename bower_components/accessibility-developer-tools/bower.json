@@ -8,14 +8,16 @@
   "description": "This is a library of accessibility-related testing and utility code.",
   "main": "dist/js/axs_testing.js",
   "moduleType": [
+    "amd",
     "globals"
   ],
   "keywords": [
     "accessibility",
     "testing",
-    "WCAG"
+    "WCAG",
+    "module"
   ],
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "ignore": [
     "**/.*",
     "lib",
