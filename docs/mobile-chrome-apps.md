@@ -4,7 +4,7 @@
 
 Polymer Starter Kit could be fully adapted to Mobile Chrome Apps through mobile-friendly features. Mobile Chrome Apps, is based on Apache Cordova, and requires mobile application SDKs such as Android and iOS. so please make sure that installation development tool by following [installation guide](https://github.com/MobileChromeApps/mobile-chrome-apps/blob/master/docs/Installation.md) of Mobile Chrome Apps. And then, You do some further steps to resolve some of restrictions and configurations to use Polymer Starter Kit on Cordova. Looking for a [guide video](https://www.youtube.com/watch?v=-ifgyobPLVg) below to better understand.
 
-![https://www.youtube.com/watch?v=-ifgyobPLVg](https://camo.githubusercontent.com/7c498c4d60113dd1ea072576df897283100428b6/687474703a2f2f696d672e796f75747562652e636f6d2f76692f2d696667796f62504c56672f302e6a7067)
+[![](https://camo.githubusercontent.com/7c498c4d60113dd1ea072576df897283100428b6/687474703a2f2f696d672e796f75747562652e636f6d2f76692f2d696667796f62504c56672f302e6a7067)](https://www.youtube.com/watch?v=-ifgyobPLVg)
 
 ## Download Polymer Starter Kit into your workspace
 
