@@ -67,12 +67,10 @@ var imageOptimizeTask = function(src, dest) {
 
 var optimizeHtmlTask = function(src, dest) {
   var assets = $.useref.assets({
-    searchPath: ['.tmp', 'app', dist()]
+    searchPath: ['.tmp', 'app']
   });
 
   return gulp.src(src)
-    // Replace path for vulcanized assets
-    .pipe($.if('*.html', $.replace('elements/elements.html', 'elements/elements.vulcanized.html')))
     .pipe(assets)
     // Concatenate and minify JavaScript
     .pipe($.if('*.js', $.uglify({
@@ -137,32 +135,20 @@ gulp.task('copy', function() {
   var app = gulp.src([
     'app/*',
     '!app/test',
+    '!app/elements',
+    '!app/bower_components',
     '!app/cache-config.json'
   ], {
     dot: true
   }).pipe(gulp.dest(dist()));
 
+  // Copy over only the bower_components we need
+  // These are things which cannot be vulcanized
   var bower = gulp.src([
-    'bower_components/**/*'
+    'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill}/**/*'
   ]).pipe(gulp.dest(dist('bower_components')));
 
-  var elements = gulp.src(['app/elements/**/*.html',
-      'app/elements/**/*.css',
-      'app/elements/**/*.js'
-    ])
-    .pipe(gulp.dest(dist('elements')));
-
-  var swBootstrap = gulp.src(['bower_components/platinum-sw/bootstrap/*.js'])
-    .pipe(gulp.dest(dist('elements/bootstrap')));
-
-  var swToolbox = gulp.src(['bower_components/sw-toolbox/*.js'])
-    .pipe(gulp.dest(dist('sw-toolbox')));
-
-  var vulcanized = gulp.src(['app/elements/elements.html'])
-    .pipe($.rename('elements.vulcanized.html'))
-    .pipe(gulp.dest(dist('elements')));
-
-  return merge(app, bower, elements, vulcanized, swBootstrap, swToolbox)
+  return merge(app, bower)
     .pipe($.size({
       title: 'copy'
     }));
@@ -180,20 +166,19 @@ gulp.task('fonts', function() {
 // Scan your HTML for assets & optimize them
 gulp.task('html', function() {
   return optimizeHtmlTask(
-    ['app/**/*.html', '!app/{elements,test}/**/*.html'],
+    ['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'],
     dist());
 });
 
 // Vulcanize granular configuration
 gulp.task('vulcanize', function() {
-  var DEST_DIR = dist('elements');
-  return gulp.src(dist('elements/elements.vulcanized.html'))
+  return gulp.src('app/elements/elements.html')
     .pipe($.vulcanize({
       stripComments: true,
       inlineCss: true,
       inlineScripts: true
     }))
-    .pipe(gulp.dest(DEST_DIR))
+    .pipe(gulp.dest(dist('elements')))
     .pipe($.size({title: 'vulcanize'}));
 });
 
@@ -257,10 +242,7 @@ gulp.task('serve', ['lint', 'styles', 'elements', 'images'], function() {
     // https: true,
     server: {
       baseDir: ['.tmp', 'app'],
-      middleware: [historyApiFallback()],
-      routes: {
-        '/bower_components': 'bower_components'
-      }
+      middleware: [historyApiFallback()]
     }
   });
 
