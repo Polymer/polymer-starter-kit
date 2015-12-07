@@ -50,11 +50,9 @@ guide](https://www.firebase.com/docs/hosting/quickstart.html).
 
 1.  Add `<base href="/">` to `head` in index.html
 
-1.  Set `hashbang: false` in routing.html near bottom
+1.  Remove `hashbang: true` in routing.html near bottom. The call to `page` should look like this now:
 
-        page({
-          hashbang: false
-        });
+        page();
 
 1.  Build
 
