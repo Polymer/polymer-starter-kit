@@ -11,10 +11,18 @@
 * Unit testing with [Web Component Tester](https://github.com/Polymer/web-component-tester)
 * Optional offline setup through [Platinum](https://elements.polymer-project.org/browse?package=platinum-elements) Service Worker elements
 * End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
-* [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, deploying to GitHub pages and using Chrome Dev Editor
+* [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor, Deploying to GitHub Pages, Deploying to Firebase, and Mobile Chrome Apps
 
 ### Demo
 See latest Polymer Starter Kit Demo (from master) at http://polymerelements.github.io/polymer-starter-kit
+
+### Tutorials
+
+Check out the Polymer Starter Kit tutorials on [polymer-project.org](https://polymer-project.org):
+
+* [Set up the PSK](https://www.polymer-project.org/1.0/docs/start/psk/set-up.html)
+* [Create a page](https://www.polymer-project.org/1.0/docs/start/psk/create-a-page.html)
+* [Deploy the PSK to the web](https://www.polymer-project.org/1.0/docs/start/psk/deploy.html)
 
 ## Getting Started
 
@@ -32,6 +40,8 @@ To take advantage of Polymer Starter Kit you need to:
 **Beginners**: Try Polymer Starter Kit Light. This doesn't require any extra dependencies nor knowledge of modern front-end tooling. This option is good for prototyping if you haven't build a Polymer app before.
 
 **Intermediate - Advanced**: Use the full version of Polymer Starter Kit. This comes with all the build tools you'll need for testing and productionising your app so it's nice and lean. You'll need to run a few extra commands to install the tools we recommend but it's worth it to make sure your final app is super optimised.
+
+:warning: **Important**: The intermediate/advanced version contains dotfiles (files starting with a `.`). If you're copying the contents of the Starter Kit to a new location make sure you bring along these dotfiles as well! On Mac, [enable showing hidden files](http://ianlunn.co.uk/articles/quickly-showhide-hidden-files-mac-os-x-mavericks/), then try extracting/copying Polymer Starter Kit again. This time the dotfiles needed should be visible so you can copy them over without issues.
 
 Rob Dodson has a fantastic [PolyCast video](https://www.youtube.com/watch?v=xz-yixRxZN8) available that walks through using Polymer Starter Kit. An [end-to-end with Polymer](https://www.youtube.com/watch?v=1f_Tj_JnStA) and Polymer Starter Kit talk is also available.
 
@@ -155,12 +165,17 @@ Polymer uses [Bower](http://bower.io) for package management. This makes it easy
 ## Deploy
 
 ### Github Pages
+
 1. Uncomment this line  `// app.baseUrl = '/polymer-starter-kit/';` in app.js near the top
 2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `bobs-awesome-site`)
 3. Run `gulp build-deploy-gh-pages` from command line
 4. To see changes wait 1-2 minutes then load Github pages for your app (ex: http://polymerelements.github.io/polymer-starter-kit)
 
 [See more details](/docs/deploy-to-github-pages.md/)
+
+### Firebase
+
+[See detail recipe](/docs/deploy-to-firebase-pretty-urls.md/)
 
 ## Service Worker
 
@@ -186,7 +201,7 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
                         skip-waiting
                         on-service-worker-installed="displayInstalledToast">
     <platinum-sw-cache default-cache-strategy="networkFirst"
-                       cache-config-file="precache.json">
+                       cache-config-file="cache-config.json">
     </platinum-sw-cache>
   </platinum-sw-register>
   -->
