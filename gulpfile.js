@@ -130,7 +130,7 @@ gulp.task('lint', ['ensureFiles'], function() {
     }))
 
   // JSCS has not yet a extract option
-  .pipe($.if('*.html', $.htmlExtract()))
+  .pipe($.if('*.html', $.htmlExtract({strip: true})))
   .pipe($.jshint())
   .pipe($.jscs())
   .pipe($.jscsStylish.combineWithHintResults())
@@ -150,7 +150,8 @@ gulp.task('copy', function() {
     '!app/test',
     '!app/elements',
     '!app/bower_components',
-    '!app/cache-config.json'
+    '!app/cache-config.json',
+    '!**/.DS_Store'
   ], {
     dot: true
   }).pipe(gulp.dest(dist()));

@@ -4,15 +4,15 @@ If you are using a Chromebook, one of the few IDE you can use is [Chrome Dev Edi
 
 To use the Polymer Starter Kit you have to download the [latest release](https://github.com/PolymerElements/polymer-starter-kit/releases) in the `light` flavor (the additional tools can't be used from CDE).
 
-After downloading the `polymer-starter-kit-light-*.zip` file unpack it in a new folder (for Example `psk-light`) you should have a directory structure like 
+After downloading the `polymer-starter-kit-light-*.zip` file unpack it in a new folder (for Example `psk-light`) you should have a directory structure like
 
 ![psk-light-folder-p1](https://cloud.githubusercontent.com/assets/1431346/9451900/a73ffcf2-4ab1-11e5-8742-e0b5523ba9d5.png)
 
+When the app first opens you'll notice, in the bottom left, that Bower is updating.
 
-Before opening the folder inside CDE, we need to move the file `bower.json` to `app/bower.json`, this way running `Bower Update` from CDE's menu, will place the updated packages in `app/bower_components`
+![bower updating](https://cloud.githubusercontent.com/assets/1066253/11860260/d837edae-a427-11e5-997e-117caa83bbed.png)
 
-![bower json-post](https://cloud.githubusercontent.com/assets/1431346/9452119/c5826a46-4ab2-11e5-96c5-00cf404d9c50.png)
-
+Wait for this process to finish before continuing (it may take a few minutes). When it is complete, you should notice that the `bower_components` directory has moved to `app/bower_components`. This is because CDE is respecting the configuration in our `.bowerrc` file. This is a good thing :)
 
 We can now `Open Folder...` inside CDE and start renaming the file `app/manifest.json` to `app/web-app-manifest.json`, followed by updating the link to it in the file `app/index.html`
 
