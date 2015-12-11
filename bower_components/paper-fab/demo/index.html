@@ -19,90 +19,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../paper-styles/color.html">
-  <link rel="import" href="../../paper-styles/demo-pages.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
   <link rel="import" href="../paper-fab.html">
 
-  <style is="custom-style">
-    .horizontal-section {
-      min-width: 200px;
-    }
-
+  <style is="custom-style" include="demo-pages-shared-styles">
     paper-fab {
-      display: block;
-      margin-bottom:24px;
-      margin-left: auto;
-      margin-right: auto;
+      margin-left: 10px;
+      margin-right: 10px;
     }
 
-    paper-fab.blue {
-      --paper-fab-background: var(--paper-light-blue-500);
-      --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+    .vertical-section-container {
+      max-width: 550px;
     }
-
-    paper-fab.red {
-      --paper-fab-background: var(--paper-red-500);
-      --paper-fab-keyboard-focus-background: var(--paper-red-900);
-    }
-
-    paper-fab.green {
-      --paper-fab-background: var(--paper-green-500);
-      --paper-fab-keyboard-focus-background: var(--paper-green-900);
-    }
-
-    paper-fab.orange {
-      --paper-fab-background: var(--paper-orange-500);
-      --paper-fab-keyboard-focus-background: var(--paper-orange-900);
-    }
-
   </style>
-
 </head>
 <body unresolved>
-  <div class="horizontal-section-container">
-    <div>
-      <h4>Enabled</h4>
-      <div class="horizontal-section">
-        <paper-fab icon="arrow-forward" title="arrow-forward"></paper-fab>
-        <paper-fab icon="create" title="create"></paper-fab>
+  <div class="vertical-section-container centered">
+    <h3>FABs can be enabled or disabled</h3>
+    <demo-snippet class="centered-demo">
+      <template>
         <paper-fab icon="favorite" title="heart"></paper-fab>
-        <paper-fab mini icon="done" title="done"></paper-fab>
-        <paper-fab mini icon="reply" title="reply"></paper-fab>
-      </div>
-    </div>
+        <paper-fab disabled icon="reply" title="reply"></paper-fab>
+      </template>
+    </demo-snippet>
 
-    <div>
-      <h4>Disabled</h4>
-      <div class="horizontal-section">
-        <paper-fab disabled icon="arrow-forward" title="arrow-forward"></paper-fab>
-        <paper-fab disabled icon="create" title="create"></paper-fab>
-        <paper-fab disabled icon="favorite" title="heart"></paper-fab>
-        <paper-fab disabled mini icon="done" title="done"></paper-fab>
-        <paper-fab disabled mini icon="reply" title="reply"></paper-fab>
-      </div>
-    </div>
+    <h3>FABs can be made smaller using the <i>mini</i> attribute</h3>
+    <demo-snippet class="centered-demo">
+      <template>
+        <paper-fab mini icon="favorite" title="heart"></paper-fab>
+        <paper-fab mini disabled icon="reply" title="reply"></paper-fab>
+      </template>
+    </demo-snippet>
 
-    <div>
-      <h4>Colors</h4>
-      <div class="horizontal-section">
-        <paper-fab icon="arrow-forward" title="arrow-forward" class="blue"></paper-fab>
-        <paper-fab icon="create" title="create" class="red"></paper-fab>
-        <paper-fab icon="favorite" title="heart" class="orange"></paper-fab>
-        <paper-fab mini icon="done" title="done" class="green"></paper-fab>
-        <paper-fab mini icon="reply" title="reply" class="blue"></paper-fab>
-      </div>
-    </div>
-
-    <div>
-      <h4>Noink</h4>
-      <div class="horizontal-section">
-        <paper-fab noink icon="arrow-forward" title="arrow-forward"></paper-fab>
-        <paper-fab noink icon="create" title="create"></paper-fab>
+    <h3>FABs can hide the ripple effect using the <i>noink</i> attribute</h3>
+    <demo-snippet class="centered-demo">
+      <template>
         <paper-fab noink icon="favorite" title="heart"></paper-fab>
-        <paper-fab noink mini icon="done" title="done"></paper-fab>
-        <paper-fab noink mini icon="reply" title="reply"></paper-fab>
-      </div>
-    </div>
+      </template>
+    </demo-snippet>
+
+    <h3>FABs can be styled using custom properties</h3>
+    <demo-snippet class="centered-demo">
+      <template>
+        <style is="custom-style">
+          paper-fab.blue {
+            --paper-fab-background: var(--paper-light-blue-500);
+            --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+          }
+          paper-fab.orange {
+            --paper-fab-background: var(--paper-orange-500);
+            --paper-fab-keyboard-focus-background: var(--paper-orange-900);
+          }
+        </style>
+
+        <paper-fab icon="favorite" title="heart" class="blue"></paper-fab>
+        <paper-fab icon="favorite" title="heart" class="orange"></paper-fab>
+      </template>
+    </demo-snippet>
   </div>
 </body>
 </html>

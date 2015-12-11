@@ -15,7 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../test-fixture-mocha.js"></script>
 
-  <link rel="import" href="../test-fixture.html">
+  <link rel="import" id="test-fixture-import" href="../test-fixture.html">
 </head>
 <body>
   <script>
@@ -82,6 +82,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
   <script>
+describe('test-fixture import', function() {
+  it('loads from test-fixture import', function() {
+    var importNode = document.getElementById('test-fixture-import');
+    expect(importNode.import).to.not.be.null;
+  });
+});
 describe('<test-fixture>', function () {
   var trivialFixture;
   var complexDomFixture;

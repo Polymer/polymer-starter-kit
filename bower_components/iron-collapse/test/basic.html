@@ -28,8 +28,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <test-fixture id="test">
       <template>
         <iron-collapse id="collapse" opened>
-          <div>
-            Forma temperiemque cornua sidera dissociata cornua recessit innabilis ligavit: solidumque coeptis nullus caelum sponte phoebe di regat mentisque tanta austro capacius amphitrite sui quin postquam semina fossae liquidum umor galeae coeptis caligine liberioris quin liquidum matutinis invasit posset: flexi glomeravit radiis certis invasit oppida postquam onerosior inclusum dominari opifex terris pace finxit quam aquae nunc sine altae auroram quam habentem homo totidemque scythiam in pondus ensis tegit caecoque poena lapidosos humanas coeperunt poena aetas totidem nec natura aethera locavit caelumque distinxit animalibus phoebe cingebant moderantum porrexerat terrae possedit sua sole diu summaque obliquis melioris orbem
+          <div style="height:100px;">
+            Lorem ipsum
           </div>
         </iron-collapse>
       </template>
@@ -40,49 +40,69 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       suite('basic', function() {
 
         var collapse;
-        var delay = 500;
         var collapseHeight;
 
-        setup(function () {
+        setup(function() {
           collapse = fixture('test');
+          collapseHeight = getComputedStyle(collapse).height;
         });
 
         test('opened attribute', function() {
           assert.equal(collapse.opened, true);
         });
 
+        test('animated by default', function() {
+          assert.isTrue(!collapse.noAnimation, '`noAnimation` is falsy');
+        });
+
         test('horizontal attribute', function() {
           assert.equal(collapse.horizontal, false);
         });
 
-        test('default opened height', function(done) {
-          setTimeout(function() {
-            // store height
-            collapseHeight = getComputedStyle(collapse).height;
-            // verify height not 0px
-            assert.notEqual(collapseHeight, '0px');
-            done();
-          }, delay);
+        test('default opened height', function() {
+          assert.equal(collapse.style.height, 'auto');
         });
 
-        test('set opened to false', function(done) {
+        test('set opened to false triggers animation', function(done) {
           collapse.opened = false;
-          setTimeout(function() {
-            var h = getComputedStyle(collapse).height;
-            // verify height is 0px
-            assert.equal(h, '0px');
+          // Animation got enabled.
+          assert.notEqual(collapse.style.transitionDuration, '0s');
+          collapse.addEventListener('transitionend', function() {
+            // Animation disabled.
+            assert.equal(collapse.style.transitionDuration, '0s');
             done();
-          }, delay);
+          });
         });
 
-        test('set opened to true', function(done) {
-          collapse.opened = true;
-          setTimeout(function() {
-            var h = getComputedStyle(collapse).height;
-            // verify height
-            assert.equal(h, collapseHeight);
-            done();
-          }, delay);
+        test('enableTransition(false) disables animations', function() {
+          collapse.enableTransition(false);
+          assert.isTrue(collapse.noAnimation, '`noAnimation` is true');
+          // trying to animate the size update
+          collapse.updateSize('0px', true);
+          // Animation immediately disabled.
+          assert.equal(collapse.style.height, '0px');
+        });
+
+        test('set opened to false, then to true', function(done) {
+          // this listener will be triggered twice (every time `opened` changes)
+          collapse.addEventListener('transitionend', function() {
+            if (collapse.opened) {
+              // Check finalSize after animation is done.
+              assert.equal(collapse.style.height, 'auto');
+              done();
+            } else {
+              // Check if size is still 0px.
+              assert.equal(collapse.style.height, '0px');
+              // Trigger 2nd toggle.
+              collapse.opened = true;
+              // Size should be immediately set.
+              assert.equal(collapse.style.height, collapseHeight);
+            }
+          });
+          // Trigger 1st toggle.
+          collapse.opened = false;
+          // Size should be immediately set.
+          assert.equal(collapse.style.height, '0px');
         });
 
       });

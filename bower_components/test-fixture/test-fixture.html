@@ -309,8 +309,16 @@ large quantity of ever-growing set-up and tear-down boilerplate.
       );
     });
 
-  document.registerElement('test-fixture', {
-    prototype: TestFixturePrototype
-  });
+  try {
+    document.registerElement('test-fixture', {
+      prototype: TestFixturePrototype
+    });
+  } catch (e) {
+    if (window.WCT) {
+      console.warn('if you are using WCT, you do not need to manually import test-fixture.html');
+    } else {
+      console.warn('test-fixture has already been registered!');
+    }
+  }
 })();
 </script>

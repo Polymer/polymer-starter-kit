@@ -26,8 +26,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <test-fixture id="test">
       <template>
         <iron-collapse id="collapse" opened horizontal>
-          <div>
-            Forma temperiemque cornua sidera dissociata cornua recessit innabilis ligavit: solidumque coeptis nullus caelum sponte phoebe di regat mentisque tanta austro capacius amphitrite sui quin postquam semina fossae liquidum umor galeae coeptis caligine liberioris quin liquidum matutinis invasit posset: flexi glomeravit radiis certis invasit oppida postquam onerosior inclusum dominari opifex terris pace finxit quam aquae nunc sine altae auroram quam habentem homo totidemque scythiam in pondus ensis tegit caecoque poena lapidosos humanas coeperunt poena aetas totidem nec natura aethera locavit caelumque distinxit animalibus phoebe cingebant moderantum porrexerat terrae possedit sua sole diu summaque obliquis melioris orbem
+          <div style="width:100px;">
+            Lorem ipsum
           </div>
         </iron-collapse>
       </template>
@@ -38,11 +38,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       suite('horizontal', function() {
 
         var collapse;
-        var delay = 500;
-        var collapseHeight;
+        var collapseWidth;
 
         setup(function () {
           collapse = fixture('test');
+          collapseWidth = getComputedStyle(collapse).width;
         });
 
         test('opened attribute', function() {
@@ -53,36 +53,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           assert.equal(collapse.horizontal, true);
         });
 
-        test('default opened width', function(done) {
-          setTimeout(function() {
-            // store actual width
-            width = getComputedStyle(collapse).width;
-            // verify width not 0px
-            assert.notEqual(width, '0px');
-            done();
-          }, delay);
+        test('default opened width', function() {
+          assert.equal(collapse.style.width, 'auto');
         });
 
-        test('set opened to false', function(done) {
+        test('set opened to false, then to true', function(done) {
+          // This listener will be triggered twice (every time `opened` changes).
+          collapse.addEventListener('transitionend', function() {
+            if (collapse.opened) {
+              // Check finalSize after animation is done.
+              assert.equal(collapse.style.width, 'auto');
+              done();
+            } else {
+              // Check if size is still 0px.
+              assert.equal(collapse.style.width, '0px');
+              // Trigger 2nd toggle.
+              collapse.opened = true;
+              // Size should be immediately set.
+              assert.equal(collapse.style.width, collapseWidth);
+            }
+          });
+          // Trigger 1st toggle.
           collapse.opened = false;
-          setTimeout(function() {
-            var h = getComputedStyle(collapse).width;
-            // verify width is 0px
-            assert.equal(h, '0px');
-            done();
-          }, delay);
+          // Size should be immediately set.
+          assert.equal(collapse.style.width, '0px');
         });
-
-        test('set opened to true', function(done) {
-          collapse.opened = true;
-          setTimeout(function() {
-            var h = getComputedStyle(collapse).width;
-            // verify width
-            assert.equal(h, width);
-            done();
-          }, delay);
-        });
-
       });
 
     </script>

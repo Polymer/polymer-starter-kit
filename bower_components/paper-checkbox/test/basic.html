@@ -19,6 +19,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <link rel="import" href="../paper-checkbox.html">
 </head>
+<style is="custom-style">
+  paper-checkbox.giant {
+    --paper-checkbox-size: 50px;
+  }
+  paper-checkbox.tiny {
+    --paper-checkbox-size: 5px;
+  }
+</style>
 <body>
 
   <test-fixture id="NoLabel">
@@ -36,6 +44,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <test-fixture id="AriaLabel">
     <template>
       <paper-checkbox id="check3" aria-label="Batman">Robin</paper-checkbox>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="WithDifferentSizes">
+    <template>
+      <paper-checkbox></paper-checkbox>
+      <paper-checkbox class="giant"></paper-checkbox>
+      <paper-checkbox class="tiny"></paper-checkbox>
     </template>
   </test-fixture>
 
@@ -92,6 +108,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         c1.checked = true;
         assert.isTrue(c1.validate());
+      });
+
+      test('checkbox can check sizes', function() {
+        var c2 = fixture('WithDifferentSizes');
+        var normal = c2[0].getBoundingClientRect();
+        var giant = c2[1].getBoundingClientRect();
+        var tiny = c2[2].getBoundingClientRect();
+
+        assert.isTrue(5 <= tiny.height < normal.height < giant.height <= 50);
+        assert.isTrue(5 <= tiny.width < normal.width < giant.width <= 50);
       });
     });
 

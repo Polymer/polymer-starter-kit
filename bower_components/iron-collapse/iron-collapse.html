@@ -56,14 +56,11 @@ and instead put a div inside and style that.
     :host {
       display: block;
       transition-duration: 300ms;
+      overflow: auto;
     }
 
     :host(.iron-collapse-closed) {
       display: none;
-    }
-
-    :host(:not(.iron-collapse-opened)) {
-      overflow: hidden;
     }
 
   </style>
@@ -105,12 +102,22 @@ and instead put a div inside and style that.
         value: false,
         notify: true,
         observer: '_openedChanged'
-      }
+      },
+
+      /**
+       * Set noAnimation to true to disable animations
+       *
+       * @attribute noAnimation
+       */
+      noAnimation: {
+        type: Boolean
+      },
 
     },
 
     hostAttributes: {
       role: 'group',
+      'aria-hidden': 'true',
       'aria-expanded': 'false'
     },
 
@@ -118,10 +125,9 @@ and instead put a div inside and style that.
       transitionend: '_transitionEnd'
     },
 
-    ready: function() {
-      // Avoid transition at the beginning e.g. page loads and enable
-      // transitions only after the element is rendered and ready.
-      this._enableTransition = true;
+    attached: function() {
+      // It will take care of setting correct classes and styles.
+      this._transitionEnd();
     },
 
     /**
@@ -134,25 +140,56 @@ and instead put a div inside and style that.
     },
 
     show: function() {
-      this.opened = true;    
+      this.opened = true;
     },
 
     hide: function() {
-      this.opened = false;    
+      this.opened = false;
     },
 
     updateSize: function(size, animated) {
-      this.enableTransition(animated);
-      var s = this.style;
-      var nochange = s[this.dimension] === size;
-      s[this.dimension] = size;
-      if (animated && nochange) {
-        this._transitionEnd();
+      // No change!
+      if (this.style[this.dimension] === size) {
+        return;
       }
+
+      this._updateTransition(false);
+      // If we can animate, must do some prep work.
+      if (animated && !this.noAnimation) {
+        // Animation will start at the current size.
+        var startSize = this._calcSize();
+        // For `auto` we must calculate what is the final size for the animation.
+        // After the transition is done, _transitionEnd will set the size back to `auto`.
+        if (size === 'auto') {
+          this.style[this.dimension] = size;
+          size = this._calcSize();
+        }
+        // Go to startSize without animation.
+        this.style[this.dimension] = startSize;
+        // Force layout to ensure transition will go. Set offsetHeight to itself
+        // so that compilers won't remove it.
+        this.offsetHeight = this.offsetHeight;
+        // Enable animation.
+        this._updateTransition(true);
+      }
+      // Set the final size.
+      this.style[this.dimension] = size;
     },
 
+    /**
+     * enableTransition() is deprecated, but left over so it doesn't break existing code.
+     * Please use `noAnimation` property instead.
+     *
+     * @method enableTransition
+     * @deprecated since version 1.0.4
+     */
     enableTransition: function(enabled) {
-      this.style.transitionDuration = (enabled && this._enableTransition) ? '' : '0s';
+      console.warn('`enableTransition()` is deprecated, use `noAnimation` instead.');
+      this.noAnimation = !enabled;
+    },
+
+    _updateTransition: function(enabled) {
+      this.style.transitionDuration = (enabled && !this.noAnimation) ? '' : '0s';
     },
 
     _horizontalChanged: function() {
@@ -161,44 +198,34 @@ and instead put a div inside and style that.
     },
 
     _openedChanged: function() {
+      this.setAttribute('aria-expanded', this.opened);
+      this.setAttribute('aria-hidden', !this.opened);
+
+      this.toggleClass('iron-collapse-closed', false);
+      this.toggleClass('iron-collapse-opened', false);
+      this.updateSize(this.opened ? 'auto' : '0px', true);
+
+      // Focus the current collapse.
       if (this.opened) {
-        this.setAttribute('aria-expanded', 'true');
-        this.setAttribute('aria-hidden', 'false');
-
-        this.toggleClass('iron-collapse-closed', false);
-        this.updateSize('auto', false);
-        var s = this._calcSize();
-        this.updateSize('0px', false);
-        // force layout to ensure transition will go
-        /** @suppress {suspiciousCode} */ this.offsetHeight;
-        this.updateSize(s, true);
-        // focus the current collapse
         this.focus();
-      } else {
-        this.setAttribute('aria-expanded', 'false');
-        this.setAttribute('aria-hidden', 'true');
-
-        this.toggleClass('iron-collapse-opened', false);
-        this.updateSize(this._calcSize(), false);
-        // force layout to ensure transition will go
-        /** @suppress {suspiciousCode} */ this.offsetHeight;
-        this.updateSize('0px', true);
+      }
+      if (this.noAnimation) {
+        this._transitionEnd();
       }
     },
 
     _transitionEnd: function() {
       if (this.opened) {
-        this.updateSize('auto', false);
+        this.style[this.dimension] = 'auto';
       }
       this.toggleClass('iron-collapse-closed', !this.opened);
       this.toggleClass('iron-collapse-opened', this.opened);
-      this.enableTransition(false);
+      this._updateTransition(false);
     },
 
     _calcSize: function() {
       return this.getBoundingClientRect()[this.dimension] + 'px';
-    },
-
+    }
 
   });
 
