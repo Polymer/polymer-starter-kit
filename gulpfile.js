@@ -103,8 +103,34 @@ gulp.task('elements', function() {
   return styleTask('elements', ['**/*.css']);
 });
 
+// Check the files necessary for linting exist.
+// Without this, the 'lint' task can fail with a very non-descriptive message:
+// "TypeError: Cannot convert undefined or null to object"
+gulp.task('lintfilesExist', function(cb) {
+  var necessaryFiles = ['.jscsrc', '.jshintrc'];
+  var filesMissing = [];
+
+  var checked = 0;
+  necessaryFiles.forEach(function(file) {
+    var filePath = path.join(__dirname, file);
+    fs.stat(filePath, function(err, stats) {
+      if (err || !stats.isFile()) {
+        filesMissing.push(file);
+      }
+      checked++;
+      if (checked === necessaryFiles.length) {
+        if (filesMissing.length === 0) {
+          cb();
+        } else {
+          cb('Cannot lint! These necessary files are missing: ' + filesMissing.join(', ') + '.\n');
+        }
+      }
+    });
+  });
+});
+
 // Lint JavaScript
-gulp.task('lint', function() {
+gulp.task('lint', ['lintfilesExist'], function() {
   return gulp.src([
       'app/scripts/**/*.js',
       'app/elements/**/*.js',
