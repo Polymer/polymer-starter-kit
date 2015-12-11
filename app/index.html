@@ -50,9 +50,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- endbuild -->
 
-  <!-- will be replaced with elements/elements.vulcanized.html -->
+  <!-- Because this project uses vulcanize this should be your only html import
+       in this file. All other imports should go in elements.html -->
   <link rel="import" href="elements/elements.html">
-  <!-- endreplace-->
 
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles"></style>
@@ -197,6 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <platinum-sw-register auto-register
                           clients-claim
                           skip-waiting
+                          base-uri="bower_components/platinum-sw/bootstrap"
                           on-service-worker-installed="displayInstalledToast">
       <platinum-sw-cache default-cache-strategy="fastest"
                          cache-config-file="cache-config.json">
