@@ -13778,6 +13778,7 @@ module.exports = Array.isArray || function (arr) {
   /* desktop-xlarge */
   @media all and (min-width: 1601px) and (max-width: 1920px) { }
 </style>
+
 </head><body><div hidden="" by-vulcanize=""><dom-module id="iron-icon" assetpath="../bower_components/iron-icon/">
 
   <style>
@@ -16016,16 +16017,6 @@ module.exports = Array.isArray || function (arr) {
         value: 0
       },
 
-      _prevScrollTop: {
-        type: Number,
-        value: 0
-      },
-
-      _y: {
-        type: Number,
-        value: 0
-      },
-
       /** @type {number|null} */
       _defaultCondsensedHeaderHeight: {
         type: Number,
@@ -16045,9 +16036,12 @@ module.exports = Array.isArray || function (arr) {
     },
 
     ready: function() {
-      this.async(this.measureHeaderHeight, 5);
       this._scrollHandler = this._scroll.bind(this);
       this.scroller.addEventListener('scroll', this._scrollHandler);
+    },
+
+    attached: function() {
+      this.async(this.measureHeaderHeight, 1);
     },
 
     /**
@@ -16290,10 +16284,14 @@ module.exports = Array.isArray || function (arr) {
       var y = Math.max(0, (this.noReveal) ? scrollTop : this._y + deltaScrollTop);
 
       if (y > this._headerMaxDelta) {
-        y = this._headerMaxDelta;
-        this._setHeaderState(ctx.HEADER_STATE_HIDDEN);
+        y = this._headerMaxDelta + 1;
 
-      } else if (this.condenses && this._prevScrollTop >= scrollTop && scrollTop >= this._headerMargin) {
+        if (this.keepCondensedHeader) {
+          this._setHeaderState(ctx.HEADER_STATE_CONDENSED);
+        } else {
+          this._setHeaderState(ctx.HEADER_STATE_HIDDEN);
+        }
+      } else if (this.condenses && scrollTop >= this._headerMargin) {
         y = Math.max(y, this._headerMargin);
         this._setHeaderState(ctx.HEADER_STATE_CONDENSED);
 
