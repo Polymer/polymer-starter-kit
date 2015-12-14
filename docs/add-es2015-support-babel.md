@@ -51,8 +51,8 @@ Make sure the `js` gulp task is triggered by the common build tasks:
 + gulp.watch(['app/**/*.html'], ['js', reload]);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
   gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
-- gulp.watch(['app/{scripts,elements}/**/*.js'], ['lint']);
-+ gulp.watch(['app/{scripts,elements}/**/*.js'], ['lint', 'js']);
+- gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint']);
++ gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint', 'js']);
   gulp.watch(['app/images/**/*'], reload);
 });
 ```
