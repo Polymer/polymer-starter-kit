@@ -232,7 +232,7 @@ gulp.task('cache-config', function(callback) {
 
 // Clean output directory
 gulp.task('clean', function() {
-  return del(['.tmp', dist()]);
+  return del(['.tmp', dist('**'), ['!', dist()].join('')]);
 });
 
 // Watch files for changes & reload
