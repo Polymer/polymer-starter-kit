@@ -9504,30 +9504,51 @@ this.fire('dom-change');
 </script>
 
 
+
+
 <style is="custom-style">
 
   :root {
+    /*
+     * Light background theme
+     */
+    --light-theme-background-color: #ffffff;
+    --light-theme-base-color: #000000;
+    --light-theme-text-color: #212121;
+    --light-theme-secondary-color: #737373;  /* for secondary text and icons */
+    --light-theme-disabled-color: #9b9b9b;  /* disabled/hint text */
+    --light-theme-divider-color: #dbdbdb;
 
-    --dark-primary-color: #303f9f;
+    /*
+     * Dark background theme
+     */
+    --dark-theme-background-color: #212121;
+    --dark-theme-base-color: #ffffff;
+    --dark-theme-text-color: #ffffff;
+    --dark-theme-secondary-color: #bcbcbc;  /* for secondary text and icons */
+    --dark-theme-disabled-color: #646464;  /* disabled/hint text */
+    --dark-theme-divider-color: #3c3c3c;
 
-    --default-primary-color: #3f51b5;
+    /*
+     * Primary and accent colors. Also see color.html for more colors.
+     */
+    --light-primary-color: #c5cae9;  /* --paper-indigo-100 */
+    --default-primary-color: #3f51b5;  /* --paper-indigo-500 */
+    --dark-primary-color: #303f9f;  /* --paper-indigo-700 */
 
-    --light-primary-color: #c5cae9;
+    --accent-color: #ff4081;  /* --paper-pink-a200 */
+    --light-accent-color: #ff80ab;  /* --paper-pink-a100 */
+    --dark-accent-color: #f50057;  /* --paper-pink-a400 */
 
-    --text-primary-color: #ffffff;
-
-    --accent-color: #ff4081;
-
-    --primary-background-color: #ffffff;
-
-    --primary-text-color: #212121;
-
-    --secondary-text-color: #757575;
-
-    --disabled-text-color: #bdbdbd;
-
-    --divider-color: #e0e0e0;
-
+    /*
+     * Deprecated values because of their confusing names.
+     */
+    --primary-text-color: var(--light-theme-text-color);
+    --text-primary-color: var(--dark-theme-text-color);
+    --primary-background-color: var(--light-theme-background-color);
+    --secondary-text-color: var(--light-theme-secondary-color);
+    --disabled-text-color:var(--light-theme-disabled-color);
+    --divider-color: var(--light-theme-divider-color);
   }
 
 </style>
@@ -11345,7 +11366,7 @@ styles. All other styles should exist as single lines."
 
 .paper-font-code1 {
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 20px;
 }
 
@@ -12183,11 +12204,6 @@ context. You should place this element as a child of `<body>` whenever possible.
   :root {
 
     /* Shared Styles */
-
-    /*
-    Unfortunately, we can't use nested rules
-    See https://github.com/Polymer/polymer/issues/1399
-    */
     --paper-font-common-base: {
       font-family: 'Roboto', 'Noto', sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -12211,14 +12227,8 @@ context. You should place this element as a child of `<body>` whenever possible.
     /* Material Font Styles */
 
     --paper-font-display4: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-
-      /* @apply(--paper-font-common-nowrap); */
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
 
       font-size: 112px;
       font-weight: 300;
@@ -12227,14 +12237,8 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-display3: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-
-      /* @apply(--paper-font-common-nowrap); */
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
 
       font-size: 56px;
       font-weight: 400;
@@ -12243,10 +12247,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-display2: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-
+      @apply(--paper-font-common-base);
 
       font-size: 45px;
       font-weight: 400;
@@ -12255,10 +12256,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-display1: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-
+      @apply(--paper-font-common-base);
 
       font-size: 34px;
       font-weight: 400;
@@ -12267,10 +12265,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-headline: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-
+      @apply(--paper-font-common-base);
 
       font-size: 24px;
       font-weight: 400;
@@ -12279,14 +12274,8 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-title: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-
-      /* @apply(--paper-font-common-nowrap); */
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
 
       font-size: 20px;
       font-weight: 500;
@@ -12294,10 +12283,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-subhead: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-
+      @apply(--paper-font-common-base);
 
       font-size: 16px;
       font-weight: 400;
@@ -12305,9 +12291,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-body2: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
+      @apply(--paper-font-common-base);
 
       font-size: 14px;
       font-weight: 500;
@@ -12315,9 +12299,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-body1: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
+      @apply(--paper-font-common-base);
 
       font-size: 14px;
       font-weight: 400;
@@ -12325,13 +12307,8 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-caption: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      /* @apply(--paper-font-common-nowrap); */
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
 
       font-size: 12px;
       font-weight: 400;
@@ -12340,14 +12317,8 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-menu: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-
-      /* @apply(--paper-font-common-nowrap); */
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
 
       font-size: 13px;
       font-weight: 500;
@@ -12355,14 +12326,8 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-button: {
-      /* @apply(--paper-font-common-base) */
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-
-      /* @apply(--paper-font-common-nowrap); */
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
 
       font-size: 14px;
       font-weight: 500;
@@ -12372,9 +12337,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-code2: {
-      /* @apply(--paper-font-common-code); */
-      font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
-      -webkit-font-smoothing: antialiased;
+      @apply(--paper-font-common-code);
 
       font-size: 14px;
       font-weight: 700;
@@ -12382,9 +12345,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     };
 
     --paper-font-code1: {
-      /* @apply(--paper-font-common-code); */
-      font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
-      -webkit-font-smoothing: antialiased;
+      @apply(--paper-font-common-code);
 
       font-size: 14px;
       font-weight: 500;
@@ -15682,16 +15643,12 @@ module.exports = Array.isArray || function (arr) {
     });
   </script>
 </dom-module>
-<dom-module id="paper-material" assetpath="../bower_components/paper-material/">
+<dom-module id="paper-material-shared-styles" assetpath="../bower_components/paper-material/">
   <template>
     <style>
       :host {
         display: block;
         position: relative;
-      }
-
-      :host([animated]) {
-        @apply(--shadow-transition);
       }
 
       :host([elevation="1"]) {
@@ -15712,6 +15669,16 @@ module.exports = Array.isArray || function (arr) {
 
       :host([elevation="5"]) {
         @apply(--shadow-elevation-16dp);
+      }
+    </style>
+  </template>
+</dom-module>
+<dom-module id="paper-material" assetpath="../bower_components/paper-material/">
+  <template>
+    <style include="paper-material-shared-styles"></style>
+    <style>
+      :host([animated]) {
+        @apply(--shadow-transition);
       }
     </style>
 
