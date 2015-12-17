@@ -15,7 +15,7 @@ This recipe focuses on adding an ES2015 to ES5 transpile step to Polymer Starter
 + gulp.task('js', function () {
 +  return gulp.src(['app/**/*.{js,html}', '!app/bower_components/**/*'])
 +    .pipe($.sourcemaps.init())
-+    .pipe($.if('*.html', $.crisper())) // Extract JS from .html files
++    .pipe($.if('*.html', $.crisper({scriptInHead:false}))) // Extract JS from .html files
 +    .pipe($.if('*.js', $.babel({
 +      presets: ['es2015']
 +    })))
