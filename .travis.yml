@@ -1,7 +1,7 @@
 language: node_js
 sudo: false
 addons:
-  firefox: latest
+  firefox: "42.0"
   apt:
     sources:
       - google-chrome
