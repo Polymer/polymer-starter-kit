@@ -2,6 +2,7 @@
   "preset": "google",
   "disallowSpacesInAnonymousFunctionExpression": null,
   "disallowTrailingWhitespace": null,
+  "validateIndentation": null,
   "maximumLineLength": 100,
   "excludeFiles": ["node_modules/**"]
 }
