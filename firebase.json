@@ -1,0 +1,14 @@
+{
+  "public": "dist",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ],
+  "rewrites": [
+    {
+      "source": "!{/bower_components,/elements}/**",
+      "destination": "/index.html"
+    }
+  ]
+}
