@@ -150,7 +150,8 @@ gulp.task('copy', function() {
     '!app/test',
     '!app/elements',
     '!app/bower_components',
-    '!app/cache-config.json'
+    '!app/cache-config.json',
+    '!**/.DS_Store'
   ], {
     dot: true
   }).pipe(gulp.dest(dist()));
