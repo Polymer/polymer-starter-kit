@@ -9,6 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
 
 <style is="custom-style">
 
@@ -50,23 +51,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   /* General styles */
 
+  body {
+    @apply(--layout-fullbleed);
+    @apply(--layout-vertical);
+  }
+
+  .space {
+    @apply(--layout-flex);
+  }
+
   #drawerToolbar {
     color: var(--secondary-text-color);
     background-color: var(--drawer-menu-color);
     border-bottom: var(--drawer-toolbar-border-color);
   }
 
-  paper-scroll-header-panel {
-    height: 100%;
+  #drawerToolbar .menu-name {
+    @apply(--paper-font-title);
   }
 
-  paper-material {
-    border-radius: 2px;
+  paper-scroll-header-panel {
     height: 100%;
-    padding: 16px 0 16px 0;
-    width: calc(98.66% - 16px);
-    margin: 16px auto;
-    background: white;
   }
 
   paper-menu {
@@ -87,6 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   paper-menu a {
     @apply(--layout-horizontal);
     @apply(--layout-center);
+
     text-decoration: none;
     color: var(--menu-link-color);
     font-family: 'Roboto', 'Noto', sans-serif;
@@ -99,7 +105,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     padding: 0 16px;
   }
 
-  paper-toolbar.tall .app-name {
+  #mainToolbar.tall .app-name {
     font-size: 40px;
     font-weight: 300;
     /* Required for main area's paper-scroll-header-panel custom condensing transformation */
@@ -107,17 +113,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     transform-origin: left center;
   }
 
+  #mainToolbar .middle-container,
+  #mainToolbar .bottom-container {
+    @apply(--layout-horizontal);
+    @apply(--layout-center);
+  }
+
   #mainToolbar .middle-container  {
     height: 100%;
     margin-left: 48px;
   }
 
-  #mainToolbar:not(.tall) .middle {
+  #mainToolbar:not(.tall) .middle-container {
     font-size: 18px;
     padding-bottom: 0;
   }
 
-  #mainToolbar .bottom {
+  #mainToolbar .bottom-container {
+    @apply(--paper-font-subhead);
+
     margin-left: 48px;
     /* Required for main area's paper-scroll-header-panel custom condensing transformation */
     -webkit-transform-origin: left center;
@@ -127,6 +141,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /* Height of the scroll area */
   .content {
     height: 900px;
+  }
+
+  section[data-route="home"] paper-material {
+    @apply(--paper-font-body2);
+  }
+
+  section[data-route="home"] paper-material .subhead {
+    @apply(--paper-font-subhead);
+  }
+
+  paper-material {
+    border-radius: 2px;
+    height: 100%;
+    padding: 16px 0 16px 0;
+    width: calc(98.66% - 16px);
+    margin: 16px auto;
+    background: white;
   }
 
   #toast .toast-hide-button {
@@ -139,6 +170,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /* Small */
   @media (max-width: 600px) {
 
+    #drawer .paper-toolbar {
+      margin-left: 16px;
+    }
+
+    #mainToolbar.tall .app-name {
+      font-size: 24px;
+      font-weight: 400;
+    }
+
     paper-material {
       --menu-container-display: none;
       width: calc(97.33% - 32px);
@@ -146,26 +186,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       padding-right: 16px;
     }
 
-    paper-toolbar.tall .app-name {
-      font-size: 24px;
-      font-weight: 400;
-    }
-
-    #drawer .paper-toolbar {
-      margin-left: 16px;
-    }
-
   }
 
   /* Tablet+ */
   @media (min-width: 601px) {
-
-    paper-material {
-      width: calc(98% - 46px);
-      margin-bottom: 32px;
-      padding-left: 30px;
-      padding-right: 30px;
-    }
 
     #drawer.paper-drawer-panel > [drawer] {
       border-right: 1px solid rgba(0, 0, 0, 0.14);
@@ -173,6 +197,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     iron-pages {
       padding: 48px 62px;
+    }
+
+    paper-material {
+      width: calc(98% - 46px);
+      margin-bottom: 32px;
+      padding-left: 30px;
+      padding-right: 30px;
     }
 
   }
