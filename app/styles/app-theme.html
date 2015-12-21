@@ -69,13 +69,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background: white;
   }
 
+  paper-menu {
+    --paper-menu-selected-item: {
+      color: var(--primary-color);
+    }
+
+    --paper-menu-focused-item-after: {
+      background: var(--primary-color);
+    }
+  }
+
   paper-menu iron-icon {
     margin-right: 33px;
     opacity: 0.54;
-  }
-
-  .paper-menu > .iron-selected {
-    color: var(--primary-color);
   }
 
   paper-menu a {
