@@ -1,6 +1,6 @@
-# Deploy to Firebase using Pretty URLs
+# Deploy to Firebase Hosting using Pretty URLs
 
-Firebase is a very simple and secure way to deploy a Polymer Starter Kit site. You can sign up for a free account and deploy your application in less than 5 minutes.
+Firebase Hosting is a very simple and secure way to deploy a Polymer Starter Kit site. You can sign up for a free account and deploy your application in less than 5 minutes. [Superstatic](https://github.com/firebase/superstatic) is the open-source web server that is used both by Firebase Hosting and as the local server for `gulp serve` and `gulp serve:dist`.
 
 The instructions below are based on the [Firebase hosting quick start
 guide](https://www.firebase.com/docs/hosting/quickstart.html).
@@ -17,42 +17,11 @@ guide](https://www.firebase.com/docs/hosting/quickstart.html).
 
 1.  `cd` into your project directory
 
-1.  Inititalize the Firebase application
+1.  Create a Firebase project (if you don't have one) at [https://www.firebase.com/account](https://www.firebase.com/account).
 
-        firebase init
+1.  Modify the `firebase.json` file in your project directory and add a `name` property that matches your Firebase project ID (e.g. `my-app` from `my-app.firebaseio.com`).
 
-    Firebase asks you which app you would like to use for hosting. If you just
-    signed up, you should see one app with a randomly-generated name. You can
-    use that one. Otherwise go to
-    [https://www.firebase.com/account](https://www.firebase.com/account) to
-    create a new app.
-
-1.  Firebase asks you the name of your app's public directory. Enter `dist`.
-    This works because when you run `gulp` to build your application, PSK
-    builds everything and places it all in `dist`. So `dist` contains
-    everything your application needs to run.
-
-1.  Edit firebase.json add rewrites section
-
-        {
-          "firebase": "polymer-starter-kit",
-          "public": "dist",
-          "ignore": [
-            "firebase.json",
-            "**/.*",
-            "**/node_modules/**"
-          ],
-          "rewrites": [ {
-            "source": "**",
-            "destination": "/index.html"
-          } ]
-        }
-
-1.  Add `<base href="/">` to `head` in index.html
-
-1.  Remove `hashbang: true` in routing.html near bottom. The call to `page` should look like this now:
-
-        page();
+        {"name": "my-app"}
 
 1.  Build
 
