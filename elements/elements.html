@@ -14,595 +14,7 @@ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
---><style>
-
-  /*******************************
-            Flex Layout
-  *******************************/
-
-  html /deep/ .layout.horizontal,
-  html /deep/ .layout.horizontal-reverse,
-  html /deep/ .layout.vertical,
-  html /deep/ .layout.vertical-reverse {
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-  }
-
-  html /deep/ .layout.inline {
-    display: -ms-inline-flexbox;
-    display: -webkit-inline-flex;
-    display: inline-flex;
-  }
-
-  html /deep/ .layout.horizontal {
-    -ms-flex-direction: row;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-  }
-
-  html /deep/ .layout.horizontal-reverse {
-    -ms-flex-direction: row-reverse;
-    -webkit-flex-direction: row-reverse;
-    flex-direction: row-reverse;
-  }
-
-  html /deep/ .layout.vertical {
-    -ms-flex-direction: column;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-  }
-
-  html /deep/ .layout.vertical-reverse {
-    -ms-flex-direction: column-reverse;
-    -webkit-flex-direction: column-reverse;
-    flex-direction: column-reverse;
-  }
-
-  html /deep/ .layout.wrap {
-    -ms-flex-wrap: wrap;
-    -webkit-flex-wrap: wrap;
-    flex-wrap: wrap;
-  }
-
-  html /deep/ .layout.wrap-reverse {
-    -ms-flex-wrap: wrap-reverse;
-    -webkit-flex-wrap: wrap-reverse;
-    flex-wrap: wrap-reverse;
-  }
-
-  html /deep/ .flex-auto {
-    -ms-flex: 1 1 auto;
-    -webkit-flex: 1 1 auto;
-    flex: 1 1 auto;
-  }
-
-  html /deep/ .flex-none {
-    -ms-flex: none;
-    -webkit-flex: none;
-    flex: none;
-  }
-
-  html /deep/ .flex,
-  html /deep/ .flex-1 {
-    -ms-flex: 1;
-    -webkit-flex: 1;
-    flex: 1;
-  }
-
-  html /deep/ .flex-2 {
-    -ms-flex: 2;
-    -webkit-flex: 2;
-    flex: 2;
-  }
-
-  html /deep/ .flex-3 {
-    -ms-flex: 3;
-    -webkit-flex: 3;
-    flex: 3;
-  }
-
-  html /deep/ .flex-4 {
-    -ms-flex: 4;
-    -webkit-flex: 4;
-    flex: 4;
-  }
-
-  html /deep/ .flex-5 {
-    -ms-flex: 5;
-    -webkit-flex: 5;
-    flex: 5;
-  }
-
-  html /deep/ .flex-6 {
-    -ms-flex: 6;
-    -webkit-flex: 6;
-    flex: 6;
-  }
-
-  html /deep/ .flex-7 {
-    -ms-flex: 7;
-    -webkit-flex: 7;
-    flex: 7;
-  }
-
-  html /deep/ .flex-8 {
-    -ms-flex: 8;
-    -webkit-flex: 8;
-    flex: 8;
-  }
-
-  html /deep/ .flex-9 {
-    -ms-flex: 9;
-    -webkit-flex: 9;
-    flex: 9;
-  }
-
-  html /deep/ .flex-10 {
-    -ms-flex: 10;
-    -webkit-flex: 10;
-    flex: 10;
-  }
-
-  html /deep/ .flex-11 {
-    -ms-flex: 11;
-    -webkit-flex: 11;
-    flex: 11;
-  }
-
-  html /deep/ .flex-12 {
-    -ms-flex: 12;
-    -webkit-flex: 12;
-    flex: 12;
-  }
-
-  /* alignment in cross axis */
-
-  html /deep/ .layout.start {
-    -ms-flex-align: start;
-    -webkit-align-items: flex-start;
-    align-items: flex-start;
-  }
-
-  html /deep/ .layout.center,
-  html /deep/ .layout.center-center {
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-  }
-
-  html /deep/ .layout.end {
-    -ms-flex-align: end;
-    -webkit-align-items: flex-end;
-    align-items: flex-end;
-  }
-
-  /* alignment in main axis */
-
-  html /deep/ .layout.start-justified {
-    -ms-flex-pack: start;
-    -webkit-justify-content: flex-start;
-    justify-content: flex-start;
-  }
-
-  html /deep/ .layout.center-justified,
-  html /deep/ .layout.center-center {
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-  }
-
-  html /deep/ .layout.end-justified {
-    -ms-flex-pack: end;
-    -webkit-justify-content: flex-end;
-    justify-content: flex-end;
-  }
-
-  html /deep/ .layout.around-justified {
-    -ms-flex-pack: around;
-    -webkit-justify-content: space-around;
-    justify-content: space-around;
-  }
-
-  html /deep/ .layout.justified {
-    -ms-flex-pack: justify;
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-  }
-
-  /* self alignment */
-
-  html /deep/ .self-start {
-    -ms-align-self: flex-start;
-    -webkit-align-self: flex-start;
-    align-self: flex-start;
-  }
-
-  html /deep/ .self-center {
-    -ms-align-self: center;
-    -webkit-align-self: center;
-    align-self: center;
-  }
-
-  html /deep/ .self-end {
-    -ms-align-self: flex-end;
-    -webkit-align-self: flex-end;
-    align-self: flex-end;
-  }
-
-  html /deep/ .self-stretch {
-    -ms-align-self: stretch;
-    -webkit-align-self: stretch;
-    align-self: stretch;
-  }
-
-  /*******************************
-            Other Layout
-  *******************************/
-
-  html /deep/ .block {
-    display: block;
-  }
-
-  /* IE 10 support for HTML5 hidden attr */
-  html /deep/ [hidden] {
-    display: none !important;
-  }
-
-  html /deep/ .invisible {
-    visibility: hidden !important;
-  }
-
-  html /deep/ .relative {
-    position: relative;
-  }
-
-  html /deep/ .fit {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  body.fullbleed {
-    margin: 0;
-    height: 100vh;
-  }
-
-  html /deep/ .scroll {
-    -webkit-overflow-scrolling: touch;
-    overflow: auto;
-  }
-
-  .fixed-bottom,
-  .fixed-left,
-  .fixed-right,
-  .fixed-top {
-    position: fixed;
-  }
-
-  html /deep/ .fixed-top {
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-
-  html /deep/ .fixed-right {
-    top: 0;
-    right: 0;
-    bottom: 0;
-  }
-
-  html /deep/ .fixed-bottom {
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  html /deep/ .fixed-left {
-    top: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-</style>
-<style>
-
-  /*******************************
-            Flex Layout
-  *******************************/
-
-  .layout.horizontal,
-  .layout.horizontal-reverse,
-  .layout.vertical,
-  .layout.vertical-reverse {
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-  }
-
-  .layout.inline {
-    display: -ms-inline-flexbox;
-    display: -webkit-inline-flex;
-    display: inline-flex;
-  }
-
-  .layout.horizontal {
-    -ms-flex-direction: row;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-  }
-
-  .layout.horizontal-reverse {
-    -ms-flex-direction: row-reverse;
-    -webkit-flex-direction: row-reverse;
-    flex-direction: row-reverse;
-  }
-
-  .layout.vertical {
-    -ms-flex-direction: column;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-  }
-
-  .layout.vertical-reverse {
-    -ms-flex-direction: column-reverse;
-    -webkit-flex-direction: column-reverse;
-    flex-direction: column-reverse;
-  }
-
-  .layout.wrap {
-    -ms-flex-wrap: wrap;
-    -webkit-flex-wrap: wrap;
-    flex-wrap: wrap;
-  }
-
-  .layout.wrap-reverse {
-    -ms-flex-wrap: wrap-reverse;
-    -webkit-flex-wrap: wrap-reverse;
-    flex-wrap: wrap-reverse;
-  }
-
-  .flex-auto {
-    -ms-flex: 1 1 auto;
-    -webkit-flex: 1 1 auto;
-    flex: 1 1 auto;
-  }
-
-  .flex-none {
-    -ms-flex: none;
-    -webkit-flex: none;
-    flex: none;
-  }
-
-  .flex,
-  .flex-1 {
-    -ms-flex: 1;
-    -webkit-flex: 1;
-    flex: 1;
-  }
-
-  .flex-2 {
-    -ms-flex: 2;
-    -webkit-flex: 2;
-    flex: 2;
-  }
-
-  .flex-3 {
-    -ms-flex: 3;
-    -webkit-flex: 3;
-    flex: 3;
-  }
-
-  .flex-4 {
-    -ms-flex: 4;
-    -webkit-flex: 4;
-    flex: 4;
-  }
-
-  .flex-5 {
-    -ms-flex: 5;
-    -webkit-flex: 5;
-    flex: 5;
-  }
-
-  .flex-6 {
-    -ms-flex: 6;
-    -webkit-flex: 6;
-    flex: 6;
-  }
-
-  .flex-7 {
-    -ms-flex: 7;
-    -webkit-flex: 7;
-    flex: 7;
-  }
-
-  .flex-8 {
-    -ms-flex: 8;
-    -webkit-flex: 8;
-    flex: 8;
-  }
-
-  .flex-9 {
-    -ms-flex: 9;
-    -webkit-flex: 9;
-    flex: 9;
-  }
-
-  .flex-10 {
-    -ms-flex: 10;
-    -webkit-flex: 10;
-    flex: 10;
-  }
-
-  .flex-11 {
-    -ms-flex: 11;
-    -webkit-flex: 11;
-    flex: 11;
-  }
-
-  .flex-12 {
-    -ms-flex: 12;
-    -webkit-flex: 12;
-    flex: 12;
-  }
-
-  /* alignment in cross axis */
-
-  .layout.start {
-    -ms-flex-align: start;
-    -webkit-align-items: flex-start;
-    align-items: flex-start;
-  }
-
-  .layout.center,
-  .layout.center-center {
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-  }
-
-  .layout.end {
-    -ms-flex-align: end;
-    -webkit-align-items: flex-end;
-    align-items: flex-end;
-  }
-
-  /* alignment in main axis */
-
-  .layout.start-justified {
-    -ms-flex-pack: start;
-    -webkit-justify-content: flex-start;
-    justify-content: flex-start;
-  }
-
-  .layout.center-justified,
-  .layout.center-center {
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-  }
-
-  .layout.end-justified {
-    -ms-flex-pack: end;
-    -webkit-justify-content: flex-end;
-    justify-content: flex-end;
-  }
-
-  .layout.around-justified {
-    -ms-flex-pack: around;
-    -webkit-justify-content: space-around;
-    justify-content: space-around;
-  }
-
-  .layout.justified {
-    -ms-flex-pack: justify;
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-  }
-
-  /* self alignment */
-
-  .self-start {
-    -ms-align-self: flex-start;
-    -webkit-align-self: flex-start;
-    align-self: flex-start;
-  }
-
-  .self-center {
-    -ms-align-self: center;
-    -webkit-align-self: center;
-    align-self: center;
-  }
-
-  .self-end {
-    -ms-align-self: flex-end;
-    -webkit-align-self: flex-end;
-    align-self: flex-end;
-  }
-
-  .self-stretch {
-    -ms-align-self: stretch;
-    -webkit-align-self: stretch;
-    align-self: stretch;
-  }
-
-  /*******************************
-            Other Layout
-  *******************************/
-
-  .block {
-    display: block;
-  }
-
-  /* IE 10 support for HTML5 hidden attr */
-  [hidden] {
-    display: none !important;
-  }
-
-  .invisible {
-    visibility: hidden !important;
-  }
-
-  .relative {
-    position: relative;
-  }
-
-  .fit {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  body.fullbleed {
-    margin: 0;
-    height: 100vh;
-  }
-
-  .scroll {
-    -webkit-overflow-scrolling: touch;
-    overflow: auto;
-  }
-
-  /* fixed position */
-
-  .fixed-bottom,
-  .fixed-left,
-  .fixed-right,
-  .fixed-top {
-    position: fixed;
-  }
-
-  .fixed-top {
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-
-  .fixed-right {
-    top: 0;
-    right: 0;
-    bottom: 0;
-  }
-
-  .fixed-bottom {
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  .fixed-left {
-    top: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-</style>
-<script>(function () {
+--><script>(function () {
 function resolve() {
 document.body.removeAttribute('unresolved');
 }
@@ -7868,288 +7280,6 @@ this.fire('dom-change');
 });</script>
 
 
-<script>
-
-  (function() {
-
-    // monostate data
-    var metaDatas = {};
-    var metaArrays = {};
-    var singleton = null;
-
-    Polymer.IronMeta = Polymer({
-
-      is: 'iron-meta',
-
-      properties: {
-
-        /**
-         * The type of meta-data.  All meta-data of the same type is stored
-         * together.
-         */
-        type: {
-          type: String,
-          value: 'default',
-          observer: '_typeChanged'
-        },
-
-        /**
-         * The key used to store `value` under the `type` namespace.
-         */
-        key: {
-          type: String,
-          observer: '_keyChanged'
-        },
-
-        /**
-         * The meta-data to store or retrieve.
-         */
-        value: {
-          type: Object,
-          notify: true,
-          observer: '_valueChanged'
-        },
-
-        /**
-         * If true, `value` is set to the iron-meta instance itself.
-         */
-         self: {
-          type: Boolean,
-          observer: '_selfChanged'
-        },
-
-        /**
-         * Array of all meta-data values for the given type.
-         */
-        list: {
-          type: Array,
-          notify: true
-        }
-
-      },
-
-      hostAttributes: {
-        hidden: true
-      },
-
-      /**
-       * Only runs if someone invokes the factory/constructor directly
-       * e.g. `new Polymer.IronMeta()`
-       *
-       * @param {{type: (string|undefined), key: (string|undefined), value}=} config
-       */
-      factoryImpl: function(config) {
-        if (config) {
-          for (var n in config) {
-            switch(n) {
-              case 'type':
-              case 'key':
-              case 'value':
-                this[n] = config[n];
-                break;
-            }
-          }
-        }
-      },
-
-      created: function() {
-        // TODO(sjmiles): good for debugging?
-        this._metaDatas = metaDatas;
-        this._metaArrays = metaArrays;
-      },
-
-      _keyChanged: function(key, old) {
-        this._resetRegistration(old);
-      },
-
-      _valueChanged: function(value) {
-        this._resetRegistration(this.key);
-      },
-
-      _selfChanged: function(self) {
-        if (self) {
-          this.value = this;
-        }
-      },
-
-      _typeChanged: function(type) {
-        this._unregisterKey(this.key);
-        if (!metaDatas[type]) {
-          metaDatas[type] = {};
-        }
-        this._metaData = metaDatas[type];
-        if (!metaArrays[type]) {
-          metaArrays[type] = [];
-        }
-        this.list = metaArrays[type];
-        this._registerKeyValue(this.key, this.value);
-      },
-
-      /**
-       * Retrieves meta data value by key.
-       *
-       * @method byKey
-       * @param {string} key The key of the meta-data to be returned.
-       * @return {*}
-       */
-      byKey: function(key) {
-        return this._metaData && this._metaData[key];
-      },
-
-      _resetRegistration: function(oldKey) {
-        this._unregisterKey(oldKey);
-        this._registerKeyValue(this.key, this.value);
-      },
-
-      _unregisterKey: function(key) {
-        this._unregister(key, this._metaData, this.list);
-      },
-
-      _registerKeyValue: function(key, value) {
-        this._register(key, value, this._metaData, this.list);
-      },
-
-      _register: function(key, value, data, list) {
-        if (key && data && value !== undefined) {
-          data[key] = value;
-          list.push(value);
-        }
-      },
-
-      _unregister: function(key, data, list) {
-        if (key && data) {
-          if (key in data) {
-            var value = data[key];
-            delete data[key];
-            this.arrayDelete(list, value);
-          }
-        }
-      }
-
-    });
-
-    Polymer.IronMeta.getIronMeta = function getIronMeta() {
-       if (singleton === null) {
-         singleton = new Polymer.IronMeta();
-       }
-       return singleton;
-     };
-
-    /**
-    `iron-meta-query` can be used to access infomation stored in `iron-meta`.
-
-    Examples:
-
-    If I create an instance like this:
-
-        <iron-meta key="info" value="foo/bar"></iron-meta>
-
-    Note that value="foo/bar" is the metadata I've defined. I could define more
-    attributes or use child nodes to define additional metadata.
-
-    Now I can access that element (and it's metadata) from any `iron-meta-query` instance:
-
-         var value = new Polymer.IronMetaQuery({key: 'info'}).value;
-
-    @group Polymer Iron Elements
-    @element iron-meta-query
-    */
-    Polymer.IronMetaQuery = Polymer({
-
-      is: 'iron-meta-query',
-
-      properties: {
-
-        /**
-         * The type of meta-data.  All meta-data of the same type is stored
-         * together.
-         */
-        type: {
-          type: String,
-          value: 'default',
-          observer: '_typeChanged'
-        },
-
-        /**
-         * Specifies a key to use for retrieving `value` from the `type`
-         * namespace.
-         */
-        key: {
-          type: String,
-          observer: '_keyChanged'
-        },
-
-        /**
-         * The meta-data to store or retrieve.
-         */
-        value: {
-          type: Object,
-          notify: true,
-          readOnly: true
-        },
-
-        /**
-         * Array of all meta-data values for the given type.
-         */
-        list: {
-          type: Array,
-          notify: true
-        }
-
-      },
-
-      /**
-       * Actually a factory method, not a true constructor. Only runs if
-       * someone invokes it directly (via `new Polymer.IronMeta()`);
-       *
-       * @param {{type: (string|undefined), key: (string|undefined)}=} config
-       */
-      factoryImpl: function(config) {
-        if (config) {
-          for (var n in config) {
-            switch(n) {
-              case 'type':
-              case 'key':
-                this[n] = config[n];
-                break;
-            }
-          }
-        }
-      },
-
-      created: function() {
-        // TODO(sjmiles): good for debugging?
-        this._metaDatas = metaDatas;
-        this._metaArrays = metaArrays;
-      },
-
-      _keyChanged: function(key) {
-        this._setValue(this._metaData && this._metaData[key]);
-      },
-
-      _typeChanged: function(type) {
-        this._metaData = metaDatas[type];
-        this.list = metaArrays[type];
-        if (this.key) {
-          this._keyChanged(this.key);
-        }
-      },
-
-      /**
-       * Retrieves meta data value by key.
-       * @param {string} key The key of the meta-data to be returned.
-       * @return {*}
-       */
-      byKey: function(key) {
-        return this._metaData && this._metaData[key];
-      }
-
-    });
-
-  })();
-</script>
-
-
 <style>
   /* IE 10 support for HTML5 hidden attr */
   [hidden] {
@@ -8452,6 +7582,288 @@ this.fire('dom-change');
   }
 
 </style>
+
+
+<script>
+
+  (function() {
+
+    // monostate data
+    var metaDatas = {};
+    var metaArrays = {};
+    var singleton = null;
+
+    Polymer.IronMeta = Polymer({
+
+      is: 'iron-meta',
+
+      properties: {
+
+        /**
+         * The type of meta-data.  All meta-data of the same type is stored
+         * together.
+         */
+        type: {
+          type: String,
+          value: 'default',
+          observer: '_typeChanged'
+        },
+
+        /**
+         * The key used to store `value` under the `type` namespace.
+         */
+        key: {
+          type: String,
+          observer: '_keyChanged'
+        },
+
+        /**
+         * The meta-data to store or retrieve.
+         */
+        value: {
+          type: Object,
+          notify: true,
+          observer: '_valueChanged'
+        },
+
+        /**
+         * If true, `value` is set to the iron-meta instance itself.
+         */
+         self: {
+          type: Boolean,
+          observer: '_selfChanged'
+        },
+
+        /**
+         * Array of all meta-data values for the given type.
+         */
+        list: {
+          type: Array,
+          notify: true
+        }
+
+      },
+
+      hostAttributes: {
+        hidden: true
+      },
+
+      /**
+       * Only runs if someone invokes the factory/constructor directly
+       * e.g. `new Polymer.IronMeta()`
+       *
+       * @param {{type: (string|undefined), key: (string|undefined), value}=} config
+       */
+      factoryImpl: function(config) {
+        if (config) {
+          for (var n in config) {
+            switch(n) {
+              case 'type':
+              case 'key':
+              case 'value':
+                this[n] = config[n];
+                break;
+            }
+          }
+        }
+      },
+
+      created: function() {
+        // TODO(sjmiles): good for debugging?
+        this._metaDatas = metaDatas;
+        this._metaArrays = metaArrays;
+      },
+
+      _keyChanged: function(key, old) {
+        this._resetRegistration(old);
+      },
+
+      _valueChanged: function(value) {
+        this._resetRegistration(this.key);
+      },
+
+      _selfChanged: function(self) {
+        if (self) {
+          this.value = this;
+        }
+      },
+
+      _typeChanged: function(type) {
+        this._unregisterKey(this.key);
+        if (!metaDatas[type]) {
+          metaDatas[type] = {};
+        }
+        this._metaData = metaDatas[type];
+        if (!metaArrays[type]) {
+          metaArrays[type] = [];
+        }
+        this.list = metaArrays[type];
+        this._registerKeyValue(this.key, this.value);
+      },
+
+      /**
+       * Retrieves meta data value by key.
+       *
+       * @method byKey
+       * @param {string} key The key of the meta-data to be returned.
+       * @return {*}
+       */
+      byKey: function(key) {
+        return this._metaData && this._metaData[key];
+      },
+
+      _resetRegistration: function(oldKey) {
+        this._unregisterKey(oldKey);
+        this._registerKeyValue(this.key, this.value);
+      },
+
+      _unregisterKey: function(key) {
+        this._unregister(key, this._metaData, this.list);
+      },
+
+      _registerKeyValue: function(key, value) {
+        this._register(key, value, this._metaData, this.list);
+      },
+
+      _register: function(key, value, data, list) {
+        if (key && data && value !== undefined) {
+          data[key] = value;
+          list.push(value);
+        }
+      },
+
+      _unregister: function(key, data, list) {
+        if (key && data) {
+          if (key in data) {
+            var value = data[key];
+            delete data[key];
+            this.arrayDelete(list, value);
+          }
+        }
+      }
+
+    });
+
+    Polymer.IronMeta.getIronMeta = function getIronMeta() {
+       if (singleton === null) {
+         singleton = new Polymer.IronMeta();
+       }
+       return singleton;
+     };
+
+    /**
+    `iron-meta-query` can be used to access infomation stored in `iron-meta`.
+
+    Examples:
+
+    If I create an instance like this:
+
+        <iron-meta key="info" value="foo/bar"></iron-meta>
+
+    Note that value="foo/bar" is the metadata I've defined. I could define more
+    attributes or use child nodes to define additional metadata.
+
+    Now I can access that element (and it's metadata) from any `iron-meta-query` instance:
+
+         var value = new Polymer.IronMetaQuery({key: 'info'}).value;
+
+    @group Polymer Iron Elements
+    @element iron-meta-query
+    */
+    Polymer.IronMetaQuery = Polymer({
+
+      is: 'iron-meta-query',
+
+      properties: {
+
+        /**
+         * The type of meta-data.  All meta-data of the same type is stored
+         * together.
+         */
+        type: {
+          type: String,
+          value: 'default',
+          observer: '_typeChanged'
+        },
+
+        /**
+         * Specifies a key to use for retrieving `value` from the `type`
+         * namespace.
+         */
+        key: {
+          type: String,
+          observer: '_keyChanged'
+        },
+
+        /**
+         * The meta-data to store or retrieve.
+         */
+        value: {
+          type: Object,
+          notify: true,
+          readOnly: true
+        },
+
+        /**
+         * Array of all meta-data values for the given type.
+         */
+        list: {
+          type: Array,
+          notify: true
+        }
+
+      },
+
+      /**
+       * Actually a factory method, not a true constructor. Only runs if
+       * someone invokes it directly (via `new Polymer.IronMeta()`);
+       *
+       * @param {{type: (string|undefined), key: (string|undefined)}=} config
+       */
+      factoryImpl: function(config) {
+        if (config) {
+          for (var n in config) {
+            switch(n) {
+              case 'type':
+              case 'key':
+                this[n] = config[n];
+                break;
+            }
+          }
+        }
+      },
+
+      created: function() {
+        // TODO(sjmiles): good for debugging?
+        this._metaDatas = metaDatas;
+        this._metaArrays = metaArrays;
+      },
+
+      _keyChanged: function(key) {
+        this._setValue(this._metaData && this._metaData[key]);
+      },
+
+      _typeChanged: function(type) {
+        this._metaData = metaDatas[type];
+        this.list = metaArrays[type];
+        if (this.key) {
+          this._keyChanged(this.key);
+        }
+      },
+
+      /**
+       * Retrieves meta data value by key.
+       * @param {string} key The key of the meta-data to be returned.
+       * @return {*}
+       */
+      byKey: function(key) {
+        return this._metaData && this._metaData[key];
+      }
+
+    });
+
+  })();
+</script>
 
 
 <script>
@@ -11225,192 +10637,160 @@ this.fire('dom-change');
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,500italic,700,700italic">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700">
+<style is="custom-style">
 
-<style>
+  :root {
 
-.paper-font-display4,
-.paper-font-display3,
-.paper-font-display2,
-.paper-font-display1,
-.paper-font-headline,
-.paper-font-title,
-.paper-font-subhead,
-.paper-font-body2,
-.paper-font-body1,
-.paper-font-caption,
-.paper-font-menu,
-.paper-font-button {
-  font-family: 'Roboto', 'Noto', sans-serif;
-  -webkit-font-smoothing: antialiased;  /* OS X subpixel AA bleed bug */
-}
+    /* Shared Styles */
+    --paper-font-common-base: {
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    };
 
-.paper-font-code2,
-.paper-font-code1 {
-  font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
-  -webkit-font-smoothing: antialiased;  /* OS X subpixel AA bleed bug */
-}
+    --paper-font-common-code: {
+      font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
+      -webkit-font-smoothing: antialiased;
+    };
 
-/* Opt for better kerning for headers & other short labels. */
-.paper-font-display4,
-.paper-font-display3,
-.paper-font-display2,
-.paper-font-display1,
-.paper-font-headline,
-.paper-font-title,
-.paper-font-subhead,
-.paper-font-menu,
-.paper-font-button {
-  text-rendering: optimizeLegibility;
-}
+    --paper-font-common-expensive-kerning: {
+      text-rendering: optimizeLegibility;
+    };
 
-/*
-"Line wrapping only applies to Body, Subhead, Headline, and the smaller Display
-styles. All other styles should exist as single lines."
-*/
-.paper-font-display4,
-.paper-font-display3,
-.paper-font-title,
-.paper-font-caption,
-.paper-font-menu,
-.paper-font-button {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+    --paper-font-common-nowrap: {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    };
 
-.paper-font-display4 {
-  font-size: 112px;
-  font-weight: 300;
-  letter-spacing: -.044em;
-  line-height: 120px;
-}
+    /* Material Font Styles */
 
-.paper-font-display3 {
-  font-size: 56px;
-  font-weight: 400;
-  letter-spacing: -.026em;
-  line-height: 60px;
-}
+    --paper-font-display4: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
 
-.paper-font-display2 {
-  font-size: 45px;
-  font-weight: 400;
-  letter-spacing: -.018em;
-  line-height: 48px;
-}
+      font-size: 112px;
+      font-weight: 300;
+      letter-spacing: -.044em;
+      line-height: 120px;
+    };
 
-.paper-font-display1 {
-  font-size: 34px;
-  font-weight: 400;
-  letter-spacing: -.01em;
-  line-height: 40px;
-}
+    --paper-font-display3: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
 
-.paper-font-headline {
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: -.012em;
-  line-height: 32px;
-}
+      font-size: 56px;
+      font-weight: 400;
+      letter-spacing: -.026em;
+      line-height: 60px;
+    };
 
-.paper-font-title {
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 28px;
-}
+    --paper-font-display2: {
+      @apply(--paper-font-common-base);
 
-.paper-font-subhead {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 24px;
-}
+      font-size: 45px;
+      font-weight: 400;
+      letter-spacing: -.018em;
+      line-height: 48px;
+    };
 
-.paper-font-body2 {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 24px;
-}
+    --paper-font-display1: {
+      @apply(--paper-font-common-base);
 
-.paper-font-body1 {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-}
+      font-size: 34px;
+      font-weight: 400;
+      letter-spacing: -.01em;
+      line-height: 40px;
+    };
 
-.paper-font-caption {
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.011em;
-  line-height: 20px;
-}
+    --paper-font-headline: {
+      @apply(--paper-font-common-base);
 
-.paper-font-menu {
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 24px;
-}
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -.012em;
+      line-height: 32px;
+    };
 
-.paper-font-button {
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.018em;
-  line-height: 24px;
-  text-transform: uppercase;
-}
+    --paper-font-title: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
 
-.paper-font-code2 {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
-}
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 28px;
+    };
 
-.paper-font-code1 {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-}
+    --paper-font-subhead: {
+      @apply(--paper-font-common-base);
 
-</style>
-<style>
-.shadow-transition {
-  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-}
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+    };
 
-.shadow-elevation-2dp {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-              0 1px 5px 0 rgba(0, 0, 0, 0.12),
-              0 3px 1px -2px rgba(0, 0, 0, 0.2);
-}
+    --paper-font-body2: {
+      @apply(--paper-font-common-base);
 
-.shadow-elevation-3dp {
-  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-              0 1px 8px 0 rgba(0, 0, 0, 0.12),
-              0 3px 3px -2px rgba(0, 0, 0, 0.4);
-}
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 24px;
+    };
 
-.shadow-elevation-4dp {
-  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-              0 1px 10px 0 rgba(0, 0, 0, 0.12),
-              0 2px 4px -1px rgba(0, 0, 0, 0.4);
-}
+    --paper-font-body1: {
+      @apply(--paper-font-common-base);
 
-.shadow-elevation-6dp {
-  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
-              0 1px 18px 0 rgba(0, 0, 0, 0.12),
-              0 3px 5px -1px rgba(0, 0, 0, 0.4);
-}
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+    };
 
-.shadow-elevation-8dp {
-  box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12),
-              0 5px 5px -3px rgba(0, 0, 0, 0.4);
-}
+    --paper-font-caption: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
 
-.shadow-elevation-16dp {
-  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
-              0  6px 30px 5px rgba(0, 0, 0, 0.12),
-              0  8px 10px -5px rgba(0, 0, 0, 0.4);
-}
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.011em;
+      line-height: 20px;
+    };
+
+    --paper-font-menu: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
+
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 24px;
+    };
+
+    --paper-font-button: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
+
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.018em;
+      line-height: 24px;
+      text-transform: uppercase;
+    };
+
+    --paper-font-code2: {
+      @apply(--paper-font-common-code);
+
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 20px;
+    };
+
+    --paper-font-code1: {
+      @apply(--paper-font-common-code);
+
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+    };
+
+  }
 
 </style>
 
@@ -12199,162 +11579,6 @@ context. You should place this element as a child of `<body>` whenever possible.
 
 
 </script>
-<style is="custom-style">
-
-  :root {
-
-    /* Shared Styles */
-    --paper-font-common-base: {
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-    };
-
-    --paper-font-common-code: {
-      font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
-      -webkit-font-smoothing: antialiased;
-    };
-
-    --paper-font-common-expensive-kerning: {
-      text-rendering: optimizeLegibility;
-    };
-
-    --paper-font-common-nowrap: {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    };
-
-    /* Material Font Styles */
-
-    --paper-font-display4: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 112px;
-      font-weight: 300;
-      letter-spacing: -.044em;
-      line-height: 120px;
-    };
-
-    --paper-font-display3: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 56px;
-      font-weight: 400;
-      letter-spacing: -.026em;
-      line-height: 60px;
-    };
-
-    --paper-font-display2: {
-      @apply(--paper-font-common-base);
-
-      font-size: 45px;
-      font-weight: 400;
-      letter-spacing: -.018em;
-      line-height: 48px;
-    };
-
-    --paper-font-display1: {
-      @apply(--paper-font-common-base);
-
-      font-size: 34px;
-      font-weight: 400;
-      letter-spacing: -.01em;
-      line-height: 40px;
-    };
-
-    --paper-font-headline: {
-      @apply(--paper-font-common-base);
-
-      font-size: 24px;
-      font-weight: 400;
-      letter-spacing: -.012em;
-      line-height: 32px;
-    };
-
-    --paper-font-title: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 20px;
-      font-weight: 500;
-      line-height: 28px;
-    };
-
-    --paper-font-subhead: {
-      @apply(--paper-font-common-base);
-
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 24px;
-    };
-
-    --paper-font-body2: {
-      @apply(--paper-font-common-base);
-
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 24px;
-    };
-
-    --paper-font-body1: {
-      @apply(--paper-font-common-base);
-
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 20px;
-    };
-
-    --paper-font-caption: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.011em;
-      line-height: 20px;
-    };
-
-    --paper-font-menu: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 13px;
-      font-weight: 500;
-      line-height: 24px;
-    };
-
-    --paper-font-button: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.018em;
-      line-height: 24px;
-      text-transform: uppercase;
-    };
-
-    --paper-font-code2: {
-      @apply(--paper-font-common-code);
-
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 20px;
-    };
-
-    --paper-font-code1: {
-      @apply(--paper-font-common-code);
-
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 20px;
-    };
-
-  }
-
-</style>
 
 
 
@@ -13577,23 +12801,27 @@ module.exports = Array.isArray || function (arr) {
 
   /* General styles */
 
+  body {
+    @apply(--layout-fullbleed);
+    @apply(--layout-vertical);
+  }
+
+  .space {
+    @apply(--layout-flex);
+  }
+
   #drawerToolbar {
     color: var(--secondary-text-color);
     background-color: var(--drawer-menu-color);
     border-bottom: var(--drawer-toolbar-border-color);
   }
 
-  paper-scroll-header-panel {
-    height: 100%;
+  #drawerToolbar .menu-name {
+    @apply(--paper-font-title);
   }
 
-  paper-material {
-    border-radius: 2px;
+  paper-scroll-header-panel {
     height: 100%;
-    padding: 16px 0 16px 0;
-    width: calc(98.66% - 16px);
-    margin: 16px auto;
-    background: white;
   }
 
   paper-menu {
@@ -13614,6 +12842,7 @@ module.exports = Array.isArray || function (arr) {
   paper-menu a {
     @apply(--layout-horizontal);
     @apply(--layout-center);
+
     text-decoration: none;
     color: var(--menu-link-color);
     font-family: 'Roboto', 'Noto', sans-serif;
@@ -13626,7 +12855,7 @@ module.exports = Array.isArray || function (arr) {
     padding: 0 16px;
   }
 
-  paper-toolbar.tall .app-name {
+  #mainToolbar.tall .app-name {
     font-size: 40px;
     font-weight: 300;
     /* Required for main area's paper-scroll-header-panel custom condensing transformation */
@@ -13634,17 +12863,25 @@ module.exports = Array.isArray || function (arr) {
     transform-origin: left center;
   }
 
+  #mainToolbar .middle-container,
+  #mainToolbar .bottom-container {
+    @apply(--layout-horizontal);
+    @apply(--layout-center);
+  }
+
   #mainToolbar .middle-container  {
     height: 100%;
     margin-left: 48px;
   }
 
-  #mainToolbar:not(.tall) .middle {
+  #mainToolbar:not(.tall) .middle-container {
     font-size: 18px;
     padding-bottom: 0;
   }
 
-  #mainToolbar .bottom {
+  #mainToolbar .bottom-container {
+    @apply(--paper-font-subhead);
+
     margin-left: 48px;
     /* Required for main area's paper-scroll-header-panel custom condensing transformation */
     -webkit-transform-origin: left center;
@@ -13654,6 +12891,23 @@ module.exports = Array.isArray || function (arr) {
   /* Height of the scroll area */
   .content {
     height: 900px;
+  }
+
+  section[data-route="home"] paper-material {
+    @apply(--paper-font-body2);
+  }
+
+  section[data-route="home"] paper-material .subhead {
+    @apply(--paper-font-subhead);
+  }
+
+  paper-material {
+    border-radius: 2px;
+    height: 100%;
+    padding: 16px 0 16px 0;
+    width: calc(98.66% - 16px);
+    margin: 16px auto;
+    background: white;
   }
 
   #toast .toast-hide-button {
@@ -13666,6 +12920,15 @@ module.exports = Array.isArray || function (arr) {
   /* Small */
   @media (max-width: 600px) {
 
+    #drawer .paper-toolbar {
+      margin-left: 16px;
+    }
+
+    #mainToolbar.tall .app-name {
+      font-size: 24px;
+      font-weight: 400;
+    }
+
     paper-material {
       --menu-container-display: none;
       width: calc(97.33% - 32px);
@@ -13673,26 +12936,10 @@ module.exports = Array.isArray || function (arr) {
       padding-right: 16px;
     }
 
-    paper-toolbar.tall .app-name {
-      font-size: 24px;
-      font-weight: 400;
-    }
-
-    #drawer .paper-toolbar {
-      margin-left: 16px;
-    }
-
   }
 
   /* Tablet+ */
   @media (min-width: 601px) {
-
-    paper-material {
-      width: calc(98% - 46px);
-      margin-bottom: 32px;
-      padding-left: 30px;
-      padding-right: 30px;
-    }
 
     #drawer.paper-drawer-panel > [drawer] {
       border-right: 1px solid rgba(0, 0, 0, 0.14);
@@ -13700,6 +12947,13 @@ module.exports = Array.isArray || function (arr) {
 
     iron-pages {
       padding: 48px 62px;
+    }
+
+    paper-material {
+      width: calc(98% - 46px);
+      margin-bottom: 32px;
+      padding-left: 30px;
+      padding-right: 30px;
     }
 
   }
@@ -16969,22 +16223,27 @@ module.exports = Array.isArray || function (arr) {
 </dom-module>
 <dom-module id="my-greeting" assetpath="my-greeting/">
   <template>
-    <style include="shared-styles"></style>
-    <style>
+    <style include="shared-styles">
       :host {
         display: block;
       }
+
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
     </style>
+
     <h2 class="page-title">{{greeting}}</h2>
-    <span class="paper-font-body2">Update text to change the greeting.</span>
+    <span>Update text to change the greeting.</span>
     
-    <input class="paper-font-body2" value="{{greeting::input}}">
+    <input value="{{greeting::input}}">
   </template>
 
   <script>
     (function() {
       'use strict';
-      
+
       Polymer({
         is: 'my-greeting',
 
@@ -16998,17 +16257,22 @@ module.exports = Array.isArray || function (arr) {
       });
     })();
   </script>
-
-</dom-module><dom-module id="my-list" assetpath="my-list/">
+</dom-module>
+<dom-module id="my-list" assetpath="my-list/">
   <template>
     <style>
       :host {
         display: block;
       }
+
+      span {
+        @apply(--paper-font-body1);
+      }
     </style>
+
     <ul>
       <template is="dom-repeat" items="{{items}}">
-        <li><span class="paper-font-body1">{{item}}</span></li>
+        <li><span>{{item}}</span></li>
       </template>
     </ul>
   </template>
@@ -17016,15 +16280,17 @@ module.exports = Array.isArray || function (arr) {
   <script>
     (function() {
       'use strict';
-  
+
       Polymer({
         is: 'my-list',
+
         properties: {
           items: {
             type: Array,
             notify: true,
           }
         },
+
         ready: function() {
           this.items = [
             'Responsive Web App boilerplate',
@@ -17038,4 +16304,5 @@ module.exports = Array.isArray || function (arr) {
       });
     })();
   </script>
-</dom-module></div></body></html>
+</dom-module>
+</div></body></html>
