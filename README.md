@@ -45,14 +45,17 @@ With Node.js installed, run the following one liner from the root of your Polyme
 npm install -g gulp bower && npm install && bower install
 ```
 
-#### Prerequisites (for everyone)
-
+#### Prerequisites 
+##### (for everyone)
 The full starter kit requires the following major dependencies:
-
 - Node.js, used to run JavaScript tools from the command line.
 - npm, the node package manager, installed with Node.js and used to install Node.js packages.
 - gulp, a Node.js-based build tool.
 - bower, a Node.js-based package manager used to install front-end packages (like Polymer).
+
+##### ( for Intermediate-Advanced )
+The Intermediate-Advanced starter kit uses node-gyp and requires the additional depency
+- node-gyp, a cross-platform command-line tool written in Node.js for compiling native addon modules for Node.js
 
 **To install dependencies:**
 
@@ -74,7 +77,14 @@ npm install -g gulp bower
 
 This lets you run `gulp` and `bower` from the command line.
 
-4)  Install the starter kit's local `npm` and `bower` dependencies.
+4) (*Intermediate-advanced only*) Install node-gyp and its dependencies
+```sh
+npm install -g node-gyp
+```
+You may need to further install depencies for gyp varying by OS. Detailed instructions can be found on the gyp project: https://github.com/nodejs/node-gyp#installation
+
+
+5)  Install the starter kit's local `npm` and `bower` dependencies.
 
 ```sh
 cd polymer-starter-kit && npm install && bower install
