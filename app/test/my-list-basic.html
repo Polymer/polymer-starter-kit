@@ -53,7 +53,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Data bindings will stamp out new DOM asynchronously
         // so wait to check for updates
         flush(function() {
-          listItems = list.querySelectorAll('li');
+          listItems = Polymer.dom(list.root).querySelectorAll('li');
           assert.equal(list.items.length, listItems.length);
           done();
         });
