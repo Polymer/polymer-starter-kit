@@ -8,7 +8,7 @@ then
 
   # Stamp index.html with the date and time of PSK's deploying
   date_value=`date`
-  sed -i.tmp1 "s/This is another card./This is another card. PSK Deployed at: $date_value/" app/index.html
+  sed -i.tmp1 "s/This is another card./This is another card. PSK Deployed on: $date_value/" app/index.html
 
   deploy_ghpages () {
     # Deploying to GitHub Pages! (http://polymerelements.github.io/polymer-starter-kit)
@@ -28,7 +28,7 @@ then
     # Starting Build Process for Firebase Changes
     gulp
     # Starting Deploy Process to Firebaseapp.com Server -- polymer-starter-kit.firebaseapp.com
-    firebase deploy --non-interactive --token "${FIREBASE_TOKEN}"
+    firebase deploy --token "${FIREBASE_TOKEN}" -m "Auto Deployed by Travis CI"
     # Undoing Changes to PSK for Firebase
     cp app/index.html.tmp1 app/index.html
     cp app/elements/routing.html.tmp app/elements/routing.html
