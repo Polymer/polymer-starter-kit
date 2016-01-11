@@ -32,10 +32,9 @@ then
     # Starting Deploy Process to Firebaseapp.com Server -- polymer-starter-kit.firebaseapp.com
     firebase deploy --token "$FIREBASE_TOKEN" -m "Auto Deployed by Travis CI"
     # Undoing Changes to PSK for Firebase
-    cp app/index.html.tmp1 app/index.html
+    cp app/index.html.tmp app/index.html
     cp app/elements/routing.html.tmp app/elements/routing.html
     rm app/elements/routing.html.tmp
-    rm app/index.html.tmp1
     rm app/index.html.tmp
     rm firebase.json
   }
