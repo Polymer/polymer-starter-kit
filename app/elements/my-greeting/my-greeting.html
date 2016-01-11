@@ -7,26 +7,33 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
+
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
 
 <dom-module id="my-greeting">
   <template>
-    <style include="shared-styles"></style>
-    <style>
+    <style include="shared-styles">
       :host {
         display: block;
       }
+
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
     </style>
+
     <h2 class="page-title">{{greeting}}</h2>
-    <span class="paper-font-body2">Update text to change the greeting.</span>
+    <span>Update text to change the greeting.</span>
     <!-- Listens for "input" event and sets greeting to <input>.value -->
-    <input class="paper-font-body2" value="{{greeting::input}}">
+    <input value="{{greeting::input}}">
   </template>
 
   <script>
     (function() {
       'use strict';
-      
+
       Polymer({
         is: 'my-greeting',
 
@@ -40,5 +47,4 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
     })();
   </script>
-
 </dom-module>

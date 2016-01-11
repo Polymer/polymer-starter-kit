@@ -74,14 +74,6 @@ You need to have some changes of configuration to fit for Mobile Chrome Apps as 
 
 ### Update gulp tasks
 
-- Add a glob pattern of restricting files in bower_components to build Android app. `.gz` files can cause building fail for Android. Therefore `!bower_components/web-animations-js/web-animations.min.js.gz` should be added to copy:bower task for that. It would be looks like that.
-  ```js
-  var bower = gulp.src([
-    'bower_components/**/*',
-    '!bower_components/web-animations-js/web-animations.min.js.gz'
-  ]).pipe(gulp.dest(dist('bower_components')));
-  ```
-
 - Using `polybuild(vulcanize + crisper)` task is mandatory because of Chrome Apps doesn't allow inline script blocks according to [CSP](https://developer.chrome.com/apps/contentSecurityPolicy). You should replace current `vulcanize` task with new task below. To do this install `polybuild` first with `npm install --save-dev polybuild` command
   ```js
   // load polybuild
@@ -89,15 +81,14 @@ You need to have some changes of configuration to fit for Mobile Chrome Apps as 
 
   // Vulcanize granular configuration
   gulp.task('vulcanize', function() {
-    var DEST_DIR = dist('elements');
-    return gulp.src(dist('elements/elements.vulcanized.html'))
+    return gulp.src('app/elements/elements.html')
       .pipe(polybuild({maximumCrush: true}))
       .pipe($.rename(function(file) {
         if (file.extname === '.html') {
           file.basename = file.basename.replace('.build', '');
         }
       }))
-      .pipe(gulp.dest(DEST_DIR))
+      .pipe(gulp.dest(dist('elements')))
       .pipe($.size({title: 'vulcanize'}));
   });
   ```

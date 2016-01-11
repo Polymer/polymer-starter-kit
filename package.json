@@ -10,7 +10,7 @@
     "gulp-cache": "^0.4.0",
     "gulp-changed": "^1.0.0",
     "gulp-gh-pages": "^0.5.4",
-    "gulp-html-extract": "^0.0.3",
+    "gulp-html-extract": "^0.1.0",
     "gulp-if": "^2.0.0",
     "gulp-imagemin": "^2.2.1",
     "gulp-jscs": "^3.0.0",
@@ -30,7 +30,7 @@
     "require-dir": "^0.3.0",
     "run-sequence": "^1.0.2",
     "vulcanize": ">= 1.4.2",
-    "web-component-tester": "^3.4.0"
+    "web-component-tester": "^4.0.0"
   },
   "scripts": {
     "test": "gulp test:local",
