@@ -13,9 +13,17 @@ You can deploy to github pages with a couple minor changes to Polymer Starter Ki
     // app.baseUrl = '/polymer-starter-kit/';
   }
   ```
+
 2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `bobs-awesome-site`)
-3. Run `gulp build-deploy-gh-pages` from command line
-4. To see changes wait 1-2 minutes then load Github pages for your app (ex: http://polymerelements.github.io/polymer-starter-kit)
+
+3. Add this code at the top of `<head>` tag in the [index.html](../app/index.html) to force HTTPS:
+```html
+<script>'https:'!==window.location.protocol&&(window.location.protocol='https')</script>
+```
+
+4. Run `gulp build-deploy-gh-pages` from command line
+
+5. To see changes wait 1-2 minutes then load Github pages for your app (ex: https://polymerelements.github.io/polymer-starter-kit)
 
 ### Notes
 
