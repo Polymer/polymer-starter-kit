@@ -1,0 +1,48 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Platinum HTTPS Redirect Demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="../platinum-https-redirect.html">
+  </head>
+
+  <body>
+    <platinum-https-redirect></platinum-https-redirect>
+
+    <p>
+      Because this page includes a <code>&lt;platinum-https-redirect></code> element, it will
+      automatically redirect to the <code>https:</code> version of this page when the following is
+      true:
+    </p>
+
+    <ul>
+      <li>The page is accessed via the <code>http:</code> protocol.</li>
+      <li>
+        The page's hostname is not
+        <a href="https://en.wikipedia.org/wiki/Localhost"><code>localhost</code></a>
+        or one of its equivalents.
+      </li>
+    </ul>
+
+    <p>
+      In order to test this functionality, you can visit this page via
+      <a href="http://polymerelements.github.io/platinum-https-redirect/demo/index.html">http://polymerelements.github.io/platinum-https-redirect/demo/index.html</a>.
+      Because that URL uses <code>http:</code> and is not on <code>localhost</code>, it will
+      automatically redirect to
+      <code>https://polymerelements.github.io/platinum-https-redirect/demo/index.html</code>
+      instead.
+    </p>
+  </body>
+</html>

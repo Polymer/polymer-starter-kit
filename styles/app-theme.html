@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/polymer/polymer.html"><link rel="import" href="../bower_components/paper-styles/typography.html"><style is="custom-style">
+<style is="custom-style">
 
   /*
    Polymer includes a shim for CSS Custom Properties that we can use for application theming.
@@ -12,17 +12,16 @@
   /* Application theme */
 
   :root {
+    --dark-primary-color: #303F9F;
+    --default-primary-color: #3F51B5;
+    --light-primary-color: #C5CAE9;
+    --text-primary-color: #ffffff; /*text/icons*/
+    --accent-color: #FF4081;
+    --primary-background-color: #c5cae9;
     --primary-text-color: #212121;
-    --primary-background-color: #ffffff;
-    --secondary-text-color: #737373;
-    --disabled-text-color: #9b9b9b;
-    --divider-color: #dbdbdb;
-    --primary-color: #3f51b5;
-    --light-primary-color: #c5cae9;
-    --dark-primary-color: #303f9f;
-    --accent-color: #ff4081;
-    --light-accent-color: #ff80ab;
-    --dark-accent-color: #f50057;
+    --secondary-text-color: #727272;
+    --disabled-text-color: #bdbdbd;
+    --divider-color: #B6B6B6;
 
     /* Components */
 
@@ -38,37 +37,23 @@
 
   /* General styles */
 
-  body {
-    @apply(--layout-fullbleed);
-    @apply(--layout-vertical);
-  }
-
-  .space {
-    @apply(--layout-flex);
-  }
-
   #drawerToolbar {
     color: var(--secondary-text-color);
     background-color: var(--drawer-menu-color);
     border-bottom: var(--drawer-toolbar-border-color);
   }
 
-  #drawerToolbar .menu-name {
-    @apply(--paper-font-title);
-  }
-
   paper-scroll-header-panel {
     height: 100%;
   }
 
-  paper-menu {
-    --paper-menu-selected-item: {
-      color: var(--primary-color);
-    }
-
-    --paper-menu-focused-item-after: {
-      background: var(--primary-color);
-    }
+  paper-material {
+    border-radius: 2px;
+    height: 100%;
+    padding: 16px 0 16px 0;
+    width: calc(98.66% - 16px);
+    margin: 16px auto;
+    background: white;
   }
 
   paper-menu iron-icon {
@@ -76,10 +61,13 @@
     opacity: 0.54;
   }
 
+  .paper-menu > .iron-selected {
+    color: var(--default-primary-color);
+  }
+
   paper-menu a {
     @apply(--layout-horizontal);
     @apply(--layout-center);
-
     text-decoration: none;
     color: var(--menu-link-color);
     font-family: 'Roboto', 'Noto', sans-serif;
@@ -92,7 +80,7 @@
     padding: 0 16px;
   }
 
-  #mainToolbar.tall .app-name {
+  paper-toolbar.tall .app-name {
     font-size: 40px;
     font-weight: 300;
     /* Required for main area's paper-scroll-header-panel custom condensing transformation */
@@ -100,25 +88,17 @@
     transform-origin: left center;
   }
 
-  #mainToolbar .middle-container,
-  #mainToolbar .bottom-container {
-    @apply(--layout-horizontal);
-    @apply(--layout-center);
-  }
-
   #mainToolbar .middle-container  {
     height: 100%;
     margin-left: 48px;
   }
 
-  #mainToolbar:not(.tall) .middle-container {
+  #mainToolbar:not(.tall) .middle {
     font-size: 18px;
     padding-bottom: 0;
   }
 
-  #mainToolbar .bottom-container {
-    @apply(--paper-font-subhead);
-
+  #mainToolbar .bottom {
     margin-left: 48px;
     /* Required for main area's paper-scroll-header-panel custom condensing transformation */
     -webkit-transform-origin: left center;
@@ -128,23 +108,6 @@
   /* Height of the scroll area */
   .content {
     height: 900px;
-  }
-
-  section[data-route="home"] paper-material {
-    @apply(--paper-font-body2);
-  }
-
-  section[data-route="home"] paper-material .subhead {
-    @apply(--paper-font-subhead);
-  }
-
-  paper-material {
-    border-radius: 2px;
-    height: 100%;
-    padding: 16px 0 16px 0;
-    width: calc(98.66% - 16px);
-    margin: 16px auto;
-    background: white;
   }
 
   #toast .toast-hide-button {
@@ -157,15 +120,6 @@
   /* Small */
   @media (max-width: 600px) {
 
-    #drawer .paper-toolbar {
-      margin-left: 16px;
-    }
-
-    #mainToolbar.tall .app-name {
-      font-size: 24px;
-      font-weight: 400;
-    }
-
     paper-material {
       --menu-container-display: none;
       width: calc(97.33% - 32px);
@@ -173,10 +127,26 @@
       padding-right: 16px;
     }
 
+    paper-toolbar.tall .app-name {
+      font-size: 24px;
+      font-weight: 400;
+    }
+
+    #drawer .paper-toolbar {
+      margin-left: 16px;
+    }
+
   }
 
   /* Tablet+ */
   @media (min-width: 601px) {
+
+    paper-material {
+      width: calc(98% - 46px);
+      margin-bottom: 32px;
+      padding-left: 30px;
+      padding-right: 30px;
+    }
 
     #drawer.paper-drawer-panel > [drawer] {
       border-right: 1px solid rgba(0, 0, 0, 0.14);
@@ -184,13 +154,6 @@
 
     iron-pages {
       padding: 48px 62px;
-    }
-
-    paper-material {
-      width: calc(98% - 46px);
-      margin-bottom: 32px;
-      padding-left: 30px;
-      padding-right: 30px;
     }
 
   }
