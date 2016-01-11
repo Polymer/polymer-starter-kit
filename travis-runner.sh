@@ -12,6 +12,7 @@ then
 
   deploy_ghpages () {
     # Deploying to GitHub Pages! (http://polymerelements.github.io/polymer-starter-kit)
+    echo Deploying to GitHub Pages
     sed -i.tmp "s/\/\/ app.baseUrl = '\/polymer-starter-kit/app.baseUrl = '\/polymer-starter-kit/" app/scripts/app.js
     gulp build-deploy-gh-pages
     # Undoing Changes to PSK for GitHub Pages
@@ -21,6 +22,7 @@ then
 
   deploy_firebase () {
     # Deploying to Firebase! (https://polymer-starter-kit.firebaseapp.com)
+    echo Deploying to Firebase
     # Making Changes to PSK for Firebase
     sed -i.tmp 's/<!-- Chrome for Android theme color -->/<base href="\/">\'$'\n<!-- Chrome for Android theme color -->/g' app/index.html
     sed -i.tmp "s/hashbang: true/hashbang: false/" app/elements/routing.html
@@ -28,7 +30,7 @@ then
     # Starting Build Process for Firebase Changes
     gulp
     # Starting Deploy Process to Firebaseapp.com Server -- polymer-starter-kit.firebaseapp.com
-    firebase deploy --token "${FIREBASE_TOKEN}" -m "Auto Deployed by Travis CI"
+    firebase deploy --token "$FIREBASE_TOKEN" -m "Auto Deployed by Travis CI"
     # Undoing Changes to PSK for Firebase
     cp app/index.html.tmp1 app/index.html
     cp app/elements/routing.html.tmp app/elements/routing.html
