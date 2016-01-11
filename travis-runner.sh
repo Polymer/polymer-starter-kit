@@ -28,7 +28,7 @@ then
     # Starting Build Process for Firebase Changes
     gulp
     # Starting Deploy Process to Firebaseapp.com Server -- polymer-starter-kit.firebaseapp.com
-    firebase deploy --non-interactive --token ${FIREBASE_TOKEN}
+    firebase deploy --non-interactive --token "${FIREBASE_TOKEN}"
     # Undoing Changes to PSK for Firebase
     cp app/index.html.tmp app/index.html
     cp app/elements/routing.html.tmp app/elements/routing.html
