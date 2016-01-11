@@ -24,7 +24,7 @@ then
     # Making Changes to PSK for Firebase
     sed -i.tmp 's/<!-- Chrome for Android theme color -->/<base href="\/">\'$'\n<!-- Chrome for Android theme color -->/g' app/index.html
     sed -i.tmp "s/hashbang: true/hashbang: false/" app/elements/routing.html
-    cp docs/firebase.json app/firebase.json
+    cp docs/firebase.json firebase.json
     # Starting Build Process for Firebase Changes
     gulp
     # Starting Deploy Process to Firebaseapp.com Server -- polymer-starter-kit.firebaseapp.com
