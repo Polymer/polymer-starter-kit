@@ -118,7 +118,7 @@ To run tests Java 7 or higher is required. To update Java go to http://www.oracl
 gulp
 ```
 
-Build and optimize the current project, ready for deployment. This includes linting as well as vulcanization, image, script, stylesheet and HTML optimization and minification.
+Build and optimize the current project, ready for deployment. This includes vulcanization, image, script, stylesheet and HTML optimization and minification.
 
 ## Application Theming & Styling
 
