@@ -14,7 +14,7 @@
 * [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor, Deploying to GitHub Pages, Deploying to Firebase, and Mobile Chrome Apps
 
 ### Demo
-See latest Polymer Starter Kit Demo (from master) at https://polymerelements.github.io/polymer-starter-kit
+See latest Polymer Starter Kit Demo (from master) at https://polymerelements.github.io/polymer-starter-kit/
 
 ### Tutorials
 
@@ -171,7 +171,7 @@ Components installed by Bower live in the `app/bower_components` directory. This
 1. Uncomment this line  `// app.baseUrl = '/polymer-starter-kit/';` in app.js near the top
 2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `bobs-awesome-site`)
 3. Run `gulp build-deploy-gh-pages` from command line
-4. To see changes wait 1-2 minutes then load Github pages for your app (ex: https://polymerelements.github.io/polymer-starter-kit)
+4. To see changes wait 1-2 minutes then load Github pages for your app (ex: https://polymerelements.github.io/polymer-starter-kit/)
 
 [See more details](/docs/deploy-to-github-pages.md/)
 
