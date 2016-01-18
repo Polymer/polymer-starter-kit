@@ -116,28 +116,6 @@ gulp.task('ensureFiles', function(cb) {
   }), cb);
 });
 
-// Lint JavaScript
-gulp.task('lint', ['ensureFiles'], function() {
-  return gulp.src([
-      'app/scripts/**/*.js',
-      'app/elements/**/*.js',
-      'app/elements/**/*.html',
-      'gulpfile.js'
-    ])
-    .pipe(reload({
-      stream: true,
-      once: true
-    }))
-
-  // JSCS has not yet a extract option
-  .pipe($.if('*.html', $.htmlExtract({strip: true})))
-  .pipe($.jshint())
-  .pipe($.jscs())
-  .pipe($.jscsStylish.combineWithHintResults())
-  .pipe($.jshint.reporter('jshint-stylish'))
-  .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
-});
-
 // Optimize images
 gulp.task('images', function() {
   return imageOptimizeTask('app/images/**/*', dist('images'));
@@ -237,7 +215,7 @@ gulp.task('clean', function() {
 });
 
 // Watch files for changes & reload
-gulp.task('serve', ['lint', 'styles', 'elements'], function() {
+gulp.task('serve', ['styles', 'elements'], function() {
   browserSync({
     port: 5000,
     notify: false,
@@ -263,7 +241,6 @@ gulp.task('serve', ['lint', 'styles', 'elements'], function() {
   gulp.watch(['app/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
   gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
-  gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint']);
   gulp.watch(['app/images/**/*'], reload);
 });
 
@@ -296,7 +273,7 @@ gulp.task('default', ['clean'], function(cb) {
   runSequence(
     ['copy', 'styles'],
     'elements',
-    ['lint', 'images', 'fonts', 'html'],
+    ['images', 'fonts', 'html'],
     'vulcanize', // 'cache-config',
     cb);
 });

@@ -47,6 +47,5 @@ then
   rm app/index.html.tmp1
 
 else
-  npm run lint
   npm test
 fi
