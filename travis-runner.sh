@@ -19,7 +19,7 @@ then
     # Undoing Changes to PSK for GitHub Pages
     cp app/scripts/app.js.tmp app/scripts/app.js
     rm app/scripts/app.js.tmp
-    cp app/app/index.html.tmp2 app/app/index.html
+    cp app/index.html.tmp2 app/index.html
     rm app/index.html.tmp2
   }
 
