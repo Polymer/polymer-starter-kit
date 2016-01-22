@@ -94,6 +94,47 @@ var optimizeHtmlTask = function (src, dest) {
 + var assets = $.useref.assets();
 ```
 
+## Vulcanize the new files
+
+Need to change the vulcanize command to grab the newly translated files.  .tmp has the translated files so will pull from there.
+
+- First need to copy over all bower_components so that vulcanize can find the html references it needs.
+```patch
++// Copy all bower_components over to help js task and vulcanize work together
++gulp.task('bowertotmp', function () {
++ return gulp.src(['app/bower_components/**/*'])
++   .pipe(gulp.dest('.tmp/bower_components/'));
++ });
+```
+
+- add it to the default command
+```patch
+ gulp.task('default', ['clean'], function(cb) {
+   // Uncomment 'cache-config' if you are going to use service workers.
+   runSequence(
++    'bowertotmp',
+     ['copy', 'styles'],
+     ['elements', 'js'],
+     ['images', 'fonts', 'html'],
+@@ -324,6 +325,12 @@
+    .pipe($.sourcemaps.write('.'))
+    .pipe(gulp.dest('.tmp/'))
+    .pipe(gulp.dest(dist()));
++});
+```
+
+- finally update vulcanize to point to .tmp directory
+```patch
+ // Vulcanize granular configuration
+ gulp.task('vulcanize', function() {
+-  return gulp.src('app/elements/elements.html')
++  return gulp.src('.tmp/elements/elements.html')
+     .pipe($.vulcanize({
+       stripComments: true,
+       inlineCss: true,
+```
+
+
 ## Optional - When using shadow-dom instead shady-dom
 Place this configuration ([Read more](https://www.polymer-project.org/1.0/docs/devguide/settings.html)) in a separate file like `scripts/polymer-settings`
 
