@@ -53,19 +53,6 @@ The scripts below are based on the [Using Static Files guide](https://cloud.goog
         
         skip_files:
         - ^(.*/)?app\.yaml
-        - ^(.*/)?app\.yml
-        - ^(.*/)?index\.yaml
-        - ^(.*/)?index\.yml
-        - ^(.*/)?bower\.json
-        - ^(.*/)?#.*#
-        - ^(.*/)?.*~
-        - ^(.*/)?.*\.py[co]
-        - ^(.*/)?.*/RCS/.*
-        - ^(.*/)?\..*
-        - ^(.*/)?.*\.bak$
-        - ^(.*/)?node_modules/.*
-        - ^(.*/).md|markdown
-        - ^(.*/)LICENSE
 
     This is the configuration file for the GCP project.
     It sets a python runtime environment and static file handlers.
