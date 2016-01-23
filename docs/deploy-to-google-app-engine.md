@@ -70,7 +70,7 @@ The scripts below are based on the [Using Static Files guide](https://cloud.goog
 
     if [ -z "$DEPLOY_VERSION" ]
     then
-      TAG=`git describe`
+      TAG=`git describe --abbrev=0`
       # GAE doesn't allow periods
       DEPLOY_VERSION=${TAG//.}
     fi
