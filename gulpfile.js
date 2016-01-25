@@ -109,7 +109,7 @@ gulp.task('elements', function() {
 // "dot" files are specifically tricky due to them being hidden on
 // some systems.
 gulp.task('ensureFiles', function(cb) {
-  var requiredFiles = ['.jscsrc', '.jshintrc', '.bowerrc'];
+  var requiredFiles = ['.bowerrc'];
 
   ensureFiles(requiredFiles.map(function(p) {
     return path.join(__dirname, p);
@@ -271,7 +271,7 @@ gulp.task('serve:dist', ['default'], function() {
 gulp.task('default', ['clean'], function(cb) {
   // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
-    ['copy', 'styles'],
+    ['ensureFiles', 'copy', 'styles'],
     'elements',
     ['images', 'fonts', 'html'],
     'vulcanize', // 'cache-config',
