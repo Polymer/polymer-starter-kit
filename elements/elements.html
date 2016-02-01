@@ -8992,6 +8992,7 @@ this.fire('dom-change');
 
       /**
        * Gets or sets the selected element. The default is to use the index of the item.
+       * @type {string|number}
        */
       selected: {
         type: String,
@@ -9048,6 +9049,7 @@ this.fire('dom-change');
       items: {
         type: Array,
         readOnly: true,
+        notify: true,
         value: function() {
           return [];
         }
@@ -9109,7 +9111,7 @@ this.fire('dom-change');
      * Selects the given value.
      *
      * @method select
-     * @param {string} value the value to select.
+     * @param {string|number} value the value to select.
      */
     select: function(value) {
       this.selected = value;
@@ -9134,6 +9136,22 @@ this.fire('dom-change');
     selectNext: function() {
       var index = (Number(this._valueToIndex(this.selected)) + 1) % this.items.length;
       this.selected = this._indexToValue(index);
+    },
+
+    /**
+     * Force a synchronous update of the `items` property.
+     *
+     * NOTE: Consider listening for the `iron-items-changed` event to respond to
+     * updates to the set of selectable items after updates to the DOM list and
+     * selection state have been made.
+     *
+     * WARNING: If you are using this method, you should probably consider an
+     * alternate approach. Synchronously querying for items is potentially
+     * slow for many use cases. The `items` property will update asynchronously
+     * on its own to reflect selectable items in the DOM.
+     */
+    forceSynchronousItemUpdate: function() {
+      this._updateItems();
     },
 
     get _shouldUpdateSelection() {
@@ -9220,18 +9238,18 @@ this.fire('dom-change');
     // observe items change under the given node.
     _observeItems: function(node) {
       return Polymer.dom(node).observeNodes(function(mutations) {
+        this._updateItems();
+
+        if (this._shouldUpdateSelection) {
+          this._updateSelected();
+        }
+
         // Let other interested parties know about the change so that
         // we don't have to recreate mutation observers everywher.
         this.fire('iron-items-changed', mutations, {
           bubbles: false,
           cancelable: false
         });
-
-        this._updateItems();
-
-        if (this._shouldUpdateSelection) {
-          this._updateSelected();
-        }
       });
     },
 
@@ -9360,7 +9378,7 @@ this.fire('dom-change');
      * `value` will be toggled; otherwise the `value` will be selected.
      *
      * @method select
-     * @param {string} value the value to select.
+     * @param {string|number} value the value to select.
      */
     select: function(value) {
       if (this.multi) {
@@ -11855,7 +11873,7 @@ this.fire('dom-change');
     },
 
     _computeKeyboardClass: function(receivedFocusFromKeyboard) {
-      this.classList.toggle('keyboard-focus', receivedFocusFromKeyboard);
+      this.toggleClass('keyboard-focus', receivedFocusFromKeyboard);
     },
 
     /**
@@ -11866,7 +11884,8 @@ this.fire('dom-change');
      */
     _spaceKeyDownHandler: function(event) {
       Polymer.IronButtonStateImpl._spaceKeyDownHandler.call(this, event);
-      if (this.hasRipple()) {
+      // Ensure that there is at most one ripple when the space key is held down.
+      if (this.hasRipple() && this.getRipple().ripples.length < 1) {
         this._ripple.uiDownAction();
       }
     },
@@ -12493,6 +12512,12 @@ this.fire('dom-change');
       box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
                   0 3px 14px 2px rgba(0, 0, 0, 0.12),
                   0 5px 5px -3px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-12dp: {
+      box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14),
+                  0 4px 22px 3px rgba(0, 0, 0, 0.12),
+                  0 6px 7px -4px rgba(0, 0, 0, 0.4);
     };
 
     --shadow-elevation-16dp: {
@@ -13948,105 +13973,149 @@ CSS properties               | Action
 </script>
 <script>
 
-  Polymer.IronOverlayManager = {
-
-    _overlays: [],
-
-    // iframes have a default z-index of 100, so this default should be at least
-    // that.
-    _minimumZ: 101,
-
-    _backdrops: [],
-
-    _applyOverlayZ: function(overlay, aboveZ) {
-      this._setZ(overlay, aboveZ + 2);
-    },
-
-    _setZ: function(element, z) {
-      element.style.zIndex = z;
-    },
-
-    // track overlays for z-index and focus managemant
-    addOverlay: function(overlay) {
-      var minimumZ = Math.max(this.currentOverlayZ(), this._minimumZ);
-      this._overlays.push(overlay);
-      var newZ = this.currentOverlayZ();
-      if (newZ <= minimumZ) {
-        this._applyOverlayZ(overlay, minimumZ);
-      }
-    },
-
-    removeOverlay: function(overlay) {
-      var i = this._overlays.indexOf(overlay);
-      if (i >= 0) {
-        this._overlays.splice(i, 1);
-        this._setZ(overlay, '');
-      }
-    },
-
-    currentOverlay: function() {
-      var i = this._overlays.length - 1;
-      while (this._overlays[i] && !this._overlays[i].opened) {
-        --i;
-      }
-      return this._overlays[i];
-    },
-
-    currentOverlayZ: function() {
-      var z = this._minimumZ;
-      var current = this.currentOverlay();
-      if (current) {
-        var z1 = window.getComputedStyle(current).zIndex;
-        if (!isNaN(z1)) {
-          z = Number(z1);
-        }
-      }
-      return z;
-    },
-
+  /**
+   * @struct
+   * @constructor
+   */
+  Polymer.IronOverlayManagerClass = function() {
+    this._overlays = [];
     /**
-     * Ensures that the minimum z-index of new overlays is at least `minimumZ`.
-     * This does not effect the z-index of any existing overlays.
-     *
-     * @param {number} minimumZ
+     * iframes have a default z-index of 100, so this default should be at least
+     * that.
+     * @private {number}
      */
-    ensureMinimumZ: function(minimumZ) {
-      this._minimumZ = Math.max(this._minimumZ, minimumZ);
-    },
+    this._minimumZ = 101;
 
-    focusOverlay: function() {
-      var current = this.currentOverlay();
-      // We have to be careful to focus the next overlay _after_ any current
-      // transitions are complete (due to the state being toggled prior to the
-      // transition). Otherwise, we risk infinite recursion when a transitioning
-      // (closed) overlay becomes the current overlay.
-      //
-      // NOTE: We make the assumption that any overlay that completes a transition
-      // will call into focusOverlay to kick the process back off. Currently:
-      // transitionend -> _applyFocus -> focusOverlay.
-      if (current && !current.transitioning) {
-        current._applyFocus();
-      }
-    },
+    this._backdrops = [];
+  }
 
-    trackBackdrop: function(element) {
-      // backdrops contains the overlays with a backdrop that are currently
-      // visible
-      if (element.opened) {
-        this._backdrops.push(element);
-      } else {
-        var index = this._backdrops.indexOf(element);
-        if (index >= 0) {
-          this._backdrops.splice(index, 1);
-        }
-      }
-    },
-
-    getBackdrops: function() {
-      return this._backdrops;
-    }
-
+  Polymer.IronOverlayManagerClass.prototype._applyOverlayZ = function(overlay, aboveZ) {
+    this._setZ(overlay, aboveZ + 2);
   };
+
+  Polymer.IronOverlayManagerClass.prototype._setZ = function(element, z) {
+    element.style.zIndex = z;
+  };
+
+  /**
+   * track overlays for z-index and focus managemant
+   */
+  Polymer.IronOverlayManagerClass.prototype.addOverlay = function(overlay) {
+    var minimumZ = Math.max(this.currentOverlayZ(), this._minimumZ);
+    this._overlays.push(overlay);
+    var newZ = this.currentOverlayZ();
+    if (newZ <= minimumZ) {
+      this._applyOverlayZ(overlay, minimumZ);
+    }
+  };
+
+  Polymer.IronOverlayManagerClass.prototype.removeOverlay = function(overlay) {
+    var i = this._overlays.indexOf(overlay);
+    if (i >= 0) {
+      this._overlays.splice(i, 1);
+      this._setZ(overlay, '');
+    }
+  };
+
+  Polymer.IronOverlayManagerClass.prototype.currentOverlay = function() {
+    var i = this._overlays.length - 1;
+    while (this._overlays[i] && !this._overlays[i].opened) {
+      --i;
+    }
+    return this._overlays[i];
+  };
+
+  Polymer.IronOverlayManagerClass.prototype.currentOverlayZ = function() {
+    return this._getOverlayZ(this.currentOverlay());
+  };
+
+  /**
+   * Ensures that the minimum z-index of new overlays is at least `minimumZ`.
+   * This does not effect the z-index of any existing overlays.
+   *
+   * @param {number} minimumZ
+   */
+  Polymer.IronOverlayManagerClass.prototype.ensureMinimumZ = function(minimumZ) {
+    this._minimumZ = Math.max(this._minimumZ, minimumZ);
+  };
+
+  Polymer.IronOverlayManagerClass.prototype.focusOverlay = function() {
+    var current = this.currentOverlay();
+    // We have to be careful to focus the next overlay _after_ any current
+    // transitions are complete (due to the state being toggled prior to the
+    // transition). Otherwise, we risk infinite recursion when a transitioning
+    // (closed) overlay becomes the current overlay.
+    //
+    // NOTE: We make the assumption that any overlay that completes a transition
+    // will call into focusOverlay to kick the process back off. Currently:
+    // transitionend -> _applyFocus -> focusOverlay.
+    if (current && !current.transitioning) {
+      current._applyFocus();
+    }
+  };
+
+  Polymer.IronOverlayManagerClass.prototype.trackBackdrop = function(element) {
+    // backdrops contains the overlays with a backdrop that are currently
+    // visible
+    var index = this._backdrops.indexOf(element);
+    if (element.opened && element.withBackdrop) {
+      // no duplicates
+      if (index === -1) {
+        this._backdrops.push(element);
+      }
+    } else if (index >= 0) {
+      this._backdrops.splice(index, 1);
+    }
+  };
+
+  Object.defineProperty(Polymer.IronOverlayManagerClass.prototype, "backdropElement", {
+    get: function() {
+      if (!this._backdropElement) {
+        this._backdropElement = document.createElement('iron-overlay-backdrop');
+      }
+      return this._backdropElement;
+    }
+  });
+
+  Polymer.IronOverlayManagerClass.prototype.getBackdrops = function() {
+    return this._backdrops;
+  };
+
+  /**
+   * Returns the z-index for the backdrop.
+   */
+  Polymer.IronOverlayManagerClass.prototype.backdropZ = function() {
+    return this._getOverlayZ(this._overlayWithBackdrop()) - 1;
+  };
+
+  /**
+   * Returns the first opened overlay that has a backdrop.
+   */
+  Polymer.IronOverlayManagerClass.prototype._overlayWithBackdrop = function() {
+    for (var i = 0; i < this._overlays.length; i++) {
+      if (this._overlays[i].opened && this._overlays[i].withBackdrop) {
+        return this._overlays[i];
+      }
+    }
+  };
+
+  /**
+   * Calculates the minimum z-index for the overlay.
+   */
+  Polymer.IronOverlayManagerClass.prototype._getOverlayZ = function(overlay) {
+    var z = this._minimumZ;
+    if (overlay) {
+      var z1 = Number(window.getComputedStyle(overlay).zIndex);
+      // Check if is a number
+      // Number.isNaN not supported in IE 10+
+      if (z1 === z1) {
+        z = z1;
+      }
+    }
+    return z;
+  };
+
+  Polymer.IronOverlayManager = new Polymer.IronOverlayManagerClass();
 
 </script>
 
@@ -14109,13 +14178,18 @@ CSS properties               | Action
 
     },
 
+    listeners: {
+      'transitionend' : '_onTransitionend'
+    },
+
     /**
      * Appends the backdrop to document body and sets its `z-index` to be below the latest overlay.
      */
     prepare: function() {
+      // Always update z-index
+      this.style.zIndex = this._manager.backdropZ();
       if (!this.parentNode) {
         Polymer.dom(document.body).appendChild(this);
-        this.style.zIndex = this._manager.currentOverlayZ() - 1;
       }
     },
 
@@ -14133,9 +14207,14 @@ CSS properties               | Action
      * Hides the backdrop if needed.
      */
     close: function() {
-      // only need to make the backdrop invisible if this is called by the last overlay with a backdrop
-      if (this._manager.getBackdrops().length < 2) {
+      // Always update z-index
+      this.style.zIndex = this._manager.backdropZ();
+      // close only if no element with backdrop is left
+      if (this._manager.getBackdrops().length === 0) {
         this._setOpened(false);
+        // complete() will be called after the transition is done.
+        // If animations are disabled via custom-styles, user is expected to call
+        // complete() after close()
       }
     },
 
@@ -14146,6 +14225,12 @@ CSS properties               | Action
       // only remove the backdrop if there are no more overlays with backdrops
       if (this._manager.getBackdrops().length === 0 && this.parentNode) {
         Polymer.dom(this.parentNode).removeChild(this);
+      }
+    },
+
+    _onTransitionend: function (event) {
+      if (event && event.target === this) {
+        this.complete();
       }
     }
 
@@ -14220,8 +14305,8 @@ context. You should place this element as a child of `<body>` whenever possible.
        * Set to true to display a backdrop behind the overlay.
        */
       withBackdrop: {
-        type: Boolean,
-        value: false
+        observer: '_withBackdropChanged',
+        type: Boolean
       },
 
       /**
@@ -14288,15 +14373,11 @@ context. You should place this element as a child of `<body>` whenever possible.
      * @type Node
      */
     get backdropElement() {
-      return this._backdrop;
+      return this._manager.backdropElement;
     },
 
     get _focusNode() {
       return Polymer.dom(this).querySelector('[autofocus]') || this;
-    },
-
-    registered: function() {
-      this._backdrop = document.createElement('iron-overlay-backdrop');
     },
 
     ready: function() {
@@ -14312,7 +14393,7 @@ context. You should place this element as a child of `<body>` whenever possible.
 
     detached: function() {
       this.opened = false;
-      this._completeBackdrop();
+      this._manager.trackBackdrop(this);
       this._manager.removeOverlay(this);
     },
 
@@ -14320,6 +14401,7 @@ context. You should place this element as a child of `<body>` whenever possible.
      * Toggle the opened state of the overlay.
      */
     toggle: function() {
+      this._setCanceled(false);
       this.opened = !this.opened;
     },
 
@@ -14327,16 +14409,16 @@ context. You should place this element as a child of `<body>` whenever possible.
      * Open the overlay.
      */
     open: function() {
+      this._setCanceled(false);
       this.opened = true;
-      this.closingReason = {canceled: false};
     },
 
     /**
      * Close the overlay.
      */
     close: function() {
-      this.opened = false;
       this._setCanceled(false);
+      this.opened = false;
     },
 
     /**
@@ -14348,8 +14430,8 @@ context. You should place this element as a child of `<body>` whenever possible.
         return;
       }
 
-      this.opened = false;
       this._setCanceled(true);
+      this.opened = false;
     },
 
     _ensureSetup: function() {
@@ -14366,6 +14448,7 @@ context. You should place this element as a child of `<body>` whenever possible.
         this.removeAttribute('aria-hidden');
       } else {
         this.setAttribute('aria-hidden', 'true');
+        Polymer.dom(this).unobserveNodes(this._observer);
       }
 
       // wait to call after ready only if we're initially open
@@ -14373,35 +14456,52 @@ context. You should place this element as a child of `<body>` whenever possible.
         this._callOpenedWhenReady = this.opened;
         return;
       }
-      if (this._openChangedAsync) {
-        this.cancelAsync(this._openChangedAsync);
-      }
 
-      this._toggleListeners();
+      this._manager.trackBackdrop(this);
 
       if (this.opened) {
         this._prepareRenderOpened();
       }
 
-      // async here to allow overlay layer to become visible.
+      if (this._openChangedAsync) {
+        this.cancelAsync(this._openChangedAsync);
+      }
+      // Async here to allow overlay layer to become visible, and to avoid
+      // listeners to immediately close via a click.
       this._openChangedAsync = this.async(function() {
         // overlay becomes visible here
         this.style.display = '';
-        // force layout to ensure transitions will go
-        /** @suppress {suspiciousCode} */ this.offsetWidth;
+        // Force layout to ensure transition will go. Set offsetWidth to itself
+        // so that compilers won't remove it.
+        this.offsetWidth = this.offsetWidth;
         if (this.opened) {
           this._renderOpened();
         } else {
           this._renderClosed();
         }
+        this._toggleListeners();
         this._openChangedAsync = null;
-      });
-
+      }, 1);
     },
 
     _canceledChanged: function() {
       this.closingReason = this.closingReason || {};
       this.closingReason.canceled = this.canceled;
+    },
+
+    _withBackdropChanged: function() {
+      if (this.opened) {
+        this._manager.trackBackdrop(this);
+        if (this.withBackdrop) {
+          this.backdropElement.prepare();
+          // Give time to be added to document.
+          this.async(function(){
+            this.backdropElement.open();
+          }, 1);
+        } else {
+          this.backdropElement.close();
+        }
+      }
     },
 
     _toggleListener: function(enable, node, event, boundListener, capture) {
@@ -14420,30 +14520,22 @@ context. You should place this element as a child of `<body>` whenever possible.
       }
     },
 
-    _toggleListeners: function() {
-      if (this._toggleListenersAsync) {
-        this.cancelAsync(this._toggleListenersAsync);
-      }
-      // async so we don't auto-close immediately via a click.
-      this._toggleListenersAsync = this.async(function() {
-        this._toggleListener(this.opened, document, 'tap', this._boundOnCaptureClick, true);
-        this._toggleListener(this.opened, document, 'keydown', this._boundOnCaptureKeydown, true);
-        this._toggleListenersAsync = null;
-      }, 1);
+    _toggleListeners: function () {
+      this._toggleListener(this.opened, document, 'tap', this._boundOnCaptureClick, true);
+      this._toggleListener(this.opened, document, 'keydown', this._boundOnCaptureKeydown, true);
     },
 
     // tasks which must occur before opening; e.g. making the element visible
     _prepareRenderOpened: function() {
       this._manager.addOverlay(this);
 
-      if (this.withBackdrop) {
-        this.backdropElement.prepare();
-        this._manager.trackBackdrop(this);
-      }
-
       this._preparePositioning();
       this.fit();
       this._finishPositioning();
+
+      if (this.withBackdrop) {
+        this.backdropElement.prepare();
+      }
     },
 
     // tasks which cause the overlay to actually open; typically play an
@@ -14462,52 +14554,24 @@ context. You should place this element as a child of `<body>` whenever possible.
       this._finishRenderClosed();
     },
 
-    _onTransitionend: function(event) {
-      // make sure this is our transition event.
-      if (event && event.target !== this) {
-        return;
-      }
-      if (this.opened) {
-        this._finishRenderOpened();
-      } else {
-        this._finishRenderClosed();
-      }
-    },
-
     _finishRenderOpened: function() {
       // focus the child node with [autofocus]
-      if (!this.noAutoFocus) {
-        this._focusNode.focus();
-      }
+      this._applyFocus();
 
+      this._observer = Polymer.dom(this).observeNodes(this.notifyResize);
       this.fire('iron-overlay-opened');
-
-      this._squelchNextResize = true;
-      this.async(this.notifyResize);
     },
 
     _finishRenderClosed: function() {
       // hide the overlay and remove the backdrop
       this.resetFit();
       this.style.display = 'none';
-      this._completeBackdrop();
       this._manager.removeOverlay(this);
 
-      this._focusNode.blur();
-      // focus the next overlay, if there is one
-      this._manager.focusOverlay();
+      this._applyFocus();
 
+      this.notifyResize();
       this.fire('iron-overlay-closed', this.closingReason);
-
-      this._squelchNextResize = true;
-      this.async(this.notifyResize);
-    },
-
-    _completeBackdrop: function() {
-      if (this.withBackdrop) {
-        this._manager.trackBackdrop(this);
-        this.backdropElement.complete();
-      }
     },
 
     _preparePositioning: function() {
@@ -14536,8 +14600,8 @@ context. You should place this element as a child of `<body>` whenever possible.
     },
 
     _onCaptureClick: function(event) {
-      if (!this.noCancelOnOutsideClick &&
-          this._manager.currentOverlay() === this &&
+      if (this._manager.currentOverlay() === this &&
+          !this.noCancelOnOutsideClick &&
           Polymer.dom(event).path.indexOf(this) === -1) {
         this.cancel();
       }
@@ -14545,18 +14609,14 @@ context. You should place this element as a child of `<body>` whenever possible.
 
     _onCaptureKeydown: function(event) {
       var ESC = 27;
-      if (!this.noCancelOnEscKey && (event.keyCode === ESC)) {
+      if (this._manager.currentOverlay() === this &&
+          !this.noCancelOnEscKey &&
+          event.keyCode === ESC) {
         this.cancel();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
       }
     },
 
     _onIronResize: function() {
-      if (this._squelchNextResize) {
-        this._squelchNextResize = false;
-        return;
-      }
       if (this.opened) {
         this.refit();
       }
@@ -14795,14 +14855,14 @@ context. You should place this element as a child of `<body>` whenever possible.
         height: var(--paper-toolbar-height, 64px);
 
         background: var(--paper-toolbar-background, --primary-color);
-        color: var(--paper-toolbar-color, --primary-text-color);
+        color: var(--paper-toolbar-color, --dark-theme-text-color);
 
         @apply(--paper-toolbar);
       }
 
       :host(.animate) {
         /* transition */
-        transition: height 0.18s ease-in;
+        transition: var(--paper-toolbar-transition, height 0.18s ease-in);
       }
 
       :host(.medium-tall) {
@@ -16323,10 +16383,6 @@ module.exports = Array.isArray || function (arr) {
     line-height: 24px;
     min-height: 48px;
     padding: 0 16px;
-  }
-
-  #mainToolbar {
-    color: #fff;
   }
 
   #mainToolbar.tall .app-name {
