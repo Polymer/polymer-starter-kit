@@ -135,6 +135,11 @@ gulp.task('build', ['images', 'fonts'], function () {
       preserveComments: 'some'
     })))
     .pipe($.if('*.css', $.minifyCss()))
+    .pipe($.if('*.html', $.minifyHtml({
+      quotes: true,
+      empty: true,
+      spare: true
+    })))
     .pipe(gulp.dest(dist()))
 });
 
