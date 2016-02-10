@@ -1,4 +1,8 @@
+'use strict';
 var fs = require('fs');
+
+var gulp = require('gulp');
+var path = require('path');
 
 /**
  * @param {Array<string>} files
@@ -30,5 +34,16 @@ function ensureFiles(files, cb) {
     throw err;
   }
 }
+
+// Ensure that we are not missing required files for the project
+// "dot" files are specifically tricky due to them being hidden on
+// some systems.
+gulp.task('ensureFiles', function(cb) {
+  var requiredFiles = ['../.bowerrc'];
+
+  ensureFiles(requiredFiles.map(function(p) {
+    return path.join(__dirname, p);
+  }), cb);
+});
 
 module.exports = ensureFiles;
