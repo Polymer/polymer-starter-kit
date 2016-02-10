@@ -12,9 +12,3 @@ var dist = function(subpath) {
 gulp.task('clean', function() {
   return del(['.tmp', dist()]);
 });
-
-
-
-
-
-

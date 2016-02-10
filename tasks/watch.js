@@ -11,4 +11,3 @@ gulp.task('watch', function () {
   gulp.watch(['app/scripts/**/*.js'], reload);
   gulp.watch(['app/images/**/*'], reload);
 });
-
