@@ -7672,7 +7672,7 @@ this.fire('dom-change');
     };
 
     --layout-around-justified: {
-      -ms-flex-pack: around;
+      -ms-flex-pack: distribute;
       -webkit-justify-content: space-around;
       justify-content: space-around;
     };
@@ -8669,11 +8669,13 @@ this.fire('dom-change');
    * size or hidden state of their children) and "resizables" (elements that need to be
    * notified when they are resized or un-hidden by their parents in order to take
    * action on their new measurements).
+   * 
    * Elements that perform measurement should add the `IronResizableBehavior` behavior to
    * their element definition and listen for the `iron-resize` event on themselves.
    * This event will be fired when they become showing after having been hidden,
    * when they are resized explicitly by another resizable, or when the window has been
    * resized.
+   * 
    * Note, the `iron-resize` event is non-bubbling.
    *
    * @polymerBehavior Polymer.IronResizableBehavior
@@ -9217,7 +9219,8 @@ this.fire('dom-change');
     },
 
     _valueForItem: function(item) {
-      return item[this.attrForSelected] || item.getAttribute(this.attrForSelected);
+      var propValue = item[this.attrForSelected];
+      return propValue != undefined ? propValue : item.getAttribute(this.attrForSelected);
     },
 
     _applySelection: function(item, isSelected) {
@@ -9281,60 +9284,54 @@ this.fire('dom-change');
 
 <dom-module id="iron-pages" assetpath="../bower_components/iron-pages/">
 
-  <style>
-
-    :host {
-      display: block;
-    }
-
-    :host > ::content > :not(.iron-selected) {
-      display: none !important;
-    }
-
-  </style>
-
   <template>
-
-    <content></content>
-
-  </template>
-
-</dom-module>
-
-<script>
-
-  Polymer({
-
-    is: 'iron-pages',
-
-    behaviors: [
-      Polymer.IronResizableBehavior,
-      Polymer.IronSelectableBehavior
-    ],
-
-    properties: {
-
-      // as the selected page is the only one visible, activateEvent
-      // is both non-sensical and problematic; e.g. in cases where a user
-      // handler attempts to change the page and the activateEvent
-      // handler immediately changes it back
-      activateEvent: {
-        type: String,
-        value: null
+    <style>
+      :host {
+        display: block;
       }
 
-    },
+      :host > ::content > :not(.iron-selected) {
+        display: none !important;
+      }
+    </style>
 
-    observers: [
-      '_selectedPageChanged(selected)'
-    ],
+    <content></content>
+  </template>
 
-    _selectedPageChanged: function(selected, old) {
-      this.async(this.notifyResize);
-    }
-  });
+  <script>
+    Polymer({
 
-</script>
+      is: 'iron-pages',
+
+      behaviors: [
+        Polymer.IronResizableBehavior,
+        Polymer.IronSelectableBehavior
+      ],
+
+      properties: {
+
+        // as the selected page is the only one visible, activateEvent
+        // is both non-sensical and problematic; e.g. in cases where a user
+        // handler attempts to change the page and the activateEvent
+        // handler immediately changes it back
+        activateEvent: {
+          type: String,
+          value: null
+        }
+
+      },
+
+      observers: [
+        '_selectedPageChanged(selected)'
+      ],
+
+      _selectedPageChanged: function(selected, old) {
+        this.async(this.notifyResize);
+      }
+    });
+
+  </script>
+</dom-module>
 <script>
   /** @polymerBehavior Polymer.IronMultiSelectableBehavior */
   Polymer.IronMultiSelectableBehaviorImpl = {
@@ -12671,7 +12668,7 @@ this.fire('dom-change');
      * Selects the given value. If the `multi` property is true, then the selected state of the
      * `value` will be toggled; otherwise the `value` will be selected.
      *
-     * @param {string} value the value to select.
+     * @param {string|number} value the value to select.
      */
     select: function(value) {
       if (this._defaultFocusAsync) {
@@ -12833,6 +12830,13 @@ this.fire('dom-change');
     _onFocus: function(event) {
       if (Polymer.IronMenuBehaviorImpl._shiftTabPressed) {
         // do not focus the menu itself
+        return;
+      }
+
+      // Do not focus the selected tab if the deepest target is part of the
+      // menu element's local DOM and is focusable.
+      var rootTarget = Polymer.dom(event).rootTarget;
+      if (rootTarget !== this && typeof rootTarget.tabIndex !== "undefined" && !this.isLightDescendant(rootTarget)) {
         return;
       }
 
@@ -13318,14 +13322,13 @@ this.fire('dom-change');
      * @param {boolean} smooth true if the scroll position should be smoothly adjusted.
      */
     condense: function(smooth) {
-      var ctx = Polymer.PaperScrollHeaderPanel;
       if (this.condenses && !this.fixed && !this.noReveal) {
         switch (this.headerState) {
-          case ctx.HEADER_STATE_HIDDEN:
+          case 1:
             this.scroll(this.scroller.scrollTop - (this._headerMaxDelta - this._headerMargin), smooth);
           break;
-          case ctx.HEADER_STATE_EXPANDED:
-          case ctx.HEADER_STATE_INTERPOLATED:
+          case 0:
+          case 3:
             this.scroll(this._headerMargin, smooth);
           break;
         }
@@ -13371,16 +13374,16 @@ this.fire('dom-change');
       s.top = this.fixed ? this.headerHeight + 'px' : '';
 
       if (this.fixed) {
-        this._setHeaderState(this.HEADER_STATE_EXPANDED);
+        this._setHeaderState(0);
         this._transformHeader(null);
       } else {
         switch (this.headerState) {
-          case this.HEADER_STATE_HIDDEN:
+          case 1:
             this._transformHeader(this._headerMaxDelta);
-            break;
-          case this.HEADER_STATE_CONDENSED:
+          break;
+          case 2:
             this._transformHeader(this._headerMargin);
-            break;
+          break;
         }
       }
     },
@@ -13444,7 +13447,6 @@ this.fire('dom-change');
     },
 
     _updateScrollState: function(scrollTop) {
-      var ctx = Polymer.PaperScrollHeaderPanel;
       var deltaScrollTop = scrollTop - this._prevScrollTop;
       var y = Math.max(0, (this.noReveal) ? scrollTop : this._y + deltaScrollTop);
 
@@ -13452,19 +13454,19 @@ this.fire('dom-change');
         y = this._headerMaxDelta;
 
         if (this.keepCondensedHeader) {
-          this._setHeaderState(ctx.HEADER_STATE_CONDENSED);
+          this._setHeaderState(2);
         } else {
-          this._setHeaderState(ctx.HEADER_STATE_HIDDEN);
+          this._setHeaderState(1);
         }
       } else if (this.condenses && scrollTop >= this._headerMargin) {
         y = Math.max(y, this._headerMargin);
-        this._setHeaderState(ctx.HEADER_STATE_CONDENSED);
+        this._setHeaderState(2);
 
       } else if (y === 0) {
-        this._setHeaderState(ctx.HEADER_STATE_EXPANDED);
+        this._setHeaderState(0);
 
       } else {
-        this._setHeaderState(ctx.HEADER_STATE_INTERPOLATED);
+        this._setHeaderState(3);
       }
 
       if (!this.fixed && y !== this._y) {
@@ -13987,6 +13989,16 @@ CSS properties               | Action
     this._minimumZ = 101;
 
     this._backdrops = [];
+
+    this._backdropElement = null;
+    Object.defineProperty(this, 'backdropElement', {
+      get: function() {
+        if (!this._backdropElement) {
+          this._backdropElement = document.createElement('iron-overlay-backdrop');
+        }
+        return this._backdropElement;
+      }.bind(this)
+    });
   }
 
   Polymer.IronOverlayManagerClass.prototype._applyOverlayZ = function(overlay, aboveZ) {
@@ -14067,15 +14079,6 @@ CSS properties               | Action
       this._backdrops.splice(index, 1);
     }
   };
-
-  Object.defineProperty(Polymer.IronOverlayManagerClass.prototype, "backdropElement", {
-    get: function() {
-      if (!this._backdropElement) {
-        this._backdropElement = document.createElement('iron-overlay-backdrop');
-      }
-      return this._backdropElement;
-    }
-  });
 
   Polymer.IronOverlayManagerClass.prototype.getBackdrops = function() {
     return this._backdrops;
@@ -14211,10 +14214,14 @@ CSS properties               | Action
       this.style.zIndex = this._manager.backdropZ();
       // close only if no element with backdrop is left
       if (this._manager.getBackdrops().length === 0) {
+        // Read style before setting opened.
+        var cs = getComputedStyle(this);
+        var noAnimation = (cs.transitionDuration === '0s' || cs.opacity == 0);
         this._setOpened(false);
-        // complete() will be called after the transition is done.
-        // If animations are disabled via custom-styles, user is expected to call
-        // complete() after close()
+        // In case of no animations, complete
+        if (noAnimation) {
+          this.complete();
+        }
       }
     },
 
@@ -14360,6 +14367,18 @@ context. You should place this element as a child of `<body>` whenever possible.
         value: function() {
           return this._onCaptureKeydown.bind(this);
         }
+      },
+
+      _boundOnCaptureFocus: {
+        type: Function,
+        value: function() {
+          return this._onCaptureFocus.bind(this);
+        }
+      },
+
+      /** @type {?Node} */
+      _focusedChild: {
+        type: Object
       }
 
     },
@@ -14377,10 +14396,13 @@ context. You should place this element as a child of `<body>` whenever possible.
     },
 
     get _focusNode() {
-      return Polymer.dom(this).querySelector('[autofocus]') || this;
+      return this._focusedChild || Polymer.dom(this).querySelector('[autofocus]') || this;
     },
 
     ready: function() {
+      // with-backdrop need tabindex to be set in order to trap the focus.
+      // If it is not set, IronOverlayBehavior will set it, and remove it if with-backdrop = false.
+      this.__shouldRemoveTabIndex = false;
       this._ensureSetup();
     },
 
@@ -14490,6 +14512,14 @@ context. You should place this element as a child of `<body>` whenever possible.
     },
 
     _withBackdropChanged: function() {
+      // If tabindex is already set, no need to override it.
+      if (this.withBackdrop && !this.hasAttribute('tabindex')) {
+        this.setAttribute('tabindex', '-1');
+        this.__shouldRemoveTabIndex = true;
+      } else if (this.__shouldRemoveTabIndex) {
+        this.removeAttribute('tabindex');
+        this.__shouldRemoveTabIndex = false;
+      }
       if (this.opened) {
         this._manager.trackBackdrop(this);
         if (this.withBackdrop) {
@@ -14523,6 +14553,7 @@ context. You should place this element as a child of `<body>` whenever possible.
     _toggleListeners: function () {
       this._toggleListener(this.opened, document, 'tap', this._boundOnCaptureClick, true);
       this._toggleListener(this.opened, document, 'keydown', this._boundOnCaptureKeydown, true);
+      this._toggleListener(this.opened, document, 'focus', this._boundOnCaptureFocus, true);
     },
 
     // tasks which must occur before opening; e.g. making the element visible
@@ -14568,6 +14599,7 @@ context. You should place this element as a child of `<body>` whenever possible.
       this.style.display = 'none';
       this._manager.removeOverlay(this);
 
+      this._focusedChild = null;
       this._applyFocus();
 
       this.notifyResize();
@@ -14601,9 +14633,12 @@ context. You should place this element as a child of `<body>` whenever possible.
 
     _onCaptureClick: function(event) {
       if (this._manager.currentOverlay() === this &&
-          !this.noCancelOnOutsideClick &&
           Polymer.dom(event).path.indexOf(this) === -1) {
-        this.cancel();
+        if (this.noCancelOnOutsideClick) {
+          this._applyFocus();
+        } else {
+          this.cancel();
+        }
       }
     },
 
@@ -14613,6 +14648,19 @@ context. You should place this element as a child of `<body>` whenever possible.
           !this.noCancelOnEscKey &&
           event.keyCode === ESC) {
         this.cancel();
+      }
+    },
+
+    _onCaptureFocus: function (event) {
+      if (this._manager.currentOverlay() === this &&
+          this.withBackdrop) {
+        var path = Polymer.dom(event).path;
+        if (path.indexOf(this) === -1) {
+          event.stopPropagation();
+          this._applyFocus();
+        } else {
+          this._focusedChild = path[0];
+        }
       }
     },
 
