@@ -4,6 +4,7 @@
     "browser-sync": "^2.7.7",
     "connect-history-api-fallback": "^1.1.0",
     "del": "^2.0.2",
+    "es6-promise": "^3.1.2",
     "glob-all": "^3.0.1",
     "gulp": "^3.8.5",
     "gulp-autoprefixer": "^3.1.0",
@@ -33,6 +34,6 @@
     "start": "gulp serve"
   },
   "engines": {
-    "node": ">=0.12.0"
+    "node": ">=0.10.0"
   }
 }
