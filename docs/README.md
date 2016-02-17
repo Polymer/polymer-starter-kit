@@ -7,3 +7,4 @@
 * [Deploy to Firebase using Pretty URLs](deploy-to-firebase-pretty-urls.md)
 * [Deploy to Google App Engine](deploy-to-google-app-engine.md)
 * [Use PSK for Mobile Chrome Apps](mobile-chrome-apps.md)
+* [Add page transitions with neon-animated-pages](neon-animated-pages.md)
