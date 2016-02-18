@@ -34,6 +34,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.closeDrawer();
       next();
     }
+    
+    function setFocus(selected){
+      var target = document.querySelector('section[data-route="' + selected + '"]');
+      target.tabIndex = '-1';
+      target.focus();
+    }
 
     // Routes
     page('*', scrollToTop, closeDrawer, function(ctx, next) {
@@ -42,28 +48,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     page('/', function() {
       app.route = 'home';
-      app.fire('iron-announce', { text: 'Home section has been loaded', route:'home' }, { bubbles: true });
+      setFocus(app.route);
     });
 
     page(app.baseUrl, function() {
       app.route = 'home';
-      app.fire('iron-announce', { text: 'Home section has been loaded', route:'home' }, { bubbles: true });
+      setFocus(app.route);
     });
 
     page('/users', function() {
       app.route = 'users';
-      app.fire('iron-announce', { text: 'Users section has been loaded', route:'users' }, { bubbles: true });
+      setFocus(app.route);
     });
 
     page('/users/:name', function(data) {
       app.route = 'user-info';
       app.params = data.params;
-      app.fire('iron-announce', { text: 'User info section has been loaded', route:'user-info' }, { bubbles: true });
+      setFocus(app.route);
     });
 
     page('/contact', function() {
       app.route = 'contact';
-      app.fire('iron-announce', { text: 'Contact section has been loaded', route:'contact' }, { bubbles: true });
+      setFocus(app.route);
     });
 
     // 404

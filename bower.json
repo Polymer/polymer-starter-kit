@@ -2,7 +2,6 @@
   "name": "polymer-starter-kit",
   "private": true,
   "dependencies": {
-    "iron-a11y-announcer": "PolymerElements/iron-a11y-announcer#~1.0.4",
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "neon-elements": "PolymerElements/neon-elements#^1.0.0",
     "page": "visionmedia/page.js#~1.6.4",

@@ -36,13 +36,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     console.log('Our app is ready to rock!');
   });
   
-  // Listen for iron-announce event from paging to set focus for the user
-  app.addEventListener('iron-announce', function(evt) {
-    var target = document.querySelector('section[data-route="' + evt.detail.route + '"]');
-    target.tabIndex = '-1';
-    target.focus();
-  });
-
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
     // imports are loaded and elements have been registered
