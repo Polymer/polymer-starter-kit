@@ -14,7 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // and give it some initial binding values
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
-
+  
   // Sets app default base URL
   app.baseUrl = '/';
   if (window.location.port === '') {  // if production
@@ -34,6 +34,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
+  });
+  
+  // Listen for iron-announce event from paging to set focus for the user
+  app.addEventListener('iron-announce', function(evt) {
+    var target = document.querySelector('section[data-route="' + evt.detail.route + '"]');
+    target.tabIndex = '-1';
+    target.focus();
   });
 
   // See https://github.com/Polymer/polymer/issues/1381

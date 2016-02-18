@@ -11,6 +11,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script src="../bower_components/page/page.js"></script>
 <script>
   window.addEventListener('WebComponentsReady', function() {
+    
+    
+    window.Polymer.IronA11yAnnouncer.requestAvailability();
 
     // We use Page.js for routing. This is a Micro
     // client-side router inspired by the Express router
@@ -39,23 +42,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     page('/', function() {
       app.route = 'home';
+      app.fire('iron-announce', { text: 'Home section has been loaded', route:'home' }, { bubbles: true });
     });
 
     page(app.baseUrl, function() {
       app.route = 'home';
+      app.fire('iron-announce', { text: 'Home section has been loaded', route:'home' }, { bubbles: true });
     });
 
     page('/users', function() {
       app.route = 'users';
+      app.fire('iron-announce', { text: 'Users section has been loaded', route:'users' }, { bubbles: true });
     });
 
     page('/users/:name', function(data) {
       app.route = 'user-info';
       app.params = data.params;
+      app.fire('iron-announce', { text: 'User info section has been loaded', route:'user-info' }, { bubbles: true });
     });
 
     page('/contact', function() {
       app.route = 'contact';
+      app.fire('iron-announce', { text: 'Contact section has been loaded', route:'contact' }, { bubbles: true });
     });
 
     // 404
