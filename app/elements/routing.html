@@ -33,9 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     
     function setFocus(selected){
-      var target = document.querySelector('section[data-route="' + selected + '"]');
-      target.tabIndex = '-1';
-      target.focus();
+      document.querySelector('section[data-route="' + selected + '"]').focus();
     }
 
     // Routes
