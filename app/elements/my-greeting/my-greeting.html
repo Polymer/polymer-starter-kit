@@ -25,9 +25,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <h1 class="page-title">{{greeting}}</h1>
-    <span>Update text to change the greeting.</span>
+    <label for="greeting-input">Update text to change the greeting.</label>
     <!-- Listens for "input" event and sets greeting to <input>.value -->
-    <input value="{{greeting::input}}">
+    <input id="greeting-input" value="{{greeting::input}}">
   </template>
 
   <script>
