@@ -49,7 +49,6 @@ bower_components/*
 + gulp.task('lint', function() {
 +   return gulp.src([
 +       'app/scripts/**/*.js',
-+       'app/elements/**/*.js',
 +       'app/elements/**/*.html',
 +       'gulpfile.js'
 +     ])
@@ -57,8 +56,6 @@ bower_components/*
 +       stream: true,
 +       once: true
 +     }))
-
-+   // JSCS has not yet a extract option
 +     .pipe($.eslint())
 +     .pipe($.eslint.format())
 +     .pipe($.eslint.failAfterError());
