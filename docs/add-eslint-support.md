@@ -18,10 +18,7 @@ This recipe helps you to create a task to use [ESLint](http://eslint.org/) tool.
     "html"
   ],
   "globals": {
-    "CustomElements": false,
-    "HTMLImports": false,
-    "Polymer": false,
-    "WeakMap": false
+    "Polymer": false
   }
 }
 ```
