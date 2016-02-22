@@ -1,6 +1,6 @@
 # Add lint support with JSHINT and JSCS
 
-This recipe helps you to create a task to use linters tools ([JSCS](http://jscs.info/) and [JSHINT](http://jshint.com/)) for your code. 
+This recipe helps you to create a task to use [JSCS](http://jscs.info/) and [JSHINT](http://jshint.com/) in your code. 
 
 
 ## Create .jshintrc file in the root folder
@@ -22,10 +22,7 @@ This recipe helps you to create a task to use linters tools ([JSCS](http://jscs.
   "unused": true,
   "newcap": false,
   "globals": {
-    "wrap": true,
-    "unwrap": true,
     "Polymer": true,
-    "Platform": true,
     "page": true,
     "app": true
   }
@@ -51,27 +48,27 @@ This recipe helps you to create a task to use linters tools ([JSCS](http://jscs.
 - Add the following gulp task in the `gulpfile.js` file:
 
 ```patch
-// Lint JavaScript
-gulp.task('lint', function() {
-  return gulp.src([
-      'app/scripts/**/*.js',
-      'app/elements/**/*.js',
-      'app/elements/**/*.html',
-      'gulpfile.js'
-    ])
-    .pipe(reload({
-      stream: true,
-      once: true
-    }))
-
-  // JSCS has not yet a extract option
-  .pipe($.if('*.html', $.htmlExtract()))
-  .pipe($.jshint())
-  .pipe($.jscs())
-  .pipe($.jscsStylish.combineWithHintResults())
-  .pipe($.jshint.reporter('jshint-stylish'))
-  .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
-});
++ // Lint JavaScript
++ gulp.task('lint', function() {
++   return gulp.src([
++       'app/scripts/**/*.js',
++       'app/elements/**/*.js',
++       'app/elements/**/*.html',
++       'gulpfile.js'
++     ])
++     .pipe(reload({
++       stream: true,
++       once: true
++     }))
++ 
++   // JSCS has not yet a extract option
++   .pipe($.if('*.html', $.htmlExtract()))
++   .pipe($.jshint())
++   .pipe($.jscs())
++   .pipe($.jscsStylish.combineWithHintResults())
++   .pipe($.jshint.reporter('jshint-stylish'))
++   .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
++ });
 ```
 
 This task will check all JS files and JS inside HTML files.
@@ -88,8 +85,8 @@ Make sure the `lint` gulp task is triggered by the common build tasks:
  - In the gulp `serve` task, make sure `lint` is triggered initially and on HTML and JS files changes:
 
 ```patch
--gulp.task('serve', ['styles', 'elements', 'images'], function () {
-+gulp.task('serve', ['lint', 'styles', 'elements', 'images'], function () {
+-gulp.task('serve', ['styles', 'elements'], function () {
++gulp.task('serve', ['lint', 'styles', 'elements'], function () {
 
   ...
 
