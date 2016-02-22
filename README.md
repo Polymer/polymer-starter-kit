@@ -268,7 +268,7 @@ In order to guarantee that the latest version of your Service Worker script is b
 * Hit shift-reload to bypass the service worker as to ensure that the remaining tab isn't under the control of a service worker
 * Hit reload to let the newer version of the Service Worker control the page.
 
-If you find anything to still be stale, you can also try navigating to `chrome:serviceworker-internals` (in Chrome), finding the relevant Service Worker entry for your application and clicking 'Unregister' before refreshing your app. This will (of course) only clear it from the local development machine. If you have already deployed to production then further work will be necessary to remove it from your user's machines.
+If you find anything to still be stale, you can also try navigating to `chrome:serviceworker-internals` (in Chrome), finding the relevant Service Worker entry for your application and clicking 'Unregister' before refreshing your app. This will (of course) only clear it from the local development machine. If you have already deployed to production then further work will be necessary to remove it from your users' machines.
 
 #### Disable Service Worker support after you enabled it
 
@@ -368,7 +368,7 @@ If you are not using the build-blocks, but still wish for additional files (e.g 
 
 ### I'm finding the installation/tooling here overwhelming. What should I do?
 
-Don't worry! We've got your covered. Polymer Starter Kit tries to offer everything you need to build and optimize your apps for production, which is why we include the tooling we do. We realise however that our tooling setup may not be for everyone.
+Don't worry! We've got you covered. Polymer Starter Kit tries to offer everything you need to build and optimize your apps for production, which is why we include the tooling we do. We realise however that our tooling setup may not be for everyone.
 
 If you find that you just want the simplest setup possible, we recommend using Polymer Starter Kit light, which is available from the [Releases](https://github.com/PolymerElements/polymer-starter-kit/releases) page. This takes next to no time to setup.
 
