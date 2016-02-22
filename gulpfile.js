@@ -306,4 +306,6 @@ require('web-component-tester').gulp.init(gulp);
 // Load custom tasks from the `tasks` directory
 try {
   require('require-dir')('tasks');
-} catch (err) {}
+} catch (err) {
+  // Do nothing
+}
