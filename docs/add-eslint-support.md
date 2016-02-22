@@ -18,7 +18,12 @@ This recipe helps you to create a task to use [ESLint](http://eslint.org/) tool.
     "html"
   ],
   "globals": {
-    "Polymer": false
+    "__dirname": false,
+    "app": false,
+    "page": false,
+    "Polymer": false,
+    "process": false,
+    "require": false
   }
 }
 ```
@@ -37,10 +42,6 @@ bower_components/*
 - Add the following gulp task in the `gulpfile.js` file:
 
 ```patch
-
-+ var eslint = require('gulp-eslint');
-
-...
 
 + // Lint JavaScript
 + gulp.task('lint', function() {
