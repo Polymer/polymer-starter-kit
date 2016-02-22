@@ -117,7 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Main Content -->
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
-            <section data-route="home">
+            <section data-route="home" tabindex="-1">
               <paper-material elevation="1">
                 <my-greeting></my-greeting>
 
@@ -151,7 +151,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
             </section>
 
-            <section data-route="users">
+            <section data-route="users" tabindex="-1">
               <paper-material elevation="1">
                 <h1 class="page-title">Users</h1>
                 <p>This is the users section</p>
@@ -162,14 +162,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
             </section>
 
-            <section data-route="user-info">
+            <section data-route="user-info" tabindex="-1">
               <paper-material elevation="1">
                 <h1 class="page-title">User: {{params.name}}</h1>
                 <div>This is {{params.name}}'s section</div>
               </paper-material>
             </section>
 
-            <section data-route="contact">
+            <section data-route="contact" tabindex="-1">
               <paper-material elevation="1">
                 <h1 class="page-title">Contact</h1>
                 <p>This is the contact section</p>

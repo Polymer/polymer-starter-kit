@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script src="../bower_components/page/page.js"></script>
 <script>
   window.addEventListener('WebComponentsReady', function() {
-
+    
     // We use Page.js for routing. This is a Micro
     // client-side router inspired by the Express router
     // More info: https://visionmedia.github.io/page.js/
@@ -31,6 +31,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.closeDrawer();
       next();
     }
+    
+    function setFocus(selected){
+      document.querySelector('section[data-route="' + selected + '"]').focus();
+    }
 
     // Routes
     page('*', scrollToTop, closeDrawer, function(ctx, next) {
@@ -39,23 +43,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     page('/', function() {
       app.route = 'home';
+      setFocus(app.route);
     });
 
     page(app.baseUrl, function() {
       app.route = 'home';
+      setFocus(app.route);
     });
 
     page('/users', function() {
       app.route = 'users';
+      setFocus(app.route);
     });
 
     page('/users/:name', function(data) {
       app.route = 'user-info';
       app.params = data.params;
+      setFocus(app.route);
     });
 
     page('/contact', function() {
       app.route = 'contact';
+      setFocus(app.route);
     });
 
     // 404
