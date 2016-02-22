@@ -3,7 +3,7 @@
 This recipe helps you to create a task to use [ESLint](http://eslint.org/) tool. 
 
 
-## Create .eslintrc file in the root folder
+## Create .eslintrc.json file in the root folder
 
 ```
 {
