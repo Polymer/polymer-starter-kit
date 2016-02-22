@@ -70,8 +70,8 @@ Make sure the `lint` gulp task is triggered by the common build tasks:
  - In the gulp `serve` task, make sure `lint` is triggered initially and on HTML and JS files changes:
 
 ```patch
--gulp.task('serve', ['styles', 'elements', 'images'], function () {
-+gulp.task('serve', ['lint', 'styles', 'elements', 'images'], function () {
+-gulp.task('serve', ['styles', 'elements'], function () {
++gulp.task('serve', ['lint', 'styles', 'elements'], function () {
 
   ...
 
