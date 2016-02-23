@@ -226,7 +226,7 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
     runSequence(
       ['copy', 'styles'],
       'elements',
-      ['jshint', 'images', 'fonts', 'html'],
+      ['images', 'fonts', 'html'],
       'vulcanize', 'cache-config',
       cb);
   });
