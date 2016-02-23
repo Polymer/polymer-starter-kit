@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/polymer/polymer.html"><link rel="import" href="../bower_components/paper-styles/typography.html"><style is="custom-style">
+<link rel="import" href="../bower_components/polymer/polymer.html"><link rel="import" href="../bower_components/paper-styles/typography.html"><link rel="import" href="../bower_components/paper-styles/color.html"><style is="custom-style">
 
   /*
    Polymer includes a shim for CSS Custom Properties that we can use for application theming.
@@ -12,17 +12,17 @@
   /* Application theme */
 
   :root {
-    --primary-text-color: #212121;
+    --primary-text-color: var(--paper-grey-900);
     --primary-background-color: #ffffff;
     --secondary-text-color: #737373;
     --disabled-text-color: #9b9b9b;
     --divider-color: #dbdbdb;
-    --primary-color: #3f51b5;
-    --light-primary-color: #c5cae9;
-    --dark-primary-color: #303f9f;
-    --accent-color: #ff4081;
-    --light-accent-color: #ff80ab;
-    --dark-accent-color: #f50057;
+    --primary-color: var(--paper-indigo-500);
+    --light-primary-color: var(--paper-indigo-100);
+    --dark-primary-color: var(--paper-indigo-700);
+    --accent-color: var(--paper-pink-a200);
+    --light-accent-color: var(--paper-pink-a100);
+    --dark-accent-color: var(--paper-pink-a400);
 
     /* Components */
 
@@ -151,7 +151,7 @@
     color: #eeff41;
     margin: 10px;
   }
-  
+
   section[tabindex="-1"]:focus { outline: none; }
 
   /* Breakpoints */
