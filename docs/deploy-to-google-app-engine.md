@@ -59,6 +59,7 @@ The scripts below are based on the [Using Static Files guide](https://cloud.goog
     This is the configuration file for the GCP project.
     It sets a python runtime environment and static file handlers.
     The configuration utilizes GAE HTTP/2 capabilities in order to minimize load time for HTTP/2 compatible browsers.
+    Please note : this also ensures https, if you wish to use custom domains supporting http only you will need to remove all the 'secure: always’ entries.​
 
 1.  Add a bash script to build & deploy the application
 
