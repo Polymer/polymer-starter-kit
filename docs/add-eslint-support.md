@@ -70,15 +70,14 @@ Make sure the `lint` gulp task is triggered by the common build tasks:
  - In the gulp `serve` task, make sure `lint` is triggered initially and on HTML and JS files changes:
 
 ```patch
--gulp.task('serve', ['styles', 'elements'], function () {
-+gulp.task('serve', ['lint', 'styles', 'elements'], function () {
+-gulp.task('serve', ['styles'], function () {
++gulp.task('serve', ['lint', 'styles'], function () {
 
   ...
 
   gulp.watch(['app/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
-  gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
-+ gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint']);
++ gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint', reload]);
   gulp.watch(['app/images/**/*'], reload);
 });
 ```
@@ -92,9 +91,8 @@ gulp.task('default', ['clean'], function (cb) {
 
   runSequence(
     ['copy', 'styles'],
-   'elements',
--    ['images', 'fonts', 'html'],
-+    ['lint', 'images', 'fonts', 'html'],
+-   ['images', 'fonts', 'html'],
++   ['lint', 'images', 'fonts', 'html'],
     'vulcanize', // 'cache-config',
     cb);
 });
