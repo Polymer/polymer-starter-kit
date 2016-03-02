@@ -12,10 +12,10 @@ This recipe focuses on adding an ES2015 to ES5 transpile step to Polymer Starter
 
 ```patch
 + // Transpile all JS to ES5.
-+ gulp.task('js', function () {
-+  return gulp.src(['app/**/*.{js,html}', '!app/bower_components/**/*'])
++ gulp.task('js', function() {
++   return gulp.src(['app/**/*.{js,html}', '!app/bower_components/**/*'])
 +    .pipe($.sourcemaps.init())
-+    .pipe($.if('*.html', $.crisper({scriptInHead:false}))) // Extract JS from .html files
++    .pipe($.if('*.html', $.crisper({scriptInHead: false}))) // Extract JS from .html files
 +    .pipe($.if('*.js', $.babel({
 +      presets: ['es2015']
 +    })))
@@ -51,7 +51,8 @@ Make sure the `js` gulp task is triggered by the common build tasks:
 + gulp.watch(['app/**/*.html'], ['js', reload]);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
   gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
-+ gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['js']);
+- gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint']);
++ gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint', 'js']);
   gulp.watch(['app/images/**/*'], reload);
 });
 ```
@@ -90,7 +91,9 @@ gulp.task('default', ['clean'], function (cb) {
 
 ```patch
 var optimizeHtmlTask = function (src, dest) {
-- var assets = $.useref.assets({searchPath: ['.tmp', 'app', 'dist']});
+- var assets = $.useref.assets({
+-   searchPath: ['.tmp', 'app']
+- });
 + var assets = $.useref.assets();
 ```
 
