@@ -18,10 +18,10 @@ This recipe helps you to create a task to use [ESLint](http://eslint.org) tool.
     "html"
   ],
   "globals": {
-    "Polymer": false,
     "__dirname": false,
     "app": false,
     "page": false,
+    "Polymer": false,
     "process": false,
     "require": false
   }
@@ -77,8 +77,7 @@ Make sure the `lint` gulp task is triggered by the common build tasks:
 
   gulp.watch(['app/**/*.html', '!app/bower_components/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
-- gulp.watch(['app/scripts/**/*.js'], reload);
-+ gulp.watch(['app/scripts/**/*.js'], ['lint', reload]);
++ gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint', reload]);
   gulp.watch(['app/images/**/*'], reload);
 });
 ```
@@ -91,9 +90,10 @@ gulp.task('default', ['clean'], function(cb) {
   // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
     ['ensureFiles', 'copy', 'styles'],
--   ['images', 'fonts', 'html'],
-+   ['lint', 'images', 'fonts', 'html'],
+-   ['build'],
++   ['lint', 'build'],
     'vulcanize', // 'cache-config',
     cb);
 });
 ```
+
