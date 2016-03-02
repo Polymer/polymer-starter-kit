@@ -279,6 +279,12 @@ If for any reason you need to disable Service Worker support after previously en
 3. Remove 'precache' from the list in the 'default' gulp task ([gulpfile.js](https://github.com/PolymerElements/polymer-starter-kit/blob/master/gulpfile.js))
 4. Navigate to `chrome://serviceworker-internals` and unregister any Service Workers registered by Polymer Starter Kit for your app just in case there's a copy of it cached.
 
+## Add to home screen banner
+
+If you've enabled Service Worker support, your app becomes eligible to trigger a Chrome [web app install banner](https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/) if you add a `start_url` property to `manifest.json`, and point it to a valid URL. The best practice here is to add a query parameter to that URL, in order to distinguish between the app being launched from the web vs. the homescreen. Simply add this to `manifest.json` and you'll be all set:
+
+    "start_url": "/?homescreen=1"
+
 ## Yeoman support
 
 [generator-polymer](https://github.com/yeoman/generator-polymer/releases) now includes support for Polymer Starter Kit out of the box.
