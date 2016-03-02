@@ -104,6 +104,10 @@ gulp.task('styles', function() {
   return styleTask('styles', ['**/*.css']);
 });
 
+gulp.task('elements', function() {
+  return styleTask('elements', ['**/*.css']);
+});
+
 // Ensure that we are not missing required files for the project
 // "dot" files are specifically tricky due to them being hidden on
 // some systems.
@@ -173,6 +177,20 @@ gulp.task('vulcanize', function() {
     .pipe($.size({title: 'vulcanize'}));
 });
 
+// Transpile all JS to ES5.
+gulp.task('js', function () {
+  return gulp.src(['app/**/*.{js,html}', '!app/bower_components/**/*'])
+    .pipe($.sourcemaps.init())
+    // Extract JS from .html files
+    .pipe($.if('*.html', $.crisper({scriptInHead:false})))
+    .pipe($.if('*.js', $.babel({
+      presets: ['es2015']
+    })))
+    .pipe($.sourcemaps.write('.'))
+    .pipe(gulp.dest('.tmp/'))
+    .pipe(gulp.dest(dist()));
+});
+
 // Generate config data for the <sw-precache-cache> element.
 // This include a list of files that should be precached, as well as a (hopefully unique) cache
 // id that ensure that multiple PSK projects don't share the same Cache Storage.
@@ -213,6 +231,36 @@ gulp.task('clean', function() {
   return del(['.tmp', dist()]);
 });
 
+// Watch files for changes & reload
+gulp.task('serve', ['styles', 'elements', 'js'], function() {
+  browserSync({
+    port: 5000,
+    notify: false,
+    logPrefix: 'PSK',
+    snippetOptions: {
+      rule: {
+        match: '<span id="browser-sync-binding"></span>',
+        fn: function(snippet) {
+          return snippet;
+        }
+      }
+    },
+    // Run as an https by uncommenting 'https: true'
+    // Note: this uses an unsigned certificate which on first access
+    //       will present a certificate warning in the browser.
+    // https: true,
+    server: {
+      baseDir: ['.tmp', 'app'],
+      middleware: [historyApiFallback()]
+    }
+  });
+
+  gulp.watch(['app/**/*.html'], ['js', reload]);
+  gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
+  gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
+  gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['js']);
+  gulp.watch(['app/images/**/*'], reload);
+});
 // Watch files for changes & reload
 gulp.task('serve', ['styles'], function() {
   browserSync({
@@ -271,11 +319,11 @@ gulp.task('default', ['clean'], function(cb) {
   // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
     ['ensureFiles', 'copy', 'styles'],
+    ['elements', 'js'],
     ['images', 'fonts', 'html'],
     'vulcanize', // 'cache-config',
     cb);
 });
-
 // Build then deploy to GitHub pages gh-pages branch
 gulp.task('build-deploy-gh-pages', function(cb) {
   runSequence(
@@ -300,9 +348,21 @@ gulp.task('deploy-gh-pages', function() {
 // Adds tasks for `gulp test:local` and `gulp test:remote`
 require('web-component-tester').gulp.init(gulp);
 
+var injectDependencies = function(task, dependencies) {
+
+  if (task !== null) {
+    dependencies.forEach(function(dependency) {
+      task.dep.push(dependency);
+    });
+  }
+};
+
+var wctTestDependencies = gulp.tasks.serve.dep;
+
+injectDependencies(gulp.tasks[ 'wct:local' ], wctTestDependencies);
+injectDependencies(gulp.tasks[ 'wct:sauce' ], wctTestDependencies);
+
 // Load custom tasks from the `tasks` directory
 try {
   require('require-dir')('tasks');
-} catch (err) {
-  // Do nothing
-}
+} catch (err) {}
