@@ -285,6 +285,8 @@ If you've enabled Service Worker support, your app becomes eligible to trigger a
 
     "start_url": "/?homescreen=1"
 
+If you are implementing an offline experince using Service Worker, make sure to cache `/?homescreen=1`. For a short explanation, you can refer to [this segment](https://youtu.be/g7f1Az5fxgU?t=1435) from Rob Dodson's talk Building Progressive Web Apps with Polymer. A more in-depth exploration can be found at [Service Workers in Production](https://developers.google.com/web/showcase/case-study/service-workers-iowa#watch-out-for-extra-query-parameters).
+
 ## Yeoman support
 
 [generator-polymer](https://github.com/yeoman/generator-polymer/releases) now includes support for Polymer Starter Kit out of the box.
