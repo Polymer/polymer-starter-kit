@@ -27,7 +27,11 @@
     "require-dir": "^0.3.0",
     "run-sequence": "^1.0.2",
     "vulcanize": ">= 1.4.2",
-    "web-component-tester": "^4.0.0"
+    "web-component-tester": "^4.0.0",
+    "babel-preset-es2015": "^6.3.13",
+    "gulp-babel": "^6.1.2",
+    "gulp-crisper": "^1.0.0",
+    "gulp-sourcemaps": "^1.6.0"
   },
   "scripts": {
     "test": "gulp test:local",
