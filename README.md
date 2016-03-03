@@ -63,6 +63,7 @@ The full starter kit requires the following major dependencies:
 - npm, the node package manager, installed with Node.js and used to install Node.js packages.
 - gulp, a Node.js-based build tool.
 - bower, a Node.js-based package manager used to install front-end packages (like Polymer).
+- The starter kit gulp build process uses platform specific tools which is handled by node-gyp which is included in node.js. See https://github.com/nodejs/node-gyp/blob/master/README.md for additional platform specific dependencies.
 
 **To install dependencies:**
 
