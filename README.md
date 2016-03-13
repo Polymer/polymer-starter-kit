@@ -170,7 +170,7 @@ Components installed by Bower live in the `app/bower_components` directory. This
 ### Github Pages
 
 1. Uncomment this line  `// app.baseUrl = '/polymer-starter-kit/';` in app.js near the top
-2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `bobs-awesome-site`)
+2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `app.baseUrl = '/bobs-awesome-site/';`)
 3. Run `gulp build-deploy-gh-pages` from command line
 4. To see changes wait 1-2 minutes then load Github pages for your app (ex: https://polymerelements.github.io/polymer-starter-kit/)
 
