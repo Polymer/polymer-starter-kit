@@ -131,7 +131,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
 
               <paper-material elevation="1">
-                <p>This is another card. PSK Deployed on: Tue Mar 15 20:47:05 UTC 2016</p>
+                <p>This is another card. PSK Deployed on: Tue Mar 15 21:35:17 UTC 2016</p>
               </paper-material>
 
               <paper-material elevation="1">
@@ -166,7 +166,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
             <section data-route="user-info" tabindex="-1">
-              <paper-material elevation="-1">
+              <paper-material elevation="1">
                 <h1 class="page-title" tabindex="-1">User: {{params.name}}</h1>
                 <div>This is {{params.name}}'s section</div>
               </paper-material>
