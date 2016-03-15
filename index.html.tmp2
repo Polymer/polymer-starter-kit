@@ -131,7 +131,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
 
               <paper-material elevation="1">
-                <p>This is another card. PSK Deployed on: Sun Mar 13 21:15:54 UTC 2016</p>
+                <p>This is another card. PSK Deployed on: Tue Mar 15 00:09:04 UTC 2016</p>
               </paper-material>
 
               <paper-material elevation="1">
@@ -156,7 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <section data-route="users" tabindex="-1">
               <paper-material elevation="1">
-                <h1 class="page-title">Users</h1>
+                <h1 class="page-title" tabindex="-1">Users</h1>
                 <p>This is the users section</p>
                 <a href$="{{baseUrl}}users/Addy">Addy</a><br>
                 <a href$="{{baseUrl}}users/Rob">Rob</a><br>
@@ -166,15 +166,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
             <section data-route="user-info" tabindex="-1">
-              <paper-material elevation="1">
-                <h1 class="page-title">User: {{params.name}}</h1>
+              <paper-material elevation="-1">
+                <h1 class="page-title" tabindex="-1">User: {{params.name}}</h1>
                 <div>This is {{params.name}}'s section</div>
               </paper-material>
             </section>
 
             <section data-route="contact" tabindex="-1">
               <paper-material elevation="1">
-                <h1 class="page-title">Contact</h1>
+                <h1 class="page-title" tabindex="-1">Contact</h1>
                 <p>This is the contact section</p>
               </paper-material>
             </section>
