@@ -4,7 +4,7 @@ This recipe focuses on replacing the "static" `iron-pages` component with `neon-
 
 ## Update your dependencies
 
-- First thing first, we need to replace the `iron-pages` import in `app/elements/elements.html` with a set of components from the `neon-animation` librairy, including `neon-animated-pages`:
+- First thing first, we need to replace the `iron-pages` import in `app/elements/elements.html` with a set of components from the `neon-animation` library, including `neon-animated-pages`:
 
 ```patch
 - <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
@@ -46,7 +46,7 @@ This is pretty straightforward, as these elements behave similarly and share a c
 - </section>
 + </neon-animatable>
 ```
-Until now, all the pages of our web application were embeded in `section` tags under our page selector `iron-pages`. Replacing those `section` with the convenience element `neon-animatable` is now mandatory because all children of `neon-animated-pages` are required to implement `Polymer.NeonAnimatableBehavior` in order to be animated.
+Until now, all the pages of our web application were embedded in `section` tags under our page selector `iron-pages`. Replacing those `section` with the convenience element `neon-animatable` is now mandatory because all children of `neon-animated-pages` are required to implement `Polymer.NeonAnimatableBehavior` in order to be animated.
 
 ## Fix the CSS
 
@@ -57,7 +57,7 @@ Until now, all the pages of our web application were embeded in `section` tags u
 + neon-animatable[data-route="home"] paper-material {
     @apply(--paper-font-body2);
   }
-  
+
 - section[data-route="home"] paper-material .subhead {
 + neon-animatable[data-route="home"] paper-material .subhead {
     @apply(--paper-font-subhead);
@@ -66,7 +66,7 @@ Until now, all the pages of our web application were embeded in `section` tags u
 + neon-animated-pages {
 +   height: 100%;
 + }
-+ 
++
   paper-material {
     border-radius: 2px;
 -   height: 100%;
@@ -80,11 +80,11 @@ Until now, all the pages of our web application were embeded in `section` tags u
 
   /* Tablet+ */
   @media (min-width: 601px) {
- 
+
     #drawer.paper-drawer-panel > [drawer] {
       border-right: 1px solid rgba(0, 0, 0, 0.14);
     }
-  
+
 -   iron-pages {
 +   neon-animated-pages > * {
       padding: 48px 62px;
