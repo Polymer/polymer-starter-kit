@@ -120,9 +120,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Main Content -->
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
-            <section data-route="home" tabindex="-1">
+            <section data-route="home">
               <paper-material elevation="1">
-                <my-greeting></my-greeting>
+                <my-greeting class="focus-target" tabindex="-1"></my-greeting>
 
                 <p class="subhead">You now have:</p>
                 <my-list></my-list>
@@ -131,7 +131,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
 
               <paper-material elevation="1">
-                <p>This is another card. PSK Deployed on: Tue Mar 15 21:35:17 UTC 2016</p>
+                <p>This is another card. PSK Deployed on: Wed Mar 16 01:18:45 UTC 2016</p>
               </paper-material>
 
               <paper-material elevation="1">
@@ -154,9 +154,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
             </section>
 
-            <section data-route="users" tabindex="-1">
+            <section data-route="users">
               <paper-material elevation="1">
-                <h1 class="page-title" tabindex="-1">Users</h1>
+                <h1 class="page-title focus-target" tabindex="-1">Users</h1>
                 <p>This is the users section</p>
                 <a href$="{{baseUrl}}users/Addy">Addy</a><br>
                 <a href$="{{baseUrl}}users/Rob">Rob</a><br>
@@ -165,16 +165,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
             </section>
 
-            <section data-route="user-info" tabindex="-1">
+            <section data-route="user-info">
               <paper-material elevation="1">
-                <h1 class="page-title" tabindex="-1">User: {{params.name}}</h1>
+                <h1 class="page-title focus-target" tabindex="-1">User: {{params.name}}</h1>
                 <div>This is {{params.name}}'s section</div>
               </paper-material>
             </section>
 
-            <section data-route="contact" tabindex="-1">
+            <section data-route="contact">
               <paper-material elevation="1">
-                <h1 class="page-title" tabindex="-1">Contact</h1>
+                <h1 class="page-title focus-target" tabindex="-1">Contact</h1>
                 <p>This is the contact section</p>
               </paper-material>
             </section>

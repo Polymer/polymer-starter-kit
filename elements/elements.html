@@ -16815,7 +16815,9 @@ module.exports = Array.isArray || function (arr) {
     }
 
     function setFocus(selected){
-      document.querySelector('section[data-route="' + selected + '"] .page-title').focus();
+      Polymer.dom(document)
+        .querySelector('section[data-route="' + selected + '"] .focus-target')
+        .focus();
     }
 
     // Routes
