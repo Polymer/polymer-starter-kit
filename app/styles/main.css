@@ -13,6 +13,12 @@ body {
   color: #333;
 }
 
-.page-title {
+/*
+ This class is used when we manage the focus start point (like when a new page
+ is loaded). We typically move the focus start point to the first header in the
+ page and don't want a focus ring to display. Instead the next time the user
+ presses tab the focus ring will appear on the nearest, focusable element.
+*/
+.focus-target {
   outline: none;
 }
