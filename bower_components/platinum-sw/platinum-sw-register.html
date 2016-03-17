@@ -101,9 +101,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       baseUri: {
         type: String,
         // Grab the URI of this file to use as a base when resolving relative paths.
+        // See https://github.com/webcomponents/webcomponentsjs/blob/88240ba9ef4cebb1579e07f7888c7b58ec017a39/src/HTMLImports/base.js#L31
+        // for background on document._currentScript. We want to support document.currentScript
+        // as well, on the off chance that the polyfills aren't loaded.
         // Fallback to './' as a default, though current browsers that don't support
         // document.currentScript also don't support service workers.
-        value: document.currentScript ? document.currentScript.baseURI : './'
+        value: document._currentScript ? document._currentScript.baseURI :
+          (document.currentScript ? document.currentScript.baseURI : './')
       },
 
       /**
@@ -166,17 +170,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       /**
-       * The scope of the service worker, relative to the registered service worker script.
-       * All pages that fall under this scope will be controlled by the registered service worker.
+       * By default, the service worker will use a scope that applies to all pages at the same
+       * directory level or lower. This is almost certainly what you want, as illustrated by the
+       * following hypothetical serving setup:
        *
-       * Normally, this would not need to be changed, unless you want the service worker to only
-       * apply to a subset of your site.
+       * ```
+       * /root/
+       *   service-worker.js
+       *   index.html
+       *   subdir1/
+       *     index.html
+       *   subdir2/
+       *     index.html
+       * ```
+       *
+       * So by default, registering `/root/service-worker.js` will cause the service worker's scope
+       * to cover `/root/index.html`, `/root/subdir1/index.html`, and /root/subdir2/index.html`.
+       *
+       * If, for some reason, you need to register `/root/service-worker.js` from within
+       * `/root/subdir1/index.html`, *and* you want that registration to only cover
+       * `/root/subdir1/**`, you can override this `scope` property and set it to `'./'`.
+       *
+       * There is more context about default scopes and how scope overrides work in
+       * [this Stack Overflow](http://stackoverflow.com/a/33881341/385997) response.
        *
        * @see {@link https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#navigator-service-worker-register}
        */
       scope: {
         type: String,
-        value: './'
+        value: null
       },
 
       /**
@@ -308,7 +330,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     },
 
     _registerServiceWorker: function(serviceWorkerUrl) {
-      navigator.serviceWorker.register(serviceWorkerUrl, {scope: this.scope}).then(function(registration) {
+      var options = this.scope ? {scope: this.scope} : null;
+      navigator.serviceWorker.register(serviceWorkerUrl, options).then(function(registration) {
         if (registration.active) {
           this._setState('installed');
         }

@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../../web-component-tester/browser.js"></script>
+    <script src="../controlled-promise.js"></script>
 
     <link rel="import" href="../../platinum-sw-register.html">
     <link rel="import" href="../../platinum-sw-cache.html">
@@ -32,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         suite('Precaching', function() {
           test('precache results in Cache Storage API entries', function() {
-            return navigator.serviceWorker.ready.then(function() {
+            return window._controlledPromise.then(function() {
               return window.fetch(swc.cacheConfigFile).then(function(response) {
                 return response.json();
               }).then(function(config) {

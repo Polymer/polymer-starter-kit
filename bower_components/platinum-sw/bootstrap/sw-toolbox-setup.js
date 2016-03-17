@@ -39,7 +39,7 @@
       return precache.concat(global.params.get('precache'));
     })
   } else {
-    precachePromise = Promise.resolve(global.params.get('precache'));
+    precachePromise = Promise.resolve(global.params.get('precache') || []);
   }
 
   global.toolbox.precache(precachePromise);

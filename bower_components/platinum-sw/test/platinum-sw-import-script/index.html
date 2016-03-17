@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../../web-component-tester/browser.js"></script>
+    <script src="../controlled-promise.js"></script>
 
     <link rel="import" href="../../platinum-sw-register.html">
     <link rel="import" href="../../platinum-sw-import-script.html">
@@ -27,10 +28,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <script>
       suite('Importing Service Worker Scripts', function() {
-        // TODO: postMessage/message events are in flux in the Service Worker spec, so this may
-        // need to change in the future.
         test('message handler is registered via imported script', function(done) {
-          return navigator.serviceWorker.ready.then(function(registration) {
+          return window._controlledPromise.then(function(registration) {
             var message = 'hello';
             var messageChannel = new MessageChannel();
             messageChannel.port1.onmessage = function(event) {

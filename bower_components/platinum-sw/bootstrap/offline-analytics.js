@@ -26,20 +26,13 @@
             // This will cause the promise to reject, triggering the .catch() function.
             return Response.error();
           }
-
-          console.log('Replay succeeded:', replayUrl);
           db.delete(url);
         }).catch(function(error) {
           if (timeDelta > EXPIRATION_TIME_DELTA) {
             // After a while, Google Analytics will no longer accept an old ping with a qt=
             // parameter. The advertised time is ~4 hours, but we'll attempt to resend up to 24
             // hours. This logic also prevents the requests from being queued indefinitely.
-            console.error('Replay failed, but the original request is too old to retry any ' +
-              'further. Error:', error);
             db.delete(url);
-          } else {
-            console.error('Replay failed, and will be retried the next time the service worker ' +
-              'starts. Error:', error);
           }
         });
       });
@@ -47,8 +40,6 @@
   }
 
   function queueFailedAnalyticsRequest(request) {
-    console.log('Queueing failed request:', request);
-
     global.simpleDB.open(OFFLINE_ANALYTICS_DB_NAME).then(function(db) {
       db.set(request.url, Date.now());
     });
