@@ -93,6 +93,17 @@ Until now, all the pages of our web application were embedded in `section` tags 
 ...
 ```
 
+## Fix the focus management
+-  In `app/elements/routing.html`:
+```patch
+  function setFocus(selected){
+    Polymer.dom(document)
+-     .querySelector('section[data-route="' + selected +'"].focus-target')
++     .querySelector('neon-animatable[data-route="' + selected + '"] .focus-target')
+      .focus();
+  }
+```
+
 ## Going further
 
 This recipe took you through a basic integration of `neon-animated-pages` in Polymer Starter Kit with global and declarative transitions.
