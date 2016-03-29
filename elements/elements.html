@@ -1,5 +1,13 @@
 <html><head><!--
 @license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><!--
+@license
 Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -36,30 +44,22 @@ addEventListener('DOMContentLoaded', resolve);
 }());
 window.Polymer = {
 Settings: function () {
-var user = window.Polymer || {};
+var settings = window.Polymer || {};
 var parts = location.search.slice(1).split('&');
 for (var i = 0, o; i < parts.length && (o = parts[i]); i++) {
 o = o.split('=');
-o[0] && (user[o[0]] = o[1] || true);
+o[0] && (settings[o[0]] = o[1] || true);
 }
-var wantShadow = user.dom === 'shadow';
-var hasShadow = Boolean(Element.prototype.createShadowRoot);
-var nativeShadow = hasShadow && !window.ShadowDOMPolyfill;
-var useShadow = wantShadow && hasShadow;
-var hasNativeImports = Boolean('import' in document.createElement('link'));
-var useNativeImports = hasNativeImports;
-var useNativeCustomElements = !window.CustomElements || window.CustomElements.useNative;
-var usePolyfillProto = !useNativeCustomElements && !Object.__proto__;
-return {
-wantShadow: wantShadow,
-hasShadow: hasShadow,
-nativeShadow: nativeShadow,
-useShadow: useShadow,
-useNativeShadow: useShadow && nativeShadow,
-useNativeImports: useNativeImports,
-useNativeCustomElements: useNativeCustomElements,
-usePolyfillProto: usePolyfillProto
-};
+settings.wantShadow = settings.dom === 'shadow';
+settings.hasShadow = Boolean(Element.prototype.createShadowRoot);
+settings.nativeShadow = settings.hasShadow && !window.ShadowDOMPolyfill;
+settings.useShadow = settings.wantShadow && settings.hasShadow;
+settings.hasNativeImports = Boolean('import' in document.createElement('link'));
+settings.useNativeImports = settings.hasNativeImports;
+settings.useNativeCustomElements = !window.CustomElements || window.CustomElements.useNative;
+settings.useNativeShadow = settings.useShadow && settings.nativeShadow;
+settings.usePolyfillProto = !settings.useNativeCustomElements && !Object.__proto__;
+return settings;
 }()
 };
 (function () {
@@ -186,6 +186,9 @@ Polymer.RenderStatus._catchFirstRender();
 }
 Polymer.ImportStatus = Polymer.RenderStatus;
 Polymer.ImportStatus.whenLoaded = Polymer.ImportStatus.whenReady;
+(function () {
+'use strict';
+var settings = Polymer.Settings;
 Polymer.Base = {
 __isPolymerInstance__: true,
 _addFeature: function (feature) {
@@ -195,13 +198,30 @@ registerCallback: function () {
 this._desugarBehaviors();
 this._doBehavior('beforeRegister');
 this._registerFeatures();
-this._doBehavior('registered');
+if (!settings.lazyRegister) {
+this.ensureRegisterFinished();
+}
 },
 createdCallback: function () {
+if (!this.__hasRegisterFinished) {
+this._ensureRegisterFinished(this.__proto__);
+}
 Polymer.telemetry.instanceCount++;
 this.root = this;
 this._doBehavior('created');
 this._initFeatures();
+},
+ensureRegisterFinished: function () {
+this._ensureRegisterFinished(this);
+},
+_ensureRegisterFinished: function (proto) {
+if (proto.__hasRegisterFinished !== proto.is) {
+proto.__hasRegisterFinished = proto.is;
+if (proto._finishRegisterFeatures) {
+proto._finishRegisterFeatures();
+}
+proto._doBehavior('registered');
+}
 },
 attachedCallback: function () {
 var self = this;
@@ -281,6 +301,7 @@ Polymer.isInstance = function (obj) {
 return Boolean(obj && obj.__isPolymerInstance__);
 };
 Polymer.telemetry.instanceCount = 0;
+}());
 (function () {
 var modules = {};
 var lcModules = {};
@@ -662,7 +683,7 @@ return value != null ? value : undefined;
 }
 }
 });
-Polymer.version = '1.3.1';
+Polymer.version = '1.4.0';
 Polymer.Base._addFeature({
 _registerFeatures: function () {
 this._prepIs();
@@ -2014,7 +2035,11 @@ get localTarget() {
 return this.event.target;
 },
 get path() {
-return this.event.path;
+var path = this.event.path;
+if (!Array.isArray(path)) {
+path = Array.prototype.slice.call(path);
+}
+return path;
 }
 };
 } else {
@@ -4477,7 +4502,12 @@ if (prop.notify) {
 this._addPropertyEffect(p, 'notify', { event: Polymer.CaseMap.camelToDashCase(p) + '-changed' });
 }
 if (prop.reflectToAttribute) {
-this._addPropertyEffect(p, 'reflect', { attribute: Polymer.CaseMap.camelToDashCase(p) });
+var attr = Polymer.CaseMap.camelToDashCase(p);
+if (attr[0] === '-') {
+this._warn(this._logf('_addPropertyEffects', 'Property ' + p + ' cannot be reflected to attribute ' + attr + ' because "-" is not a valid starting attribute name. Use a lowercase first letter for the property instead.'));
+} else {
+this._addPropertyEffect(p, 'reflect', { attribute: attr });
+}
 }
 if (prop.readOnly) {
 Polymer.Bind.ensurePropertyEffects(this, p);
@@ -4560,6 +4590,9 @@ var part = note.parts[i];
 if (part.signature) {
 this._addAnnotatedComputationEffect(note, part, index);
 } else if (!part.literal) {
+if (note.kind === 'attribute' && note.name[0] === '-') {
+this._warn(this._logf('_addAnnotationEffect', 'Cannot set attribute ' + note.name + ' because "-" is not a valid attribute starting character'));
+} else {
 this._addPropertyEffect(part.model, 'annotation', {
 kind: note.kind,
 index: index,
@@ -4572,6 +4605,7 @@ event: part.event,
 customEvent: part.customEvent,
 negate: part.negate
 });
+}
 }
 }
 },
@@ -5343,19 +5377,29 @@ this.forEachRule(r, styleRuleCallback, keyframesRuleCallback);
 }
 }
 },
-applyCss: function (cssText, moniker, target, afterNode) {
+applyCss: function (cssText, moniker, target, contextNode) {
+var style = this.createScopeStyle(cssText, moniker);
+target = target || document.head;
+var after = contextNode && contextNode.nextSibling || target.firstChild;
+this.__lastHeadApplyNode = style;
+return target.insertBefore(style, after);
+},
+createScopeStyle: function (cssText, moniker) {
 var style = document.createElement('style');
 if (moniker) {
 style.setAttribute('scope', moniker);
 }
 style.textContent = cssText;
-target = target || document.head;
-if (!afterNode) {
-var n$ = target.querySelectorAll('style[scope]');
-afterNode = n$[n$.length - 1];
-}
-target.insertBefore(style, afterNode && afterNode.nextSibling || target.firstChild);
 return style;
+},
+__lastHeadApplyNode: null,
+applyStylePlaceHolder: function (moniker) {
+var placeHolder = document.createComment(' Shady DOM styles for ' + moniker + ' ');
+var after = this.__lastHeadApplyNode ? this.__lastHeadApplyNode.nextSibling : null;
+var scope = document.head;
+scope.insertBefore(placeHolder, after || scope.firstChild);
+this.__lastHeadApplyNode = placeHolder;
+return placeHolder;
 },
 cssFromModules: function (moduleIds, warnIfNotFound) {
 var modules = moduleIds.trim().split(' ');
@@ -5673,20 +5717,20 @@ styleTransformer.element(element, this.is, this._scopeCssViaAttr);
 prepElement.call(this, element);
 },
 _prepStyles: function () {
-if (this._encapsulateStyle === undefined) {
-this._encapsulateStyle = !nativeShadow && Boolean(this._template);
+if (!nativeShadow) {
+this._scopeStyle = styleUtil.applyStylePlaceHolder(this.is);
 }
+},
+_prepShimStyles: function () {
 if (this._template) {
+if (this._encapsulateStyle === undefined) {
+this._encapsulateStyle = !nativeShadow;
+}
 this._styles = this._collectStyles();
 var cssText = styleTransformer.elementStyles(this);
 this._prepStyleProperties();
-var needsStatic = this._styles.length && !this._needsStyleProperties();
-if (needsStatic || !nativeShadow) {
-cssText = needsStatic ? cssText : ' ';
-var style = styleUtil.applyCss(cssText, this.is, nativeShadow ? this._template.content : null);
-if (!nativeShadow) {
-this._scopeStyle = style;
-}
+if (!this._needsStyleProperties() && this._styles.length) {
+styleUtil.applyCss(cssText, this.is, nativeShadow ? this._template.content : null, this._scopeStyle);
 }
 } else {
 this._styles = [];
@@ -6329,8 +6373,11 @@ Polymer.Base._addFeature({
 _registerFeatures: function () {
 this._prepIs();
 this._prepConstructor();
-this._prepTemplate();
 this._prepStyles();
+},
+_finishRegisterFeatures: function () {
+this._prepTemplate();
+this._prepShimStyles();
 this._prepAnnotations();
 this._prepEffects();
 this._prepBehaviors();
@@ -12888,6 +12935,8 @@ this.fire('dom-change');
      * @param {string|number} value the value to select.
      */
     select: function(value) {
+      // Cancel automatically focusing a default item if the menu received focus
+      // through a user action selecting a particular item.
       if (this._defaultFocusAsync) {
         this.cancelAsync(this._defaultFocusAsync);
         this._defaultFocusAsync = null;
@@ -13058,8 +13107,6 @@ this.fire('dom-change');
         return;
       }
 
-      this.blur();
-
       // clear the cached focus item
       this._defaultFocusAsync = this.async(function() {
         // focus the selected item when the menu receives focus, or the first item
@@ -13070,11 +13117,10 @@ this.fire('dom-change');
 
         if (selectedItem) {
           this._setFocusedItem(selectedItem);
-        } else {
+        } else if (this.items[0]) {
           this._setFocusedItem(this.items[0]);
         }
-      // async 1ms to wait for `select` to get called from `_itemActivate`
-      }, 1);
+      });
     },
 
     /**
@@ -14220,12 +14266,6 @@ CSS properties               | Action
     this._overlays = [];
 
     /**
-     * Used to keep track of the last focused node before an overlay gets opened.
-     * @private {Array<Element>}
-     */
-    this._lastFocusedNodes = [];
-
-    /**
      * iframes have a default z-index of 100,
      * so this default should be at least that.
      * @private {number}
@@ -14233,16 +14273,18 @@ CSS properties               | Action
     this._minimumZ = 101;
 
     /**
-     * Used to keep track of the opened overlays with backdrop.
-     * @private {Array<Element>}
-     */
-    this._backdrops = [];
-
-    /**
      * Memoized backdrop element.
      * @private {Element|null}
      */
     this._backdropElement = null;
+
+    // Enable document-wide tap recognizer.
+    Polymer.Gestures.add(document, 'tap', null);
+    // We should be using only 'tap', but this would be a breaking change.
+    var tapEvent = ('ontouchstart' in window) ? 'tap' : 'click';
+    document.addEventListener(tapEvent, this._onCaptureClick.bind(this), true);
+    document.addEventListener('focus', this._onCaptureFocus.bind(this), true);
+    document.addEventListener('keydown', this._onCaptureKeyDown.bind(this), true);
   };
 
   Polymer.IronOverlayManagerClass.prototype = {
@@ -14262,52 +14304,57 @@ CSS properties               | Action
 
     /**
      * The deepest active element.
-     * @type {Element|undefined} activeElement the active element
+     * @type {Element} activeElement the active element
      */
     get deepActiveElement() {
-      var active = document.activeElement;
       // document.activeElement can be null
       // https://developer.mozilla.org/en-US/docs/Web/API/Document/activeElement
-      while (active && active.root && Polymer.dom(active.root).activeElement) {
+      // In case of null, default it to document.body.
+      var active = document.activeElement || document.body;
+      while (active.root && Polymer.dom(active.root).activeElement) {
         active = Polymer.dom(active.root).activeElement;
       }
       return active;
     },
 
     /**
-     * If a node is contained in an overlay.
-     * @param {Element=} node
-     * @return {boolean}
+     * Brings the overlay at the specified index to the front.
+     * @param {number} i
      * @private
      */
-    _isChildOfOverlay: function(node) {
-      while (node && node !== document.body) {
-        // Use logical parentNode, or native ShadowRoot host.
-        node = Polymer.dom(node).parentNode || node.host;
-        // Check if it is an overlay.
-        if (node && node.behaviors && node.behaviors.indexOf(Polymer.IronOverlayBehaviorImpl) !== -1) {
-          return true;
-        }
+    _bringOverlayAtIndexToFront: function(i) {
+      var overlay = this._overlays[i];
+      var lastI = this._overlays.length - 1;
+      // If already the top element, return.
+      if (!overlay || i === lastI) {
+        return;
       }
-      return false;
+      // Update z-index to be on top.
+      var minimumZ = Math.max(this.currentOverlayZ(), this._minimumZ);
+      if (this._getZ(overlay) <= minimumZ) {
+        this._applyOverlayZ(overlay, minimumZ);
+      }
+
+      // Shift other overlays behind the new on top.
+      while (i < lastI) {
+        this._overlays[i] = this._overlays[i + 1];
+        i++;
+      }
+      this._overlays[lastI] = overlay;
     },
 
     /**
+     * Adds the overlay and updates its z-index if it's opened, or removes it if it's closed.
+     * Also updates the backdrop z-index.
      * @param {Element} overlay
-     * @param {number} aboveZ
-     * @private
      */
-    _applyOverlayZ: function(overlay, aboveZ) {
-      this._setZ(overlay, aboveZ + 2);
-    },
-
-    /**
-     * @param {Element} element
-     * @param {number|string} z
-     * @private
-     */
-    _setZ: function(element, z) {
-      element.style.zIndex = z;
+    addOrRemoveOverlay: function(overlay) {
+      if (overlay.opened) {
+        this.addOverlay(overlay);
+      } else {
+        this.removeOverlay(overlay);
+      }
+      this.trackBackdrop();
     },
 
     /**
@@ -14315,6 +14362,11 @@ CSS properties               | Action
      * @param {Element} overlay
      */
     addOverlay: function(overlay) {
+      var i = this._overlays.indexOf(overlay);
+      if (i >= 0) {
+        this._bringOverlayAtIndexToFront(i);
+        return;
+      }
       var minimumZ = Math.max(this.currentOverlayZ(), this._minimumZ);
       this._overlays.push(overlay);
       var newZ = this.currentOverlayZ();
@@ -14322,11 +14374,7 @@ CSS properties               | Action
         this._applyOverlayZ(overlay, minimumZ);
       }
       var element = this.deepActiveElement;
-      // If already in other overlay, don't reset focus there.
-      if (this._isChildOfOverlay(element)) {
-        element = null;
-      }
-      this._lastFocusedNodes.push(element);
+      overlay.restoreFocusNode = this._overlayParent(element) ? null : element;
     },
 
     /**
@@ -14334,35 +14382,35 @@ CSS properties               | Action
      */
     removeOverlay: function(overlay) {
       var i = this._overlays.indexOf(overlay);
-      if (i >= 0) {
-        this._overlays.splice(i, 1);
-        this._setZ(overlay, '');
+      if (i === -1) {
+        return;
+      }
+      this._overlays.splice(i, 1);
+      this._setZ(overlay, '');
 
-        var node = this._lastFocusedNodes[i];
-        // Focus only if still contained in document.body
-        if (overlay.restoreFocusOnClose && node && Polymer.dom(document.body).deepContains(node)) {
-          node.focus();
-        }
-        this._lastFocusedNodes.splice(i, 1);
+      var node = overlay.restoreFocusOnClose ? overlay.restoreFocusNode : null;
+      overlay.restoreFocusNode = null;
+      // Focus back only if still contained in document.body
+      if (node && Polymer.dom(document.body).deepContains(node)) {
+        node.focus();
       }
     },
 
     /**
-     * @return {Element|undefined} overlay The current overlay.
+     * Returns the current overlay.
+     * @return {Element|undefined}
      */
     currentOverlay: function() {
       var i = this._overlays.length - 1;
-      while (this._overlays[i] && !this._overlays[i].opened) {
-        --i;
-      }
       return this._overlays[i];
     },
 
     /**
-     * @return {number} zIndex the current overlay z-index.
+     * Returns the current overlay z-index.
+     * @return {number}
      */
     currentOverlayZ: function() {
-      return this._getOverlayZ(this.currentOverlay());
+      return this._getZ(this.currentOverlay());
     },
 
     /**
@@ -14390,41 +14438,41 @@ CSS properties               | Action
     },
 
     /**
-     * @param {Element} overlay The overlay that updated its withBackdrop.
+     * Updates the backdrop z-index.
      */
-    trackBackdrop: function(overlay) {
-      var index = this._backdrops.indexOf(overlay);
-      if (overlay.opened && overlay.withBackdrop) {
-        // no duplicates
-        if (index === -1) {
-          this._backdrops.push(overlay);
-        }
-      } else if (index >= 0) {
-        this._backdrops.splice(index, 1);
-      }
+    trackBackdrop: function() {
+      this.backdropElement.style.zIndex = this.backdropZ();
     },
 
     /**
-     * @return {Array<Element>} backdrops
+     * @return {Array<Element>}
      */
     getBackdrops: function() {
-      return this._backdrops;
+      var backdrops = [];
+      for (var i = 0; i < this._overlays.length; i++) {
+        if (this._overlays[i].withBackdrop) {
+          backdrops.push(this._overlays[i]);
+        }
+      }
+      return backdrops;
     },
 
     /**
-     * @return {number} index The z-index for the backdrop.
+     * Returns the z-index for the backdrop.
+     * @return {number}
      */
     backdropZ: function() {
-      return this._getOverlayZ(this._overlayWithBackdrop()) - 1;
+      return this._getZ(this._overlayWithBackdrop()) - 1;
     },
 
     /**
-     * @return {Element|undefined} overlay The first opened overlay that has a backdrop.
+     * Returns the first opened overlay that has a backdrop.
+     * @return {Element|undefined}
      * @private
      */
     _overlayWithBackdrop: function() {
       for (var i = 0; i < this._overlays.length; i++) {
-        if (this._overlays[i].opened && this._overlays[i].withBackdrop) {
+        if (this._overlays[i].withBackdrop) {
           return this._overlays[i];
         }
       }
@@ -14435,7 +14483,7 @@ CSS properties               | Action
      * @param {Element=} overlay
      * @private
      */
-    _getOverlayZ: function(overlay) {
+    _getZ: function(overlay) {
       var z = this._minimumZ;
       if (overlay) {
         var z1 = Number(window.getComputedStyle(overlay).zIndex);
@@ -14446,6 +14494,98 @@ CSS properties               | Action
         }
       }
       return z;
+    },
+
+    /**
+     * @param {Element} element
+     * @param {number|string} z
+     * @private
+     */
+    _setZ: function(element, z) {
+      element.style.zIndex = z;
+    },
+
+    /**
+     * @param {Element} overlay
+     * @param {number} aboveZ
+     * @private
+     */
+    _applyOverlayZ: function(overlay, aboveZ) {
+      this._setZ(overlay, aboveZ + 2);
+    },
+
+    /**
+     * Returns the overlay containing the provided node. If the node is an overlay,
+     * it returns the node.
+     * @param {Element=} node
+     * @return {Element|undefined}
+     * @private
+     */
+    _overlayParent: function(node) {
+      while (node && node !== document.body) {
+        // Check if it is an overlay.
+        if (node._manager === this) {
+          return node;
+        }
+        // Use logical parentNode, or native ShadowRoot host.
+        node = Polymer.dom(node).parentNode || node.host;
+      }
+    },
+
+    /**
+     * Returns the deepest overlay in the path.
+     * @param {?Array<Element>} path
+     * @return {Element|undefined}
+     * @private
+     */
+    _overlayInPath: function(path) {
+      path = path || [];
+      for (var i = 0; i < path.length; i++) {
+        if (path[i]._manager === this) {
+          return path[i];
+        }
+      }
+    },
+
+    /**
+     * Ensures the click event is delegated to the right overlay.
+     * @param {!Event} event
+     * @private
+     */
+    _onCaptureClick: function(event) {
+      var overlay = /** @type {?} */ (this.currentOverlay());
+      // Check if clicked outside of top overlay.
+      if (overlay && this._overlayInPath(Polymer.dom(event).path) !== overlay) {
+        overlay._onCaptureClick(event);
+      }
+    },
+
+    /**
+     * Ensures the focus event is delegated to the right overlay.
+     * @param {!Event} event
+     * @private
+     */
+    _onCaptureFocus: function(event) {
+      var overlay = /** @type {?} */ (this.currentOverlay());
+      if (overlay) {
+        overlay._onCaptureFocus(event);
+      }
+    },
+
+    /**
+     * Ensures TAB and ESC keyboard events are delegated to the right overlay.
+     * @param {!Event} event
+     * @private
+     */
+    _onCaptureKeyDown: function(event) {
+      var overlay = /** @type {?} */ (this.currentOverlay());
+      if (overlay) {
+        if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(event, 'esc')) {
+          overlay._onCaptureEsc(event);
+        } else if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(event, 'tab')) {
+          overlay._onCaptureTab(event);
+        }
+      }
     }
   };
 
@@ -14466,12 +14606,14 @@ CSS properties               | Action
       background-color: var(--iron-overlay-backdrop-background-color, #000);
       opacity: 0;
       transition: opacity 0.2s;
+      pointer-events: none;
 
       @apply(--iron-overlay-backdrop);
     }
 
     :host([opened]) {
       opacity: var(--iron-overlay-backdrop-opacity, 0.6);
+      pointer-events: auto;
 
       @apply(--iron-overlay-backdrop-opened);
     }
@@ -14519,8 +14661,6 @@ CSS properties               | Action
      * Appends the backdrop to document body and sets its `z-index` to be below the latest overlay.
      */
     prepare: function() {
-      // Always update z-index
-      this.style.zIndex = this._manager.backdropZ();
       if (!this.parentNode) {
         Polymer.dom(document.body).appendChild(this);
       }
@@ -14540,8 +14680,6 @@ CSS properties               | Action
      * Hides the backdrop if needed.
      */
     close: function() {
-      // Always update z-index
-      this.style.zIndex = this._manager.backdropZ();
       // close only if no element with backdrop is left
       if (this._manager.getBackdrops().length === 0) {
         // Read style before setting opened.
@@ -14681,15 +14819,6 @@ context. You should place this element as a child of `<body>` whenever possible.
       },
 
       /**
-       * The HTMLElement that will be firing relevant KeyboardEvents.
-       * Used for capturing esc and tab. Overridden from `IronA11yKeysBehavior`.
-       */
-      keyEventTarget: {
-        type: Object,
-        value: document
-      },
-
-      /**
        * Set to true to enable restoring of focus when overlay is closed.
        */
       restoreFocusOnClose: {
@@ -14707,20 +14836,6 @@ context. You should place this element as a child of `<body>` whenever possible.
         value: Polymer.IronOverlayManager
       },
 
-      _boundOnCaptureClick: {
-        type: Function,
-        value: function() {
-          return this._onCaptureClick.bind(this);
-        }
-      },
-
-      _boundOnCaptureFocus: {
-        type: Function,
-        value: function() {
-          return this._onCaptureFocus.bind(this);
-        }
-      },
-
       /**
        * The node being focused.
        * @type {?Node}
@@ -14729,11 +14844,6 @@ context. You should place this element as a child of `<body>` whenever possible.
         type: Object
       }
 
-    },
-
-    keyBindings: {
-      'esc': '__onEsc',
-      'tab': '__onTab'
     },
 
     listeners: {
@@ -14831,8 +14941,10 @@ context. You should place this element as a child of `<body>` whenever possible.
       Polymer.dom(this).unobserveNodes(this._observer);
       this._observer = null;
       this.opened = false;
-      this._manager.trackBackdrop(this);
-      this._manager.removeOverlay(this);
+      if (this.withBackdrop) {
+        // Allow user interactions right away.
+        this.backdropElement.close();
+      }
     },
 
     /**
@@ -14894,18 +15006,17 @@ context. You should place this element as a child of `<body>` whenever possible.
         return;
       }
 
-      this._manager.trackBackdrop(this);
+      this._manager.addOrRemoveOverlay(this);
 
       this.__isAnimating = true;
+
       if (this.opened) {
         this._prepareRenderOpened();
       }
-
       if (this._openChangedAsync) {
         this.cancelAsync(this._openChangedAsync);
       }
-      // Async here to allow overlay layer to become visible, and to avoid
-      // listeners to immediately close via a click.
+      // Async here to allow overlay layer to become visible.
       this._openChangedAsync = this.async(function() {
         // overlay becomes visible here
         this.style.display = '';
@@ -14917,9 +15028,8 @@ context. You should place this element as a child of `<body>` whenever possible.
         } else {
           this._renderClosed();
         }
-        this._toggleListeners();
         this._openChangedAsync = null;
-      }, 1);
+      });
     },
 
     _canceledChanged: function() {
@@ -14937,7 +15047,7 @@ context. You should place this element as a child of `<body>` whenever possible.
         this.__shouldRemoveTabIndex = false;
       }
       if (this.opened) {
-        this._manager.trackBackdrop(this);
+        this._manager.trackBackdrop();
         if (this.withBackdrop) {
           this.backdropElement.prepare();
           // Give time to be added to document.
@@ -14950,31 +15060,11 @@ context. You should place this element as a child of `<body>` whenever possible.
       }
     },
 
-    _toggleListener: function(enable, node, event, boundListener, capture) {
-      if (enable) {
-        // enable document-wide tap recognizer
-        if (event === 'tap') {
-          Polymer.Gestures.add(document, 'tap', null);
-        }
-        node.addEventListener(event, boundListener, capture);
-      } else {
-        // disable document-wide tap recognizer
-        if (event === 'tap') {
-          Polymer.Gestures.remove(document, 'tap', null);
-        }
-        node.removeEventListener(event, boundListener, capture);
-      }
-    },
-
-    _toggleListeners: function() {
-      this._toggleListener(this.opened, document, 'tap', this._boundOnCaptureClick, true);
-      this._toggleListener(this.opened, document, 'focus', this._boundOnCaptureFocus, true);
-    },
-
-    // tasks which must occur before opening; e.g. making the element visible
+    /**
+     * tasks which must occur before opening; e.g. making the element visible.
+     * @protected
+     */
     _prepareRenderOpened: function() {
-
-      this._manager.addOverlay(this);
 
       // Needed to calculate the size of the overlay so that transitions on its size
       // will have the correct starting points.
@@ -14993,8 +15083,10 @@ context. You should place this element as a child of `<body>` whenever possible.
       }
     },
 
-    // tasks which cause the overlay to actually open; typically play an
-    // animation
+    /**
+     * Tasks which cause the overlay to actually open; typically play an animation.
+     * @protected
+     */
     _renderOpened: function() {
       if (this.withBackdrop) {
         this.backdropElement.open();
@@ -15002,6 +15094,10 @@ context. You should place this element as a child of `<body>` whenever possible.
       this._finishRenderOpened();
     },
 
+    /**
+     * Tasks which cause the overlay to actually close; typically play an animation.
+     * @protected
+     */
     _renderClosed: function() {
       if (this.withBackdrop) {
         this.backdropElement.close();
@@ -15009,6 +15105,10 @@ context. You should place this element as a child of `<body>` whenever possible.
       this._finishRenderClosed();
     },
 
+    /**
+     * Tasks to be performed at the end of open action. Will fire `iron-overlay-opened`.
+     * @protected
+     */
     _finishRenderOpened: function() {
       // Focus the child node with [autofocus]
       this._applyFocus();
@@ -15018,10 +15118,13 @@ context. You should place this element as a child of `<body>` whenever possible.
       this.fire('iron-overlay-opened');
     },
 
+    /**
+     * Tasks to be performed at the end of close action. Will fire `iron-overlay-closed`.
+     * @protected
+     */
     _finishRenderClosed: function() {
       // Hide the overlay and remove the backdrop.
       this.style.display = 'none';
-      this._manager.removeOverlay(this);
 
       this._applyFocus();
 
@@ -15045,6 +15148,10 @@ context. You should place this element as a child of `<body>` whenever possible.
       this.style.transition = this.style.webkitTransition = '';
     },
 
+    /**
+     * Applies focus according to the opened state.
+     * @protected
+     */
     _applyFocus: function() {
       if (this.opened) {
         if (!this.noAutoFocus) {
@@ -15057,29 +15164,69 @@ context. You should place this element as a child of `<body>` whenever possible.
       }
     },
 
+    /**
+     * Cancels (closes) the overlay. Call when click happens outside the overlay.
+     * @param {!Event} event
+     * @protected
+     */
     _onCaptureClick: function(event) {
-      if (this._manager.currentOverlay() === this &&
-          Polymer.dom(event).path.indexOf(this) === -1) {
-        if (this.noCancelOnOutsideClick) {
-          this._applyFocus();
-        } else {
-          this.cancel(event);
-        }
+      if (!this.noCancelOnOutsideClick) {
+        this.cancel(event);
       }
     },
 
+    /**
+     * Keeps track of the focused child. If withBackdrop, traps focus within overlay.
+     * @param {!Event} event
+     * @protected
+     */
     _onCaptureFocus: function (event) {
-      if (this._manager.currentOverlay() === this && this.withBackdrop) {
-        var path = Polymer.dom(event).path;
-        if (path.indexOf(this) === -1) {
-          event.stopPropagation();
-          this._applyFocus();
-        } else {
-          this._focusedChild = path[0];
-        }
+      if (!this.withBackdrop) {
+        return;
+      }
+      var path = Polymer.dom(event).path;
+      if (path.indexOf(this) === -1) {
+        event.stopPropagation();
+        this._applyFocus();
+      } else {
+        this._focusedChild = path[0];
       }
     },
 
+    /**
+     * Handles the ESC key event and cancels (closes) the overlay.
+     * @param {!Event} event
+     * @protected
+     */
+    _onCaptureEsc: function(event) {
+      if (!this.noCancelOnEscKey) {
+        this.cancel(event);
+      }
+    },
+
+    /**
+     * Handles TAB key events to track focus changes.
+     * Will wrap focus for overlays withBackdrop.
+     * @param {!Event} event
+     * @protected
+     */
+    _onCaptureTab: function(event) {
+      // TAB wraps from last to first focusable.
+      // Shift + TAB wraps from first to last focusable.
+      var shift = event.shiftKey;
+      var nodeToCheck = shift ? this.__firstFocusableNode : this.__lastFocusableNode;
+      var nodeToSet = shift ? this.__lastFocusableNode : this.__firstFocusableNode;
+      if (this.withBackdrop && this._focusedChild === nodeToCheck) {
+        // We set here the _focusedChild so that _onCaptureFocus will handle the
+        // wrapping of the focus (the next event after tab is focus).
+        this._focusedChild = nodeToSet;
+      }
+    },
+
+    /**
+     * Refits if the overlay is opened and not animating.
+     * @protected
+     */
     _onIronResize: function() {
       if (this.__isAnimating) {
         return;
@@ -15091,9 +15238,9 @@ context. You should place this element as a child of `<body>` whenever possible.
     },
 
     /**
-     * @protected
      * Will call notifyResize if overlay is opened.
      * Can be overridden in order to avoid multiple observers on the same node.
+     * @protected
      */
     _onNodesChange: function() {
       if (this.opened && !this.__isAnimating) {
@@ -15103,38 +15250,11 @@ context. You should place this element as a child of `<body>` whenever possible.
       var focusableNodes = this._focusableNodes;
       this.__firstFocusableNode = focusableNodes[0];
       this.__lastFocusableNode = focusableNodes[focusableNodes.length - 1];
-    },
-
-    __onEsc: function(event) {
-      // Not opened or not on top, so return.
-      if (this._manager.currentOverlay() !== this) {
-        return;
-      }
-      if (!this.noCancelOnEscKey) {
-        this.cancel(event);
-      }
-    },
-
-    __onTab: function(event) {
-      // Not opened or not on top, so return.
-      if (this._manager.currentOverlay() !== this) {
-        return;
-      }
-      // TAB wraps from last to first focusable.
-      // Shift + TAB wraps from first to last focusable.
-      var shift = event.detail.keyboardEvent.shiftKey;
-      var nodeToCheck = shift ? this.__firstFocusableNode : this.__lastFocusableNode;
-      var nodeToSet = shift ? this.__lastFocusableNode : this.__firstFocusableNode;
-      if (this.withBackdrop && this._focusedChild === nodeToCheck) {
-        // We set here the _focusedChild so that _onCaptureFocus will handle the
-        // wrapping of the focus (the next event after tab is focus).
-        this._focusedChild = nodeToSet;
-      }
     }
   };
 
   /** @polymerBehavior */
-  Polymer.IronOverlayBehavior = [Polymer.IronA11yKeysBehavior, Polymer.IronFitBehavior, Polymer.IronResizableBehavior, Polymer.IronOverlayBehaviorImpl];
+  Polymer.IronOverlayBehavior = [Polymer.IronFitBehavior, Polymer.IronResizableBehavior, Polymer.IronOverlayBehaviorImpl];
 
   /**
   * Fired after the `iron-overlay` opens.
