@@ -43,7 +43,7 @@ guide](https://www.firebase.com/docs/hosting/quickstart.html).
             "**/node_modules/**"
           ],
           "rewrites": [ {
-            "source": "**",
+            "source": "!{/bower_components,/elements}/**",
             "destination": "/index.html"
           } ]
         }
