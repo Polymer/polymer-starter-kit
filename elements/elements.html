@@ -10657,6 +10657,13 @@ this.fire('dom-change');
     var SPACE_KEY = /^space(bar)?/;
 
     /**
+     * Matches ESC key.
+     *
+     * Value from: http://w3c.github.io/uievents-key/#key-Escape
+     */
+    var ESC_KEY = /^escape$/;
+
+    /**
      * Transforms the key.
      * @param {string} key The KeyBoardEvent.key
      * @param {Boolean} [noSpecialChars] Limits the transformation to
@@ -10668,6 +10675,8 @@ this.fire('dom-change');
         var lKey = key.toLowerCase();
         if (lKey === ' ' || SPACE_KEY.test(lKey)) {
           validKey = 'space';
+        } else if (ESC_KEY.test(lKey)) {
+          validKey = 'esc';
         } else if (lKey.length == 1) {
           if (!noSpecialChars || KEY_CHAR.test(lKey)) {
             validKey = lKey;
@@ -10711,10 +10720,10 @@ this.fire('dom-change');
           validKey = 'f' + (keyCode - 112);
         } else if (keyCode >= 48 && keyCode <= 57) {
           // top 0-9 keys
-          validKey = String(48 - keyCode);
+          validKey = String(keyCode - 48);
         } else if (keyCode >= 96 && keyCode <= 105) {
           // num pad 0-9
-          validKey = String(96 - keyCode);
+          validKey = String(keyCode - 96);
         } else {
           validKey = KEY_CODE[keyCode];
         }
@@ -10879,6 +10888,13 @@ this.fire('dom-change');
         this._resetKeyEventListeners();
       },
 
+      /**
+       * Returns true if a keyboard event matches `eventString`.
+       *
+       * @param {KeyboardEvent} event
+       * @param {string} eventString
+       * @return {boolean}
+       */
       keyboardEventMatchesKeys: function(event, eventString) {
         var keyCombos = parseEventString(eventString);
         for (var i = 0; i < keyCombos.length; ++i) {
@@ -14325,8 +14341,12 @@ CSS properties               | Action
     _bringOverlayAtIndexToFront: function(i) {
       var overlay = this._overlays[i];
       var lastI = this._overlays.length - 1;
+      // Ensure always-on-top overlay stays on top.
+      if (!overlay.alwaysOnTop && this._overlays[lastI].alwaysOnTop) {
+        lastI--;
+      }
       // If already the top element, return.
-      if (!overlay || i === lastI) {
+      if (!overlay || i >= lastI) {
         return;
       }
       // Update z-index to be on top.
@@ -14359,6 +14379,7 @@ CSS properties               | Action
 
     /**
      * Tracks overlays for z-index and focus management.
+     * Ensures the last added overlay with always-on-top remains on top.
      * @param {Element} overlay
      */
     addOverlay: function(overlay) {
@@ -14367,12 +14388,28 @@ CSS properties               | Action
         this._bringOverlayAtIndexToFront(i);
         return;
       }
-      var minimumZ = Math.max(this.currentOverlayZ(), this._minimumZ);
-      this._overlays.push(overlay);
-      var newZ = this.currentOverlayZ();
+      var insertionIndex = this._overlays.length;
+      var currentOverlay = this._overlays[insertionIndex - 1];
+      var minimumZ = Math.max(this._getZ(currentOverlay), this._minimumZ);
+      var newZ = this._getZ(overlay);
+
+      // Ensure always-on-top overlay stays on top.
+      if (currentOverlay && currentOverlay.alwaysOnTop && !overlay.alwaysOnTop) {
+        // This bumps the z-index of +2.
+        this._applyOverlayZ(currentOverlay, minimumZ);
+        insertionIndex--;
+        // Update minimumZ to match previous overlay's z-index.
+        var previousOverlay = this._overlays[insertionIndex - 1];
+        minimumZ = Math.max(this._getZ(previousOverlay), this._minimumZ);
+      }
+
+      // Update z-index and insert overlay.
       if (newZ <= minimumZ) {
         this._applyOverlayZ(overlay, minimumZ);
       }
+      this._overlays.splice(insertionIndex, 0, overlay);
+
+      // Get focused node.
       var element = this.deepActiveElement;
       overlay.restoreFocusNode = this._overlayParent(element) ? null : element;
     },
@@ -14534,7 +14571,7 @@ CSS properties               | Action
 
     /**
      * Returns the deepest overlay in the path.
-     * @param {?Array<Element>} path
+     * @param {Array<Element>=} path
      * @return {Element|undefined}
      * @private
      */
@@ -14824,6 +14861,13 @@ context. You should place this element as a child of `<body>` whenever possible.
       restoreFocusOnClose: {
         type: Boolean,
         value: false
+      },
+
+      /**
+       * Set to true to keep overlay always on top.
+       */
+      alwaysOnTop: {
+        type: Boolean
       },
 
       /**
@@ -15408,7 +15452,7 @@ context. You should place this element as a child of `<body>` whenever possible.
 
         /**
          * Show the toast. Without arguments, this is the same as `open()` from `IronOverlayBehavior`.
-         * @param {Object|string|undefined} properties Properties to be set before opening the toast.
+         * @param {(Object|string)=} properties Properties to be set before opening the toast.
          * e.g. `toast.show('hello')` or `toast.show({text: 'hello', duration: 3000})`
          */
         show: function(properties) {
