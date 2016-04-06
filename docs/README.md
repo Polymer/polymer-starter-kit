@@ -9,3 +9,4 @@
 * [Use PSK for Mobile Chrome Apps](mobile-chrome-apps.md)
 * [Add page transitions with neon-animated-pages](neon-animated-pages.md)
 * [Add ESLint support](add-eslint-support.md)
+* [Add Push Notifications with platinum-push-messaging](platinum-push-messaging.md)
