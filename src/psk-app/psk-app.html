@@ -1,6 +1,6 @@
 <!--
 @license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
@@ -38,7 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
 
       :host {
-        --app-primary-color: #404040;
+        --app-primary-color:  var(--paper-indigo-500);
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         font-family: 'Roboto', sans-serif;
       }
@@ -90,7 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .title {
         padding-bottom: 40px;
-        font-size: 60px;
+        font-size: 50px;
         font-weight: 800;
       }
 
@@ -114,7 +114,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         /* make title smaller to fit on screen */
         .title {
-          font-size: 40px;
+          font-size: 30px;
           padding-bottom: 16px;
         }
 
@@ -182,7 +182,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- bottom toolbar -->
           <app-toolbar class="title-toolbar main-title-toolbar">
-            <div class="title">STARTER KIT</div>
+            <h4 class="title">POLYMER STARTER KIT - [[params.page]]</h4>
           </app-toolbar>
 
         </app-header>
@@ -203,16 +203,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       },
 
-      ready: function() {
-        this.async(function() {
-          if (!this.route.path) {
-            this.set('route.path', '#/art');
-          }
-        });
-      },
-
-      _stringify: function(obj) {
-        return JSON.stringify(obj);
+      attached: function() {
+        if (!this.route.path) {
+          this.set('route.path', '/art');
+        }
       },
 
       _drawerSelected: function() {
