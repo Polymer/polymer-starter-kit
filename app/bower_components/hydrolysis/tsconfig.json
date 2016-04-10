@@ -1,0 +1,53 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "isolatedModules": false,
+        "noImplicitAny": true,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "suppressImplicitAnyIndexErrors": true
+    },
+    "filesGlob": [
+        "src/analyzer.ts",
+        "src/**/*.ts",
+        "typings/main.d.ts",
+        "custom_typings/**.d.ts"
+    ],
+    "atom": {
+        "rewriteTsconfig": true
+    },
+    "files": [
+        "src/analyzer.ts",
+        "src/ast-utils/analyze-properties.ts",
+        "src/ast-utils/ast-value.ts",
+        "src/ast-utils/behavior-finder.ts",
+        "src/ast-utils/declaration-property-handlers.ts",
+        "src/ast-utils/descriptors.ts",
+        "src/ast-utils/docs.ts",
+        "src/ast-utils/element-finder.ts",
+        "src/ast-utils/esutil.ts",
+        "src/ast-utils/feature-finder.ts",
+        "src/ast-utils/fluent-traverse.ts",
+        "src/ast-utils/import-parse.ts",
+        "src/ast-utils/js-parse.ts",
+        "src/ast-utils/jsdoc.ts",
+        "src/loader/error-swallowing-fs-resolver.ts",
+        "src/loader/file-loader.ts",
+        "src/loader/fs-resolver.ts",
+        "src/loader/noop-resolver.ts",
+        "src/loader/redirect-resolver.ts",
+        "src/loader/resolver.ts",
+        "src/loader/string-resolver.ts",
+        "src/loader/xhr-resolver.ts",
+        "typings/main.d.ts",
+        "custom_typings/doctrine.d.ts",
+        "custom_typings/dom5.d.ts",
+        "custom_typings/escodegen.d.ts",
+        "custom_typings/espree.d.ts",
+        "custom_typings/estraverse.d.ts",
+        "custom_typings/estree.d.ts",
+        "custom_typings/main.d.ts"
+    ]
+}

@@ -1,0 +1,19 @@
+doctype html
+html(lang='en')
+  head
+
+    //- build:css({.tmp/serve,src}) /styles/vendor.css -->
+    link(rel='stylesheet', href='/bower_components/some_module/main.css')
+    //- endbuild -->
+        
+        
+  body
+    block content
+    
+    //- build:js({.tmp/serve,src}) /scripts/vendor.js -->
+    script(type='text/javascript', src='/bower_components/jquery/dist/jquery.js')
+    //- endbuild -->
+    
+    //- build:js({src,.tmp/serve}) /scripts/app.js -->
+    script(type='text/javascript', src='/config.js')
+    //- endbuild -->

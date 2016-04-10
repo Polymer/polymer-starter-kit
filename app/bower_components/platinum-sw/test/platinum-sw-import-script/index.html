@@ -1,0 +1,45 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+    <script src="../controlled-promise.js"></script>
+
+    <link rel="import" href="../../platinum-sw-register.html">
+    <link rel="import" href="../../platinum-sw-import-script.html">
+  </head>
+
+  <body>
+    <platinum-sw-register skip-waiting clients-claim auto-register>
+      <platinum-sw-import-script href="post-message-echo.js"></platinum-sw-import-script>
+    </platinum-sw-register>
+
+    <script>
+      suite('Importing Service Worker Scripts', function() {
+        test('message handler is registered via imported script', function(done) {
+          return window._controlledPromise.then(function(registration) {
+            var message = 'hello';
+            var messageChannel = new MessageChannel();
+            messageChannel.port1.onmessage = function(event) {
+              assert.equal(event.data, message);
+              done();
+            };
+            registration.active.postMessage(message, [messageChannel.port2]);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

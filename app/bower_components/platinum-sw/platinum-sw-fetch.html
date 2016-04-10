@@ -1,0 +1,136 @@
+<!--
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+  /**
+   * The `<platinum-sw-fetch>` element creates custom [`fetch` event](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#fetch-event-section)
+   * handlers for given URL patterns. Possible use cases include:
+   *
+   * - Using a special caching strategy for specific URLs.
+   * - Returning static "fallback" responses instead of network errors when a remote API
+   * is unavailable.
+   *
+   * In short, any scenario in which you'd like a service worker to intercept network
+   * requests and provide custom response handling.
+   *
+   * If you'd like a single caching policy applied to all same-origin requests, then an alternative
+   * to using `<platinum-sw-fetch>` is to use `<platinum-sw-cache>` with the `defaultCacheStategy`
+   * property set.
+   *
+   * Under the hood, the [sw-toolbox](https://github.com/googlechrome/sw-toolbox) library is used
+   * for all the request handling logic.
+   *
+   * `<platinum-sw-fetch>` needs to be a child element of `<platinum-sw-register>`.
+   *
+   * An example configuration is:
+   *
+   *     <platinum-sw-register auto-register>
+   *       <platinum-sw-import-script href="custom-fetch-handler.js"></platinum-sw-import-script>
+   *       <platinum-sw-fetch handler="customFetchHandler"
+   *                          path="/(.*)/customFetch"></platinum-sw-fetch>
+   *     </platinum-sw-register>
+   *
+   * This implies that there's a `custom-fetch-handler.js` file in the same directory as the current
+   * page, which defines a `sw-toolbox` compliant
+   * [request handler](https://github.com/googlechrome/sw-toolbox#request-handlers) named
+   * `customFetchHandler`. This definition is imported using `<platinum-sw-import-script>`. The
+   * `<platinum-sw-fetch>` element takes care of mapping which request paths are handled by
+   * `customFetchHandler`.
+   *
+   * Anything not matching the `path` pattern is ignored by `<platinum-sw-fetch>`,
+   * and it's possible to have multiple `<platinum-sw-fetch>` elements that each define different
+   * paths and different handlers. The path matching is performed top-down, starting with the first
+   * `<platinum-sw-fetch>` element.
+   *
+   * The `path` will, by default, only match same-origin requests. If you'd like to define a custom
+   * handler for requests on a specific cross-origin domain, you must use the `origin` parameter
+   * in conjunction with `path` to match the domains you'd like to handle.
+   */
+  Polymer({
+    is: 'platinum-sw-fetch',
+
+    properties: {
+      /**
+       * The name of the request handler to use. This should be a `sw-toolbox`-style
+       * [request handler](https://github.com/googlechrome/sw-toolbox#request-handlers).
+       *
+       * `handler` is a `String`, not a `function`, so you're providing the name of a function, not
+       * the function itself. It can be a function defined in the
+       * [`toolbox` scope](https://github.com/googlechrome/sw-toolbox#built-in-handlers)
+       * (e.g. 'networkFirst', 'fastest', 'networkOnly', etc.) or a function defined in the
+       * [`ServiceWorkerGlobalScope`](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-global-scope),
+       * like a function that is defined in a file that's imported via `platinum-sw-import-script`.
+       **
+       * @see {@link https://github.com/GoogleChrome/sw-toolbox#built-in-handlers}
+       */
+      handler: String,
+
+      /**
+       * By default, `path` will only match URLs under the current host (i.e. same-origin requests).
+       * If you'd like to apply `handler` to cross-origin requests, then use `origin` to specify
+       * which hosts will match. Setting `origin` is optional.
+       *
+       * `origin` is a `String`, but it is used internally to construct a
+       * [`RegExp` object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions),
+       * which is used for the matching.
+       *
+       * Note that the `origin` value will be matched against the full domain name and the protocol.
+       * If you want to match  'http' and 'https', then use 'https?://' at the start of your string.
+       *
+       * Some examples:
+       * - `origin="https?://.+\.google\.com"` → a RegExp that matches `http` or `https` requests
+       *   made to any domain that ends in `.google.com`.
+       * - `origin="https://www\.example\.com" → a RegExp that will only match `https` requests to
+       *   one domain, `www.example.com`.
+       *
+       * @see {@link https://github.com/googlechrome/sw-toolbox#toolboxrouterheadurlpattern-handler-options}
+       */
+      origin: String,
+
+      /**
+       * URLs with paths matching `path` will have `handler` applied to them.
+       *
+       * By default, `path` will only match same-origin URLs. If you'd like it to match
+       * cross-origin URLs, use `path` in conjunction with `origin`.
+       *
+       * As explained in the
+       * [`sw-toolbox` docs](https://github.com/googlechrome/sw-toolbox#toolboxrouterheadurlpattern-handler-options),
+       * the URL path matching is done using the [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
+       * module, which is the same logic used in [Express-style routing](http://expressjs.com/guide/routing.html).
+       *
+       * In practice, you need to always use '/' as the first character of your `path`, and then
+       * can use '(.*)' as a wildcard.
+       *
+       * Some examples:
+       * - `path="/(.*)/customFetch"` → matches any path that ends with '/customFetch'.
+       * - `path="/customFetch(.*)"` → matches any path that starts with '/customFetch', optionally
+       *   followed by other characters.
+       *
+       * @see {@link https://github.com/pillarjs/path-to-regexp}
+       */
+      path: String
+    },
+
+    _getParameters: function(baseURI) {
+      return new Promise(function(resolve) {
+        var params = {
+          importscriptLate: new URL('bootstrap/sw-toolbox-setup.js', baseURI).href
+        };
+        if (this.path && this.handler) {
+          params.route = [this.path, this.handler, this.origin];
+        } else {
+          console.warn('The following platinum-sw-fetch element will not have any effect. ' +
+            'Both the "path" and "handler" attributes must be set.', this);
+        }
+        resolve(params);
+      }.bind(this));
+    }
+  });
+</script>

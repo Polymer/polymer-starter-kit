@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+console.log('`start-selenium` is deprecated, please use `selenium-standalone` command line.');
+console.log('Example: `selenium-standalone install && selenium-standalone start`');

@@ -1,0 +1,146 @@
+#!/usr/bin/env node
+'use strict';
+
+var colors = require('cli-color')
+  , argv = require('argh').argv
+  , Minimize = require('../')
+  , fs = require('fs')
+  , options = {};
+
+//
+// Lookup table for options.
+//
+var lookup = {
+  e: 'empty',
+  c: 'comments',
+  d: 'cdata',
+  s: 'ssi',
+  o: 'conditionals',
+  r: 'spare',
+  q: 'quotes',
+  l: 'loose'
+};
+
+//
+// Show project name.
+//
+output([
+  '',
+  '  ' + colors.bold.green('Minimize HTML'),
+  ''
+]);
+
+//
+// Display help information.
+//
+if (argv.h || argv.help) return help();
+
+//
+// Build the object hash that will be provided to minimize.
+//
+Object.keys(argv).forEach(function (key) {
+  if ('argv' === key || 'output' === key) return;
+  options[key.length === 1 ? lookup[key] : key] = true;
+});
+
+//
+// Return and display help if no content was provided as last argument.
+//
+if (!argv.argv) return help('Please provide content as last argument') && process.exit(1);
+
+//
+// Extract the content from the file or string and process.
+//
+var input = argv.argv.slice(-1)[0];
+fs.exists(input, function check(exists) {
+  if (exists) {
+    output('  Reading content from file ' + colors.cyan(input));
+    return fs.readFile(input, 'utf-8', function read(error, data) {
+      if (error) return help(error) && process.exit(1);
+      minimize(data);
+    });
+  }
+
+  output('  Using content from the CLI');
+  minimize(input);
+});
+
+/**
+ * Helper to console.log content set.
+ *
+ * @param {Array} lines Collection of lines to display.
+ * @api private
+ */
+function output(lines) {
+  lines = Array.isArray(lines) ? lines : [lines];
+  lines.forEach(function log(line) {
+    console.log(line);
+  });
+}
+
+/**
+ * Display help information.
+ *
+ * @param {Error|String} error Optionally display error message with help.
+ * @api private
+ */
+function help(error) {
+  if (error) console.error('  ' + colors.red((error.message || error).trim()));
+
+  output([
+    '  Usage: minimize [options] <filename | HTML string>',
+    '',
+    '  Options:',
+    '    ' + colors.cyan('--output <filename>') + '        store output in file',
+    '    ' + colors.cyan('-e, --empty true') + '           keep empty attributes',
+    '    ' + colors.cyan('-c, --comments true') + '        keep comments',
+    '    ' + colors.cyan('-d, --cdata true') + '           keep CDATA',
+    '    ' + colors.cyan('-s, --ssi true') + '             keep Server Side Includes (SSI)',
+    '    ' + colors.cyan('-o, --conditionals true') + '    keep conditional comments',
+    '    ' + colors.cyan('-r, --spare true') + '           keep spare attributes intact',
+    '    ' + colors.cyan('-q, --quotes true') + '          always quote attributes',
+    '    ' + colors.cyan('-l, --loose true') + '           only remove redundant whitespaces',
+    '',
+    '  Examples:',
+    '',
+    colors.xterm(8)('  # Parse HTML directly from a quoted string and keep comments'),
+    '  minimize -c ' + colors.yellow('\'<!-- will be in output --><h1 class="header">Minimize</h1>\''),
+    '',
+    colors.xterm(8)('  # Parse HTML from a file and store to output destination'),
+    '  minimize --output out.html ' + colors.yellow('/path/to/input.html'),
+    ''
+  ]);
+}
+
+/**
+ * Minimize the provided content.
+ *
+ * @param {String} content
+ * @api private
+ */
+function minimize(content) {
+  output('  Minimizing content...');
+
+  new Minimize(options).parse(content, function parsed(error, result) {
+    if (error) return help(error) && process.exit(1);
+    output('  Finished processing content');
+
+    if (argv.output) {
+      return fs.writeFile(argv.output, result, function written(error) {
+        if (error) return help(error) && process.exit(1);
+        output([
+          '',
+          '  Wrote processed content to file ' + colors.cyan(argv.output)
+        ]);
+      });
+    }
+
+    output([
+      '',
+      colors.xterm(8)('  ========================================='),
+      '',
+      colors.green(result),
+      ''
+    ]);
+  });
+}

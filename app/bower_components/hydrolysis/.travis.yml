@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "0.10"
+  - "0.12"
+  - "4"
+sudo: false
+before_script:
+  - npm run init
+script:
+  - npm run testNode

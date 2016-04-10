@@ -1,0 +1,33 @@
+{
+  "name": "hydrolysis",
+  "main": "hydrolysis.js",
+  "ignore": [
+    "lib/",
+    "examples/",
+    "demo/",
+    "test/",
+    ".gitignore",
+    "gulpfile.js",
+    "package.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Polymer/hydrolysis.git"
+  },
+  "devDependencies": {
+    "polymer": "Polymer/polymer#^0.9.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "web-component-tester": "*"
+  },
+  "version": "1.23.3",
+  "homepage": "https://github.com/Polymer/hydrolysis",
+  "_release": "1.23.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.23.3",
+    "commit": "d5cac74b62d992965b4e777a9476f80b9c96d619"
+  },
+  "_source": "git://github.com/Polymer/hydrolysis.git",
+  "_target": "^1.18",
+  "_originalSource": "Polymer/hydrolysis"
+}

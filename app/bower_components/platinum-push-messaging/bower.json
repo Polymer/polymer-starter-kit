@@ -1,0 +1,38 @@
+{
+  "name": "platinum-push-messaging",
+  "private": true,
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "description": "Subscribes for push messaging and handles notifications.",
+  "keywords": [
+    "push",
+    "messaging",
+    "notification",
+    "polymer",
+    "service-worker",
+    "serviceworker",
+    "web-component",
+    "web-components"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "demo"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "promise-polyfill": "PolymerLabs/promise-polyfill#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.2",
+    "web-component-tester": "Polymer/web-component-tester#^3.1.3",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.0",
+    "paper-material": "PolymerElements/paper-material#^1.0.0",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.0.0",
+    "paper-item": "PolymerElements/paper-item#^1.0.0"
+  },
+  "main": "platinum-push-messaging.html"
+}

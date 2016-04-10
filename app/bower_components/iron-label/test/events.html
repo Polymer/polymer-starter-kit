@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>iron-label event tests</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../test-fixture/test-fixture-mocha.js"></script>
+    <link rel="import" href="../../test-fixture/test-fixture.html">
+    <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+
+    <link rel="import" href="../iron-label.html">
+  </head>
+  <body>
+
+    <test-fixture id="Inside">
+      <template>
+        <iron-label id="inside">
+          TEXT <input type="checkbox">
+        </iron-label>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="Outside">
+      <template>
+        <iron-label id="outside" for="outside-checkbox">
+          TEXT
+        </iron-label>
+        <input id="outside-checkbox" type="checkbox">
+      </template>
+    </test-fixture>
+
+    <test-fixture id="Reordered">
+      <template>
+        <iron-label id="reordered">
+          <span>TEXT</span>
+          <input iron-label-target type="checkbox">
+        </iron-label>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('event handling', function() {
+
+        suite('target inside', function() {
+          var inside, target;
+          setup(function() {
+            inside = fixture('Inside');
+            target = inside.firstElementChild;
+          });
+
+          test('target has aria-labelledby', function() {
+            var label = target.getAttribute('aria-labelledby');
+            assert.equal(label, 'inside');
+          });
+
+          test('tap on label goes to the target', function() {
+            var count = 0;
+            Polymer.Gestures.add(target, 'tap', function() {
+              count++;
+            });
+            MockInteractions.tap(inside);
+            assert.equal(count, 1);
+          });
+
+          test('tap on target does not recurse', function() {
+            var count = 0;
+            Polymer.Gestures.add(target, 'tap', function() {
+              count++;
+            });
+            MockInteractions.tap(target);
+            assert.equal(count, 1);
+          });
+
+          test('tap on label will "activate" target', function() {
+            target.checked = false;
+            MockInteractions.tap(inside);
+            assert.equal(target.checked, true);
+          });
+        });
+
+        suite('target outside', function() {
+          var outside, target;
+          setup(function() {
+            var temp = fixture('Outside');
+            outside = temp[0];
+            target = temp[1];
+          });
+
+          test('target has aria-labelledby', function() {
+            var label = target.getAttribute('aria-labelledby');
+            assert.equal(label, 'outside');
+          });
+
+          test('tap on label goes to the target', function() {
+            var count = 0;
+            Polymer.Gestures.add(target, 'tap', function() {
+              count++;
+            });
+            MockInteractions.tap(outside);
+            assert.equal(count, 1);
+          });
+
+          test('tap on label will "activate" target', function() {
+            target.checked = false;
+            MockInteractions.tap(outside);
+            assert.equal(target.checked, true);
+          });
+        });
+
+        suite('target by reordered', function() {
+          var reordered, target;
+          setup(function() {
+            reordered = fixture('Reordered');
+            target =
+              Polymer.dom(reordered).querySelector('[iron-label-target]');
+          });
+
+          test('target has aria-labelledby', function() {
+            var label = target.getAttribute('aria-labelledby');
+            assert.equal(label, 'reordered');
+          });
+
+          test('tap on label goes to the target', function() {
+            var count = 0;
+            Polymer.Gestures.add(target, 'tap', function() {
+              count++;
+            });
+            MockInteractions.tap(reordered);
+            assert.equal(count, 1);
+          });
+
+          test('tap on label will "activate" target', function() {
+            target.checked = false;
+            MockInteractions.tap(reordered);
+            assert.equal(target.checked, true);
+          });
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

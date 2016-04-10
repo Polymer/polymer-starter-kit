@@ -1,0 +1,21 @@
+{
+	"boss": true,
+	"curly": true,
+	"eqeqeq": true,
+	"eqnull": true,
+	"expr": true,
+	"immed": true,
+	"noarg": true,
+	"smarttabs": true,
+	"trailing": true,
+	"undef": true,
+	"unused": true,
+
+	"node": true,
+	"esnext": true,
+
+	"globals": {
+		"define": false,
+		"PointerEvent": true
+	}
+}
