@@ -1,21 +1,50 @@
 {
   "name": "Polymer Starter Kit",
   "short_name": "PSK",
-  "icons": [{
-      "src": "//app-layout-assets.appspot.com/assets/zuperkulblog/launcher-icon-128x128.png",
+  "icons": [
+    {
+      "src": "images/manifest/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "images/manifest/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "images/manifest/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png"
-    }, {
-      "src": "//app-layout-assets.appspot.com/assets/zuperkulblog/launcher-icon-192x192.png",
+    },
+    {
+      "src": "images/manifest/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "images/manifest/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "images/manifest/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
-    },{
-      "src": "//app-layout-assets.appspot.com/assets/zuperkulblog/launcher-icon-384x384.png",
+    },
+    {
+      "src": "images/manifest/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png"
-    }],
-  "start_url": "index.html",
-  "background_color": "#fafafa",
+    },
+    {
+      "src": "images/manifest/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "background_color": "#3E4EB8",
+  "theme_color": "#2E3AA1",
   "display": "standalone",
-  "theme_color": "#fafafa"
+  "start_url": "/?homescreen=1"
 }
