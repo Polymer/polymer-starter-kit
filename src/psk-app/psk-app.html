@@ -23,20 +23,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../../app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../../../app-layout/app-drawer/app-drawer.html">
-<link rel="import" href="../../../app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../../../app-layout/app-header/app-header.html">
 <link rel="import" href="../../../app-layout/app-header-layout/app-header-layout.html">
-<link rel="import" href="../../../app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../../app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../../../app-layout/app-scrollpos-control/app-scrollpos-control.html">
+<link rel="import" href="../../../app-layout/app-toolbar/app-toolbar.html">
 
 <link rel="import" href="../app-icons/app-icons.html">
 
 <dom-module id="psk-app">
-
   <template>
-
     <style>
-
       :host {
         --app-primary-color:  var(--paper-indigo-500);
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -111,25 +108,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       @media (max-width: 580px) {
-
         /* make title smaller to fit on screen */
         .title {
           font-size: 30px;
           padding-bottom: 16px;
         }
-
       }
 
       /* narrow layout */
       @media (max-width: 808px) {
-
         article-detail {
           max-width: none;
           margin: 0;
         }
-
       }
-
     </style>
 
     <!-- setup routes -->
@@ -137,19 +129,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <carbon-route route="{{route}}" pattern="/:page" data="{{params}}"></carbon-route>
 
     <app-drawer-layout drawer-width="288px" responsive-width="1280px">
-
       <!-- nav panel -->
       <app-drawer id="drawer">
         <app-header-layout has-scrolling-region>
-
           <app-header fixed>
-
             <!-- top toolbar -->
             <app-toolbar></app-toolbar>
 
             <!-- bottom toolbar -->
             <app-toolbar class="title-toolbar nav-title-toolbar"></app-toolbar>
-
           </app-header>
 
           <!-- nav menu -->
@@ -162,46 +150,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <a data-page="film" href="#/film">Film</a>
             <a data-page="design" href="#/design">Design</a>
           </iron-selector>
-
         </app-header-layout>
       </app-drawer>
 
       <!-- main panel -->
       <app-header-layout>
-
         <app-header fixed effects="waterfall" class="main-header">
-
           <!-- top toolbar -->
           <app-toolbar>
             <!-- menu button -->
-            <paper-icon-button
-                drawer-toggle
-                icon="app:menu">
-            </paper-icon-button>
+            <paper-icon-button icon="app:menu" drawer-toggle></paper-icon-button>
           </app-toolbar>
 
           <!-- bottom toolbar -->
           <app-toolbar class="title-toolbar main-title-toolbar">
-            <h4 class="title">POLYMER STARTER KIT - [[params.page]]</h4>
+            <h4 class="title">Polymer Starter Kit - [[params.page]]</h4>
           </app-toolbar>
-
         </app-header>
-
       </app-header-layout>
-
     </app-drawer-layout>
-
   </template>
 
   <script>
-
     Polymer({
-
       is: 'psk-app',
-
-      properties: {
-
-      },
 
       attached: function() {
         if (!this.route.path) {
@@ -212,9 +184,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _drawerSelected: function() {
         if (!this.$.drawer.persistent) this.$.drawer.close();
       }
-
     });
-
   </script>
-
 </dom-module>
