@@ -18,7 +18,7 @@ Create a Cordova project in path `polymer-starter-kit` by following command. `pl
 cca create platform com.your.app "Your Polymer Starter Kit App"
 ```
 
-If you have no problems while creating a project you will seeing the message of  installing successful coming from Cordova and have the tree of the project below.
+If you have no problems while creating a project you will seeing the message of installing successful coming from Cordova and have the tree of the project below.
 
 ```sh
 └── polymer-starter-kit
