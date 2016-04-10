@@ -1,16 +1,12 @@
 {
   "name": "polymer-starter-kit",
-  "private": true,
   "dependencies": {
+    "app-layout": "PolymerLabs/app-layout#^0.0.15",
+    "carbon-route": "PolymerElements/carbon-route#^0.8.4",
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
     "platinum-elements": "PolymerElements/platinum-elements#^1.0.0",
-    "polymer": "Polymer/polymer#^1.0.0",
-    "carbon-route": "PolymerElements/carbon-route#~0.8.4",
-    "app-layout": "PolymerLabs/app-layout#~0.0.14"
+    "polymer": "Polymer/polymer#^1.0.0"
   },
-  "devDependencies": {
-    "web-component-tester": "^4.0.0"
-  },
-  "ignore": []
+  "private": true
 }

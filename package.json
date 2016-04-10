@@ -1,9 +1,16 @@
 {
-  "private": true,
-  "devDependencies": {
-
+  "version": "1.3.0",
+  "description": "A starting point for Polymer 1.0 apps",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:PolymerElements/polymer-starter-kit.git"
+  },
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/PolymerElements/polymer-starter-kit/issues"
   },
   "engines": {
     "node": ">=0.10.0"
-  }
+  },
+  "private": true
 }
