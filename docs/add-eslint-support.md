@@ -1,15 +1,15 @@
 # Add ESLint support
 
-This recipe helps you to create a task to use [ESLint](http://eslint.org/) tool. 
+This recipe helps you to create a task to use [ESLint](http://eslint.org) tool.
 
 
-## Create .eslintrc.json file in the root folder
+## Create `.eslintrc.json` file in the root folder
 
 ```
 {
   "extends": "eslint:recommended",
   "rules": {
-    "no-console": 0
+    "no-console": "off"
   },
   "env": {
     "browser": true
@@ -18,10 +18,10 @@ This recipe helps you to create a task to use [ESLint](http://eslint.org/) tool.
     "html"
   ],
   "globals": {
+    "Polymer": false,
     "__dirname": false,
     "app": false,
     "page": false,
-    "Polymer": false,
     "process": false,
     "require": false
   }
@@ -38,7 +38,7 @@ This recipe helps you to create a task to use [ESLint](http://eslint.org/) tool.
 
 ## Create a lint gulp task
 
-- Install the gulp-eslint and eslint-plugin-html: `npm install --save-dev gulp-eslint eslint-plugin-html`
+- Install the `gulp-eslint` and `eslint-plugin-html`: `npm install --save-dev gulp-eslint eslint-plugin-html`
 - Add the following gulp task in the `gulpfile.js` file:
 
 ```patch
@@ -70,14 +70,15 @@ Make sure the `lint` gulp task is triggered by the common build tasks:
  - In the gulp `serve` task, make sure `lint` is triggered initially and on HTML and JS files changes:
 
 ```patch
--gulp.task('serve', ['styles'], function () {
-+gulp.task('serve', ['lint', 'styles'], function () {
+- gulp.task('serve', ['styles'], function() {
++ gulp.task('serve', ['lint', 'styles'], function() {
 
   ...
 
   gulp.watch(['app/**/*.html', '!app/bower_components/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
-+ gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint', reload]);
+- gulp.watch(['app/scripts/**/*.js'], reload);
++ gulp.watch(['app/scripts/**/*.js'], ['lint', reload]);
   gulp.watch(['app/images/**/*'], reload);
 });
 ```
@@ -85,16 +86,14 @@ Make sure the `lint` gulp task is triggered by the common build tasks:
  - In the `default` task make sure `lint` is run in parallel to `images`, `fonts` and `html`:
 
 ```patch
-gulp.task('default', ['clean'], function (cb) {
-
-  ...
-
+// Build production files, the default task
+gulp.task('default', ['clean'], function(cb) {
+  // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
-    ['copy', 'styles'],
+    ['ensureFiles', 'copy', 'styles'],
 -   ['images', 'fonts', 'html'],
 +   ['lint', 'images', 'fonts', 'html'],
     'vulcanize', // 'cache-config',
     cb);
 });
 ```
-
