@@ -77,6 +77,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: #888;
       }
 
+      iron-pages a {
+        color: var(--app-primary-color);
+      }
+
       .main-header {
         border-bottom: 1px solid #ddd;
         background-color: #fff;
@@ -173,10 +177,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
       </app-header-layout>
 
-      <iron-pages selected="[[params.page]]" attr-for-selected="data-page">
+      <iron-pages selected="{{params.page}}"
+                  attr-for-selected="data-page"
+                  fallback-selection="404">
         <psk-page-art data-page="art"></psk-page-art>
         <psk-page-film data-page="film"></psk-page-film>
         <psk-page-design data-page="design"></psk-page-design>
+        <section data-page="404">
+          Oops you hit a 404. <a href="#/art">Head back to home.</a>
+        </section>
       </iron-pages>
     </app-drawer-layout>
   </template>
