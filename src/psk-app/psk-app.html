@@ -135,7 +135,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- setup routes -->
     <carbon-location route="{{_route}}" use-hash-as-path></carbon-location>
-    <carbon-route route="{{_route}}" pattern="/:page" data="{{params}}"></carbon-route>
+    <carbon-route route="{{_route}}" pattern="/:page" data="{{_routeData}}"></carbon-route>
 
     <app-drawer-layout drawer-width="288px" responsive-width="1280px">
       <!-- nav panel -->
@@ -152,7 +152,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <!-- nav menu -->
           <iron-selector
               class="nav-menu"
-              selected="[[params.page]]"
+              selected="[[_routeData.page]]"
               attr-for-selected="data-page"
               on-iron-activate="_drawerSelected">
             <a data-page="art" href="#/art">Art</a>
@@ -173,12 +173,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- bottom toolbar -->
           <app-toolbar class="title-toolbar main-title-toolbar">
-            <h4 class="title">Polymer Starter Kit - [[params.page]]</h4>
+            <h4 class="title">Polymer Starter Kit - [[_routeData.page]]</h4>
           </app-toolbar>
         </app-header>
       </app-header-layout>
 
-      <iron-pages selected="[[params.page]]" attr-for-selected="data-page" fallback-selection="404">
+      <iron-pages selected="[[_routeData.page]]" attr-for-selected="data-page" fallback-selection="404">
         <psk-page-art data-page="art"></psk-page-art>
         <psk-page-film data-page="film"></psk-page-film>
         <psk-page-design data-page="design"></psk-page-design>
@@ -193,6 +193,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       properties: {
         _route: {
+          type: Object
+        },
+
+        _routeData: {
           type: Object
         }
       },
