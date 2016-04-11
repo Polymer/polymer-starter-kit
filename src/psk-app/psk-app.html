@@ -31,6 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../app-layout/app-toolbar/app-toolbar.html">
 
 <link rel="import" href="../app-icons/app-icons.html">
+<link rel="import" href="../psk-pages/psk-page-404.html">
 <link rel="import" href="../psk-pages/psk-page-art.html">
 <link rel="import" href="../psk-pages/psk-page-design.html">
 <link rel="import" href="../psk-pages/psk-page-film.html">
@@ -177,15 +178,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
       </app-header-layout>
 
-      <iron-pages selected="{{params.page}}"
-                  attr-for-selected="data-page"
-                  fallback-selection="404">
+      <iron-pages selected="[[params.page]]" attr-for-selected="data-page" fallback-selection="404">
         <psk-page-art data-page="art"></psk-page-art>
         <psk-page-film data-page="film"></psk-page-film>
         <psk-page-design data-page="design"></psk-page-design>
-        <section data-page="404">
-          Oops you hit a 404. <a href="#/art">Head back to home.</a>
-        </section>
+        <psk-page-404 data-page="404"></psk-page-404>
       </iron-pages>
     </app-drawer-layout>
   </template>
