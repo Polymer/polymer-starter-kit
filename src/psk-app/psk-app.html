@@ -134,8 +134,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <!-- setup routes -->
-    <carbon-location route="{{route}}" use-hash-as-path></carbon-location>
-    <carbon-route route="{{route}}" pattern="/:page" data="{{params}}"></carbon-route>
+    <carbon-location route="{{_route}}" use-hash-as-path></carbon-location>
+    <carbon-route route="{{_route}}" pattern="/:page" data="{{params}}"></carbon-route>
 
     <app-drawer-layout drawer-width="288px" responsive-width="1280px">
       <!-- nav panel -->
@@ -191,9 +191,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'psk-app',
 
+      properties: {
+        _route: {
+          type: Object
+        }
+      },
+
       attached: function() {
-        if (!this.route.path) {
-          this.set('route.path', '/art');
+        if (!this._route.path) {
+          this.set('_route.path', '/art');
         }
       },
 
