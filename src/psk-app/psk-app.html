@@ -175,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- bottom toolbar -->
           <app-toolbar class="title-toolbar main-title-toolbar">
-            <h4 class="title">Polymer Starter Kit 2 - [[_getPageName(params.page)]]</h4>
+            <h4 class="title">Polymer Starter Kit</h4>
           </app-toolbar>
         </app-header>
       </app-header-layout>
@@ -204,14 +204,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (!this.$.drawer.persistent) this.$.drawer.close();
       },
 
-      _getPageName: function(pageName) {
-        if (!pageName || pageName == '') {
-          return 'Home'
-        } else {
-          // Make Proper Case
-          return pageName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-        }
-      }
     });
   </script>
 </dom-module>
