@@ -9287,6 +9287,15 @@ this.fire('dom-change');
       },
 
       /**
+       * Default fallback if the selection based on selected with `attrForSelected`
+       * is not found.
+       */
+      fallbackSelection: {
+        type: String,
+        value: null
+      },
+
+      /**
        * The list of items from which a selection can be made.
        */
       items: {
@@ -9316,7 +9325,8 @@ this.fire('dom-change');
 
     observers: [
       '_updateAttrForSelected(attrForSelected)',
-      '_updateSelected(selected)'
+      '_updateSelected(selected)',
+      '_checkFallback(fallbackSelection)'
     ],
 
     created: function() {
@@ -9402,6 +9412,12 @@ this.fire('dom-change');
       return this.selected != null;
     },
 
+    _checkFallback: function() {
+      if (this._shouldUpdateSelection) {
+        this._updateSelected();
+      }
+    },
+
     _addListener: function(eventName) {
       this.listen(this, eventName, '_activateHandler');
     },
@@ -9423,7 +9439,7 @@ this.fire('dom-change');
 
     _updateAttrForSelected: function() {
       if (this._shouldUpdateSelection) {
-        this.selected = this._indexToValue(this.indexOf(this.selectedItem));        
+        this.selected = this._indexToValue(this.indexOf(this.selectedItem));
       }
     },
 
@@ -9433,6 +9449,11 @@ this.fire('dom-change');
 
     _selectSelected: function(selected) {
       this._selection.select(this._valueToItem(this.selected));
+      // Check for items, since this array is populated only when attached
+      // Since Number(0) is falsy, explicitly check for undefined
+      if (this.fallbackSelection && this.items.length && (this._selection.get() === undefined)) {
+        this.selected = this.fallbackSelection;
+      }
     },
 
     _filterItem: function(node) {
@@ -9651,7 +9672,7 @@ this.fire('dom-change');
         Polymer.IronSelectableBehavior._updateAttrForSelected.apply(this);
       } else if (this._shouldUpdateSelection) {
         this.selectedValues = this.selectedItems.map(function(selectedItem) {
-          return this._indexToValue(this.indexOf(selectedItem));        
+          return this._indexToValue(this.indexOf(selectedItem));
         }, this).filter(function(unfilteredValue) {
           return unfilteredValue != null;
         }, this);
@@ -9674,6 +9695,13 @@ this.fire('dom-change');
         // select only those not selected yet
         for (var i = 0; i < selectedItems.length; i++) {
           this._selection.setItemSelected(selectedItems[i], true);
+        }
+        // Check for items, since this array is populated only when attached
+        if (this.fallbackSelection && this.items.length && !this._selection.get().length) {
+          var fallback = this._valueToItem(this.fallbackSelection);
+          if (fallback) {
+            this.selectedValues = [this.fallbackSelection];
+          }
         }
       } else {
         this._selection.clear();
@@ -9698,7 +9726,6 @@ this.fire('dom-change');
       } else {
         this.splice('selectedValues',i,1);
       }
-      this._selection.setItemSelected(this._valueToItem(value), unselected);
     },
 
     _valuesToItems: function(values) {
@@ -9740,6 +9767,20 @@ this.fire('dom-change');
         <div name="bar">Bar</div>
         <div name="zot">Zot</div>
       </iron-selector>
+
+  If no matching element is found using `attForSelected`, use `fallbackSelection` as fallback.
+
+  Example:
+
+        <iron-selector attr-for-selected="name" selected="non-existing"
+                       fallback-selection="default">
+          <div name="foo">Foo</div>
+          <div name="bar">Bar</div>
+          <div name="default">Default</div>
+        </iron-selector>
+
+  Note: When the selector is multi, the selection will set to `fallbackSelection` iff
+  the number of matching elements is zero.
 
   `iron-selector` is not styled. Use the `iron-selected` CSS class to style the selected element.
 
@@ -12673,40 +12714,207 @@ this.fire('dom-change');
     Polymer.PaperItemBehaviorImpl
   ];
 </script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,500italic,700,700italic">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700">
+<style is="custom-style">
+
+  :root {
+
+    /* Shared Styles */
+    --paper-font-common-base: {
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    };
+
+    --paper-font-common-code: {
+      font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
+      -webkit-font-smoothing: antialiased;
+    };
+
+    --paper-font-common-expensive-kerning: {
+      text-rendering: optimizeLegibility;
+    };
+
+    --paper-font-common-nowrap: {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    };
+
+    /* Material Font Styles */
+
+    --paper-font-display4: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
+
+      font-size: 112px;
+      font-weight: 300;
+      letter-spacing: -.044em;
+      line-height: 120px;
+    };
+
+    --paper-font-display3: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
+
+      font-size: 56px;
+      font-weight: 400;
+      letter-spacing: -.026em;
+      line-height: 60px;
+    };
+
+    --paper-font-display2: {
+      @apply(--paper-font-common-base);
+
+      font-size: 45px;
+      font-weight: 400;
+      letter-spacing: -.018em;
+      line-height: 48px;
+    };
+
+    --paper-font-display1: {
+      @apply(--paper-font-common-base);
+
+      font-size: 34px;
+      font-weight: 400;
+      letter-spacing: -.01em;
+      line-height: 40px;
+    };
+
+    --paper-font-headline: {
+      @apply(--paper-font-common-base);
+
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -.012em;
+      line-height: 32px;
+    };
+
+    --paper-font-title: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
+
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 28px;
+    };
+
+    --paper-font-subhead: {
+      @apply(--paper-font-common-base);
+
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+    };
+
+    --paper-font-body2: {
+      @apply(--paper-font-common-base);
+
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 24px;
+    };
+
+    --paper-font-body1: {
+      @apply(--paper-font-common-base);
+
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+    };
+
+    --paper-font-caption: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
+
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.011em;
+      line-height: 20px;
+    };
+
+    --paper-font-menu: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
+
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 24px;
+    };
+
+    --paper-font-button: {
+      @apply(--paper-font-common-base);
+      @apply(--paper-font-common-nowrap);
+
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.018em;
+      line-height: 24px;
+      text-transform: uppercase;
+    };
+
+    --paper-font-code2: {
+      @apply(--paper-font-common-code);
+
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 20px;
+    };
+
+    --paper-font-code1: {
+      @apply(--paper-font-common-code);
+
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+    };
+
+  }
+
+</style>
 <dom-module id="paper-item-shared-styles" assetpath="../bower_components/paper-item/">
   <template>
     <style>
-      :host {
+      :host, .paper-item {
         display: block;
         position: relative;
         min-height: var(--paper-item-min-height, 48px);
         padding: 0px 16px;
       }
 
-      :host([hidden]) {
+      .paper-item {
+        @apply(--paper-font-subhead);
+        border:none;
+        outline: none;
+        background: white;
+        width: 100%;
+        text-align: left;
+      }
+
+      :host([hidden]), .paper-item[hidden] {
         display: none !important;
       }
 
-      :host(.iron-selected) {
+      :host(.iron-selected), .paper-item.iron-selected {
         font-weight: var(--paper-item-selected-weight, bold);
 
         @apply(--paper-item-selected);
       }
 
-      :host([disabled]) {
+      :host([disabled]), .paper-item[disabled] {
         color: var(--paper-item-disabled-color, --disabled-text-color);
 
         @apply(--paper-item-disabled);
       }
 
-      :host(:focus) {
+      :host(:focus), .paper-item:focus {
         position: relative;
         outline: 0;
 
         @apply(--paper-item-focused);
       }
 
-      :host(:focus):before {
+      :host(:focus):before, .paper-item:focus:before {
         @apply(--layout-fit);
 
         background: currentColor;
@@ -13768,164 +13976,6 @@ this.fire('dom-change');
 })();
 
 </script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,500italic,700,700italic">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700">
-<style is="custom-style">
-
-  :root {
-
-    /* Shared Styles */
-    --paper-font-common-base: {
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-    };
-
-    --paper-font-common-code: {
-      font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
-      -webkit-font-smoothing: antialiased;
-    };
-
-    --paper-font-common-expensive-kerning: {
-      text-rendering: optimizeLegibility;
-    };
-
-    --paper-font-common-nowrap: {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    };
-
-    /* Material Font Styles */
-
-    --paper-font-display4: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 112px;
-      font-weight: 300;
-      letter-spacing: -.044em;
-      line-height: 120px;
-    };
-
-    --paper-font-display3: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 56px;
-      font-weight: 400;
-      letter-spacing: -.026em;
-      line-height: 60px;
-    };
-
-    --paper-font-display2: {
-      @apply(--paper-font-common-base);
-
-      font-size: 45px;
-      font-weight: 400;
-      letter-spacing: -.018em;
-      line-height: 48px;
-    };
-
-    --paper-font-display1: {
-      @apply(--paper-font-common-base);
-
-      font-size: 34px;
-      font-weight: 400;
-      letter-spacing: -.01em;
-      line-height: 40px;
-    };
-
-    --paper-font-headline: {
-      @apply(--paper-font-common-base);
-
-      font-size: 24px;
-      font-weight: 400;
-      letter-spacing: -.012em;
-      line-height: 32px;
-    };
-
-    --paper-font-title: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 20px;
-      font-weight: 500;
-      line-height: 28px;
-    };
-
-    --paper-font-subhead: {
-      @apply(--paper-font-common-base);
-
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 24px;
-    };
-
-    --paper-font-body2: {
-      @apply(--paper-font-common-base);
-
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 24px;
-    };
-
-    --paper-font-body1: {
-      @apply(--paper-font-common-base);
-
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 20px;
-    };
-
-    --paper-font-caption: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.011em;
-      line-height: 20px;
-    };
-
-    --paper-font-menu: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 13px;
-      font-weight: 500;
-      line-height: 24px;
-    };
-
-    --paper-font-button: {
-      @apply(--paper-font-common-base);
-      @apply(--paper-font-common-nowrap);
-
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.018em;
-      line-height: 24px;
-      text-transform: uppercase;
-    };
-
-    --paper-font-code2: {
-      @apply(--paper-font-common-code);
-
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 20px;
-    };
-
-    --paper-font-code1: {
-      @apply(--paper-font-common-code);
-
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 20px;
-    };
-
-  }
-
-</style>
 
 
 <dom-module id="iron-a11y-announcer" assetpath="../bower_components/iron-a11y-announcer/">
@@ -14294,11 +14344,10 @@ CSS properties               | Action
      */
     this._backdropElement = null;
 
-    // Enable document-wide tap recognizer.
-    Polymer.Gestures.add(document, 'tap', null);
-    // We should be using only 'tap', but this would be a breaking change.
-    var tapEvent = ('ontouchstart' in window) ? 'tap' : 'click';
-    document.addEventListener(tapEvent, this._onCaptureClick.bind(this), true);
+    // Listen to mousedown or touchstart to be sure to be the first to capture
+    // clicks outside the overlay.
+    var clickEvent = ('ontouchstart' in window) ? 'touchstart' : 'mousedown';
+    document.addEventListener(clickEvent, this._onCaptureClick.bind(this), true);
     document.addEventListener('focus', this._onCaptureFocus.bind(this), true);
     document.addEventListener('keydown', this._onCaptureKeyDown.bind(this), true);
   };
@@ -14309,7 +14358,7 @@ CSS properties               | Action
 
     /**
      * The shared backdrop element.
-     * @type {Element} backdropElement
+     * @type {!Element} backdropElement
      */
     get backdropElement() {
       if (!this._backdropElement) {
@@ -14320,7 +14369,7 @@ CSS properties               | Action
 
     /**
      * The deepest active element.
-     * @type {Element} activeElement the active element
+     * @type {!Element} activeElement the active element
      */
     get deepActiveElement() {
       // document.activeElement can be null
@@ -14340,13 +14389,17 @@ CSS properties               | Action
      */
     _bringOverlayAtIndexToFront: function(i) {
       var overlay = this._overlays[i];
+      if (!overlay) {
+        return;
+      }
       var lastI = this._overlays.length - 1;
+      var currentOverlay = this._overlays[lastI];
       // Ensure always-on-top overlay stays on top.
-      if (!overlay.alwaysOnTop && this._overlays[lastI].alwaysOnTop) {
+      if (currentOverlay && this._shouldBeBehindOverlay(overlay, currentOverlay)) {
         lastI--;
       }
       // If already the top element, return.
-      if (!overlay || i >= lastI) {
+      if (i >= lastI) {
         return;
       }
       // Update z-index to be on top.
@@ -14366,7 +14419,7 @@ CSS properties               | Action
     /**
      * Adds the overlay and updates its z-index if it's opened, or removes it if it's closed.
      * Also updates the backdrop z-index.
-     * @param {Element} overlay
+     * @param {!Element} overlay
      */
     addOrRemoveOverlay: function(overlay) {
       if (overlay.opened) {
@@ -14380,7 +14433,7 @@ CSS properties               | Action
     /**
      * Tracks overlays for z-index and focus management.
      * Ensures the last added overlay with always-on-top remains on top.
-     * @param {Element} overlay
+     * @param {!Element} overlay
      */
     addOverlay: function(overlay) {
       var i = this._overlays.indexOf(overlay);
@@ -14394,7 +14447,7 @@ CSS properties               | Action
       var newZ = this._getZ(overlay);
 
       // Ensure always-on-top overlay stays on top.
-      if (currentOverlay && currentOverlay.alwaysOnTop && !overlay.alwaysOnTop) {
+      if (currentOverlay && this._shouldBeBehindOverlay(overlay, currentOverlay)) {
         // This bumps the z-index of +2.
         this._applyOverlayZ(currentOverlay, minimumZ);
         insertionIndex--;
@@ -14415,7 +14468,7 @@ CSS properties               | Action
     },
 
     /**
-     * @param {Element} overlay
+     * @param {!Element} overlay
      */
     removeOverlay: function(overlay) {
       var i = this._overlays.indexOf(overlay);
@@ -14423,7 +14476,6 @@ CSS properties               | Action
         return;
       }
       this._overlays.splice(i, 1);
-      this._setZ(overlay, '');
 
       var node = overlay.restoreFocusOnClose ? overlay.restoreFocusNode : null;
       overlay.restoreFocusNode = null;
@@ -14523,7 +14575,7 @@ CSS properties               | Action
     _getZ: function(overlay) {
       var z = this._minimumZ;
       if (overlay) {
-        var z1 = Number(window.getComputedStyle(overlay).zIndex);
+        var z1 = Number(overlay.style.zIndex || window.getComputedStyle(overlay).zIndex);
         // Check if is a number
         // Number.isNaN not supported in IE 10+
         if (z1 === z1) {
@@ -14534,7 +14586,7 @@ CSS properties               | Action
     },
 
     /**
-     * @param {Element} element
+     * @param {!Element} element
      * @param {number|string} z
      * @private
      */
@@ -14543,7 +14595,7 @@ CSS properties               | Action
     },
 
     /**
-     * @param {Element} overlay
+     * @param {!Element} overlay
      * @param {number} aboveZ
      * @private
      */
@@ -14623,6 +14675,19 @@ CSS properties               | Action
           overlay._onCaptureTab(event);
         }
       }
+    },
+
+    /**
+     * Returns if the overlay1 should be behind overlay2.
+     * @param {!Element} overlay1
+     * @param {!Element} overlay2
+     * @return {boolean}
+     * @private
+     */
+    _shouldBeBehindOverlay: function(overlay1, overlay2) {
+      var o1 = /** @type {?} */ (overlay1);
+      var o2 = /** @type {?} */ (overlay2);
+      return !o1.alwaysOnTop && o2.alwaysOnTop;
     }
   };
 
@@ -14638,8 +14703,8 @@ CSS properties               | Action
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       background-color: var(--iron-overlay-backdrop-background-color, #000);
       opacity: 0;
       transition: opacity 0.2s;
@@ -14752,6 +14817,9 @@ CSS properties               | Action
 
 </script>
 <script>
+// IIFE to help scripts concatenation.
+(function() {
+'use strict';
 
 /**
 Use `Polymer.IronOverlayBehavior` to implement an element that can be hidden or shown, and displays
@@ -14970,6 +15038,10 @@ context. You should place this element as a child of `<body>` whenever possible.
       this.__shouldRemoveTabIndex = false;
       // Used for wrapping the focus on TAB / Shift+TAB.
       this.__firstFocusableNode = this.__lastFocusableNode = null;
+      // Used for requestAnimationFrame when opened changes.
+      this.__openChangedAsync = null;
+      // Used for requestAnimationFrame when iron-resize is fired.
+      this.__onIronResizeAsync = null;
       this._ensureSetup();
     },
 
@@ -15054,26 +15126,22 @@ context. You should place this element as a child of `<body>` whenever possible.
 
       this.__isAnimating = true;
 
+      // requestAnimationFrame for non-blocking rendering
+      if (this.__openChangedAsync) {
+        window.cancelAnimationFrame(this.__openChangedAsync);
+      }
       if (this.opened) {
-        this._prepareRenderOpened();
-      }
-      if (this._openChangedAsync) {
-        this.cancelAsync(this._openChangedAsync);
-      }
-      // Async here to allow overlay layer to become visible.
-      this._openChangedAsync = this.async(function() {
-        // overlay becomes visible here
-        this.style.display = '';
-        // Force layout to ensure transition will go. Set offsetWidth to itself
-        // so that compilers won't remove it.
-        this.offsetWidth = this.offsetWidth;
-        if (this.opened) {
-          this._renderOpened();
-        } else {
-          this._renderClosed();
+        if (this.withBackdrop) {
+          this.backdropElement.prepare();
         }
-        this._openChangedAsync = null;
-      });
+        this.__openChangedAsync = window.requestAnimationFrame(function() {
+          this.__openChangedAsync = null;
+          this._prepareRenderOpened();
+          this._renderOpened();
+        }.bind(this));
+      } else {
+        this._renderClosed();
+      }
     },
 
     _canceledChanged: function() {
@@ -15115,10 +15183,6 @@ context. You should place this element as a child of `<body>` whenever possible.
       this._preparePositioning();
       this.refit();
       this._finishPositioning();
-
-      if (this.withBackdrop) {
-        this.backdropElement.prepare();
-      }
 
       // Safari will apply the focus to the autofocus element when displayed for the first time,
       // so we blur it. Later, _applyFocus will set the focus if necessary.
@@ -15169,6 +15233,8 @@ context. You should place this element as a child of `<body>` whenever possible.
     _finishRenderClosed: function() {
       // Hide the overlay and remove the backdrop.
       this.style.display = 'none';
+      // Reset z-index only at the end of the animation.
+      this.style.zIndex = '';
 
       this._applyFocus();
 
@@ -15184,12 +15250,18 @@ context. You should place this element as a child of `<body>` whenever possible.
     },
 
     _finishPositioning: function() {
+      // First, make it invisible & reactivate animations.
       this.style.display = 'none';
-      this.style.transform = this.style.webkitTransform = '';
-      // Force layout layout to avoid application of transform.
-      // Set offsetWidth to itself so that compilers won't remove it.
-      this.offsetWidth = this.offsetWidth;
+      // Force reflow before re-enabling animations so that they don't start.
+      // Set scrollTop to itself so that Closure Compiler doesn't remove this.
+      this.scrollTop = this.scrollTop;
       this.style.transition = this.style.webkitTransition = '';
+      this.style.transform = this.style.webkitTransform = '';
+      // Now that animations are enabled, make it visible again
+      this.style.display = '';
+      // Force reflow, so that following animations are properly started.
+      // Set scrollTop to itself so that Closure Compiler doesn't remove this.
+      this.scrollTop = this.scrollTop;
     },
 
     /**
@@ -15272,12 +15344,15 @@ context. You should place this element as a child of `<body>` whenever possible.
      * @protected
      */
     _onIronResize: function() {
-      if (this.__isAnimating) {
-        return;
+      if (this.__onIronResizeAsync) {
+        window.cancelAnimationFrame(this.__onIronResizeAsync);
+        this.__onIronResizeAsync = null;
       }
-
-      if (this.opened) {
-        this.refit();
+      if (this.opened && !this.__isAnimating) {
+        this.__onIronResizeAsync = window.requestAnimationFrame(function() {
+          this.__onIronResizeAsync = null;
+          this.refit();
+        }.bind(this));
       }
     },
 
@@ -15320,6 +15395,7 @@ context. You should place this element as a child of `<body>` whenever possible.
   * @param {{canceled: (boolean|undefined)}} closingReason Contains `canceled` (whether the overlay was canceled).
   */
 
+})();
 </script>
 
 
