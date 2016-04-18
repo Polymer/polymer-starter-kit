@@ -31,6 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../app-layout/app-toolbar/app-toolbar.html">
 
 <link rel="import" href="../app-icons/app-icons.html">
+<link rel="import" href="../psk-pages/psk-page-home.html">
 <link rel="import" href="../psk-pages/psk-page-art.html">
 <link rel="import" href="../psk-pages/psk-page-design.html">
 <link rel="import" href="../psk-pages/psk-page-film.html">
@@ -74,7 +75,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .nav-menu > a.iron-selected {
-        background-color: #888;
+        background-color: var(--paper-indigo-800);
       }
 
       .main-header {
@@ -150,6 +151,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               selected="[[params.page]]"
               attr-for-selected="data-page"
               on-iron-activate="_drawerSelected">
+            <a data-page="" href="#/">Home</a>
             <a data-page="art" href="#/art">Art</a>
             <a data-page="film" href="#/film">Film</a>
             <a data-page="design" href="#/design">Design</a>
@@ -168,12 +170,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- bottom toolbar -->
           <app-toolbar class="title-toolbar main-title-toolbar">
-            <h4 class="title">Polymer Starter Kit - [[params.page]]</h4>
+            <h4 class="title">Polymer Starter Kit 2 - [[_getPageName(params.page)]]</h4>
           </app-toolbar>
         </app-header>
       </app-header-layout>
 
       <iron-pages selected="[[params.page]]" attr-for-selected="data-page">
+        <psk-page-home data-page=""></psk-page-home>
         <psk-page-art data-page="art"></psk-page-art>
         <psk-page-film data-page="film"></psk-page-film>
         <psk-page-design data-page="design"></psk-page-design>
@@ -187,12 +190,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       attached: function() {
         if (!this.route.path) {
-          this.set('route.path', '/art');
+          this.set('route.path', '/');
         }
       },
 
       _drawerSelected: function() {
         if (!this.$.drawer.persistent) this.$.drawer.close();
+      },
+
+      _getPageName: function(pageName) {
+        if (!pageName || pageName == '') {
+          return 'Home'
+        } else {
+          // Make Proper Case
+          return pageName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        }
       }
     });
   </script>

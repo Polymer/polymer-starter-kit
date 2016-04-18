@@ -8,22 +8,21 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<!doctype html>
-<html>
-  <head>
-    <title>Polymer Starter Kit 2</title>
+<link rel="import" href="../../../polymer/polymer.html">
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <meta name="theme-color" content="#fafafa">
+<dom-module id="psk-page-home">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
 
-    <link rel="manifest" href="manifest.json">
-
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-
-    <link rel="import" href="src/psk-app/psk-app.html">
-  </head>
-  <body>
-    <psk-app></psk-app>
-  </body>
-</html>
+    <span>psk-page-home</span>
+  </template>
+  <script>
+    Polymer({
+      is: 'psk-page-home'
+    });
+  </script>
+</dom-module>
