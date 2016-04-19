@@ -24,6 +24,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       body {
         margin: 0;
       }
+
+      /* shared style for page titles */
+      .page-title {
+        font-size: 40px;
+        margin-left: 40px;
+        color: #37474F;
+      }
+
+      @media (max-width: 580px) {
+        /* make page title smaller */
+        .page-title {
+          font-size: 26px;
+        }
+      }
     </style>
 
     <link rel="import" href="src/psk-app/psk-app.html">
