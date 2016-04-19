@@ -41,9 +41,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        --app-primary-color:  var(--paper-indigo-500);
+        --app-primary-color:  var(--paper-grey-800);
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+        display: block;
         font-family: 'Roboto', sans-serif;
+        background-color: var(--paper-grey-50);
       }
 
       app-drawer {
@@ -76,11 +79,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .nav-menu > a.iron-selected {
-        background-color: var(--paper-indigo-800);
+        background-color: var(--paper-grey-600);
       }
 
       iron-pages a {
         color: var(--app-primary-color);
+      }
+
+      iron-pages > * {
+        min-height: 100vh;
       }
 
       .main-header {
@@ -113,23 +120,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 100%;
       }
 
-      .category-page {
-        min-height: 100vh;
-      }
-
       @media (max-width: 580px) {
         /* make title smaller to fit on screen */
         .title {
           font-size: 30px;
           padding-bottom: 16px;
-        }
-      }
-
-      /* narrow layout */
-      @media (max-width: 808px) {
-        article-detail {
-          max-width: none;
-          margin: 0;
         }
       }
     </style>
@@ -175,7 +170,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- bottom toolbar -->
           <app-toolbar class="title-toolbar main-title-toolbar">
-            <h4 class="title">Polymer Starter Kit</h4>
+            <h1 class="title">Polymer Starter Kit</h1>
           </app-toolbar>
         </app-header>
       </app-header-layout>
