@@ -55,6 +55,16 @@ With Node.js installed, run the following one liner from the root of your Polyme
 npm install -g gulp bower && npm install && bower install
 ```
 
+#### Nitrous Quickstart
+
+You can quickly create a free development environment for this project in the cloud on www.nitrous.io:
+
+<a href="https://www.nitrous.io/quickstart">
+  <img src="https://nitrous-image-icons.s3.amazonaws.com/quickstart.png" alt="Nitrous Quickstart" width=142 height=34>
+</a>
+
+In the IDE, start this project via `Run > Start Polymer Starter Kit` and access your site via `Preview > 5000`.
+
 #### Prerequisites (for everyone)
 
 The full starter kit requires the following major dependencies:

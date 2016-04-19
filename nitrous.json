@@ -1,0 +1,10 @@
+{
+  "template": "nodejs",
+  "ports": [5000, 3001],
+  "name": "Polymer Starter Kit",
+  "description": "A starting point for building web applications with Polymer 1.0",
+  "scripts": {
+    "post-create": "cd ~/code/polymer-starter-kit && echo 'running npm install...' && npm install -g gulp bower && npm install --no-progress && echo 'done npm install' && echo 'running bower install...' && bower install && echo 'bower install done'",
+    "Start Polymer Starter Kit": "cd ~/code/polymer-starter-kit && gulp serve"
+  }
+}
