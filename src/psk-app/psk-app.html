@@ -136,7 +136,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- setup routes -->
     <carbon-location route="{{route}}" use-hash-as-path></carbon-location>
-    <carbon-route route="{{route}}" pattern="/:page" data="{{params}}"></carbon-route>
+    <carbon-route route="{{route}}" pattern="/:page" data="{{pageData}}"></carbon-route>
 
     <app-drawer-layout drawer-width="288px" responsive-width="1280px">
       <!-- nav panel -->
@@ -153,7 +153,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <!-- nav menu -->
           <iron-selector
               class="nav-menu"
-              selected="[[params.page]]"
+              selected="[[pageData.page]]"
               attr-for-selected="data-page"
               on-iron-activate="_drawerSelected">
             <a data-page="" href="#/">Home</a>
@@ -180,7 +180,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
       </app-header-layout>
 
-      <iron-pages selected="[[params.page]]" attr-for-selected="data-page" fallback-selection="404">
+      <iron-pages selected="[[pageData.page]]" attr-for-selected="data-page" fallback-selection="404">
         <psk-page-home data-page=""></psk-page-home>
         <psk-page-art data-page="art"></psk-page-art>
         <psk-page-film data-page="film"></psk-page-film>
