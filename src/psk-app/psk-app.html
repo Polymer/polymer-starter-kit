@@ -133,6 +133,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <carbon-location route="{{route}}" use-hash-as-path></carbon-location>
     <carbon-route route="{{route}}" pattern="/:page" data="{{pageData}}"></carbon-route>
 
+    <app-scrollpos-control selected="{{pageData.page}}"></app-scrollpos-control>
+
     <app-drawer-layout drawer-width="288px" responsive-width="1280px">
       <!-- nav panel -->
       <app-drawer id="drawer">
