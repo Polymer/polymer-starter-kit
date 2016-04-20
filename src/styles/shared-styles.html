@@ -7,25 +7,26 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../../../polymer/polymer.html">
-<link rel="import" href="../../../app-layout/demo/sample-content.html">
-<link rel="import" href="../styles/shared-styles.html">
+<link rel="import" href="../../../paper-styles/color.html">
 
-<dom-module id="psk-page-film">
+<!-- shared styles for all elements -->
+<dom-module id="shared-styles">
   <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <style>
+      /* shared style for page titles */
+      .page-title {
+        font-size: 40px;
+        margin-left: 40px;
+        color: var(--paper-grey-800);
+      }
+
+      @media (max-width: 580px) {
+        /* make page title smaller */
+        .page-title {
+          font-size: 26px;
+        }
       }
     </style>
-
-    <h2 class="page-title">Film</h2>
-    <sample-content size="100"></sample-content>
   </template>
-  <script>
-    Polymer({
-      is: 'psk-page-film'
-    });
-  </script>
 </dom-module>
