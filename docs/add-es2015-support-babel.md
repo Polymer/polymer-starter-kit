@@ -42,19 +42,18 @@ Make sure the `js` gulp task is triggered by the common build tasks:
  - In the gulp `serve` task, make sure `js` is triggered initially and on HTML and JS files changes:
 
 ```patch
--gulp.task('serve', ['styles'], function () {
-+gulp.task('serve', ['styles', 'js'], function () {
+- gulp.task('serve', ['styles'], function () {
++ gulp.task('serve', ['styles', 'js'], function () {
 
   ...
 
 - gulp.watch(['app/**/*.html', '!app/bower_components/**/*.html'], reload);
 + gulp.watch(['app/**/*.html', '!app/bower_components/**/*.html'], ['js', reload]);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
-- gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint']);
-+ gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint', 'js']);
+- gulp.watch(['app/scripts/**/*.js'], reload);
++ gulp.watch(['app/scripts/**/*.js'], ['js', reload]);
   gulp.watch(['app/images/**/*'], reload);
 });
-```
 
  - In the `default` task:
 
@@ -65,35 +64,26 @@ gulp.task('default', ['clean'], function(cb) {
 
   runSequence(
     ['ensureFiles', 'copy', 'styles'],
--   ['build'],
-+   ['js', build],
++   'js',
+-   ['images', 'fonts', 'html'],
+    'build',
     'vulcanize', // 'cache-config',
     cb);
 });
 ```
 
- - In the `html` task replace `app` in the paths by `dist` since dist should already contain all JS and HTML files now transpiled.
+ - In the `build` task replace `app` in the paths by `dist` since dist should already contain all JS and HTML files now transpiled.
 
  ```patch
  // Scan your HTML for assets & optimize them
- gulp.task('html', function () {
+ gulp.task('build', ['images', 'fonts'], function () {
    return optimizeHtmlTask(
--    ['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'],
-+    [dist('/**/*.html'), '!' + dist('/{elements,test,bower_components}/**/*.html')],
-     dist());
- });
+-    return gulp.src(['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'])
++    return gulp.src(['dist/**/*.html', '!dist/{elements,test,bower_components}/**/*.html'])
+
+  ...
+     
  ```
-
-
- - In the `optimizeHtmlTask` function remove the `searchPath` attribute since all assets should be found under the `dist` folder and we want to make sure we are not picking up duplicates and un-transpiled JS files:
-
-```patch
-var optimizeHtmlTask = function (src, dest) {
-- var assets = $.useref.assets({
--   searchPath: ['.tmp', 'app']
-- });
-+ var assets = $.useref.assets();
-```
 
 
 ## Vulcanize the new files
@@ -111,29 +101,21 @@ Need to change the vulcanize command to grab the newly translated files.  .tmp h
 
 - Add it to the `default` task:
 ```patch
- gulp.task('default', ['clean'], function(cb) {
-   // Uncomment 'cache-config' if you are going to use service workers.
-   runSequence(
-+    'bowertotmp',
-     ['ensureFiles', 'copy', 'styles'],
--    ['build'],
-+    ['js', 'build'],
-@@ -324,6 +325,12 @@
-    .pipe($.sourcemaps.write('.'))
-    .pipe(gulp.dest('.tmp/'))
-    .pipe(gulp.dest(dist()));
-+});
+gulp.task('default', ['clean'], function(cb) {
+  // Uncomment 'cache-config' if you are going to use service workers.
+  runSequence(
++   'bowertotmp',
+    ['ensureFiles', 'copy', 'styles'],
+    'js',
 ```
 
 - Finally update `vulcanize` task to point to `.tmp` directory:
 ```patch
- // Vulcanize granular configuration
- gulp.task('vulcanize', function() {
--  return gulp.src('app/elements/elements.html')
-+  return gulp.src('.tmp/elements/elements.html')
-     .pipe($.vulcanize({
-       stripComments: true,
-       inlineCss: true,
+gulp.task('vulcanize', function() {
+- return gulp.src('app/elements/elements.html')
++ return gulp.src('.tmp/elements/elements.html')
+    .pipe($.vulcanize({
+      stripComments: true,
 ```
 
 
