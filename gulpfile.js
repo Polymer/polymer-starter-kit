@@ -76,7 +76,6 @@ gulp.task('styles', function() {
   return styleTask('styles', ['**/*.css']);
 });
 
-
 // Ensure that we are not missing required files for the project
 // "dot" files are specifically tricky due to them being hidden on
 // some systems.
@@ -128,7 +127,7 @@ gulp.task('fonts', function() {
 });
 
 // Scan your HTML for assets & optimize them
-gulp.task('build', ['images', 'fonts'], function () {
+gulp.task('build', ['images', 'fonts'], function() {
   return gulp.src(['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'])
     .pipe($.useref())
     .pipe($.if('*.js', $.uglify({
