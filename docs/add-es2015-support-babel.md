@@ -42,8 +42,8 @@ Make sure the `js` gulp task is triggered by the common build tasks:
  - In the gulp `serve` task, make sure `js` is triggered initially and on HTML and JS files changes:
 
 ```patch
-- gulp.task('serve', ['styles'], function () {
-+ gulp.task('serve', ['styles', 'js'], function () {
+- gulp.task('serve', ['styles'], function() {
++ gulp.task('serve', ['styles', 'js'], function() {
 
   ...
 
@@ -54,6 +54,7 @@ Make sure the `js` gulp task is triggered by the common build tasks:
 + gulp.watch(['app/scripts/**/*.js'], ['js', reload]);
   gulp.watch(['app/images/**/*'], reload);
 });
+```
 
  - In the `default` task:
 
@@ -66,7 +67,7 @@ gulp.task('default', ['clean'], function(cb) {
     ['ensureFiles', 'copy', 'styles'],
 +   'js',
 -   ['images', 'fonts', 'html'],
-    'build',
++   'build',
     'vulcanize', // 'cache-config',
     cb);
 });
@@ -76,13 +77,12 @@ gulp.task('default', ['clean'], function(cb) {
 
  ```patch
  // Scan your HTML for assets & optimize them
- gulp.task('build', ['images', 'fonts'], function () {
+ gulp.task('build', ['images', 'fonts'], function() {
    return optimizeHtmlTask(
 -    return gulp.src(['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'])
 +    return gulp.src(['dist/**/*.html', '!dist/{elements,test,bower_components}/**/*.html'])
 
   ...
-     
  ```
 
 
