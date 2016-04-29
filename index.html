@@ -26,7 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <link rel="import" href="src/psk-app/psk-app.html">
+    <link rel="import" href="/src/psk-app/psk-app.html">
   </head>
   <body>
     <psk-app></psk-app>
@@ -52,7 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (!webComponentsSupported) {
           var script = document.createElement('script');
           script.async = true;
-          script.src = '../webcomponentsjs/webcomponents-lite.min.js';
+          script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
           script.onload = onload;
           document.head.appendChild(script);
         } else {
