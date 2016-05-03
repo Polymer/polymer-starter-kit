@@ -66,8 +66,7 @@ gulp.task('default', ['clean'], function(cb) {
   runSequence(
     ['ensureFiles', 'copy', 'styles'],
 +   'js',
--   ['images', 'fonts', 'html'],
-+   'build',
+    'build',
     'vulcanize', // 'cache-config',
     cb);
 });
