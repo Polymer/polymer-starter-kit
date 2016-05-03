@@ -78,9 +78,8 @@ gulp.task('default', ['clean'], function(cb) {
  ```patch
  // Scan your HTML for assets & optimize them
  gulp.task('build', ['images', 'fonts'], function() {
-   return optimizeHtmlTask(
--    return gulp.src(['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'])
-+    return gulp.src(['dist/**/*.html', '!dist/{elements,test,bower_components}/**/*.html'])
+-  return gulp.src(['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'])
++  return gulp.src(['dist/**/*.html', '!dist/{elements,test,bower_components}/**/*.html'])
 
   ...
  ```
