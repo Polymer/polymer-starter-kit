@@ -77,7 +77,8 @@ Make sure the `lint` gulp task is triggered by the common build tasks:
 
   gulp.watch(['app/**/*.html', '!app/bower_components/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
-+ gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint', reload]);
+- gulp.watch(['app/scripts/**/*.js'], reload);
++ gulp.watch(['app/scripts/**/*.js'], ['lint', reload]);
   gulp.watch(['app/images/**/*'], reload);
 });
 ```
