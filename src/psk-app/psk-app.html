@@ -130,7 +130,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <!-- setup routes -->
-    <carbon-location route="{{route}}" use-hash-as-path></carbon-location>
+    <carbon-location route="{{route}}"></carbon-location>
     <carbon-route route="{{route}}" pattern="/:page" data="{{pageData}}"></carbon-route>
 
     <app-scrollpos-control selected="{{pageData.page}}"></app-scrollpos-control>
@@ -153,10 +153,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               selected="[[pageData.page]]"
               attr-for-selected="data-page"
               on-iron-activate="_drawerSelected">
-            <a data-page="" href="#/">Home</a>
-            <a data-page="art" href="#/art">Art</a>
-            <a data-page="film" href="#/film">Film</a>
-            <a data-page="design" href="#/design">Design</a>
+            <a data-page="" href="/">Home</a>
+            <a data-page="art" href="/art">Art</a>
+            <a data-page="film" href="/film">Film</a>
+            <a data-page="design" href="/design">Design</a>
           </iron-selector>
         </app-header-layout>
       </app-drawer>
