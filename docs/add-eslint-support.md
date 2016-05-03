@@ -18,10 +18,10 @@ This recipe helps you to create a task to use [ESLint](http://eslint.org) tool.
     "html"
   ],
   "globals": {
-    "Polymer": false,
     "__dirname": false,
     "app": false,
     "page": false,
+    "Polymer": false,
     "process": false,
     "require": false
   }
@@ -91,9 +91,10 @@ gulp.task('default', ['clean'], function(cb) {
   // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
     ['ensureFiles', 'copy', 'styles'],
--   ['images', 'fonts', 'html'],
-+   ['lint', 'images', 'fonts', 'html'],
+-   ['build'],
++   ['lint', 'build'],
     'vulcanize', // 'cache-config',
     cb);
 });
 ```
+

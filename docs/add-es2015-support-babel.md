@@ -43,7 +43,7 @@ Make sure the `js` gulp task is triggered by the common build tasks:
 
 ```patch
 - gulp.task('serve', ['styles'], function() {
-+ gulp.task('serve', ['styles', 'js'], function () {
++ gulp.task('serve', ['styles', 'js'], function() {
 
   ...
 
@@ -66,33 +66,22 @@ gulp.task('default', ['clean'], function(cb) {
   runSequence(
     ['ensureFiles', 'copy', 'styles'],
 +   'js',
-    ['images', 'fonts', 'html'],
+    'build',
     'vulcanize', // 'cache-config',
     cb);
 });
 ```
 
- - In the `html` task replace `app` in the paths by `dist` since dist should already contain all JS and HTML files now transpiled.
+ - In the `build` task replace `app` in the paths by `dist` since dist should already contain all JS and HTML files now transpiled.
 
  ```patch
  // Scan your HTML for assets & optimize them
- gulp.task('html', function() {
-   return optimizeHtmlTask(
--    ['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'],
-+    [dist('/**/*.html'), '!' + dist('/{elements,test,bower_components}/**/*.html')],
-     dist());
- });
+ gulp.task('build', ['images', 'fonts'], function() {
+-  return gulp.src(['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'])
++  return gulp.src(['dist/**/*.html', '!dist/{elements,test,bower_components}/**/*.html'])
+
+  ...
  ```
-
- - In the `optimizeHtmlTask` function remove the `searchPath` attribute since all assets should be found under the `dist` folder and we want to make sure we are not picking up duplicates and un-transpiled JS files:
-
-```patch
-var optimizeHtmlTask = function(src, dest) {
-- var assets = $.useref.assets({
--   searchPath: ['.tmp', 'app']
-- });
-+ var assets = $.useref.assets();
-```
 
 
 ## Vulcanize the new files
