@@ -36,98 +36,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../psk-page-art/psk-page-art.html">
 <link rel="import" href="../psk-page-design/psk-page-design.html">
 <link rel="import" href="../psk-page-film/psk-page-film.html">
+<link rel="import" href="../styles/app-theme.html">
 
 <dom-module id="psk-app">
   <template>
-    <style>
-      :host {
-        --app-primary-color:  var(--paper-grey-800);
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-
-        display: block;
-        font-family: 'Roboto', sans-serif;
-        background-color: var(--paper-grey-50);
-      }
-
-      app-drawer {
-        --app-drawer-content-container: {
-          background-color: var(--app-primary-color);
-          overflow-x: hidden;
-        };
-      }
-
-      app-drawer app-header {
-        background-color: var(--app-primary-color);
-      }
-
-      .nav-menu {
-        background-color: var(--app-primary-color);
-        color: #fff;
-      }
-
-      a {
-        text-decoration: none;
-        color: inherit;
-        font-size: inherit;
-      }
-
-      .nav-menu > a {
-        display: block;
-        padding: 12px 16px;
-        font-size: 20px;
-        font-weight: 500;
-      }
-
-      .nav-menu > a.iron-selected {
-        background-color: var(--paper-grey-600);
-      }
-
-      iron-pages a {
-        color: var(--app-primary-color);
-      }
-
-      iron-pages > * {
-        min-height: 100vh;
-      }
-
-      .main-header {
-        border-bottom: 1px solid #ddd;
-        background-color: #fff;
-        color: #444;
-      }
-
-      .title-toolbar {
-        @apply(--layout-center-center);
-        width: 100vw;
-        box-sizing: border-box;
-      }
-
-      .title {
-        padding-bottom: 40px;
-        font-size: 50px;
-        font-weight: 800;
-      }
-
-      .nav-title-toolbar {
-        color: #fff;
-      }
-
-      app-drawer-layout:not([narrow]) .nav-title-toolbar {
-        visibility: hidden;
-      }
-
-      app-drawer-layout:not([narrow]) .main-title-toolbar {
-        width: 100%;
-      }
-
-      @media (max-width: 580px) {
-        /* make title smaller to fit on screen */
-        .title {
-          font-size: 30px;
-          padding-bottom: 16px;
-        }
-      }
-    </style>
+    <style include="app-theme"></style>
 
     <!-- setup routes -->
     <carbon-location route="{{route}}"></carbon-location>
