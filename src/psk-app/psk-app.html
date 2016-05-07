@@ -103,7 +103,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .title {
-        padding-bottom: 40px;
+        padding-bottom: 20px;
+        padding-top: 20px;
         font-size: 50px;
         font-weight: 800;
       }
@@ -137,7 +138,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <app-drawer-layout drawer-width="288px" responsive-width="1280px">
       <!-- nav panel -->
-      <app-drawer id="drawer">
+      <app-drawer swipe-open id="drawer">
         <app-header-layout has-scrolling-region>
           <app-header fixed>
             <!-- top toolbar -->
@@ -163,7 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- main panel -->
       <app-header-layout>
-        <app-header fixed effects="waterfall" class="main-header">
+        <app-header fixed condenses effects="waterfall" class="main-header">
           <!-- top toolbar -->
           <app-toolbar>
             <!-- menu button -->
