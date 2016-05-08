@@ -49,6 +49,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--paper-grey-50);
       }
 
+      a {
+        text-decoration: none;
+        color: inherit;
+        font-size: inherit;
+      }
+
       app-drawer {
         --app-drawer-content-container: {
           background-color: var(--app-primary-color);
@@ -60,25 +66,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--app-primary-color);
       }
 
-      .nav-menu {
+      iron-selector {
         background-color: var(--app-primary-color);
         color: #fff;
       }
 
-      a {
-        text-decoration: none;
-        color: inherit;
-        font-size: inherit;
-      }
-
-      .nav-menu > a {
+      iron-selector > a {
         display: block;
         padding: 12px 16px;
         font-size: 20px;
         font-weight: 500;
       }
 
-      .nav-menu > a.iron-selected {
+      iron-selector > a.iron-selected {
         background-color: var(--paper-grey-600);
       }
 
@@ -96,36 +96,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: #444;
       }
 
-      .title-toolbar {
-        @apply(--layout-center-center);
-        width: 100vw;
-        box-sizing: border-box;
-      }
-
-      .title {
-        padding-bottom: 40px;
-        font-size: 50px;
-        font-weight: 800;
-      }
-
-      .nav-title-toolbar {
-        color: #fff;
-      }
-
-      app-drawer-layout:not([narrow]) .nav-title-toolbar {
-        visibility: hidden;
-      }
-
-      app-drawer-layout:not([narrow]) .main-title-toolbar {
-        width: 100%;
-      }
-
-      @media (max-width: 580px) {
-        /* make title smaller to fit on screen */
-        .title {
-          font-size: 30px;
-          padding-bottom: 16px;
-        }
+      .main-header [title] {
+        margin: 0 0 0 40px;
       }
     </style>
 
@@ -137,19 +109,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <app-drawer-layout drawer-width="288px" responsive-width="1280px">
       <!-- nav panel -->
-      <app-drawer id="drawer">
+      <app-drawer swipe-open id="drawer">
         <app-header-layout has-scrolling-region>
           <app-header fixed>
             <!-- top toolbar -->
             <app-toolbar></app-toolbar>
 
             <!-- bottom toolbar -->
-            <app-toolbar class="title-toolbar nav-title-toolbar"></app-toolbar>
+            <app-toolbar></app-toolbar>
           </app-header>
 
           <!-- nav menu -->
           <iron-selector
-              class="nav-menu"
               selected="[[pageData.page]]"
               attr-for-selected="data-page"
               on-iron-activate="_drawerSelected">
@@ -163,16 +134,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- main panel -->
       <app-header-layout>
-        <app-header fixed effects="waterfall" class="main-header">
+        <app-header condenses reveals effects="waterfall resize-title" class="main-header">
           <!-- top toolbar -->
           <app-toolbar>
-            <!-- menu button -->
             <paper-icon-button icon="app:menu" drawer-toggle></paper-icon-button>
+            <h4 condensed-title>Polymer Starter Kit</h4>
           </app-toolbar>
 
           <!-- bottom toolbar -->
-          <app-toolbar class="title-toolbar main-title-toolbar">
-            <h1 class="title">Polymer Starter Kit</h1>
+          <app-toolbar>
+            <h1 title>Polymer Starter Kit</h1>
           </app-toolbar>
         </app-header>
       </app-header-layout>
