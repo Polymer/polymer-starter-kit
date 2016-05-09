@@ -10,7 +10,7 @@
     "polymer": "Polymer/polymer#^1.4.0"
   },
   "devDependencies": {
-    "web-component-tester": "^4.2.2"
+    "web-component-tester": "^4.0.0"
   },
   "ignore": []
 }
