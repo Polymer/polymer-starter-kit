@@ -36,12 +36,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../psk-page-art/psk-page-art.html">
 <link rel="import" href="../psk-page-design/psk-page-design.html">
 <link rel="import" href="../psk-page-film/psk-page-film.html">
+<link rel="import" href="../styles/app-theme.html">
+
 
 <dom-module id="psk-app">
   <template>
-    <style>
+    <style include="app-theme">
       :host {
-        --app-primary-color:  var(--paper-grey-800);
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
         display: block;

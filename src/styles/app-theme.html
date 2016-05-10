@@ -1,0 +1,37 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+
+<!-- shared styles for all elements -->
+<dom-module id="app-theme">
+  <template>
+    <style>
+      :host {
+
+        /* PSK2-specific custom properties */
+        --app-primary-color:  var(--paper-indigo-500);
+
+        /* Default paper custom properties */
+        --primary-text-color: var(--paper-grey-900);
+        --primary-background-color: #ffffff;
+        --secondary-text-color: #737373;
+        --disabled-text-color: #9b9b9b;
+        --divider-color: #dbdbdb;
+        --primary-color: var(--paper-indigo-500);
+        --light-primary-color: var(--paper-indigo-100);
+        --dark-primary-color: var(--paper-indigo-700);
+        --accent-color: var(--paper-pink-a200);
+        --light-accent-color: var(--paper-pink-a100);
+        --dark-accent-color: var(--paper-pink-a400);
+        }
+    </style>
+  </template>
+</dom-module>
