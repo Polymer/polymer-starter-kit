@@ -38,9 +38,69 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../psk-page-film/psk-page-film.html">
 <link rel="import" href="../styles/app-theme.html">
 
+
 <dom-module id="psk-app">
   <template>
-    <style include="app-theme"></style>
+    <style include-"app-theme">
+      :host {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+        display: block;
+        font-family: 'Roboto', sans-serif;
+        background-color: var(--paper-grey-50);
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+        font-size: inherit;
+      }
+
+      app-drawer {
+        --app-drawer-content-container: {
+          background-color: var(--app-primary-color);
+          overflow-x: hidden;
+        };
+      }
+
+      app-drawer app-header {
+        background-color: var(--app-primary-color);
+      }
+
+      iron-selector {
+        background-color: var(--app-primary-color);
+        color: #fff;
+      }
+
+      iron-selector > a {
+        display: block;
+        padding: 12px 16px;
+        font-size: 20px;
+        font-weight: 500;
+      }
+
+      iron-selector > a.iron-selected {
+        background-color: var(--paper-grey-600);
+      }
+
+      iron-pages a {
+        color: var(--app-primary-color);
+      }
+
+      iron-pages > * {
+        min-height: 100vh;
+      }
+
+      .main-header {
+        border-bottom: 1px solid #ddd;
+        background-color: #fff;
+        color: #444;
+      }
+
+      .main-header [title] {
+        margin: 0 0 0 40px;
+      }
+    </style>
 
     <!-- setup routes -->
     <carbon-location route="{{route}}"></carbon-location>
@@ -50,19 +110,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <app-drawer-layout drawer-width="288px" responsive-width="1280px">
       <!-- nav panel -->
-      <app-drawer id="drawer">
+      <app-drawer swipe-open id="drawer">
         <app-header-layout has-scrolling-region>
           <app-header fixed>
             <!-- top toolbar -->
             <app-toolbar></app-toolbar>
 
             <!-- bottom toolbar -->
-            <app-toolbar class="title-toolbar nav-title-toolbar"></app-toolbar>
+            <app-toolbar></app-toolbar>
           </app-header>
 
           <!-- nav menu -->
           <iron-selector
-              class="nav-menu"
               selected="[[pageData.page]]"
               attr-for-selected="data-page"
               on-iron-activate="_drawerSelected">
@@ -76,16 +135,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- main panel -->
       <app-header-layout>
-        <app-header fixed effects="waterfall" class="main-header">
+        <app-header condenses reveals effects="waterfall resize-title" class="main-header">
           <!-- top toolbar -->
           <app-toolbar>
-            <!-- menu button -->
             <paper-icon-button icon="app:menu" drawer-toggle></paper-icon-button>
+            <h4 condensed-title>Polymer Starter Kit</h4>
           </app-toolbar>
 
           <!-- bottom toolbar -->
-          <app-toolbar class="title-toolbar main-title-toolbar">
-            <h1 class="title">Polymer Starter Kit</h1>
+          <app-toolbar>
+            <h1 title>Polymer Starter Kit</h1>
           </app-toolbar>
         </app-header>
       </app-header-layout>
