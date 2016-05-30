@@ -5,7 +5,6 @@
     "carbon-route": "PolymerElements/carbon-route#^0.8.4",
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
-    "platinum-elements": "PolymerElements/platinum-elements#^1.0.0",
     "polymer": "Polymer/polymer#^1.0.0"
   },
   "private": true

@@ -17,8 +17,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 
-<link rel="import" href="../../bower_components/font-roboto/roboto.html">
-
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-styles/color.html">
 
@@ -32,10 +30,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../app-icons/app-icons.html">
 <link rel="import" href="../psk-page-home/psk-page-home.html">
+<link rel="import" href="../psk-page-about/psk-page-about.html">
 <link rel="import" href="../psk-page-404/psk-page-404.html">
-<link rel="import" href="../psk-page-art/psk-page-art.html">
-<link rel="import" href="../psk-page-design/psk-page-design.html">
-<link rel="import" href="../psk-page-film/psk-page-film.html">
 
 <dom-module id="psk-app">
   <template>
@@ -45,14 +41,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
         display: block;
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Roboto', 'Noto', sans-serif;
         background-color: var(--paper-grey-50);
-      }
-
-      a {
-        text-decoration: none;
-        color: inherit;
-        font-size: inherit;
       }
 
       app-drawer {
@@ -62,8 +52,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
       }
 
+      app-drawer a {
+        text-decoration: none;
+        color: inherit;
+        font-size: inherit;
+      }
+
       app-drawer app-header {
         background-color: var(--app-primary-color);
+      }
+
+      .main-header {
+        border-bottom: 1px solid #ddd;
+        background-color: #fff;
+        color: #444;
+      }
+
+      .title-toolbar {
+        @apply(--layout-center-center);
+        width: 100vw;
+        box-sizing: border-box;
+      }
+
+      app-drawer-layout:not([narrow]) .title-toolbar {
+        width: 100%;
+      }
+
+      .title {
+        padding-bottom: 40px;
+        font-size: 50px;
+        font-weight: 800;
       }
 
       iron-selector {
@@ -90,14 +108,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         min-height: 100vh;
       }
 
-      .main-header {
-        border-bottom: 1px solid #ddd;
-        background-color: #fff;
-        color: #444;
-      }
-
-      .main-header [title] {
-        margin: 0 0 0 40px;
+      @media (max-width: 580px) {
+        /* make title smaller to fit on screen */
+        .title {
+          font-size: 30px;
+          padding-bottom: 16px;
+        }
       }
     </style>
 
@@ -108,7 +124,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-scrollpos-control selected="{{pageData.page}}"></app-scrollpos-control>
 
     <app-drawer-layout drawer-width="288px" responsive-width="1280px">
-      <!-- nav panel -->
+
+      <!-- drawer panel -->
       <app-drawer swipe-open id="drawer">
         <app-header-layout has-scrolling-region>
           <app-header fixed>
@@ -119,40 +136,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <app-toolbar></app-toolbar>
           </app-header>
 
-          <!-- nav menu -->
-          <iron-selector
-              selected="[[pageData.page]]"
-              attr-for-selected="data-page"
-              on-iron-activate="_drawerSelected">
+          <!-- drawer menu -->
+          <iron-selector selected="[[pageData.page]]" attr-for-selected="data-page"
+            on-iron-activate="_drawerSelected">
             <a data-page="" href="/">Home</a>
-            <a data-page="art" href="/art">Art</a>
-            <a data-page="film" href="/film">Film</a>
-            <a data-page="design" href="/design">Design</a>
+            <a data-page="about" href="/about">About</a>
           </iron-selector>
         </app-header-layout>
       </app-drawer>
 
       <!-- main panel -->
       <app-header-layout>
-        <app-header condenses reveals effects="waterfall resize-title" class="main-header">
+        <app-header reveals effects="waterfall" class="main-header">
           <!-- top toolbar -->
           <app-toolbar>
+            <!-- menu button -->
             <paper-icon-button icon="app:menu" drawer-toggle></paper-icon-button>
-            <h4 condensed-title>Polymer Starter Kit</h4>
           </app-toolbar>
 
           <!-- bottom toolbar -->
-          <app-toolbar>
-            <h1 title>Polymer Starter Kit</h1>
+          <app-toolbar class="title-toolbar">
+            <h1 class="title">Polymer Starter Kit</h1>
           </app-toolbar>
         </app-header>
       </app-header-layout>
 
+      <!-- main menu -->
       <iron-pages selected="[[pageData.page]]" attr-for-selected="data-page" fallback-selection="404">
         <psk-page-home data-page=""></psk-page-home>
-        <psk-page-art data-page="art"></psk-page-art>
-        <psk-page-film data-page="film"></psk-page-film>
-        <psk-page-design data-page="design"></psk-page-design>
+        <psk-page-about data-page="about"></psk-page-about>
         <psk-page-404 data-page="404"></psk-page-404>
       </iron-pages>
     </app-drawer-layout>
@@ -160,6 +172,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     Polymer({
+
       is: 'psk-app',
 
       attached: function() {
@@ -169,8 +182,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _drawerSelected: function() {
-        if (!this.$.drawer.persistent) this.$.drawer.close();
+        if (!this.$.drawer.persistent) {
+          this.$.drawer.close();
+        }
       }
+
     });
   </script>
 </dom-module>
