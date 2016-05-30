@@ -68,20 +68,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: #444;
       }
 
-      .title-toolbar {
-        @apply(--layout-center-center);
-        width: 100vw;
-        box-sizing: border-box;
-      }
-
-      app-drawer-layout:not([narrow]) .title-toolbar {
-        width: 100%;
-      }
-
-      .title {
-        padding-bottom: 40px;
-        font-size: 50px;
-        font-weight: 800;
+      [title] {
+        font-size: 20px;
+        font-weight: normal;
       }
 
       iron-selector {
@@ -106,14 +95,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       iron-pages > * {
         min-height: 100vh;
-      }
-
-      @media (max-width: 580px) {
-        /* make title smaller to fit on screen */
-        .title {
-          font-size: 30px;
-          padding-bottom: 16px;
-        }
       }
     </style>
 
@@ -148,15 +129,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- main panel -->
       <app-header-layout>
         <app-header reveals effects="waterfall" class="main-header">
-          <!-- top toolbar -->
           <app-toolbar>
-            <!-- menu button -->
             <paper-icon-button icon="app:menu" drawer-toggle></paper-icon-button>
-          </app-toolbar>
-
-          <!-- bottom toolbar -->
-          <app-toolbar class="title-toolbar">
-            <h1 class="title">Polymer Starter Kit</h1>
+            <h1 title>Polymer Starter Kit</h1>
           </app-toolbar>
         </app-header>
       </app-header-layout>
