@@ -1,8 +1,8 @@
 {
   "name": "polymer-starter-kit",
   "dependencies": {
-    "app-layout": "PolymerLabs/app-layout#^0.0.15",
-    "carbon-route": "PolymerElements/carbon-route#^0.8.4",
+    "app-layout": "PolymerElements/app-layout#^0.9.0",
+    "app-route": "PolymerElements/app-route#^0.9.1",
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
     "polymer": "Polymer/polymer#^1.0.0"
