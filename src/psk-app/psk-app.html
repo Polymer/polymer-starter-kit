@@ -10,8 +10,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<link rel="import" href="../../bower_components/carbon-route/carbon-location.html">
-<link rel="import" href="../../bower_components/carbon-route/carbon-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
 
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
@@ -99,8 +99,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <!-- setup routes -->
-    <carbon-location route="{{route}}"></carbon-location>
-    <carbon-route route="{{route}}" pattern="/:page" data="{{pageData}}"></carbon-route>
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{pageData}}"></app-route>
 
     <app-scrollpos-control selected="{{pageData.page}}"></app-scrollpos-control>
 
