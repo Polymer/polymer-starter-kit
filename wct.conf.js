@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 var path = require('path');
 
 var ret = {
-  'suites': ['src/test'],
+  'suites': ['test'],
   'webserver': {
     'pathMappings': []
   }
