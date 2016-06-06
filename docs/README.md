@@ -1,4 +1,12 @@
-# Recipes
+# Docs
+
+## Tutorials
+
+* [Set up](tutorials/set-up.md)
+* [Create a page](tutorials/create-a-page.md)
+* [Deploy](tutorials/deploy.md)
+
+## Recipes
 
 * [Add ES2015 (formally ES6) support using Babel](add-es2015-support-babel.md)
 * [Polymer Performance Recipe](polymer-perf.md)
