@@ -29,9 +29,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 
 <link rel="import" href="../app-icons/app-icons.html">
-<link rel="import" href="../psk-page-home/psk-page-home.html">
-<link rel="import" href="../psk-page-about/psk-page-about.html">
-<link rel="import" href="../psk-page-404/psk-page-404.html">
+<link rel="import" href="views/psk-home/psk-home.html">
+<link rel="import" href="views/psk-about/psk-about.html">
+<link rel="import" href="views/psk-404/psk-404.html">
 
 <dom-module id="psk-app">
   <template>
@@ -138,9 +138,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- main menu -->
       <iron-pages selected="[[pageData.page]]" attr-for-selected="data-page" fallback-selection="404">
-        <psk-page-home data-page=""></psk-page-home>
-        <psk-page-about data-page="about"></psk-page-about>
-        <psk-page-404 data-page="404"></psk-page-404>
+        <psk-home data-page=""></psk-home>
+        <psk-about data-page="about"></psk-about>
+        <psk-404 data-page="404"></psk-404>
       </iron-pages>
     </app-drawer-layout>
   </template>
