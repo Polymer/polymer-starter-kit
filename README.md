@@ -20,9 +20,9 @@ See latest Polymer Starter Kit Demo (from master) at https://polymerelements.git
 
 Check out the Polymer Starter Kit tutorials on [polymer-project.org](https://www.polymer-project.org):
 
-* [Set up the PSK](https://www.polymer-project.org/1.0/docs/start/psk/set-up.html)
-* [Create a page](https://www.polymer-project.org/1.0/docs/start/psk/create-a-page.html)
-* [Deploy the PSK to the web](https://www.polymer-project.org/1.0/docs/start/psk/deploy.html)
+* [Set up the PSK](docs/tutorials/set-up.md)
+* [Create a page](docs/tutorials/create-a-page.md)
+* [Deploy the PSK to the web](docs/tutorials/deploy.md)
 
 ## Getting Started
 
