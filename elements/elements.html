@@ -41,8 +41,7 @@ resolve();
 addEventListener('DOMContentLoaded', resolve);
 }
 }
-}());
-window.Polymer = {
+}());window.Polymer = {
 Settings: function () {
 var settings = window.Polymer || {};
 var parts = location.search.slice(1).split('&');
@@ -61,8 +60,7 @@ settings.useNativeShadow = settings.useShadow && settings.nativeShadow;
 settings.usePolyfillProto = !settings.useNativeCustomElements && !Object.__proto__;
 return settings;
 }()
-};
-(function () {
+};(function () {
 var userPolymer = window.Polymer;
 window.Polymer = function (prototype) {
 if (typeof prototype === 'function') {
@@ -109,15 +107,13 @@ Polymer.log && this._regLog(prototype);
 dumpRegistrations: function () {
 this.registrations.forEach(this._regLog);
 }
-};
-Object.defineProperty(window, 'currentImport', {
+};Object.defineProperty(window, 'currentImport', {
 enumerable: true,
 configurable: true,
 get: function () {
 return (document._currentScript || document.currentScript).ownerDocument;
 }
-});
-Polymer.RenderStatus = {
+});Polymer.RenderStatus = {
 _ready: false,
 _callbacks: [],
 whenReady: function (cb) {
@@ -185,8 +181,7 @@ Polymer.RenderStatus._catchFirstRender();
 Polymer.RenderStatus._catchFirstRender();
 }
 Polymer.ImportStatus = Polymer.RenderStatus;
-Polymer.ImportStatus.whenLoaded = Polymer.ImportStatus.whenReady;
-(function () {
+Polymer.ImportStatus.whenLoaded = Polymer.ImportStatus.whenReady;(function () {
 'use strict';
 var settings = Polymer.Settings;
 Polymer.Base = {
@@ -221,6 +216,9 @@ if (proto._finishRegisterFeatures) {
 proto._finishRegisterFeatures();
 }
 proto._doBehavior('registered');
+if (settings.usePolyfillProto && proto !== this) {
+proto.extend(this, proto);
+}
 }
 },
 attachedCallback: function () {
@@ -231,8 +229,11 @@ self._doBehavior('attached');
 });
 },
 detachedCallback: function () {
-this.isAttached = false;
-this._doBehavior('detached');
+var self = this;
+Polymer.RenderStatus.whenReady(function () {
+self.isAttached = false;
+self._doBehavior('detached');
+});
 },
 attributeChangedCallback: function (name, oldValue, newValue) {
 this._attributeChangedImpl(name);
@@ -266,15 +267,36 @@ if (pd) {
 Object.defineProperty(target, name, pd);
 }
 },
-_log: console.log.apply.bind(console.log, console),
-_warn: console.warn.apply.bind(console.warn, console),
-_error: console.error.apply.bind(console.error, console),
+_logger: function (level, args) {
+if (args.length === 1 && Array.isArray(args[0])) {
+args = args[0];
+}
+switch (level) {
+case 'log':
+case 'warn':
+case 'error':
+console[level].apply(console, args);
+break;
+}
+},
+_log: function () {
+var args = Array.prototype.slice.call(arguments, 0);
+this._logger('log', args);
+},
+_warn: function () {
+var args = Array.prototype.slice.call(arguments, 0);
+this._logger('warn', args);
+},
+_error: function () {
+var args = Array.prototype.slice.call(arguments, 0);
+this._logger('error', args);
+},
 _logf: function () {
-return this._logPrefix.concat([this.is]).concat(Array.prototype.slice.call(arguments, 0));
+return this._logPrefix.concat(this.is).concat(Array.prototype.slice.call(arguments, 0));
 }
 };
 Polymer.Base._logPrefix = function () {
-var color = window.chrome || /firefox/i.test(navigator.userAgent);
+var color = window.chrome && !/edge/i.test(navigator.userAgent) || /firefox/i.test(navigator.userAgent);
 return color ? [
 '%c[%s::%s]:',
 'font-weight: bold; background-color:#EEEE00;'
@@ -301,8 +323,7 @@ Polymer.isInstance = function (obj) {
 return Boolean(obj && obj.__isPolymerInstance__);
 };
 Polymer.telemetry.instanceCount = 0;
-}());
-(function () {
+}());(function () {
 var modules = {};
 var lcModules = {};
 var findModule = function (id) {
@@ -355,8 +376,7 @@ CustomElements.upgrade(m);
 }
 }
 }
-}());
-Polymer.Base._addFeature({
+}());Polymer.Base._addFeature({
 _prepIs: function () {
 if (!this.is) {
 var module = (document._currentScript || document.currentScript).parentNode;
@@ -369,8 +389,7 @@ if (this.is) {
 this.is = this.is.toLowerCase();
 }
 }
-});
-Polymer.Base._addFeature({
+});Polymer.Base._addFeature({
 behaviors: [],
 _desugarBehaviors: function () {
 if (this.behaviors.length) {
@@ -451,8 +470,7 @@ attached: true,
 detached: true,
 attributeChanged: true,
 ready: true
-};
-Polymer.Base._addFeature({
+};Polymer.Base._addFeature({
 _getExtendedPrototype: function (tag) {
 return this._getExtendedNativePrototype(tag);
 },
@@ -469,8 +487,7 @@ return p;
 getNativePrototype: function (tag) {
 return Object.getPrototypeOf(document.createElement(tag));
 }
-});
-Polymer.Base._addFeature({
+});Polymer.Base._addFeature({
 _prepConstructor: function () {
 this._factoryArgs = this.extends ? [
 this.extends,
@@ -496,8 +513,7 @@ this.factoryImpl.apply(elt, args);
 }
 return elt;
 }
-});
-Polymer.nob = Object.create(null);
+});Polymer.nob = Object.create(null);
 Polymer.Base._addFeature({
 properties: {},
 getPropertyInfo: function (property) {
@@ -556,8 +572,7 @@ t.readOnly = s.readOnly;
 }
 }
 }
-});
-Polymer.CaseMap = {
+});Polymer.CaseMap = {
 _caseMap: {},
 _rx: {
 dashToCamel: /-[a-z]/g,
@@ -571,8 +586,7 @@ return m[1].toUpperCase();
 camelToDashCase: function (camel) {
 return this._caseMap[camel] || (this._caseMap[camel] = camel.replace(this._rx.camelToDash, '-$1').toLowerCase());
 }
-};
-Polymer.Base._addFeature({
+};Polymer.Base._addFeature({
 _addHostAttributes: function (attributes) {
 if (!this._aggregatedAttributes) {
 this._aggregatedAttributes = {};
@@ -682,9 +696,7 @@ default:
 return value != null ? value : undefined;
 }
 }
-});
-Polymer.version = '1.4.0';
-Polymer.Base._addFeature({
+});Polymer.version = "1.5.0";Polymer.Base._addFeature({
 _registerFeatures: function () {
 this._prepIs();
 this._prepBehaviors();
@@ -700,7 +712,20 @@ _initFeatures: function () {
 this._marshalHostAttributes();
 this._marshalBehaviors();
 }
-});</script><script>Polymer.Base._addFeature({
+});</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>Polymer.Base._addFeature({
 _prepTemplate: function () {
 if (this._template === undefined) {
 this._template = Polymer.DomModule.import(this.is, 'template');
@@ -721,8 +746,7 @@ instanceTemplate: function (template) {
 var dom = document.importNode(template._content || template.content, true);
 return dom;
 }
-});
-(function () {
+});(function () {
 var baseAttachedCallback = Polymer.Base.attachedCallback;
 Polymer.Base._addFeature({
 _hostStack: [],
@@ -798,8 +822,7 @@ this._attachedPending = true;
 }
 }
 });
-}());
-Polymer.ArraySplice = function () {
+}());Polymer.ArraySplice = function () {
 function newSplice(index, removed, addedCount) {
 return {
 index: index,
@@ -968,8 +991,7 @@ return currentValue === previousValue;
 }
 };
 return new ArraySplice();
-}();
-Polymer.domInnerHTML = function () {
+}();Polymer.domInnerHTML = function () {
 var escapeAttrRegExp = /[&\u00A0"]/g;
 var escapeDataRegExp = /[&\u00A0<>]/g;
 function escapeReplace(c) {
@@ -1065,8 +1087,7 @@ s += getOuterHTML(child, node, composed);
 return s;
 }
 return { getInnerHTML: getInnerHTML };
-}();
-(function () {
+}();(function () {
 'use strict';
 var nativeInsertBefore = Element.prototype.insertBefore;
 var nativeAppendChild = Element.prototype.appendChild;
@@ -1262,8 +1283,7 @@ removeChild: function (parentNode, node) {
 return nativeRemoveChild.call(parentNode, node);
 }
 };
-}());
-Polymer.DomApi = function () {
+}());Polymer.DomApi = function () {
 'use strict';
 var Settings = Polymer.Settings;
 var TreeApi = Polymer.TreeApi;
@@ -1380,8 +1400,7 @@ return DomApi.factory(obj, patch);
 var p = Element.prototype;
 DomApi.matchesSelector = p.matches || p.matchesSelector || p.mozMatchesSelector || p.msMatchesSelector || p.oMatchesSelector || p.webkitMatchesSelector;
 return DomApi;
-}();
-(function () {
+}();(function () {
 'use strict';
 var Settings = Polymer.Settings;
 var DomApi = Polymer.DomApi;
@@ -1850,8 +1869,7 @@ configurable: true
 DomApi.hasInsertionPoint = function (root) {
 return Boolean(root && root._insertionPoints.length);
 };
-}());
-(function () {
+}());(function () {
 'use strict';
 var Settings = Polymer.Settings;
 var TreeApi = Polymer.TreeApi;
@@ -1969,8 +1987,7 @@ forwardProperties([
 'nextElementSibling',
 'previousElementSibling'
 ]);
-}());
-Polymer.Base.extend(Polymer.dom, {
+}());Polymer.Base.extend(Polymer.dom, {
 _flushGuard: 0,
 _FLUSH_MAX: 100,
 _needsTakeRecords: !Polymer.Settings.useNativeCustomElements,
@@ -2018,8 +2035,7 @@ this._finishDebouncer = Polymer.Debounce(this._finishDebouncer, this._finishFlus
 _finishFlush: function () {
 Polymer.dom._debouncers = [];
 }
-});
-Polymer.EventApi = function () {
+});Polymer.EventApi = function () {
 'use strict';
 var DomApi = Polymer.DomApi.ctor;
 var Settings = Polymer.Settings;
@@ -2087,8 +2103,7 @@ event.__eventApi = new DomApi.Event(event);
 return event.__eventApi;
 };
 return { factory: factory };
-}();
-(function () {
+}();(function () {
 'use strict';
 var DomApi = Polymer.DomApi.ctor;
 var useShadow = Polymer.Settings.useShadow;
@@ -2127,8 +2142,7 @@ contains: function () {
 return this.node.classList.contains.apply(this.node.classList, arguments);
 }
 };
-}());
-(function () {
+}());(function () {
 'use strict';
 var DomApi = Polymer.DomApi.ctor;
 var Settings = Polymer.Settings;
@@ -2328,8 +2342,7 @@ h._alwaysNotify = h._isContentListener;
 }
 });
 }
-}());
-(function () {
+}());(function () {
 'use strict';
 var DomApi = Polymer.DomApi.ctor;
 var Settings = Polymer.Settings;
@@ -2380,8 +2393,7 @@ this._observer = null;
 }
 });
 }
-}());
-(function () {
+}());(function () {
 var DomApi = Polymer.DomApi;
 var TreeApi = Polymer.TreeApi;
 Polymer.Base._addFeature({
@@ -2688,8 +2700,7 @@ CustomElements.upgrade(children[i]);
 }
 }
 }
-}());
-if (Polymer.Settings.useShadow) {
+}());if (Polymer.Settings.useShadow) {
 Polymer.Base._addFeature({
 _poolContent: function () {
 },
@@ -2707,8 +2718,7 @@ this.shadowRoot.appendChild(this.root);
 this.root = this.shadowRoot;
 }
 });
-}
-Polymer.Async = {
+}Polymer.Async = {
 _currVal: 0,
 _lastVal: 0,
 _callbacks: [],
@@ -2758,8 +2768,7 @@ this._lastVal += len;
 };
 new window.MutationObserver(function () {
 Polymer.Async._atEndOfMicrotask();
-}).observe(Polymer.Async._twiddle, { characterData: true });
-Polymer.Debounce = function () {
+}).observe(Polymer.Async._twiddle, { characterData: true });Polymer.Debounce = function () {
 var Async = Polymer.Async;
 var Debouncer = function (context) {
 this.context = context;
@@ -2781,12 +2790,14 @@ stop: function () {
 if (this.finish) {
 this.finish();
 this.finish = null;
+this.callback = null;
 }
 },
 complete: function () {
 if (this.finish) {
+var callback = this.callback;
 this.stop();
-this.callback.call(this.context);
+callback.call(this.context);
 }
 }
 };
@@ -2800,8 +2811,7 @@ debouncer.go(callback, wait);
 return debouncer;
 }
 return debounce;
-}();
-Polymer.Base._addFeature({
+}();Polymer.Base._addFeature({
 _setupDebouncers: function () {
 this._debouncers = {};
 },
@@ -2824,8 +2834,7 @@ if (debouncer) {
 debouncer.stop();
 }
 }
-});
-Polymer.DomModule = document.createElement('dom-module');
+});Polymer.DomModule = document.createElement('dom-module');
 Polymer.Base._addFeature({
 _registerFeatures: function () {
 this._prepIs();
@@ -2853,7 +2862,22 @@ this._tryReady();
 },
 _marshalBehavior: function (b) {
 }
-});</script><script>Polymer.nar = [];
+});</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>Polymer.nar = [];
 Polymer.Annotations = {
 parseAnnotations: function (template) {
 var list = [];
@@ -3070,8 +3094,7 @@ return n;
 return root;
 }
 }
-};
-(function () {
+};(function () {
 function resolveCss(cssText, ownerDocument) {
 return cssText.replace(CSS_URL_RX, function (m, pre, url, post) {
 return pre + '\'' + resolve(url.replace(/["']/g, ''), ownerDocument) + '\'' + post;
@@ -3129,8 +3152,7 @@ resolveCss: resolveCss,
 resolveAttrs: resolveAttrs,
 resolveUrl: resolveUrl
 };
-}());
-Polymer.Base._addFeature({
+}());Polymer.Base._addFeature({
 _prepAnnotations: function () {
 if (!this._template) {
 this._notes = [];
@@ -3170,10 +3192,12 @@ this._processAnnotations(note.templateContent._notes);
 var pp = note.templateContent._parentProps = this._discoverTemplateParentProps(note.templateContent._notes);
 var bindings = [];
 for (var prop in pp) {
+var name = '_parent_' + prop;
 bindings.push({
 index: note.index,
 kind: 'property',
-name: '_parent_' + prop,
+name: name,
+propertyName: name,
 parts: [{
 mode: '{',
 model: prop,
@@ -3197,6 +3221,9 @@ var model = args[kk].model;
 if (model) {
 pp[model] = true;
 }
+}
+if (p.signature.dynamicFn) {
+pp[p.signature.method] = true;
 }
 } else {
 if (p.model) {
@@ -3288,8 +3315,7 @@ this.listen(node, e.name, e.value);
 }
 }
 }
-});
-Polymer.Base._addFeature({
+});Polymer.Base._addFeature({
 listeners: {},
 _listenListeners: function (listeners) {
 var node, name, eventName;
@@ -3370,8 +3396,7 @@ node.addEventListener(eventName, handler);
 _unlisten: function (node, eventName, handler) {
 node.removeEventListener(eventName, handler);
 }
-});
-(function () {
+});(function () {
 'use strict';
 var wrap = Polymer.DomApi.wrap;
 var HAS_NATIVE_TA = typeof document.head.style.touchAction === 'string';
@@ -3552,9 +3577,9 @@ if (type === 'touchstart' || type === 'touchmove') {
 Gestures.handleTouchAction(ev);
 }
 }
-if (type === 'touchend' && !ev.__polymerSimulatedTouch) {
+if (type === 'touchend') {
 POINTERSTATE.mouse.target = Polymer.dom(ev).rootTarget;
-ignoreMouse(true);
+ignoreMouse();
 }
 }
 }
@@ -3701,6 +3726,11 @@ prevent: function (evName) {
 var recognizer = this.findRecognizerByEvent(evName);
 if (recognizer.info) {
 recognizer.info.prevent = true;
+}
+},
+resetMouseCanceller: function () {
+if (POINTERSTATE.mouse.mouseIgnoreJob) {
+POINTERSTATE.mouse.mouseIgnoreJob.complete();
 }
 }
 };
@@ -4014,8 +4044,7 @@ Gestures.setTouchAction(node, DIRECTION_MAP[direction] || 'auto');
 }
 });
 Polymer.Gestures = Gestures;
-}());
-Polymer.Base._addFeature({
+}());Polymer.Base._addFeature({
 $$: function (slctr) {
 return Polymer.dom(this.root).querySelector(slctr);
 },
@@ -4191,9 +4220,7 @@ return this !== node && this.contains(node) && Polymer.dom(this).getOwnerRoot() 
 isLocalDescendant: function (node) {
 return this.root === Polymer.dom(node).getOwnerRoot();
 }
-});
-Polymer.Bind = {
-_dataEventCache: {},
+});Polymer.Bind = {
 prepareModel: function (model) {
 Polymer.Base.mixin(model, this._modelApi);
 },
@@ -4366,8 +4393,7 @@ element.addEventListener(event, function (e) {
 return context._notifyListener(changedFn, e);
 });
 }
-};
-Polymer.Base.extend(Polymer.Bind, {
+};Polymer.Base.extend(Polymer.Bind, {
 _shouldAddListener: function (effect) {
 return effect.name && effect.kind != 'attribute' && effect.kind != 'text' && !effect.isCompound && effect.parts[0].mode === '{';
 },
@@ -4376,10 +4402,7 @@ if (source != effect.value) {
 value = this._get(effect.value);
 this.__data__[effect.value] = value;
 }
-var calc = effect.negate ? !value : value;
-if (!effect.customEvent || this._nodes[effect.index][effect.name] !== calc) {
-return this._applyEffectValue(effect, calc);
-}
+this._applyEffectValue(effect, value);
 },
 _reflectEffect: function (source, value, effect) {
 this.reflectPropertyToAttribute(source, effect.attribute, value);
@@ -4432,9 +4455,6 @@ if (fn) {
 var args = Polymer.Bind._marshalArgs(this.__data__, effect, source, value);
 if (args) {
 var computedvalue = fn.apply(computedHost, args);
-if (effect.negate) {
-computedvalue = !computedvalue;
-}
 this._applyEffectValue(effect, computedvalue);
 }
 } else if (effect.dynamicFn) {
@@ -4452,17 +4472,19 @@ var name = arg.name;
 var v;
 if (arg.literal) {
 v = arg.value;
-} else if (arg.structured) {
-v = Polymer.Base._get(name, model);
+} else if (path === name) {
+v = value;
 } else {
 v = model[name];
+if (v === undefined && arg.structured) {
+v = Polymer.Base._get(name, model);
+}
 }
 if (bailoutEarly && v === undefined) {
 return;
 }
 if (arg.wildcard) {
-var baseChanged = name.indexOf(path + '.') === 0;
-var matches = effect.trigger.name.indexOf(name) === 0 && !baseChanged;
+var matches = path.indexOf(name + '.') === 0;
 values[i] = {
 path: matches ? path : name,
 value: matches ? value : v,
@@ -4474,8 +4496,7 @@ values[i] = v;
 }
 return values;
 }
-});
-Polymer.Base._addFeature({
+});Polymer.Base._addFeature({
 _addPropertyEffect: function (property, kind, effect) {
 var prop = Polymer.Bind.addPropertyEffect(this, property, kind, effect);
 prop.pathFn = this['_' + prop.kind + 'PathEffect'];
@@ -4710,33 +4731,45 @@ Polymer.Bind.setupBindListeners(this);
 _applyEffectValue: function (info, value) {
 var node = this._nodes[info.index];
 var property = info.name;
+value = this._computeFinalAnnotationValue(node, property, value, info);
+if (info.customEvent && node[property] === value) {
+return;
+}
+if (info.kind == 'attribute') {
+this.serializeValueToAttribute(value, property, node);
+} else {
+var pinfo = node._propertyInfo && node._propertyInfo[property];
+if (pinfo && pinfo.readOnly) {
+return;
+}
+this.__setProperty(property, value, false, node);
+}
+},
+_computeFinalAnnotationValue: function (node, property, value, info) {
+if (info.negate) {
+value = !value;
+}
 if (info.isCompound) {
 var storage = node.__compoundStorage__[property];
 storage[info.compoundIndex] = value;
 value = storage.join('');
 }
-if (info.kind == 'attribute') {
-this.serializeValueToAttribute(value, property, node);
-} else {
+if (info.kind !== 'attribute') {
 if (property === 'className') {
 value = this._scopeElementClass(node, value);
 }
 if (property === 'textContent' || node.localName == 'input' && property == 'value') {
 value = value == undefined ? '' : value;
 }
-var pinfo;
-if (!node._propertyInfo || !(pinfo = node._propertyInfo[property]) || !pinfo.readOnly) {
-this.__setProperty(property, value, false, node);
 }
-}
+return value;
 },
 _executeStaticEffects: function () {
 if (this._propertyEffects && this._propertyEffects.__static__) {
 this._effectEffects('__static__', null, this._propertyEffects.__static__);
 }
 }
-});
-(function () {
+});(function () {
 var usePolyfillProto = Polymer.Settings.usePolyfillProto;
 Polymer.Base._addFeature({
 _setupConfigure: function (initialConfig) {
@@ -4803,13 +4836,14 @@ for (var p in config) {
 var fx = fx$[p];
 if (fx) {
 for (var i = 0, l = fx.length, x; i < l && (x = fx[i]); i++) {
-if (x.kind === 'annotation' && !x.isCompound) {
+if (x.kind === 'annotation') {
 var node = this._nodes[x.effect.index];
 var name = x.effect.propertyName;
 var isAttr = x.effect.kind == 'attribute';
 var hasEffect = node._propertyEffects && node._propertyEffects[name];
 if (node._configValue && (hasEffect || !isAttr)) {
 var value = p === x.effect.value ? config[p] : this._get(x.effect.value, config);
+value = this._computeFinalAnnotationValue(node, name, value, x.effect);
 if (isAttr) {
 value = node.deserialize(this.serialize(value), node._propertyInfo[name].type);
 }
@@ -4863,13 +4897,15 @@ h[0].call(this, h[1], h[2], h[3]);
 this._handlers = [];
 }
 });
-}());
-(function () {
+}());(function () {
 'use strict';
 Polymer.Base._addFeature({
 notifyPath: function (path, value, fromAbove) {
 var info = {};
-this._get(path, this, info);
+var v = this._get(path, this, info);
+if (arguments.length === 1) {
+value = v;
+}
 if (info.path) {
 this._notifyPath(info.path, value, fromAbove);
 }
@@ -5067,17 +5103,13 @@ var change = {
 keySplices: Polymer.Collection.applySplices(array, splices),
 indexSplices: splices
 };
-if (!array.hasOwnProperty('splices')) {
-Object.defineProperty(array, 'splices', {
-configurable: true,
-writable: true
-});
-}
-array.splices = change;
-this._notifyPath(path + '.splices', change);
+var splicesPath = path + '.splices';
+this._notifyPath(splicesPath, change);
 this._notifyPath(path + '.length', array.length);
-change.keySplices = null;
-change.indexSplices = null;
+this.__data__[splicesPath] = {
+keySplices: null,
+indexSplices: null
+};
 },
 _notifySplice: function (array, path, index, added, removed) {
 this._notifySplices(array, path, [{
@@ -5172,8 +5204,7 @@ _getPathParts: Polymer.Base._getPathParts
 });
 }
 });
-}());
-Polymer.Base._addFeature({
+}());Polymer.Base._addFeature({
 resolveUrl: function (url) {
 var module = Polymer.DomModule.import(this.is);
 var root = '';
@@ -5183,8 +5214,7 @@ root = Polymer.ResolveUrl.resolveUrl(assetPath, module.ownerDocument.baseURI);
 }
 return Polymer.ResolveUrl.resolveUrl(url, root);
 }
-});
-Polymer.CssParse = function () {
+});Polymer.CssParse = function () {
 return {
 parse: function (text) {
 text = this._clean(text);
@@ -5328,8 +5358,7 @@ VAR_START: '--',
 MEDIA_START: '@media',
 AT_START: '@'
 };
-}();
-Polymer.StyleUtil = function () {
+}();Polymer.StyleUtil = function () {
 return {
 MODULE_STYLES_SELECTOR: 'style, link[rel=import][type~=css], template',
 INCLUDE_ATTR: 'include',
@@ -5379,6 +5408,9 @@ this.forEachRule(r, styleRuleCallback, keyframesRuleCallback);
 },
 applyCss: function (cssText, moniker, target, contextNode) {
 var style = this.createScopeStyle(cssText, moniker);
+return this.applyStyle(style, target, contextNode);
+},
+applyStyle: function (style, target, contextNode) {
 target = target || document.head;
 var after = contextNode && contextNode.nextSibling || target.firstChild;
 this.__lastHeadApplyNode = style;
@@ -5447,8 +5479,7 @@ resolveCss: Polymer.ResolveUrl.resolveCss,
 parser: Polymer.CssParse,
 ruleTypes: Polymer.CssParse.types
 };
-}();
-Polymer.StyleTransformer = function () {
+}();Polymer.StyleTransformer = function () {
 var nativeShadow = Polymer.Settings.useNativeShadow;
 var styleUtil = Polymer.StyleUtil;
 var api = {
@@ -5631,8 +5662,7 @@ var PSEUDO_PREFIX = ':';
 var CLASS = 'class';
 var CONTENT_START = new RegExp('^(' + CONTENT + ')');
 return api;
-}();
-Polymer.StyleExtends = function () {
+}();Polymer.StyleExtends = function () {
 var styleUtil = Polymer.StyleUtil;
 return {
 hasExtends: function (cssText) {
@@ -5702,8 +5732,7 @@ EXTEND: /@extends\(([^)]*)\)\s*?;/gim,
 STRIP: /%[^,]*$/
 }
 };
-}();
-(function () {
+}();(function () {
 var prepElement = Polymer.Base._prepElement;
 var nativeShadow = Polymer.Settings.useNativeShadow;
 var styleUtil = Polymer.StyleUtil;
@@ -5808,8 +5837,7 @@ return mo;
 }
 }
 });
-}());
-Polymer.StyleProperties = function () {
+}());Polymer.StyleProperties = function () {
 'use strict';
 var nativeShadow = Polymer.Settings.useNativeShadow;
 var matchesSelector = Polymer.DomApi.matchesSelector;
@@ -6071,12 +6099,20 @@ if (s._useCount <= 0 && s.parentNode) {
 s.parentNode.removeChild(s);
 }
 }
-if (nativeShadow || (!style || !style.parentNode)) {
-if (nativeShadow && element._customStyle) {
+if (nativeShadow) {
+if (element._customStyle) {
 element._customStyle.textContent = cssText;
 style = element._customStyle;
 } else if (cssText) {
-style = styleUtil.applyCss(cssText, selector, nativeShadow ? element.root : null, element._scopeStyle);
+style = styleUtil.applyCss(cssText, selector, element.root);
+}
+} else {
+if (!style) {
+if (cssText) {
+style = styleUtil.applyCss(cssText, selector, null, element._scopeStyle);
+}
+} else if (!style.parentNode) {
+styleUtil.applyStyle(style, null, element._scopeStyle);
 }
 }
 if (style) {
@@ -6117,8 +6153,7 @@ var o = parseInt(n / 32);
 var v = 1 << n % 32;
 bits[o] = (bits[o] || 0) | v;
 }
-}();
-(function () {
+}();(function () {
 Polymer.StyleCache = function () {
 this.cache = {};
 };
@@ -6164,8 +6199,7 @@ _objectsStrictlyEqual: function (target, source) {
 return this._objectsEqual(target, source) && this._objectsEqual(source, target);
 }
 };
-}());
-Polymer.StyleDefaults = function () {
+}());Polymer.StyleDefaults = function () {
 var styleProperties = Polymer.StyleProperties;
 var StyleCache = Polymer.StyleCache;
 var api = {
@@ -6206,8 +6240,7 @@ s._apply();
 }
 };
 return api;
-}();
-(function () {
+}();(function () {
 'use strict';
 var serializeValueToAttribute = Polymer.Base.serializeValueToAttribute;
 var propertyUtils = Polymer.StyleProperties;
@@ -6368,8 +6401,7 @@ var styleCache = new Polymer.StyleCache();
 Polymer.customStyleCache = styleCache;
 var SCOPE_NAME = styleTransformer.SCOPE_NAME;
 var XSCOPE_NAME = propertyUtils.XSCOPE_NAME;
-}());
-Polymer.Base._addFeature({
+}());Polymer.Base._addFeature({
 _registerFeatures: function () {
 this._prepIs();
 this._prepConstructor();
@@ -6415,8 +6447,7 @@ if (b.listeners) {
 this._listenListeners(b.listeners);
 }
 }
-});
-(function () {
+});(function () {
 var propertyUtils = Polymer.StyleProperties;
 var styleUtil = Polymer.StyleUtil;
 var cssParse = Polymer.CssParse;
@@ -6489,8 +6520,7 @@ rule.cssText = propertyUtils.valueForProperties(css, props);
 });
 }
 });
-}());
-Polymer.Templatizer = {
+}());Polymer.Templatizer = {
 properties: { __hideTemplateChildren__: { observer: '_showHideChildren' } },
 _instanceProps: Polymer.nob,
 _parentPropPrefix: '_parent_',
@@ -6680,7 +6710,7 @@ var dot = path.indexOf('.');
 var root = dot < 0 ? path : path.slice(0, dot);
 dataHost._forwardInstancePath.call(dataHost, this, path, value);
 if (root in dataHost._parentProps) {
-dataHost._templatized.notifyPath(dataHost._parentPropPrefix + path, value);
+dataHost._templatized._notifyPath(dataHost._parentPropPrefix + path, value);
 }
 },
 _pathEffectorImpl: function (path, value, fromAbove) {
@@ -6733,6 +6763,7 @@ var host = this._rootDataHost;
 if (host) {
 return host._scopeElementClass(node, value);
 }
+return value;
 },
 stamp: function (model) {
 model = model || {};
@@ -6760,8 +6791,7 @@ el = el.parentNode;
 }
 }
 }
-};
-Polymer({
+};Polymer({
 is: 'dom-template',
 extends: 'template',
 _template: null,
@@ -6769,8 +6799,7 @@ behaviors: [Polymer.Templatizer],
 ready: function () {
 this.templatize(this);
 }
-});
-Polymer._collections = new WeakMap();
+});Polymer._collections = new WeakMap();
 Polymer.Collection = function (userArray) {
 Polymer._collections.set(userArray, this);
 this.userArray = userArray;
@@ -6905,8 +6934,7 @@ return Polymer._collections.get(userArray) || new Polymer.Collection(userArray);
 Polymer.Collection.applySplices = function (userArray, splices) {
 var coll = Polymer._collections.get(userArray);
 return coll ? coll._applySplices(splices) : null;
-};
-Polymer({
+};Polymer({
 is: 'dom-repeat',
 extends: 'template',
 _template: null,
@@ -7372,8 +7400,7 @@ indexForElement: function (el) {
 var instance = this.modelForElement(el);
 return instance && instance[this.indexAs];
 }
-});
-Polymer({
+});Polymer({
 is: 'array-selector',
 _template: null,
 properties: {
@@ -7464,8 +7491,7 @@ this.linkPaths('selectedItem', 'items.' + key);
 }
 }
 }
-});
-Polymer({
+});Polymer({
 is: 'dom-if',
 extends: 'template',
 _template: null,
@@ -7565,8 +7591,7 @@ if (this._instance) {
 this._instance._notifyPath(path, value, true);
 }
 }
-});
-Polymer({
+});Polymer({
 is: 'dom-bind',
 extends: 'template',
 _template: null,
@@ -7649,6 +7674,35 @@ this._insertChildren();
 this.fire('dom-change');
 }
 });</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <style>
@@ -9210,8 +9264,8 @@ this.fire('dom-change');
 
       /**
        * Fired when the list of selectable items changes (e.g., items are
-       * added or removed). The detail of the event is a list of mutation
-       * records that describe what changed.
+       * added or removed). The detail of the event is a mutation record that
+       * describes what changed.
        *
        * @event iron-items-changed
        */
@@ -9518,7 +9572,7 @@ this.fire('dom-change');
 
     // observe items change under the given node.
     _observeItems: function(node) {
-      return Polymer.dom(node).observeNodes(function(mutations) {
+      return Polymer.dom(node).observeNodes(function(mutation) {
         this._updateItems();
 
         if (this._shouldUpdateSelection) {
@@ -9527,7 +9581,7 @@ this.fire('dom-change');
 
         // Let other interested parties know about the change so that
         // we don't have to recreate mutation observers everywhere.
-        this.fire('iron-items-changed', mutations, {
+        this.fire('iron-items-changed', mutation, {
           bubbles: false,
           cancelable: false
         });
@@ -10798,7 +10852,7 @@ this.fire('dom-change');
       return transformKey(keyEvent.key, noSpecialChars) ||
         transformKeyIdentifier(keyEvent.keyIdentifier) ||
         transformKeyCode(keyEvent.keyCode) ||
-        transformKey(keyEvent.detail.key, noSpecialChars) || '';
+        transformKey(keyEvent.detail ? keyEvent.detail.key : keyEvent.detail, noSpecialChars) || '';
     }
 
     function keyComboMatchesEvent(keyCombo, event) {
@@ -11140,13 +11194,15 @@ this.fire('dom-change');
 
       if (event.target === this) {
         this._setFocused(event.type === 'focus');
-      } else if (!this.shadowRoot &&
-          !this.isLightDescendant(Polymer.dom(event).localTarget)) {
-        this.fire(event.type, {sourceEvent: event}, {
-          node: this,
-          bubbles: event.bubbles,
-          cancelable: event.cancelable
-        });
+      } else if (!this.shadowRoot) {
+        var target = /** @type {Node} */(Polymer.dom(event).localTarget);
+        if (!this.isLightDescendant(target)) {
+          this.fire(event.type, {sourceEvent: event}, {
+            node: this,
+            bubbles: event.bubbles,
+            cancelable: event.cancelable
+          });
+        }
       }
     },
 
@@ -13221,7 +13277,7 @@ this.fire('dom-change');
         var attr = this.attrForItemTitle || 'textContent';
         var title = item[attr] || item.getAttribute(attr);
 
-        if (!item.hasAttribute('disabled') && title && 
+        if (!item.hasAttribute('disabled') && title &&
             title.trim().charAt(0).toLowerCase() === String.fromCharCode(event.keyCode).toLowerCase()) {
           this._setFocusedItem(item);
           break;
@@ -13302,17 +13358,8 @@ this.fire('dom-change');
      * detail.
      */
     _onIronItemsChanged: function(event) {
-      var mutations = event.detail;
-      var mutation;
-      var index;
-
-      for (index = 0; index < mutations.length; ++index) {
-        mutation = mutations[index];
-
-        if (mutation.addedNodes.length) {
-          this._resetTabindices();
-          break;
-        }
+      if (event.detail.addedNodes.length) {
+        this._resetTabindices();
       }
     },
 
@@ -14178,6 +14225,14 @@ Use `noOverlap` to position the element around another element without overlappi
       },
 
       /**
+       * If true, it will use `horizontalAlign` and `verticalAlign` values as preferred alignment
+       * and if there's not enough space, it will pick the values which minimize the cropping.
+       */
+      dynamicAlign: {
+        type: Boolean
+      },
+
+      /**
        * The same as setting margin-left and margin-right css properties.
        * @deprecated
        */
@@ -14382,10 +14437,15 @@ Use `noOverlap` to position the element around another element without overlappi
      * Equivalent to calling `resetFit()` and `fit()`. Useful to call this after
      * the element or the `fitInto` element has been resized, or if any of the
      * positioning properties (e.g. `horizontalAlign, verticalAlign`) is updated.
+     * It preserves the scroll position of the sizingTarget.
      */
     refit: function() {
+      var scrollLeft = this.sizingTarget.scrollLeft;
+      var scrollTop = this.sizingTarget.scrollTop;
       this.resetFit();
       this.fit();
+      this.sizingTarget.scrollLeft = scrollLeft;
+      this.sizingTarget.scrollTop = scrollTop;
     },
 
     /**
@@ -14408,66 +14468,40 @@ Use `noOverlap` to position the element around another element without overlappi
       var positionRect = this.__getNormalizedRect(this.positionTarget);
       var fitRect = this.__getNormalizedRect(this.fitInto);
 
+      var margin = this._fitInfo.margin;
+
       // Consider the margin as part of the size for position calculations.
-      var width = rect.width + this._fitInfo.margin.left + this._fitInfo.margin.right;
-      var height = rect.height + this._fitInfo.margin.top + this._fitInfo.margin.bottom;
+      var size = {
+        width: rect.width + margin.left + margin.right,
+        height: rect.height + margin.top + margin.bottom
+      };
 
-      var alignRight = this.__isAlignRight(this._localeHorizontalAlign, width, positionRect, fitRect);
-      var alignBottom = this.__isAlignBottom(this.verticalAlign, height, positionRect, fitRect);
+      var position = this.__getPosition(this._localeHorizontalAlign, this.verticalAlign, size, positionRect, fitRect);
 
-      var top = alignBottom ? positionRect.bottom - height : positionRect.top;
-      var left = alignRight ? positionRect.right - width : positionRect.left;
+      var left = position.left + margin.left;
+      var top = position.top + margin.top;
 
-      if (this.noOverlap) {
-        // We can overlap one of the dimensions, choose the one that minimizes the cropped area.
-        var noOverlapLeft = left + positionRect.width * (alignRight ? -1 : 1);
-        var noOverlapTop = top + positionRect.height * (alignBottom ? -1 : 1);
-        var areaOverlapLeft = this.__getCroppedArea({
-          top: noOverlapTop,
-          left: left,
-          width: width,
-          height: height
-        }, fitRect);
-        var areaOverlapTop = this.__getCroppedArea({
-          top: top,
-          left: noOverlapLeft,
-          width: width,
-          height: height
-        }, fitRect);
-        if (areaOverlapLeft >= areaOverlapTop) {
-          left = noOverlapLeft;
-        } else {
-          top = noOverlapTop;
-        }
-      }
-
-      left += this._fitInfo.margin.left;
-      top += this._fitInfo.margin.top;
-
-      // Use original size (without margin)
-      var right = left + rect.width;
-      var bottom = top + rect.height;
-
-      left = Math.max(left, this._fitInfo.margin.left);
-      top = Math.max(top, this._fitInfo.margin.top);
-
-      var maxWidth = Math.min(fitRect.right - this._fitInfo.margin.right, right) - left;
-      var maxHeight = Math.min(fitRect.bottom - this._fitInfo.margin.bottom, bottom) - top;
+      // Use original size (without margin).
+      var right = Math.min(fitRect.right - margin.right, left + rect.width);
+      var bottom = Math.min(fitRect.bottom - margin.bottom, top + rect.height);
 
       var minWidth = this._fitInfo.sizedBy.minWidth;
       var minHeight = this._fitInfo.sizedBy.minHeight;
-
-      if (maxWidth < minWidth || right < minWidth) {
-        left = -9999;
-        maxWidth = 0;
+      if (left < margin.left) {
+        left = margin.left;
+        if (right - left < minWidth) {
+          left = right - minWidth;
+        }
       }
-      if (maxHeight < minHeight || bottom < minHeight) {
-        top = -9999;
-        maxHeight = 0;
+      if (top < margin.top) {
+        top = margin.top;
+        if (bottom - top < minHeight) {
+          top = bottom - minHeight;
+        }
       }
 
-      this.sizingTarget.style.maxWidth = maxWidth + 'px';
-      this.sizingTarget.style.maxHeight = maxHeight + 'px';
+      this.sizingTarget.style.maxWidth = (right - left) + 'px';
+      this.sizingTarget.style.maxHeight = (bottom - top) + 'px';
 
       // Remove the offset caused by any stacking context.
       this.style.left = (left - rect.left) + 'px';
@@ -14579,46 +14613,100 @@ Use `noOverlap` to position the element around another element without overlappi
       return target.getBoundingClientRect();
     },
 
-    __isAlignRight: function(hAlign, size, positionRect, fitRect) {
-      if (hAlign === 'right') {
-        return true;
-      }
-      if (hAlign === 'auto') {
-        // We should align on the right if positionTarget is on the right of fitInto,
-        // or if we can overlap and aligning on the left would cause more cropping
-        // than aligning on the right.
-        var positionTargetCenter = positionRect.left + positionRect.width/2;
-        var fitIntoCenter = fitRect.left + fitRect.width/2;
-        var croppedLeft = Math.abs(Math.min(0, positionRect.left));
-        var croppedRight = Math.abs(Math.min(0, positionRect.right - size));
-        return positionTargetCenter > fitIntoCenter ||
-          (!this.noOverlap && croppedLeft > croppedRight);
-      }
-      return false;
+    __getCroppedArea: function(position, size, fitRect) {
+      var verticalCrop = Math.min(0, position.top) + Math.min(0, fitRect.bottom - (position.top + size.height));
+      var horizontalCrop = Math.min(0, position.left) + Math.min(0, fitRect.right - (position.left + size.width));
+      return Math.abs(verticalCrop) * size.width + Math.abs(horizontalCrop) * size.height;
     },
 
-    __isAlignBottom: function(vAlign, size, positionRect, fitRect) {
-      if (vAlign === 'bottom') {
-        return true;
-      }
-      if (vAlign === 'auto') {
-        // We should align on the bottom if positionTarget is on the bottom of fitInto,
-        // or if we can overlap and aligning on the top would cause more cropping
-        // than aligning on the bottom.
-        var positionTargetCenter = positionRect.top + positionRect.height/2;
-        var fitIntoCenter = fitRect.top + fitRect.height/2;
-        var croppedTop = Math.abs(Math.min(0, positionRect.top));
-        var croppedBottom = Math.abs(Math.min(0, positionRect.bottom - size));
-        return positionTargetCenter > fitIntoCenter ||
-          (!this.noOverlap && croppedTop > croppedBottom);
-      }
-      return false;
-    },
 
-    __getCroppedArea: function(rect, fitRect) {
-      var verticalCrop = Math.min(0, rect.top) + Math.min(0, fitRect.bottom - (rect.top + rect.height));
-      var horizontalCrop = Math.min(0, rect.left) + Math.min(0, fitRect.right - (rect.left + rect.width));
-      return Math.abs(verticalCrop) * rect.width + Math.abs(horizontalCrop) * rect.height;
+    __getPosition: function(hAlign, vAlign, size, positionRect, fitRect) {
+      // All the possible configurations.
+      // Ordered as top-left, top-right, bottom-left, bottom-right.
+      var positions = [{
+        verticalAlign: 'top',
+        horizontalAlign: 'left',
+        top: positionRect.top,
+        left: positionRect.left
+      }, {
+        verticalAlign: 'top',
+        horizontalAlign: 'right',
+        top: positionRect.top,
+        left: positionRect.right - size.width
+      }, {
+        verticalAlign: 'bottom',
+        horizontalAlign: 'left',
+        top: positionRect.bottom - size.height,
+        left: positionRect.left
+      }, {
+        verticalAlign: 'bottom',
+        horizontalAlign: 'right',
+        top: positionRect.bottom - size.height,
+        left: positionRect.right - size.width
+      }];
+
+      if (this.noOverlap) {
+        // Duplicate.
+        for (var i = 0, l = positions.length; i < l; i++) {
+          var copy = {};
+          for (var key in positions[i]) {
+            copy[key] = positions[i][key];
+          }
+          positions.push(copy);
+        }
+        // Horizontal overlap only.
+        positions[0].top = positions[1].top += positionRect.height;
+        positions[2].top = positions[3].top -= positionRect.height;
+        // Vertical overlap only.
+        positions[4].left = positions[6].left += positionRect.width;
+        positions[5].left = positions[7].left -= positionRect.width;
+      }
+
+      // Consider auto as null for coding convenience.
+      vAlign = vAlign === 'auto' ? null : vAlign;
+      hAlign = hAlign === 'auto' ? null : hAlign;
+
+      var position;
+      for (var i = 0; i < positions.length; i++) {
+        var pos = positions[i];
+
+        // If both vAlign and hAlign are defined, return exact match.
+        // For dynamicAlign and noOverlap we'll have more than one candidate, so
+        // we'll have to check the croppedArea to make the best choice.
+        if (!this.dynamicAlign && !this.noOverlap &&
+            pos.verticalAlign === vAlign && pos.horizontalAlign === hAlign) {
+          position = pos;
+          break;
+        }
+
+        // Align is ok if alignment preferences are respected. If no preferences,
+        // it is considered ok.
+        var alignOk = (!vAlign || pos.verticalAlign === vAlign) &&
+                      (!hAlign || pos.horizontalAlign === hAlign);
+
+        // Filter out elements that don't match the alignment (if defined).
+        // With dynamicAlign, we need to consider all the positions to find the
+        // one that minimizes the cropped area.
+        if (!this.dynamicAlign && !alignOk) {
+          continue;
+        }
+
+        position = position || pos;
+        pos.croppedArea = this.__getCroppedArea(pos, size, fitRect);
+        var diff = pos.croppedArea - position.croppedArea;
+        // Check which crops less. If it crops equally, check if align is ok.
+        if (diff < 0 || (diff === 0 && alignOk)) {
+          position = pos;
+        }
+        // If not cropped and respects the align requirements, keep it.
+        // This allows to prefer positions overlapping horizontally over the
+        // ones overlapping vertically.
+        if (position.croppedArea === 0 && alignOk) {
+          break;
+        }
+      }
+
+      return position;
     }
 
   };
@@ -14627,28 +14715,28 @@ Use `noOverlap` to position the element around another element without overlappi
 
 <dom-module id="iron-overlay-backdrop" assetpath="../bower_components/iron-overlay-behavior/">
 
-  <style>
-    :host {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var(--iron-overlay-backdrop-background-color, #000);
-      opacity: 0;
-      transition: opacity 0.2s;
-      pointer-events: none;
-      @apply(--iron-overlay-backdrop);
-    }
-
-    :host(.opened) {
-      opacity: var(--iron-overlay-backdrop-opacity, 0.6);
-      pointer-events: auto;
-      @apply(--iron-overlay-backdrop-opened);
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--iron-overlay-backdrop-background-color, #000);
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+        @apply(--iron-overlay-backdrop);
+      }
+
+      :host(.opened) {
+        opacity: var(--iron-overlay-backdrop-opacity, 0.6);
+        pointer-events: auto;
+        @apply(--iron-overlay-backdrop-opened);
+      }
+    </style>
+
     <content></content>
   </template>
 
@@ -14792,10 +14880,10 @@ Use `noOverlap` to position the element around another element without overlappi
      */
     this._backdropElement = null;
 
-    // Listen to mousedown or touchstart to be sure to be the first to capture
-    // clicks outside the overlay.
-    var clickEvent = ('ontouchstart' in window) ? 'touchstart' : 'mousedown';
-    document.addEventListener(clickEvent, this._onCaptureClick.bind(this), true);
+    // Enable document-wide tap recognizer.
+    Polymer.Gestures.add(document, 'tap', null);
+    // Need to have useCapture=true, Polymer.Gestures doesn't offer that.
+    document.addEventListener('tap', this._onCaptureClick.bind(this), true);
     document.addEventListener('focus', this._onCaptureFocus.bind(this), true);
     document.addEventListener('keydown', this._onCaptureKeyDown.bind(this), true);
   };
@@ -14875,7 +14963,6 @@ Use `noOverlap` to position the element around another element without overlappi
       } else {
         this.removeOverlay(overlay);
       }
-      this.trackBackdrop();
     },
 
     /**
@@ -14887,6 +14974,7 @@ Use `noOverlap` to position the element around another element without overlappi
       var i = this._overlays.indexOf(overlay);
       if (i >= 0) {
         this._bringOverlayAtIndexToFront(i);
+        this.trackBackdrop();
         return;
       }
       var insertionIndex = this._overlays.length;
@@ -14913,6 +15001,7 @@ Use `noOverlap` to position the element around another element without overlappi
       // Get focused node.
       var element = this.deepActiveElement;
       overlay.restoreFocusNode = this._overlayParent(element) ? null : element;
+      this.trackBackdrop();
     },
 
     /**
@@ -14931,6 +15020,7 @@ Use `noOverlap` to position the element around another element without overlappi
       if (node && Polymer.dom(document.body).deepContains(node)) {
         node.focus();
       }
+      this.trackBackdrop();
     },
 
     /**
@@ -15099,12 +15189,6 @@ Use `noOverlap` to position the element around another element without overlappi
       var overlay = /** @type {?} */ (this.currentOverlay());
       // Check if clicked outside of top overlay.
       if (overlay && this._overlayInPath(Polymer.dom(event).path) !== overlay) {
-        if (overlay.withBackdrop) {
-          // There's no need to stop the propagation as the backdrop element
-          // already got this mousedown/touchstart event. Calling preventDefault
-          // on this event ensures that click/tap won't be triggered at all.
-          event.preventDefault();
-        }
         overlay._onCaptureClick(event);
       }
     },
@@ -15456,10 +15540,15 @@ context. You should place this element as a child of `<body>` whenever possible.
         return;
       }
 
-      this._manager.addOrRemoveOverlay(this);
-
       if (this.__openChangedAsync) {
         window.cancelAnimationFrame(this.__openChangedAsync);
+      }
+
+      // Synchronously remove the overlay.
+      // The adding is done asynchronously to go out of the scope of the event
+      // which might have generated the opening.
+      if (!this.opened) {
+        this._manager.removeOverlay(this);
       }
 
       // Defer any animation-related code on attached
@@ -15470,16 +15559,17 @@ context. You should place this element as a child of `<body>` whenever possible.
 
       this.__isAnimating = true;
 
-      if (this.opened) {
-        // requestAnimationFrame for non-blocking rendering
-        this.__openChangedAsync = window.requestAnimationFrame(function() {
-          this.__openChangedAsync = null;
+      // requestAnimationFrame for non-blocking rendering
+      this.__openChangedAsync = window.requestAnimationFrame(function() {
+        this.__openChangedAsync = null;
+        if (this.opened) {
+          this._manager.addOverlay(this);
           this._prepareRenderOpened();
           this._renderOpened();
-        }.bind(this));
-      } else {
-        this._renderClosed();
-      }
+        } else {
+          this._renderClosed();
+        }
+      }.bind(this));
     },
 
     _canceledChanged: function() {
@@ -15496,7 +15586,7 @@ context. You should place this element as a child of `<body>` whenever possible.
         this.removeAttribute('tabindex');
         this.__shouldRemoveTabIndex = false;
       }
-      if (this.opened) {
+      if (this.opened && this.isAttached) {
         this._manager.trackBackdrop();
       }
     },
@@ -15546,6 +15636,12 @@ context. You should place this element as a child of `<body>` whenever possible.
 
       this.notifyResize();
       this.__isAnimating = false;
+
+      // Store it so we don't query too much.
+      var focusableNodes = this._focusableNodes;
+      this.__firstFocusableNode = focusableNodes[0];
+      this.__lastFocusableNode = focusableNodes[focusableNodes.length - 1];
+
       this.fire('iron-overlay-opened');
     },
 
@@ -15650,15 +15746,45 @@ context. You should place this element as a child of `<body>` whenever possible.
      * @protected
      */
     _onCaptureTab: function(event) {
+      if (!this.withBackdrop) {
+        return;
+      }
       // TAB wraps from last to first focusable.
       // Shift + TAB wraps from first to last focusable.
       var shift = event.shiftKey;
       var nodeToCheck = shift ? this.__firstFocusableNode : this.__lastFocusableNode;
       var nodeToSet = shift ? this.__lastFocusableNode : this.__firstFocusableNode;
-      if (this.withBackdrop && this._focusedChild === nodeToCheck) {
-        // We set here the _focusedChild so that _onCaptureFocus will handle the
-        // wrapping of the focus (the next event after tab is focus).
+      var shouldWrap = false;
+      if (nodeToCheck === nodeToSet) {
+        // If nodeToCheck is the same as nodeToSet, it means we have an overlay
+        // with 0 or 1 focusables; in either case we still need to trap the
+        // focus within the overlay.
+        shouldWrap = true;
+      } else {
+        // In dom=shadow, the manager will receive focus changes on the main
+        // root but not the ones within other shadow roots, so we can't rely on
+        // _focusedChild, but we should check the deepest active element.
+        var focusedNode = this._manager.deepActiveElement;
+        // If the active element is not the nodeToCheck but the overlay itself,
+        // it means the focus is about to go outside the overlay, hence we
+        // should prevent that (e.g. user opens the overlay and hit Shift+TAB).
+        shouldWrap = (focusedNode === nodeToCheck || focusedNode === this);
+      }
+
+      if (shouldWrap) {
+        // When the overlay contains the last focusable element of the document
+        // and it's already focused, pressing TAB would move the focus outside
+        // the document (e.g. to the browser search bar). Similarly, when the
+        // overlay contains the first focusable element of the document and it's
+        // already focused, pressing Shift+TAB would move the focus outside the
+        // document (e.g. to the browser search bar).
+        // In both cases, we would not receive a focus event, but only a blur.
+        // In order to achieve focus wrapping, we prevent this TAB event and
+        // force the focus. This will also prevent the focus to temporarily move
+        // outside the overlay, which might cause scrolling.
+        event.preventDefault();
         this._focusedChild = nodeToSet;
+        this._applyFocus();
       }
     },
 
@@ -15688,10 +15814,6 @@ context. You should place this element as a child of `<body>` whenever possible.
       if (this.opened && !this.__isAnimating) {
         this.notifyResize();
       }
-      // Store it so we don't query too much.
-      var focusableNodes = this._focusableNodes;
-      this.__firstFocusableNode = focusableNodes[0];
-      this.__lastFocusableNode = focusableNodes[focusableNodes.length - 1];
     }
   };
 
@@ -15736,8 +15858,6 @@ context. You should place this element as a child of `<body>` whenever possible.
         box-sizing: border-box;
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
         border-radius: 2px;
-        left: 0;
-        bottom: 0;
         margin: 12px;
         font-size: 14px;
         cursor: default;
@@ -15784,6 +15904,36 @@ context. You should place this element as a child of `<body>` whenever possible.
         ],
 
         properties: {
+          /**
+           * The element to fit `this` into.
+           * Overridden from `Polymer.IronFitBehavior`.
+           */
+          fitInto: {
+            type: Object,
+            value: window,
+            observer: '_onFitIntoChanged'
+          },
+
+          /**
+           * The orientation against which to align the dropdown content
+           * horizontally relative to `positionTarget`.
+           * Overridden from `Polymer.IronFitBehavior`.
+           */
+          horizontalAlign: {
+            type: String,
+            value: 'left'
+          },
+
+          /**
+           * The orientation against which to align the dropdown content
+           * vertically relative to `positionTarget`.
+           * Overridden from `Polymer.IronFitBehavior`.
+           */
+          verticalAlign: {
+            type: String,
+            value: 'bottom'
+          },
+
           /**
            * The duration in milliseconds to show the toast.
            * Set to `0`, a negative number, or `Infinity`, to disable the
@@ -15832,7 +15982,7 @@ context. You should place this element as a child of `<body>` whenever possible.
          * @deprecated
          */
         get visible() {
-          console.warn('`visible` is deprecated, use `opened` instead');
+          Polymer.Base._warn('`visible` is deprecated, use `opened` instead');
           return this.opened;
         },
 
@@ -15860,11 +16010,11 @@ context. You should place this element as a child of `<body>` whenever possible.
           }
           for (var property in properties) {
             if (property.indexOf('_') === 0) {
-              console.warn('The property "' + property + '" is private and was not set.');
+              Polymer.Base._warn('The property "' + property + '" is private and was not set.');
             } else if (property in this) {
               this[property] = properties[property];
             } else {
-              console.warn('The property "' + property + '" is not valid.');
+              Polymer.Base._warn('The property "' + property + '" is not valid.');
             }
           }
           this.open();
@@ -15875,20 +16025,6 @@ context. You should place this element as a child of `<body>` whenever possible.
          */
         hide: function() {
           this.close();
-        },
-
-        /**
-         * Overridden from `IronFitBehavior`.
-         * Positions the toast at the bottom left of fitInto.
-         */
-        center: function () {
-          if (this.fitInto === window) {
-            this.style.bottom = this.style.left = '';
-          } else {
-            var rect = this.fitInto.getBoundingClientRect();
-            this.style.left = rect.left + 'px';
-            this.style.bottom = (window.innerHeight - rect.bottom) + 'px';
-          }
         },
 
         /**
@@ -15950,16 +16086,10 @@ context. You should place this element as a child of `<body>` whenever possible.
         },
 
         /**
-         * Overridden from `IronOverlayBehavior`.
-         * iron-fit-behavior will set the inline style position: static, which
-         * causes the toast to be rendered incorrectly when opened by default.
+         * @private
          */
-        _onIronResize: function() {
-          Polymer.IronOverlayBehaviorImpl._onIronResize.apply(this, arguments);
-          if (this.opened) {
-            // Make sure there is no inline style for position.
-            this.style.position = '';
-          }
+        _onFitIntoChanged: function(fitInto) {
+          this.positionTarget = fitInto;
         }
 
         /**
