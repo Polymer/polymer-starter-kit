@@ -146,22 +146,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    Polymer({
+    class PSKApp {
 
-      is: 'psk-app',
+      beforeRegister() {
+        this.is = 'psk-app';
+      }
 
-      attached: function() {
+      attached() {
         if (!this.route.path) {
           this.set('route.path', '/');
         }
-      },
+      }
 
-      _drawerSelected: function() {
+      _drawerSelected() {
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
       }
 
-    });
+    }
+
+    Polymer(PSKApp);
   </script>
 </dom-module>
