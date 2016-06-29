@@ -8,24 +8,19 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/app-layout/demo/sample-content.html">
-<link rel="import" href="../styles/shared-styles.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
 
-<dom-module id="psk-page-about">
+<!-- shared styles for all elements -->
+<dom-module id="shared-styles">
   <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <style>
+      /* shared style for page titles */
+      .page-title {
+        font-size: 26px;
+        margin-left: 40px;
+        color: var(--paper-grey-800);
       }
     </style>
-
-    <h2 class="page-title">About</h2>
-    <sample-content size="100"></sample-content>
   </template>
-  <script>
-    Polymer({
-      is: 'psk-page-about'
-    });
-  </script>
 </dom-module>
