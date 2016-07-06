@@ -146,7 +146,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    class PSKApp {
+    class PSKApp extends HTMLElement {
       // Element setup goes in beforeRegister instead of createdCallback.
       beforeRegister() {
         this.is = 'psk-app';
