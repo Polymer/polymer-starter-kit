@@ -1,40 +1,14 @@
 {
   "name": "Polymer Starter Kit",
   "short_name": "PSK",
+  "start_url": "/?homescreen=1",
+  "display": "standalone",
+  "theme_color": "#2E3AA1",
+  "background_color": "#3E4EB8",
   "icons": [
-    {
-      "src": "images/manifest/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
-      "src": "images/manifest/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png"
-    },
-    {
-      "src": "images/manifest/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "images/manifest/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-    {
-      "src": "images/manifest/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png"
-    },
     {
       "src": "images/manifest/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "images/manifest/icon-384x384.png",
-      "sizes": "384x384",
       "type": "image/png"
     },
     {
@@ -42,9 +16,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "background_color": "#3E4EB8",
-  "theme_color": "#2E3AA1",
-  "display": "standalone",
-  "start_url": "/?homescreen=1"
+  ]
 }
