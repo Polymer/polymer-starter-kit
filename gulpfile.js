@@ -1,6 +1,5 @@
 const gulp = require('gulp');
 const gulpif = require('gulp-if');
-const babel = require('gulp-babel');
 const imagemin = require('gulp-imagemin');
 const logging = require('plylog');
 const mergeStream = require('merge-stream');
