@@ -21,12 +21,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Oops you hit a 404. <a href="/">Head back to home.</a>
   </template>
   <script>
-    class PSKPage404 extends HTMLElement {
-      beforeRegister() {
-        this.is = 'psk-page-404';
-      }
-    }
-
-    Polymer(PSKPage404);
+    Polymer({
+      is: 'psk-page-404'
+    });
   </script>
 </dom-module>

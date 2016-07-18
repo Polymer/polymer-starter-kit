@@ -24,12 +24,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <sample-content size="100"></sample-content>
   </template>
   <script>
-    class PSKPageHome extends HTMLElement {
-      beforeRegister() {
-        this.is = 'psk-page-home';
-      }
-    }
-
-    Polymer(PSKPageHome);
+    Polymer({
+      is: 'psk-page-home'
+    });
   </script>
 </dom-module>

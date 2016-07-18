@@ -25,9 +25,6 @@ gulp.task('default', () => {
   let sources = project.sources()
     .pipe(project.splitHtml())
     // add compilers or optimizers here!
-    .pipe(gulpif('*.js', babel({
-      presets: ['es2015']
-    })))
     .pipe(gulpif('*.{png,gif,jpg,svg}', imagemin({
       progressive: true, interlaced: true
     })))

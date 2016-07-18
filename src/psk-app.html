@@ -146,33 +146,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    class PSKApp extends HTMLElement {
-      // Element setup goes in beforeRegister instead of createdCallback.
-      beforeRegister() {
-        this.is = 'psk-app';
-
-        // Define the properties object in beforeRegister.
-        this.properties = {
-          foo: {
-            type: String,
-            value: 'Hello, World'
-          }
-        };
-      }
-
+    Polymer({
+      is: 'psk-app',
+      properties: {
+        foo: {
+          type: String,
+          value: 'Hello, World'
+        }
+      },
       attached() {
         if (!this.route.path) {
           this.set('route.path', '/');
         }
-      }
-
+      },
       _drawerSelected() {
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
       }
-    }
-
-    Polymer(PSKApp);
+    });
   </script>
 </dom-module>
