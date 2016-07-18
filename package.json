@@ -10,7 +10,7 @@
     "url": "https://github.com/PolymerElements/polymer-starter-kit/issues"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4.0"
   },
   "private": true
 }
