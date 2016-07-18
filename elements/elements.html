@@ -58,6 +58,8 @@ settings.useNativeImports = settings.hasNativeImports;
 settings.useNativeCustomElements = !window.CustomElements || window.CustomElements.useNative;
 settings.useNativeShadow = settings.useShadow && settings.nativeShadow;
 settings.usePolyfillProto = !settings.useNativeCustomElements && !Object.__proto__;
+settings.hasNativeCSSProperties = !navigator.userAgent.match('AppleWebKit/601') && window.CSS && CSS.supports && CSS.supports('box-shadow', '0 0 0 var(--foo)');
+settings.useNativeCSSProperties = settings.hasNativeCSSProperties && settings.lazyRegister && settings.useNativeCSSProperties;
 return settings;
 }()
 };(function () {
@@ -144,6 +146,9 @@ element,
 fn,
 args
 ]);
+},
+hasRendered: function () {
+return this._ready;
 },
 _watchNextRender: function () {
 if (!this._waitingNextRender) {
@@ -696,7 +701,7 @@ default:
 return value != null ? value : undefined;
 }
 }
-});Polymer.version = "1.5.0";Polymer.Base._addFeature({
+});Polymer.version = '1.6.0';Polymer.Base._addFeature({
 _registerFeatures: function () {
 this._prepIs();
 this._prepBehaviors();
@@ -713,6 +718,11 @@ this._marshalHostAttributes();
 this._marshalBehaviors();
 }
 });</script>
+
+
+
+
+
 
 
 
@@ -1225,7 +1235,7 @@ node.__dom.previousSibling = ref_node ? ref_node.__dom.previousSibling : contain
 if (node.__dom.previousSibling) {
 node.__dom.previousSibling.__dom.nextSibling = node;
 }
-node.__dom.nextSibling = ref_node;
+node.__dom.nextSibling = ref_node || null;
 if (node.__dom.nextSibling) {
 node.__dom.nextSibling.__dom.previousSibling = node;
 }
@@ -2877,6 +2887,8 @@ _marshalBehavior: function (b) {
 
 
 
+
+
 <script>Polymer.nar = [];
 Polymer.Annotations = {
 parseAnnotations: function (template) {
@@ -3716,9 +3728,9 @@ bubbles: true,
 cancelable: true
 });
 if (ev.defaultPrevented) {
-var se = detail.sourceEvent;
-if (se && se.preventDefault) {
-se.preventDefault();
+var preventer = detail.preventer || detail.sourceEvent;
+if (preventer && preventer.preventDefault) {
+preventer.preventDefault();
 }
 }
 },
@@ -3784,16 +3796,17 @@ trackDocument(this.info, movefn, upfn);
 this.fire('down', t, e);
 },
 touchstart: function (e) {
-this.fire('down', Gestures.findOriginalTarget(e), e.changedTouches[0]);
+this.fire('down', Gestures.findOriginalTarget(e), e.changedTouches[0], e);
 },
 touchend: function (e) {
-this.fire('up', Gestures.findOriginalTarget(e), e.changedTouches[0]);
+this.fire('up', Gestures.findOriginalTarget(e), e.changedTouches[0], e);
 },
-fire: function (type, target, event) {
+fire: function (type, target, event, preventer) {
 Gestures.fire(target, type, {
 x: event.clientX,
 y: event.clientY,
 sourceEvent: event,
+preventer: preventer,
 prevent: function (e) {
 return Gestures.prevent(e);
 }
@@ -3922,10 +3935,10 @@ this.info.addMove({
 x: ct.clientX,
 y: ct.clientY
 });
-this.fire(t, ct);
+this.fire(t, ct, e);
 }
 },
-fire: function (target, touch) {
+fire: function (target, touch, preventer) {
 var secondlast = this.info.moves[this.info.moves.length - 2];
 var lastmove = this.info.moves[this.info.moves.length - 1];
 var dx = lastmove.x - this.info.x;
@@ -3944,6 +3957,7 @@ dy: dy,
 ddx: ddx,
 ddy: ddy,
 sourceEvent: touch,
+preventer: preventer,
 hover: function () {
 return Gestures.deepTargetFind(touch.clientX, touch.clientY);
 }
@@ -3994,12 +4008,12 @@ this.forward(e);
 }
 },
 touchstart: function (e) {
-this.save(e.changedTouches[0]);
+this.save(e.changedTouches[0], e);
 },
 touchend: function (e) {
-this.forward(e.changedTouches[0]);
+this.forward(e.changedTouches[0], e);
 },
-forward: function (e) {
+forward: function (e, preventer) {
 var dx = Math.abs(e.clientX - this.info.x);
 var dy = Math.abs(e.clientY - this.info.y);
 var t = Gestures.findOriginalTarget(e);
@@ -4008,7 +4022,8 @@ if (!this.info.prevent) {
 Gestures.fire(t, 'tap', {
 x: e.clientX,
 y: e.clientY,
-sourceEvent: e
+sourceEvent: e,
+preventer: preventer
 });
 }
 }
@@ -4044,7 +4059,9 @@ Gestures.setTouchAction(node, DIRECTION_MAP[direction] || 'auto');
 }
 });
 Polymer.Gestures = Gestures;
-}());Polymer.Base._addFeature({
+}());(function () {
+'use strict';
+Polymer.Base._addFeature({
 $$: function (slctr) {
 return Polymer.dom(this.root).querySelector(slctr);
 },
@@ -4184,26 +4201,45 @@ node = node || this;
 this.transform('translate3d(' + x + ',' + y + ',' + z + ')', node);
 },
 importHref: function (href, onload, onerror, optAsync) {
-var l = document.createElement('link');
-l.rel = 'import';
-l.href = href;
-optAsync = Boolean(optAsync);
-if (optAsync) {
-l.setAttribute('async', '');
-}
+var link = document.createElement('link');
+link.rel = 'import';
+link.href = href;
+var list = Polymer.Base.importHref.imported = Polymer.Base.importHref.imported || {};
+var cached = list[link.href];
+var imprt = cached || link;
 var self = this;
 if (onload) {
-l.onload = function (e) {
+var loadListener = function (e) {
+e.target.__firedLoad = true;
+e.target.removeEventListener('load', loadListener);
 return onload.call(self, e);
 };
+imprt.addEventListener('load', loadListener);
 }
 if (onerror) {
-l.onerror = function (e) {
+var errorListener = function (e) {
+e.target.__firedError = true;
+e.target.removeEventListener('error', errorListener);
 return onerror.call(self, e);
 };
+imprt.addEventListener('error', errorListener);
 }
-document.head.appendChild(l);
-return l;
+if (cached) {
+if (cached.__firedLoad) {
+cached.dispatchEvent(new Event('load'));
+}
+if (cached.__firedError) {
+cached.dispatchEvent(new Event('error'));
+}
+} else {
+list[link.href] = link;
+optAsync = Boolean(optAsync);
+if (optAsync) {
+link.setAttribute('async', '');
+}
+document.head.appendChild(link);
+}
+return imprt;
 },
 create: function (tag, props) {
 var elt = document.createElement(tag);
@@ -4220,7 +4256,22 @@ return this !== node && this.contains(node) && Polymer.dom(this).getOwnerRoot() 
 isLocalDescendant: function (node) {
 return this.root === Polymer.dom(node).getOwnerRoot();
 }
-});Polymer.Bind = {
+});
+if (!Polymer.Settings.useNativeCustomElements) {
+var importHref = Polymer.Base.importHref;
+Polymer.Base.importHref = function (href, onload, onerror, optAsync) {
+CustomElements.ready = false;
+var loadFn = function (e) {
+CustomElements.upgradeDocumentTree(document);
+CustomElements.ready = true;
+if (onload) {
+return onload.call(this, e);
+}
+};
+return importHref.call(this, href, loadFn, onerror, optAsync);
+};
+}
+}());Polymer.Bind = {
 prepareModel: function (model) {
 Polymer.Base.mixin(model, this._modelApi);
 },
@@ -4261,7 +4312,7 @@ node[property] = value;
 },
 _effectEffects: function (property, value, effects, old, fromAbove) {
 for (var i = 0, l = effects.length, fx; i < l && (fx = effects[i]); i++) {
-fx.fn.call(this, property, value, fx.effect, old, fromAbove);
+fx.fn.call(this, property, this[property], fx.effect, old, fromAbove);
 }
 },
 _clearPath: function (path) {
@@ -5048,7 +5099,7 @@ Polymer.Bind._annotatedComputationEffect.call(this, path, value, effect);
 },
 _pathMatchesEffect: function (path, effect) {
 var effectArg = effect.trigger.name;
-return effectArg == path || effectArg.indexOf(path + '.') === 0 || effect.trigger.wildcard && path.indexOf(effectArg) === 0;
+return effectArg == path || effectArg.indexOf(path + '.') === 0 || effect.trigger.wildcard && path.indexOf(effectArg + '.') === 0;
 },
 linkPaths: function (to, from) {
 this._boundPaths = this._boundPaths || {};
@@ -5300,7 +5351,7 @@ text = text || '';
 var cssText = '';
 if (node.cssText || node.rules) {
 var r$ = node.rules;
-if (r$ && (preserveProperties || !this._hasMixinRules(r$))) {
+if (r$ && !this._hasMixinRules(r$)) {
 for (var i = 0, l = r$.length, r; i < l && (r = r$[i]); i++) {
 cssText = this.stringify(r, preserveProperties, cssText);
 }
@@ -5349,7 +5400,7 @@ comments: /\/\*[^*]*\*+([^\/*][^*]*\*+)*\//gim,
 port: /@import[^;]*;/gim,
 customProp: /(?:^[^;\-\s}]+)?--[^;{}]*?:[^{};]*?(?:[;\n]|$)/gim,
 mixinProp: /(?:^[^;\-\s}]+)?--[^;{}]*?:[^{};]*?{[^}]*?}(?:[;\n]|$)?/gim,
-mixinApply: /@apply[\s]*\([^)]*?\)[\s]*(?:[;\n]|$)?/gim,
+mixinApply: /@apply\s*\(?[^);]*\)?\s*(?:[;\n]|$)?/gim,
 varApply: /[^;:]*?:[^;]*?var\([^;]*\)(?:[;\n]|$)?/gim,
 keyframesRule: /^@[^\s]*keyframes/,
 multipleSpaces: /\s+/g
@@ -5359,22 +5410,31 @@ MEDIA_START: '@media',
 AT_START: '@'
 };
 }();Polymer.StyleUtil = function () {
+var settings = Polymer.Settings;
 return {
+NATIVE_VARIABLES: Polymer.Settings.useNativeCSSProperties,
 MODULE_STYLES_SELECTOR: 'style, link[rel=import][type~=css], template',
 INCLUDE_ATTR: 'include',
-toCssText: function (rules, callback, preserveProperties) {
+toCssText: function (rules, callback) {
 if (typeof rules === 'string') {
 rules = this.parser.parse(rules);
 }
 if (callback) {
 this.forEachRule(rules, callback);
 }
-return this.parser.stringify(rules, preserveProperties);
+return this.parser.stringify(rules, this.NATIVE_VARIABLES);
 },
 forRulesInStyles: function (styles, styleRuleCallback, keyframesRuleCallback) {
 if (styles) {
 for (var i = 0, l = styles.length, s; i < l && (s = styles[i]); i++) {
-this.forEachRule(this.rulesForStyle(s), styleRuleCallback, keyframesRuleCallback);
+this.forEachRuleInStyle(s, styleRuleCallback, keyframesRuleCallback);
+}
+}
+},
+forActiveRulesInStyles: function (styles, styleRuleCallback, keyframesRuleCallback) {
+if (styles) {
+for (var i = 0, l = styles.length, s; i < l && (s = styles[i]); i++) {
+this.forEachRuleInStyle(s, styleRuleCallback, keyframesRuleCallback, true);
 }
 }
 },
@@ -5387,11 +5447,36 @@ return style.__cssRules;
 isKeyframesSelector: function (rule) {
 return rule.parent && rule.parent.type === this.ruleTypes.KEYFRAMES_RULE;
 },
-forEachRule: function (node, styleRuleCallback, keyframesRuleCallback) {
+forEachRuleInStyle: function (style, styleRuleCallback, keyframesRuleCallback, onlyActiveRules) {
+var rules = this.rulesForStyle(style);
+var styleCallback, keyframeCallback;
+if (styleRuleCallback) {
+styleCallback = function (rule) {
+styleRuleCallback(rule, style);
+};
+}
+if (keyframesRuleCallback) {
+keyframeCallback = function (rule) {
+keyframesRuleCallback(rule, style);
+};
+}
+this.forEachRule(rules, styleCallback, keyframeCallback, onlyActiveRules);
+},
+forEachRule: function (node, styleRuleCallback, keyframesRuleCallback, onlyActiveRules) {
 if (!node) {
 return;
 }
 var skipRules = false;
+if (onlyActiveRules) {
+if (node.type === this.ruleTypes.MEDIA_RULE) {
+var matchMedia = node.selector.match(this.rx.MEDIA_MATCH);
+if (matchMedia) {
+if (!window.matchMedia(matchMedia[1]).matches) {
+skipRules = true;
+}
+}
+}
+}
 if (node.type === this.ruleTypes.STYLE_RULE) {
 styleRuleCallback(node);
 } else if (keyframesRuleCallback && node.type === this.ruleTypes.KEYFRAMES_RULE) {
@@ -5402,7 +5487,7 @@ skipRules = true;
 var r$ = node.rules;
 if (r$ && !skipRules) {
 for (var i = 0, l = r$.length, r; i < l && (r = r$[i]); i++) {
-this.forEachRule(r, styleRuleCallback, keyframesRuleCallback);
+this.forEachRule(r, styleRuleCallback, keyframesRuleCallback, onlyActiveRules);
 }
 }
 },
@@ -5475,13 +5560,37 @@ cssText += this.resolveCss(e.import.body.textContent, e.import);
 }
 return cssText;
 },
+isTargetedBuild: function (buildType) {
+return settings.useNativeShadow ? buildType === 'shadow' : buildType === 'shady';
+},
+cssBuildTypeForModule: function (module) {
+var dm = Polymer.DomModule.import(module);
+if (dm) {
+return this.getCssBuildType(dm);
+}
+},
+getCssBuildType: function (element) {
+return element.getAttribute('css-build');
+},
+rx: {
+VAR_ASSIGN: /(?:^|[;\s{]\s*)(--[\w-]*?)\s*:\s*(?:([^;{]*)|{([^}]*)})(?:(?=[;\s}])|$)/gi,
+MIXIN_MATCH: /(?:^|\W+)@apply\s*\(?([^);\n]*)\)?/gi,
+VAR_MATCH: /(^|\W+)var\([\s]*([^,)]*)[\s]*,?[\s]*((?:[^,()]*)|(?:[^;()]*\([^;)]*\)+))[\s]*?\)/gi,
+VAR_CONSUMED: /(--[\w-]+)\s*([:,;)]|$)/gi,
+ANIMATION_MATCH: /(animation\s*:)|(animation-name\s*:)/,
+MEDIA_MATCH: /@media[^(]*(\([^)]*\))/,
+IS_VAR: /^--/,
+BRACKETED: /\{[^}]*\}/g,
+HOST_PREFIX: '(?:^|[^.#[:])',
+HOST_SUFFIX: '($|[.:[\\s>+~])'
+},
 resolveCss: Polymer.ResolveUrl.resolveCss,
 parser: Polymer.CssParse,
 ruleTypes: Polymer.CssParse.types
 };
 }();Polymer.StyleTransformer = function () {
-var nativeShadow = Polymer.Settings.useNativeShadow;
 var styleUtil = Polymer.StyleUtil;
+var settings = Polymer.Settings;
 var api = {
 dom: function (node, scope, useAttr, shouldRemoveScope) {
 this._transformDom(node, scope || '', useAttr, shouldRemoveScope);
@@ -5528,9 +5637,10 @@ element.setAttribute(CLASS, (c ? c + ' ' : '') + SCOPE_NAME + ' ' + scope);
 elementStyles: function (element, callback) {
 var styles = element._styles;
 var cssText = '';
+var cssBuildType = element.__cssBuild;
 for (var i = 0, l = styles.length, s; i < l && (s = styles[i]); i++) {
 var rules = styleUtil.rulesForStyle(s);
-cssText += nativeShadow ? styleUtil.toCssText(rules, callback) : this.css(rules, element.is, element.extends, callback, element._scopeCssViaAttr) + '\n\n';
+cssText += settings.useNativeShadow || cssBuildType === 'shady' ? styleUtil.toCssText(rules, callback) : this.css(rules, element.is, element.extends, callback, element._scopeCssViaAttr) + '\n\n';
 }
 return cssText.trim();
 },
@@ -5562,18 +5672,22 @@ rule: function (rule, scope, hostScope) {
 this._transformRule(rule, this._transformComplexSelector, scope, hostScope);
 },
 _transformRule: function (rule, transformer, scope, hostScope) {
+rule.selector = rule.transformedSelector = this._transformRuleCss(rule, transformer, scope, hostScope);
+},
+_transformRuleCss: function (rule, transformer, scope, hostScope) {
 var p$ = rule.selector.split(COMPLEX_SELECTOR_SEP);
 if (!styleUtil.isKeyframesSelector(rule)) {
 for (var i = 0, l = p$.length, p; i < l && (p = p$[i]); i++) {
 p$[i] = transformer.call(this, p, scope, hostScope);
 }
 }
-rule.selector = rule.transformedSelector = p$.join(COMPLEX_SELECTOR_SEP);
+return p$.join(COMPLEX_SELECTOR_SEP);
 },
 _transformComplexSelector: function (selector, scope, hostScope) {
 var stop = false;
 var hostContext = false;
 var self = this;
+selector = selector.trim();
 selector = selector.replace(CONTENT_START, HOST + ' $1');
 selector = selector.replace(SIMPLE_SELECTOR_SEP, function (m, c, s) {
 if (!stop) {
@@ -5600,10 +5714,7 @@ var hostContext = false;
 if (selector.indexOf(HOST_CONTEXT) >= 0) {
 hostContext = true;
 } else if (selector.indexOf(HOST) >= 0) {
-selector = selector.replace(HOST_PAREN, function (m, host, paren) {
-return hostScope + paren;
-});
-selector = selector.replace(HOST, hostScope);
+selector = this._transformHostSelector(selector, hostScope);
 } else if (jumpIndex !== 0) {
 selector = scope ? this._transformSimpleSelector(selector, scope) : selector;
 }
@@ -5627,16 +5738,36 @@ var p$ = selector.split(PSEUDO_PREFIX);
 p$[0] += scope;
 return p$.join(PSEUDO_PREFIX);
 },
+_transformHostSelector: function (selector, hostScope) {
+var m = selector.match(HOST_PAREN);
+var paren = m && m[2].trim() || '';
+if (paren) {
+if (!paren[0].match(SIMPLE_SELECTOR_PREFIX)) {
+var typeSelector = paren.split(SIMPLE_SELECTOR_PREFIX)[0];
+if (typeSelector === hostScope) {
+return paren;
+} else {
+return SELECTOR_NO_MATCH;
+}
+} else {
+return selector.replace(HOST_PAREN, function (m, host, paren) {
+return hostScope + paren;
+});
+}
+} else {
+return selector.replace(HOST, hostScope);
+}
+},
 documentRule: function (rule) {
 rule.selector = rule.parsedSelector;
 this.normalizeRootSelector(rule);
-if (!nativeShadow) {
+if (!settings.useNativeShadow) {
 this._transformRule(rule, this._transformDocumentSelector);
 }
 },
 normalizeRootSelector: function (rule) {
 if (rule.selector === ROOT) {
-rule.selector = 'body';
+rule.selector = 'html';
 }
 },
 _transformDocumentSelector: function (selector) {
@@ -5648,9 +5779,10 @@ var SCOPE_NAME = api.SCOPE_NAME;
 var SCOPE_DOC_SELECTOR = ':not([' + SCOPE_NAME + '])' + ':not(.' + SCOPE_NAME + ')';
 var COMPLEX_SELECTOR_SEP = ',';
 var SIMPLE_SELECTOR_SEP = /(^|[\s>+~]+)((?:\[.+?\]|[^\s>+~=\[])+)/g;
+var SIMPLE_SELECTOR_PREFIX = /[[.:#*]/;
 var HOST = ':host';
 var ROOT = ':root';
-var HOST_PAREN = /(:host)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))/g;
+var HOST_PAREN = /(:host)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))/;
 var HOST_CONTEXT = ':host-context';
 var HOST_CONTEXT_PAREN = /(.*)(?::host-context)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))(.*)/;
 var CONTENT = '::content';
@@ -5661,6 +5793,7 @@ var CSS_ATTR_SUFFIX = ']';
 var PSEUDO_PREFIX = ':';
 var CLASS = 'class';
 var CONTENT_START = new RegExp('^(' + CONTENT + ')');
+var SELECTOR_NO_MATCH = 'should_not_match';
 return api;
 }();Polymer.StyleExtends = function () {
 var styleUtil = Polymer.StyleUtil;
@@ -5732,33 +5865,187 @@ EXTEND: /@extends\(([^)]*)\)\s*?;/gim,
 STRIP: /%[^,]*$/
 }
 };
+}();Polymer.ApplyShim = function () {
+'use strict';
+var styleUtil = Polymer.StyleUtil;
+var MIXIN_MATCH = styleUtil.rx.MIXIN_MATCH;
+var VAR_ASSIGN = styleUtil.rx.VAR_ASSIGN;
+var VAR_MATCH = styleUtil.rx.VAR_MATCH;
+var APPLY_NAME_CLEAN = /;\s*/m;
+var MIXIN_VAR_SEP = '_-_';
+var mixinMap = {};
+function mapSet(name, prop) {
+name = name.trim();
+mixinMap[name] = prop;
+}
+function mapGet(name) {
+name = name.trim();
+return mixinMap[name];
+}
+function cssTextToMap(text) {
+var props = text.split(';');
+var out = {};
+for (var i = 0, p, sp; i < props.length; i++) {
+p = props[i];
+if (p) {
+sp = p.split(':');
+if (sp.length > 1) {
+out[sp[0].trim()] = sp.slice(1).join(':');
+}
+}
+}
+return out;
+}
+function produceCssProperties(matchText, propertyName, valueProperty, valueMixin) {
+if (valueProperty) {
+VAR_MATCH.lastIndex = 0;
+var m = VAR_MATCH.exec(valueProperty);
+if (m) {
+var value = m[2];
+if (mapGet(value)) {
+valueMixin = '@apply ' + value + ';';
+}
+}
+}
+if (!valueMixin) {
+return matchText;
+}
+var mixinAsProperties = consumeCssProperties(valueMixin);
+var prefix = matchText.slice(0, matchText.indexOf('--'));
+var mixinValues = cssTextToMap(mixinAsProperties);
+var oldProperties = mapGet(propertyName);
+var combinedProps = mixinValues;
+if (oldProperties) {
+combinedProps = Polymer.Base.mixin(oldProperties, mixinValues);
+} else {
+mapSet(propertyName, combinedProps);
+}
+var out = [];
+var p, v;
+for (p in combinedProps) {
+v = mixinValues[p];
+if (v === undefined) {
+v = 'initial';
+}
+out.push(propertyName + MIXIN_VAR_SEP + p + ': ' + v);
+}
+return prefix + out.join('; ') + ';';
+}
+function fixVars(matchText, prefix, value, fallback) {
+if (!fallback || fallback.indexOf('--') !== 0) {
+return matchText;
+}
+return [
+prefix,
+'var(',
+value,
+', var(',
+fallback,
+'));'
+].join('');
+}
+function atApplyToCssProperties(mixinName, fallbacks) {
+mixinName = mixinName.replace(APPLY_NAME_CLEAN, '');
+var vars = [];
+var mixinProperties = mapGet(mixinName);
+if (mixinProperties) {
+var p, parts, f;
+for (p in mixinProperties) {
+f = fallbacks && fallbacks[p];
+parts = [
+p,
+': var(',
+mixinName,
+MIXIN_VAR_SEP,
+p
+];
+if (f) {
+parts.push(',', f);
+}
+parts.push(')');
+vars.push(parts.join(''));
+}
+}
+return vars.join('; ');
+}
+function consumeCssProperties(text) {
+var m;
+while (m = MIXIN_MATCH.exec(text)) {
+var matchText = m[0];
+var mixinName = m[1];
+var idx = m.index;
+var applyPos = idx + matchText.indexOf('@apply');
+var afterApplyPos = idx + matchText.length;
+var textBeforeApply = text.slice(0, applyPos);
+var textAfterApply = text.slice(afterApplyPos);
+var defaults = cssTextToMap(textBeforeApply);
+var replacement = atApplyToCssProperties(mixinName, defaults);
+text = [
+textBeforeApply,
+replacement,
+textAfterApply
+].join('');
+MIXIN_MATCH.lastIndex = idx + replacement.length;
+}
+return text;
+}
+var ApplyShim = {
+_map: mixinMap,
+_separator: MIXIN_VAR_SEP,
+transform: function (styles) {
+styleUtil.forRulesInStyles(styles, this._boundTransformRule);
+},
+transformRule: function (rule) {
+rule.cssText = this.transformCssText(rule.parsedCssText);
+if (rule.selector === ':root') {
+rule.selector = ':host > *';
+}
+},
+transformCssText: function (cssText) {
+cssText = cssText.replace(VAR_MATCH, fixVars);
+cssText = cssText.replace(VAR_ASSIGN, produceCssProperties);
+return consumeCssProperties(cssText);
+}
+};
+ApplyShim._boundTransformRule = ApplyShim.transformRule.bind(ApplyShim);
+return ApplyShim;
 }();(function () {
 var prepElement = Polymer.Base._prepElement;
 var nativeShadow = Polymer.Settings.useNativeShadow;
 var styleUtil = Polymer.StyleUtil;
 var styleTransformer = Polymer.StyleTransformer;
 var styleExtends = Polymer.StyleExtends;
+var applyShim = Polymer.ApplyShim;
+var settings = Polymer.Settings;
 Polymer.Base._addFeature({
 _prepElement: function (element) {
-if (this._encapsulateStyle) {
+if (this._encapsulateStyle && this.__cssBuild !== 'shady') {
 styleTransformer.element(element, this.is, this._scopeCssViaAttr);
 }
 prepElement.call(this, element);
 },
 _prepStyles: function () {
-if (!nativeShadow) {
-this._scopeStyle = styleUtil.applyStylePlaceHolder(this.is);
-}
-},
-_prepShimStyles: function () {
-if (this._template) {
 if (this._encapsulateStyle === undefined) {
 this._encapsulateStyle = !nativeShadow;
 }
-this._styles = this._collectStyles();
-var cssText = styleTransformer.elementStyles(this);
+if (!nativeShadow) {
+this._scopeStyle = styleUtil.applyStylePlaceHolder(this.is);
+}
+this.__cssBuild = styleUtil.cssBuildTypeForModule(this.is);
+},
+_prepShimStyles: function () {
+if (this._template) {
+var hasTargetedCssBuild = styleUtil.isTargetedBuild(this.__cssBuild);
+if (settings.useNativeCSSProperties && this.__cssBuild === 'shadow' && hasTargetedCssBuild) {
+return;
+}
+this._styles = this._styles || this._collectStyles();
+if (settings.useNativeCSSProperties && !this.__cssBuild) {
+applyShim.transform(this._styles);
+}
+var cssText = settings.useNativeCSSProperties && hasTargetedCssBuild ? this._styles.length && this._styles[0].textContent.trim() : styleTransformer.elementStyles(this);
 this._prepStyleProperties();
-if (!this._needsStyleProperties() && this._styles.length) {
+if (!this._needsStyleProperties() && cssText) {
 styleUtil.applyCss(cssText, this.is, nativeShadow ? this._template.content : null, this._scopeStyle);
 }
 } else {
@@ -5839,15 +6126,28 @@ return mo;
 });
 }());Polymer.StyleProperties = function () {
 'use strict';
-var nativeShadow = Polymer.Settings.useNativeShadow;
 var matchesSelector = Polymer.DomApi.matchesSelector;
 var styleUtil = Polymer.StyleUtil;
 var styleTransformer = Polymer.StyleTransformer;
+var settings = Polymer.Settings;
 return {
-decorateStyles: function (styles) {
-var self = this, props = {}, keyframes = [];
-styleUtil.forRulesInStyles(styles, function (rule) {
+decorateStyles: function (styles, scope) {
+var self = this, props = {}, keyframes = [], ruleIndex = 0;
+var scopeSelector = styleTransformer._calcHostScope(scope.is, scope.extends);
+styleUtil.forRulesInStyles(styles, function (rule, style) {
 self.decorateRule(rule);
+rule.index = ruleIndex++;
+self.whenHostOrRootRule(scope, rule, style, function (info) {
+if (rule.parent.type === styleUtil.ruleTypes.MEDIA_RULE) {
+scope.__notStyleScopeCacheable = true;
+}
+if (info.isHost) {
+var hostContextOrFunction = info.selector.split(' ').some(function (s) {
+return s.indexOf(scopeSelector) === 0 && s.length !== scopeSelector.length;
+});
+scope.__notStyleScopeCacheable = scope.__notStyleScopeCacheable || hostContextOrFunction;
+}
+});
 self.collectPropertiesInCssText(rule.propertyInfo.cssText, props);
 }, function onKeyframesRule(rule) {
 keyframes.push(rule);
@@ -5885,7 +6185,7 @@ var m, rx = this.rx.VAR_ASSIGN;
 var cssText = rule.parsedCssText;
 var any;
 while (m = rx.exec(cssText)) {
-properties[m[1]] = (m[2] || m[3]).trim();
+properties[m[1].trim()] = (m[2] || m[3]).trim();
 any = true;
 }
 return any;
@@ -5899,11 +6199,10 @@ return cssText.replace(this.rx.BRACKETED, '').replace(this.rx.VAR_ASSIGN, '');
 },
 collectPropertiesInCssText: function (cssText, props) {
 var m;
-while (m = this.rx.VAR_CAPTURE.exec(cssText)) {
-props[m[1]] = true;
-var def = m[2];
-if (def && def.match(this.rx.IS_VAR)) {
-props[def] = true;
+while (m = this.rx.VAR_CONSUMED.exec(cssText)) {
+var name = m[1];
+if (m[2] !== ':') {
+props[name] = true;
 }
 }
 },
@@ -5921,7 +6220,7 @@ property = this.valueForProperties(property, props);
 } else {
 var self = this;
 var fn = function (all, prefix, value, fallback) {
-var propertyValue = self.valueForProperty(props[value], props) || (props[fallback] ? self.valueForProperty(props[fallback], props) : fallback);
+var propertyValue = self.valueForProperty(props[value], props) || self.valueForProperty(props[fallback] || fallback, props) || fallback;
 return prefix + (propertyValue || '');
 };
 property = property.replace(this.rx.VAR_MATCH, fn);
@@ -5933,7 +6232,8 @@ valueForProperties: function (property, props) {
 var parts = property.split(';');
 for (var i = 0, p, m; i < parts.length; i++) {
 if (p = parts[i]) {
-m = p.match(this.rx.MIXIN_MATCH);
+this.rx.MIXIN_MATCH.lastIndex = 0;
+m = this.rx.MIXIN_MATCH.exec(p);
 if (m) {
 p = this.valueForProperty(props[m[1]], props);
 } else {
@@ -5990,48 +6290,78 @@ rule.cssText = output;
 },
 propertyDataFromStyles: function (styles, element) {
 var props = {}, self = this;
-var o = [], i = 0;
-styleUtil.forRulesInStyles(styles, function (rule) {
+var o = [];
+styleUtil.forActiveRulesInStyles(styles, function (rule) {
 if (!rule.propertyInfo) {
 self.decorateRule(rule);
 }
-if (element && rule.propertyInfo.properties && matchesSelector.call(element, rule.transformedSelector || rule.parsedSelector)) {
+var selectorToMatch = rule.transformedSelector || rule.parsedSelector;
+if (element && rule.propertyInfo.properties && selectorToMatch) {
+if (matchesSelector.call(element, selectorToMatch)) {
 self.collectProperties(rule, props);
-addToBitMask(i, o);
+addToBitMask(rule.index, o);
 }
-i++;
+}
 });
 return {
 properties: props,
 key: o
 };
 },
-scopePropertiesFromStyles: function (styles) {
-if (!styles._scopeStyleProperties) {
-styles._scopeStyleProperties = this.selectedPropertiesFromStyles(styles, this.SCOPE_SELECTORS);
-}
-return styles._scopeStyleProperties;
-},
-hostPropertiesFromStyles: function (styles) {
-if (!styles._hostStyleProperties) {
-styles._hostStyleProperties = this.selectedPropertiesFromStyles(styles, this.HOST_SELECTORS);
-}
-return styles._hostStyleProperties;
-},
-selectedPropertiesFromStyles: function (styles, selectors) {
-var props = {}, self = this;
-styleUtil.forRulesInStyles(styles, function (rule) {
+whenHostOrRootRule: function (scope, rule, style, callback) {
 if (!rule.propertyInfo) {
 self.decorateRule(rule);
 }
-for (var i = 0; i < selectors.length; i++) {
-if (rule.parsedSelector === selectors[i]) {
-self.collectProperties(rule, props);
+if (!rule.propertyInfo.properties) {
 return;
+}
+var hostScope = scope.is ? styleTransformer._calcHostScope(scope.is, scope.extends) : 'html';
+var parsedSelector = rule.parsedSelector;
+var isRoot = parsedSelector === ':root';
+var isHost = parsedSelector.indexOf(':host') === 0;
+var cssBuild = scope.__cssBuild || style.__cssBuild;
+if (cssBuild === 'shady') {
+isRoot = parsedSelector === hostScope + '> *.' + hostScope || parsedSelector.indexOf('html') !== -1;
+isHost = !isRoot && parsedSelector.indexOf(hostScope) === 0;
+}
+if (cssBuild === 'shadow') {
+isRoot = parsedSelector === ':host > *' || parsedSelector === 'html';
+isHost = isHost && !isRoot;
+}
+if (!isRoot && !isHost) {
+return;
+}
+var selectorToMatch = hostScope;
+if (isHost) {
+if (settings.useNativeShadow && !rule.transformedSelector) {
+rule.transformedSelector = styleTransformer._transformRuleCss(rule, styleTransformer._transformComplexSelector, scope.is, hostScope);
+}
+selectorToMatch = rule.transformedSelector || hostScope;
+}
+callback({
+selector: selectorToMatch,
+isHost: isHost,
+isRoot: isRoot
+});
+},
+hostAndRootPropertiesForScope: function (scope) {
+var hostProps = {}, rootProps = {}, self = this;
+styleUtil.forActiveRulesInStyles(scope._styles, function (rule, style) {
+self.whenHostOrRootRule(scope, rule, style, function (info) {
+var element = scope._element || scope;
+if (matchesSelector.call(element, info.selector)) {
+if (info.isHost) {
+self.collectProperties(rule, hostProps);
+} else {
+self.collectProperties(rule, rootProps);
 }
 }
 });
-return props;
+});
+return {
+rootProps: rootProps,
+hostProps: hostProps
+};
 },
 transformStyles: function (element, properties, scopeSelector) {
 var self = this;
@@ -6041,7 +6371,7 @@ var hostRx = new RegExp(this.rx.HOST_PREFIX + rxHostSelector + this.rx.HOST_SUFF
 var keyframeTransforms = this._elementKeyframeTransforms(element, scopeSelector);
 return styleTransformer.elementStyles(element, function (rule) {
 self.applyProperties(rule, properties);
-if (!nativeShadow && !Polymer.StyleUtil.isKeyframesSelector(rule) && rule.cssText) {
+if (!settings.useNativeShadow && !Polymer.StyleUtil.isKeyframesSelector(rule) && rule.cssText) {
 self.applyKeyframeTransforms(rule, keyframeTransforms);
 self._scopeSelector(rule, hostRx, hostSelector, element._scopeCssViaAttr, scopeSelector);
 }
@@ -6050,7 +6380,7 @@ self._scopeSelector(rule, hostRx, hostSelector, element._scopeCssViaAttr, scopeS
 _elementKeyframeTransforms: function (element, scopeSelector) {
 var keyframesRules = element._styles._keyframes;
 var keyframeTransforms = {};
-if (!nativeShadow && keyframesRules) {
+if (!settings.useNativeShadow && keyframesRules) {
 for (var i = 0, keyframesRule = keyframesRules[i]; i < keyframesRules.length; keyframesRule = keyframesRules[++i]) {
 this._scopeKeyframes(keyframesRule, scopeSelector);
 keyframeTransforms[keyframesRule.keyframesName] = this._keyframesRuleTransformer(keyframesRule);
@@ -6093,18 +6423,18 @@ element.setAttribute('class', v);
 applyElementStyle: function (element, properties, selector, style) {
 var cssText = style ? style.textContent || '' : this.transformStyles(element, properties, selector);
 var s = element._customStyle;
-if (s && !nativeShadow && s !== style) {
+if (s && !settings.useNativeShadow && s !== style) {
 s._useCount--;
 if (s._useCount <= 0 && s.parentNode) {
 s.parentNode.removeChild(s);
 }
 }
-if (nativeShadow) {
+if (settings.useNativeShadow) {
 if (element._customStyle) {
 element._customStyle.textContent = cssText;
 style = element._customStyle;
 } else if (cssText) {
-style = styleUtil.applyCss(cssText, selector, element.root);
+style = styleUtil.applyCss(cssText, selector, element.root, element._scopeStyle);
 }
 } else {
 if (!style) {
@@ -6133,19 +6463,17 @@ props[i] = v;
 }
 }
 },
-rx: {
-VAR_ASSIGN: /(?:^|[;\s{]\s*)(--[\w-]*?)\s*:\s*(?:([^;{]*)|{([^}]*)})(?:(?=[;\s}])|$)/gi,
-MIXIN_MATCH: /(?:^|\W+)@apply[\s]*\(([^)]*)\)/i,
-VAR_MATCH: /(^|\W+)var\([\s]*([^,)]*)[\s]*,?[\s]*((?:[^,()]*)|(?:[^;()]*\([^;)]*\)))[\s]*?\)/gi,
-VAR_CAPTURE: /\([\s]*(--[^,\s)]*)(?:,[\s]*(--[^,\s)]*))?(?:\)|,)/gi,
-ANIMATION_MATCH: /(animation\s*:)|(animation-name\s*:)/,
-IS_VAR: /^--/,
-BRACKETED: /\{[^}]*\}/g,
-HOST_PREFIX: '(?:^|[^.#[:])',
-HOST_SUFFIX: '($|[.:[\\s>+~])'
+updateNativeStyleProperties: function (element, properties) {
+for (var i = 0; i < element.style.length; i++) {
+element.style.removeProperty(element.style[i]);
+}
+for (var p in properties) {
+if (properties[p] !== null) {
+element.style.setProperty(p, properties[p]);
+}
+}
 },
-HOST_SELECTORS: [':host'],
-SCOPE_SELECTORS: [':root'],
+rx: styleUtil.rx,
 XSCOPE_NAME: 'x-scope'
 };
 function addToBitMask(n, bits) {
@@ -6202,24 +6530,29 @@ return this._objectsEqual(target, source) && this._objectsEqual(source, target);
 }());Polymer.StyleDefaults = function () {
 var styleProperties = Polymer.StyleProperties;
 var StyleCache = Polymer.StyleCache;
+var nativeVariables = Polymer.Settings.useNativeCSSProperties;
 var api = {
 _styles: [],
 _properties: null,
 customStyle: {},
 _styleCache: new StyleCache(),
+_element: Polymer.DomApi.wrap(document.documentElement),
 addStyle: function (style) {
 this._styles.push(style);
 this._properties = null;
 },
 get _styleProperties() {
 if (!this._properties) {
-styleProperties.decorateStyles(this._styles);
+styleProperties.decorateStyles(this._styles, this);
 this._styles._scopeStyleProperties = null;
-this._properties = styleProperties.scopePropertiesFromStyles(this._styles);
+this._properties = styleProperties.hostAndRootPropertiesForScope(this).rootProps;
 styleProperties.mixinCustomStyle(this._properties, this.customStyle);
 styleProperties.reify(this._properties);
 }
 return this._properties;
+},
+hasStyleProperties: function () {
+return Boolean(this._properties);
 },
 _needsStyleProperties: function () {
 },
@@ -6237,6 +6570,9 @@ s = this._styles[i];
 s = s.__importElement || s;
 s._apply();
 }
+if (nativeVariables) {
+styleProperties.updateNativeStyleProperties(document.documentElement, this.customStyle);
+}
 }
 };
 return api;
@@ -6247,13 +6583,16 @@ var propertyUtils = Polymer.StyleProperties;
 var styleTransformer = Polymer.StyleTransformer;
 var styleDefaults = Polymer.StyleDefaults;
 var nativeShadow = Polymer.Settings.useNativeShadow;
+var nativeVariables = Polymer.Settings.useNativeCSSProperties;
 Polymer.Base._addFeature({
 _prepStyleProperties: function () {
-this._ownStylePropertyNames = this._styles && this._styles.length ? propertyUtils.decorateStyles(this._styles) : null;
+if (!nativeVariables) {
+this._ownStylePropertyNames = this._styles && this._styles.length ? propertyUtils.decorateStyles(this._styles, this) : null;
+}
 },
 customStyle: null,
 getComputedStyleValue: function (property) {
-return this._styleProperties && this._styleProperties[property] || getComputedStyle(this).getPropertyValue(property);
+return !nativeVariables && this._styleProperties && this._styleProperties[property] || getComputedStyle(this).getPropertyValue(property);
 },
 _setupStyleProperties: function () {
 this.customStyle = {};
@@ -6264,10 +6603,11 @@ this._ownStyleProperties = null;
 this._customStyle = null;
 },
 _needsStyleProperties: function () {
-return Boolean(this._ownStylePropertyNames && this._ownStylePropertyNames.length);
+return Boolean(!nativeVariables && this._ownStylePropertyNames && this._ownStylePropertyNames.length);
 },
 _beforeAttached: function () {
-if (!this._scopeSelector && this._needsStyleProperties()) {
+if ((!this._scopeSelector || this.__stylePropertiesInvalid) && this._needsStyleProperties()) {
+this.__stylePropertiesInvalid = false;
 this._updateStyleProperties();
 }
 },
@@ -6287,8 +6627,11 @@ if (!scope._styleCache) {
 scope._styleCache = new Polymer.StyleCache();
 }
 var scopeData = propertyUtils.propertyDataFromStyles(scope._styles, this);
+var scopeCacheable = !this.__notStyleScopeCacheable;
+if (scopeCacheable) {
 scopeData.key.customStyle = this.customStyle;
 info = scope._styleCache.retrieve(this.is, scopeData.key, this._styles);
+}
 var scopeCached = Boolean(info);
 if (scopeCached) {
 this._styleProperties = info._styleProperties;
@@ -6308,9 +6651,11 @@ style: style,
 _scopeSelector: this._scopeSelector,
 _styleProperties: this._styleProperties
 };
+if (scopeCacheable) {
 scopeData.key.customStyle = {};
 this.mixin(scopeData.key.customStyle, this.customStyle);
 scope._styleCache.store(this.is, info, scopeData.key, this._styles);
+}
 if (!globalCached) {
 styleCache.store(this.is, Object.create(info), this._ownStyleProperties, this._styles);
 }
@@ -6322,10 +6667,11 @@ if (!scope._styleProperties) {
 scope._computeStyleProperties();
 }
 var props = Object.create(scope._styleProperties);
-this.mixin(props, propertyUtils.hostPropertiesFromStyles(this._styles));
+var hostAndRootProps = propertyUtils.hostAndRootPropertiesForScope(this);
+this.mixin(props, hostAndRootProps.hostProps);
 scopeProps = scopeProps || propertyUtils.propertyDataFromStyles(scope._styles, this).properties;
 this.mixin(props, scopeProps);
-this.mixin(props, propertyUtils.scopePropertiesFromStyles(this._styles));
+this.mixin(props, hostAndRootProps.rootProps);
 propertyUtils.mixinCustomStyle(props, this.customStyle);
 propertyUtils.reify(props);
 this._styleProperties = props;
@@ -6366,14 +6712,20 @@ selector = (selector ? selector + ' ' : '') + SCOPE_NAME + ' ' + this.is + (elem
 return selector;
 },
 updateStyles: function (properties) {
-if (this.isAttached) {
 if (properties) {
 this.mixin(this.customStyle, properties);
 }
+if (nativeVariables) {
+propertyUtils.updateNativeStyleProperties(this, this.customStyle);
+} else {
+if (this.isAttached) {
 if (this._needsStyleProperties()) {
 this._updateStyleProperties();
 } else {
 this._styleProperties = null;
+}
+} else {
+this.__stylePropertiesInvalid = true;
 }
 if (this._styleCache) {
 this._styleCache.clear();
@@ -6453,12 +6805,21 @@ var styleUtil = Polymer.StyleUtil;
 var cssParse = Polymer.CssParse;
 var styleDefaults = Polymer.StyleDefaults;
 var styleTransformer = Polymer.StyleTransformer;
+var applyShim = Polymer.ApplyShim;
+var debounce = Polymer.Debounce;
+var settings = Polymer.Settings;
+var updateDebouncer;
 Polymer({
 is: 'custom-style',
 extends: 'style',
 _template: null,
 properties: { include: String },
 ready: function () {
+this.__appliedElement = this.__appliedElement || this;
+this.__cssBuild = styleUtil.getCssBuildType(this);
+if (this.__appliedElement !== this) {
+this.__appliedElement.__cssBuild = this.__cssBuild;
+}
 this._tryApply();
 },
 attached: function () {
@@ -6468,8 +6829,11 @@ _tryApply: function () {
 if (!this._appliesToDocument) {
 if (this.parentNode && this.parentNode.localName !== 'dom-module') {
 this._appliesToDocument = true;
-var e = this.__appliedElement || this;
+var e = this.__appliedElement;
+if (!settings.useNativeCSSProperties) {
+this.__needsUpdateStyles = styleDefaults.hasStyleProperties();
 styleDefaults.addStyle(e);
+}
 if (e.textContent || this.include) {
 this._apply(true);
 } else {
@@ -6483,34 +6847,61 @@ observer.observe(e, { childList: true });
 }
 }
 },
-_apply: function (deferProperties) {
-var e = this.__appliedElement || this;
+_updateStyles: function () {
+Polymer.updateStyles();
+},
+_apply: function (initialApply) {
+var e = this.__appliedElement;
 if (this.include) {
 e.textContent = styleUtil.cssFromModules(this.include, true) + e.textContent;
 }
-if (e.textContent) {
-styleUtil.forEachRule(styleUtil.rulesForStyle(e), function (rule) {
+if (!e.textContent) {
+return;
+}
+var buildType = this.__cssBuild;
+var targetedBuild = styleUtil.isTargetedBuild(buildType);
+if (settings.useNativeCSSProperties && targetedBuild) {
+return;
+}
+var styleRules = styleUtil.rulesForStyle(e);
+if (!targetedBuild) {
+styleUtil.forEachRule(styleRules, function (rule) {
 styleTransformer.documentRule(rule);
+if (settings.useNativeCSSProperties && !buildType) {
+applyShim.transformRule(rule);
+}
 });
+}
+if (settings.useNativeCSSProperties) {
+e.textContent = styleUtil.toCssText(styleRules);
+} else {
 var self = this;
 var fn = function fn() {
-self._applyCustomProperties(e);
+self._flushCustomProperties();
 };
-if (this._pendingApplyProperties) {
-cancelAnimationFrame(this._pendingApplyProperties);
-this._pendingApplyProperties = null;
-}
-if (deferProperties) {
-this._pendingApplyProperties = requestAnimationFrame(fn);
+if (initialApply) {
+Polymer.RenderStatus.whenReady(fn);
 } else {
 fn();
 }
 }
 },
-_applyCustomProperties: function (element) {
+_flushCustomProperties: function () {
+if (this.__needsUpdateStyles) {
+this.__needsUpdateStyles = false;
+updateDebouncer = debounce(updateDebouncer, this._updateStyles);
+} else {
+this._applyCustomProperties();
+}
+},
+_applyCustomProperties: function () {
+var element = this.__appliedElement;
 this._computeStyleProperties();
 var props = this._styleProperties;
 var rules = styleUtil.rulesForStyle(element);
+if (!rules) {
+return;
+}
 element.textContent = styleUtil.toCssText(rules, function (rule) {
 var css = rule.cssText = rule.parsedCssText;
 if (rule.propertyInfo && rule.propertyInfo.cssText) {
@@ -7705,6 +8096,9 @@ this.fire('dom-change');
 
 
 
+
+
+
 <style>
   /* IE 10 support for HTML5 hidden attr */
   [hidden] {
@@ -8341,24 +8735,22 @@ this.fire('dom-change');
 
 
 <dom-module id="iron-icon" assetpath="../bower_components/iron-icon/">
-
-  <style>
-    :host {
-      @apply(--layout-inline);
-      @apply(--layout-center-center);
-      position: relative;
-
-      vertical-align: middle;
-
-      fill: var(--iron-icon-fill-color, currentcolor);
-      stroke: var(--iron-icon-stroke-color, none);
-
-      width: var(--iron-icon-width, 24px);
-      height: var(--iron-icon-height, 24px);
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        @apply(--layout-inline);
+        @apply(--layout-center-center);
+        position: relative;
+
+        vertical-align: middle;
+
+        fill: var(--iron-icon-fill-color, currentcolor);
+        stroke: var(--iron-icon-stroke-color, none);
+
+        width: var(--iron-icon-width, 24px);
+        height: var(--iron-icon-height, 24px);
+      }
+    </style>
   </template>
 
   <script>
@@ -10907,12 +11299,31 @@ this.fire('dom-change');
      * and uses an expressive syntax to filter key presses.
      *
      * Use the `keyBindings` prototype property to express what combination of keys
-     * will trigger the event to fire.
+     * will trigger the callback. A key binding has the format
+     * `"KEY+MODIFIER:EVENT": "callback"` (`"KEY": "callback"` or
+     * `"KEY:EVENT": "callback"` are valid as well). Some examples:
      *
-     * Use the `key-event-target` attribute to set up event handlers on a specific
+     *      keyBindings: {
+     *        'space': '_onKeydown', // same as 'space:keydown'
+     *        'shift+tab': '_onKeydown',
+     *        'enter:keypress': '_onKeypress',
+     *        'esc:keyup': '_onKeyup'
+     *      }
+     *
+     * The callback will receive with an event containing the following information in `event.detail`:
+     *
+     *      _onKeydown: function(event) {
+     *        console.log(event.detail.combo); // KEY+MODIFIER, e.g. "shift+tab"
+     *        console.log(event.detail.key); // KEY only, e.g. "tab"
+     *        console.log(event.detail.event); // EVENT, e.g. "keydown"
+     *        console.log(event.detail.keyboardEvent); // the original KeyboardEvent
+     *      }
+     *
+     * Use the `keyEventTarget` attribute to set up event handlers on a specific
      * node.
-     * The `keys-pressed` event will fire when one of the key combinations set with the
-     * `keys` property is pressed.
+     *
+     * See the [demo source code](https://github.com/PolymerElements/iron-a11y-keys-behavior/blob/master/demo/x-key-aware.html)
+     * for an example.
      *
      * @demo demo/index.html
      * @polymerBehavior
@@ -10920,7 +11331,9 @@ this.fire('dom-change');
     Polymer.IronA11yKeysBehavior = {
       properties: {
         /**
-         * The HTMLElement that will be firing relevant KeyboardEvents.
+         * The EventTarget that will be firing relevant KeyboardEvents. Set it to
+         * `null` to disable the listeners.
+         * @type {?EventTarget}
          */
         keyEventTarget: {
           type: Object,
@@ -10959,6 +11372,12 @@ this.fire('dom-change');
         '_resetKeyEventListeners(keyEventTarget, _boundKeyHandlers)'
       ],
 
+
+      /**
+       * To be used to express what combination of keys  will trigger the relative
+       * callback. e.g. `keyBindings: { 'esc': '_onEscPressed'}`
+       * @type {Object}
+       */
       keyBindings: {},
 
       registered: function() {
@@ -11066,6 +11485,9 @@ this.fire('dom-change');
       },
 
       _listenKeyEventListeners: function() {
+        if (!this.keyEventTarget) {
+          return;
+        }
         Object.keys(this._keyBindings).forEach(function(eventName) {
           var keyBindings = this._keyBindings[eventName];
           var boundKeyHandler = this._onKeyBindingEvent.bind(this, keyBindings);
@@ -11446,8 +11868,6 @@ this.fire('dom-change');
 
 
 <dom-module id="paper-ripple" assetpath="../bower_components/paper-ripple/">
-
-  
 
   <template>
     <style>
@@ -11924,16 +12344,7 @@ this.fire('dom-change');
       },
 
       get target () {
-        var ownerRoot = Polymer.dom(this).getOwnerRoot();
-        var target;
-
-        if (this.parentNode.nodeType == 11) { // DOCUMENT_FRAGMENT_NODE
-          target = ownerRoot.host;
-        } else {
-          target = this.parentNode;
-        }
-
-        return target;
+        return this.keyEventTarget;
       },
 
       keyBindings: {
@@ -11946,14 +12357,20 @@ this.fire('dom-change');
         // Set up a11yKeysBehavior to listen to key events on the target,
         // so that space and enter activate the ripple even if the target doesn't
         // handle key events. The key handlers deal with `noink` themselves.
-        this.keyEventTarget = this.target;
-        this.listen(this.target, 'up', 'uiUpAction');
-        this.listen(this.target, 'down', 'uiDownAction');
+        if (this.parentNode.nodeType == 11) { // DOCUMENT_FRAGMENT_NODE
+          this.keyEventTarget = Polymer.dom(this).getOwnerRoot().host;
+        } else {
+          this.keyEventTarget = this.parentNode;
+        }
+        var keyEventTarget = /** @type {!EventTarget} */ (this.keyEventTarget);
+        this.listen(keyEventTarget, 'up', 'uiUpAction');
+        this.listen(keyEventTarget, 'down', 'uiDownAction');
       },
 
       detached: function() {
-        this.unlisten(this.target, 'up', 'uiUpAction');
-        this.unlisten(this.target, 'down', 'uiDownAction');
+        this.unlisten(this.keyEventTarget, 'up', 'uiUpAction');
+        this.unlisten(this.keyEventTarget, 'down', 'uiDownAction');
+        this.keyEventTarget = null;
       },
 
       get shouldKeepAnimating () {
@@ -12001,6 +12418,7 @@ this.fire('dom-change');
         ripple.downAction(event);
 
         if (!this._animating) {
+          this._animating = true;
           this.animate();
         }
       },
@@ -12030,6 +12448,7 @@ this.fire('dom-change');
           ripple.upAction(event);
         });
 
+        this._animating = true;
         this.animate();
       },
 
@@ -12068,10 +12487,11 @@ this.fire('dom-change');
       },
 
       animate: function() {
+        if (!this._animating) {
+          return;
+        }
         var index;
         var ripple;
-
-        this._animating = true;
 
         for (index = 0; index < this.ripples.length; ++index) {
           ripple = this.ripples[index];
@@ -12117,11 +12537,19 @@ this.fire('dom-change');
           this.upAction();
         }
       }
+
+      /**
+      Fired when the animation finishes.
+      This is useful if you want to wait until
+      the ripple animation finishes to perform some action.
+
+      @event transitionend
+      @param {{node: Object}} detail Contains the animated node.
+      */
     });
   })();
 </script>
 <script>
-
   /**
    * `Polymer.PaperRippleBehavior` dynamically implements a ripple
    * when the element has focus via pointer or keyboard.
@@ -12132,7 +12560,6 @@ this.fire('dom-change');
    * @polymerBehavior Polymer.PaperRippleBehavior
    */
   Polymer.PaperRippleBehavior = {
-
     properties: {
       /**
        * If true, the element will not produce a ripple effect when interacted
@@ -12233,19 +12660,15 @@ this.fire('dom-change');
         this._ripple.noink = noink;
       }
     }
-
   };
-
 </script>
 <script>
-
   /**
    * `Polymer.PaperInkyFocusBehavior` implements a ripple when the element has keyboard focus.
    *
    * @polymerBehavior Polymer.PaperInkyFocusBehavior
    */
   Polymer.PaperInkyFocusBehaviorImpl = {
-
     observers: [
       '_focusedChanged(receivedFocusFromKeyboard)'
     ],
@@ -12266,7 +12689,6 @@ this.fire('dom-change');
       ripple.classList.add('circle');
       return ripple;
     }
-
   };
 
   /** @polymerBehavior Polymer.PaperInkyFocusBehavior */
@@ -12276,7 +12698,6 @@ this.fire('dom-change');
     Polymer.PaperRippleBehavior,
     Polymer.PaperInkyFocusBehaviorImpl
   ];
-
 </script>
 <style is="custom-style">
 
@@ -12668,7 +13089,6 @@ this.fire('dom-change');
         position: relative;
         padding: 8px;
         outline: none;
-        -webkit-tap-highlight-color: rgba(0,0,0,0);
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -12679,6 +13099,10 @@ this.fire('dom-change');
 
         width: 40px;
         height: 40px;
+
+        /* NOTE: Both values are needed, since some phones require the value to be `transparent`. */
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
 
         /* Because of polymer/2558, this style has lower specificity than * */
         box-sizing: border-box !important;
@@ -13288,11 +13712,12 @@ this.fire('dom-change');
     /**
      * Focuses the previous item (relative to the currently focused item) in the
      * menu, disabled items will be skipped.
+     * Loop until length + 1 to handle case of single item in menu.
      */
     _focusPrevious: function() {
       var length = this.items.length;
       var curFocusIndex = Number(this.indexOf(this.focusedItem));
-      for (var i = 1; i < length; i++) {
+      for (var i = 1; i < length + 1; i++) {
         var item = this.items[(curFocusIndex - i + length) % length];
         if (!item.hasAttribute('disabled')) {
           this._setFocusedItem(item);
@@ -13304,11 +13729,12 @@ this.fire('dom-change');
     /**
      * Focuses the next item (relative to the currently focused item) in the
      * menu, disabled items will be skipped.
+     * Loop until length + 1 to handle case of single item in menu.
      */
     _focusNext: function() {
       var length = this.items.length;
       var curFocusIndex = Number(this.indexOf(this.focusedItem));
-      for (var i = 1; i < length; i++) {
+      for (var i = 1; i < length + 1; i++) {
         var item = this.items[(curFocusIndex + i) % length];
         if (!item.hasAttribute('disabled')) {
           this._setFocusedItem(item);
@@ -13555,71 +13981,72 @@ this.fire('dom-change');
 
 
 <dom-module id="paper-scroll-header-panel" assetpath="../bower_components/paper-scroll-header-panel/">
-
-  <style>
-    :host {
-      display: block;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #mainContainer {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-      -webkit-overflow-scrolling: touch;
-
-      overflow-x: hidden;
-      overflow-y: auto;
-
-      @apply(--paper-scroll-header-container);
-    }
-
-    #headerContainer {
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-    }
-
-    .bg-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    #headerBg {
-      @apply(--paper-scroll-header-panel-full-header);
-    }
-
-    #condensedHeaderBg {
-      @apply(--paper-scroll-header-panel-condensed-header);
-    }
-
-    #headerBg, #condensedHeaderBg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
-
-    #condensedHeaderBg {
-      opacity: 0;
-    }
-  </style>
   <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #mainContainer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-overflow-scrolling: touch;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+        @apply(--paper-scroll-header-container); /* deprecated due to incorrect/confusing naming */
+        @apply(--paper-scroll-header-panel-container);
+      }
+
+      #headerContainer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        @apply(--paper-scroll-header-panel-header-container);
+      }
+
+      .bg-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      #headerBg {
+        @apply(--paper-scroll-header-panel-full-header);
+      }
+
+      #condensedHeaderBg {
+        @apply(--paper-scroll-header-panel-condensed-header);
+      }
+
+      #headerBg, #condensedHeaderBg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+      }
+
+      #condensedHeaderBg {
+        opacity: 0;
+      }
+    </style>
+
     <div id="mainContainer">
       <content id="mainContent" select=":not(paper-toolbar):not(.paper-header)"></content>
     </div>
@@ -14052,15 +14479,14 @@ this.fire('dom-change');
 
 
 <dom-module id="iron-a11y-announcer" assetpath="../bower_components/iron-a11y-announcer/">
-  <style>
-    :host {
-      display: inline-block;
-      position: fixed;
-      clip: rect(0px,0px,0px,0px);
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        display: inline-block;
+        position: fixed;
+        clip: rect(0px,0px,0px,0px);
+      }
+    </style>
     <div aria-live$="[[mode]]">[[_text]]</div>
   </template>
 
@@ -14363,6 +14789,7 @@ Use `noOverlap` to position the element around another element without overlappi
 
     /**
      * Memoize information needed to position and size the target element.
+     * @suppress {deprecated}
      */
     _discoverInfo: function() {
       if (this._fitInfo) {
@@ -15169,6 +15596,7 @@ Use `noOverlap` to position the element around another element without overlappi
      * Returns the deepest overlay in the path.
      * @param {Array<Element>=} path
      * @return {Element|undefined}
+     * @suppress {missingProperties}
      * @private
      */
     _overlayInPath: function(path) {
@@ -15226,12 +15654,11 @@ Use `noOverlap` to position the element around another element without overlappi
      * @param {!Element} overlay1
      * @param {!Element} overlay2
      * @return {boolean}
+     * @suppress {missingProperties}
      * @private
      */
     _shouldBeBehindOverlay: function(overlay1, overlay2) {
-      var o1 = /** @type {?} */ (overlay1);
-      var o2 = /** @type {?} */ (overlay2);
-      return !o1.alwaysOnTop && o2.alwaysOnTop;
+      return !overlay1.alwaysOnTop && overlay2.alwaysOnTop;
     }
   };
 
@@ -15246,9 +15673,12 @@ Use `Polymer.IronOverlayBehavior` to implement an element that can be hidden or 
 on top of other content. It includes an optional backdrop, and can be used to implement a variety
 of UI controls including dialogs and drop downs. Multiple overlays may be displayed at once.
 
+See the [demo source code](https://github.com/PolymerElements/iron-overlay-behavior/blob/master/demo/simple-overlay.html)
+for an example.
+
 ### Closing and canceling
 
-A dialog may be hidden by closing or canceling. The difference between close and cancel is user
+An overlay may be hidden by closing or canceling. The difference between close and cancel is user
 intent. Closing generally implies that the user acknowledged the content on the overlay. By default,
 it will cancel whenever the user taps outside it or presses the escape key. This behavior is
 configurable with the `no-cancel-on-esc-key` and the `no-cancel-on-outside-click` properties.
@@ -15266,6 +15696,10 @@ position and size it manually using CSS. See `Polymer.IronFitBehavior`.
 Set the `with-backdrop` attribute to display a backdrop behind the overlay. The backdrop is
 appended to `<body>` and is of type `<iron-overlay-backdrop>`. See its doc page for styling
 options.
+
+In addition, `with-backdrop` will wrap the focus within the content in the light DOM.
+Override the [`_focusableNodes` getter](#Polymer.IronOverlayBehavior:property-_focusableNodes)
+to achieve a different behavior.
 
 ### Limitations
 
@@ -15302,7 +15736,8 @@ context. You should place this element as a child of `<body>` whenever possible.
       },
 
       /**
-       * Set to true to display a backdrop behind the overlay.
+       * Set to true to display a backdrop behind the overlay. It traps the focus
+       * within the light DOM of the overlay.
        */
       withBackdrop: {
         observer: '_withBackdropChanged',
@@ -15567,6 +16002,8 @@ context. You should place this element as a child of `<body>` whenever possible.
           this._prepareRenderOpened();
           this._renderOpened();
         } else {
+          // Move the focus before actually closing.
+          this._applyFocus();
           this._renderClosed();
         }
       }.bind(this));
@@ -15603,6 +16040,9 @@ context. You should place this element as a child of `<body>` whenever possible.
       this.refit();
       this._finishPositioning();
 
+      // Move the focus to the child node with [autofocus].
+      this._applyFocus();
+
       // Safari will apply the focus to the autofocus element when displayed for the first time,
       // so we blur it. Later, _applyFocus will set the focus if necessary.
       if (this.noAutoFocus && document.activeElement === this._focusNode) {
@@ -15631,8 +16071,6 @@ context. You should place this element as a child of `<body>` whenever possible.
      * @protected
      */
     _finishRenderOpened: function() {
-      // Focus the child node with [autofocus]
-      this._applyFocus();
 
       this.notifyResize();
       this.__isAnimating = false;
@@ -15654,8 +16092,6 @@ context. You should place this element as a child of `<body>` whenever possible.
       this.style.display = 'none';
       // Reset z-index only at the end of the animation.
       this.style.zIndex = '';
-
-      this._applyFocus();
 
       this.notifyResize();
       this.__isAnimating = false;
@@ -16108,6 +16544,9 @@ context. You should place this element as a child of `<body>` whenever possible.
   <template>
     <style>
       :host {
+        --calculated-paper-toolbar-height: var(--paper-toolbar-height, 64px);
+        --calculated-paper-toolbar-sm-height: var(--paper-toolbar-sm-height, 56px);
+
         /* technical */
         display: block;
         position: relative;
@@ -16115,7 +16554,7 @@ context. You should place this element as a child of `<body>` whenever possible.
         -moz-box-sizing: border-box;
 
         /* size */
-        height: var(--paper-toolbar-height, 64px);
+        height: var(--calculated-paper-toolbar-height);
 
         background: var(--paper-toolbar-background, --primary-color);
         color: var(--paper-toolbar-color, --dark-theme-text-color);
@@ -16129,18 +16568,18 @@ context. You should place this element as a child of `<body>` whenever possible.
       }
 
       :host(.medium-tall) {
-        height: calc(var(--paper-toolbar-height, 64px) * 2);
+        height: calc(var(--calculated-paper-toolbar-height) * 2);
         @apply(--paper-toolbar-medium);
       }
 
       :host(.tall) {
-        height: calc(var(--paper-toolbar-height, 64px) * 3);
+        height: calc(var(--calculated-paper-toolbar-height) * 3);
         @apply(--paper-toolbar-tall);
       }
 
       .toolbar-tools {
         position: relative;
-        height: var(--paper-toolbar-height, 64px);
+        height: var(--calculated-paper-toolbar-height);
         padding: 0 16px;
         pointer-events: none;
         @apply(--layout-horizontal);
@@ -16154,19 +16593,19 @@ context. You should place this element as a child of `<body>` whenever possible.
 
       @media (max-width: 600px) {
         :host {
-          height: var(--paper-toolbar-sm-height, 56px);
+          height: var(--calculated-paper-toolbar-sm-height);
         }
 
         :host(.medium-tall) {
-          height: calc(var(--paper-toolbar-sm-height, 56px) * 2);
+          height: calc(var(--calculated-paper-toolbar-sm-height) * 2);
         }
 
         :host(.tall) {
-          height: calc(var(--paper-toolbar-sm-height, 56px) * 3);
+          height: calc(var(--calculated-paper-toolbar-sm-height) * 3);
         }
 
         .toolbar-tools {
-          height: var(--paper-toolbar-sm-height, 56px);
+          height: var(--calculated-paper-toolbar-sm-height);
         }
       }
 
@@ -16219,27 +16658,26 @@ context. You should place this element as a child of `<body>` whenever possible.
         pointer-events: none;
 
         @apply(--layout-flex);
-        @apply(--paper-toolbar-title);
       }
 
-      /**
-       * TODO: Refactor these selectors
-       * Work in progress.
-       */
-      .toolbar-tools > ::content paper-icon-button[icon=menu] {
-        margin-right: 24px;
-      }
-
-      .toolbar-tools > ::content > .title,
-      .toolbar-tools > ::content[select=".middle"] > .title,
-      .toolbar-tools > ::content[select=".bottom"] > .title {
+      .toolbar-tools > ::content > .title {
         margin-left: 56px;
       }
 
-      .toolbar-tools > ::content > paper-icon-button + .title,
-      .toolbar-tools > ::content[select=".middle"] paper-icon-button + .title,
-      .toolbar-tools > ::content[select=".bottom"] paper-icon-button + .title {
+      .toolbar-tools > ::content > paper-icon-button + .title {
         margin-left: 0;
+      }
+
+      /**
+       * The --paper-toolbar-title mixin is applied here instead of above to
+       * fix the issue with margin-left being ignored due to css ordering.
+       */
+      .toolbar-tools > ::content .title {
+        @apply(--paper-toolbar-title);
+      }
+
+      .toolbar-tools > ::content paper-icon-button[icon=menu] {
+        margin-right: 24px;
       }
 
       .toolbar-tools > ::content > .fit {

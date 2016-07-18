@@ -127,7 +127,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
 
               <paper-material elevation="1">
-                <p>This is another card. PSK Deployed on: Tue Jun  7 15:51:33 UTC 2016</p>
+                <p>This is another card. PSK Deployed on: Mon Jul 18 18:31:21 UTC 2016</p>
               </paper-material>
 
               <paper-material elevation="1">
@@ -179,9 +179,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-scroll-header-panel>
     </paper-drawer-panel>
 
-    <paper-toast id="toast">
-      <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
-    </paper-toast>
+    <paper-toast id="toast"></paper-toast>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
     <!--
