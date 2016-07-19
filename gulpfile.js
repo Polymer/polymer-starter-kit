@@ -24,11 +24,8 @@ const polymer = require('polymer-build');
 const PolymerProject = polymer.PolymerProject;
 const fork = polymer.forkStream;
 
-let project = new PolymerProject({
-  root: process.cwd(),
-  entrypoint: 'index.html',
-  shell: 'src/psk-app.html',
-});
+let polymerJSON = require('./polymer.json');
+let project = new PolymerProject(polymerJSON);
 
 gulp.task('default', () => {
 
