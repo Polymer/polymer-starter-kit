@@ -147,21 +147,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     Polymer({
-
       is: 'psk-app',
-
-      attached: function() {
+      properties: {
+        foo: {
+          type: String,
+          value: 'Hello, World'
+        }
+      },
+      attached() {
         if (!this.route.path) {
           this.set('route.path', '/');
         }
       },
-
-      _drawerSelected: function() {
+      _drawerSelected() {
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
       }
-
     });
   </script>
 </dom-module>
