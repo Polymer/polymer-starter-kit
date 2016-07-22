@@ -178,7 +178,7 @@ Components installed by Bower live in the `app/bower_components` directory. This
 
 ### Firebase
 
-[See detail recipe](/docs/deploy-to-firebase-pretty-urls.md/)
+[See detailed recipe](/docs/deploy-to-firebase-pretty-urls.md/)
 
 ## Service Worker
 
