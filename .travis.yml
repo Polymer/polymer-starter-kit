@@ -22,7 +22,7 @@ before_script:
   - npm i -g bower@1.7.1 polymer-cli
   - bower i
 script:
-  - polymer lint --no-follow-dependencies
+  # - polymer lint --no-follow-dependencies (uncomment once polylint is fixed to handle lazy loaded elements)
   - polymer test
 env:
   global:
