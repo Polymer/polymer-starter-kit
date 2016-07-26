@@ -161,8 +161,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _pageChanged: function(page) {
         // load page import on demand.
         this.importHref(
-          this.resolveUrl('psk-page-' + page + '.html'), null, null, true);
+          this.resolveUrl('psk-page-' + page + '.html'), null, function(e) {
+            // load 404 page if page not found
+            this.page = '404';
+          }, true);
       },
+
       _drawerSelected() {
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
