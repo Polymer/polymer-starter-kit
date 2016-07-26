@@ -145,26 +145,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'psk-app',
+
       properties: {
         page: {
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
-        },
+        }
       },
+
       observers: [
         '_routePageChanged(routeData.page)'
       ],
+
       _routePageChanged: function(page) {
         this.page = page || 'home';
       },
+
       _pageChanged: function(page) {
-        // load page import on demand.
-        this.importHref(
-          this.resolveUrl('psk-page-' + page + '.html'), null, function(e) {
-            // load 404 page if page not found
-            this.page = '404';
-          }, true);
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl('psk-page-' + page + '.html')
+        this.importHref(resolvedPageUrl, null, this._show404page, true);
+      },
+
+      _show404page: function() {
+        this.page = '404';
       },
 
       _drawerSelected() {
