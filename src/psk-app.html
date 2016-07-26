@@ -29,9 +29,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 
 <link rel="import" href="app-icons.html">
-<link rel="import" href="psk-page-home.html">
-<link rel="import" href="psk-page-about.html">
-<link rel="import" href="psk-page-404.html">
 
 <dom-module id="psk-app">
   <template>
@@ -100,9 +97,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- setup routes -->
     <app-location route="{{route}}"></app-location>
-    <app-route route="{{route}}" pattern="/:page" data="{{pageData}}"></app-route>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}"></app-route>
 
-    <app-scrollpos-control selected="{{pageData.page}}"></app-scrollpos-control>
+    <app-scrollpos-control selected="{{routeData.page}}"></app-scrollpos-control>
 
     <app-drawer-layout drawer-width="288px" responsive-width="1280px">
 
@@ -118,10 +115,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-header>
 
           <!-- drawer menu -->
-          <iron-selector selected="[[pageData.page]]" attr-for-selected="data-page"
-            on-iron-activate="_drawerSelected">
-            <a data-page="" href="/">Home</a>
-            <a data-page="about" href="/about">About</a>
+          <iron-selector selected="[[page]]" attr-for-selected="name"
+            on-iron-activate="_drawerSelected" role="navigation">
+            <a name="home" href="/">Home</a>
+            <a name="about" href="/about">About</a>
           </iron-selector>
         </app-header-layout>
       </app-drawer>
@@ -137,10 +134,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-header-layout>
 
       <!-- main menu -->
-      <iron-pages selected="[[pageData.page]]" attr-for-selected="data-page" fallback-selection="404">
-        <psk-page-home data-page=""></psk-page-home>
-        <psk-page-about data-page="about"></psk-page-about>
-        <psk-page-404 data-page="404"></psk-page-404>
+      <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="404">
+        <psk-page-home name="home"></psk-page-home>
+        <psk-page-about name="about"></psk-page-about>
+        <psk-page-404 name="404"></psk-page-404>
       </iron-pages>
     </app-drawer-layout>
   </template>
@@ -149,15 +146,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'psk-app',
       properties: {
-        foo: {
+        page: {
           type: String,
-          value: 'Hello, World'
-        }
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        },
       },
-      attached() {
-        if (!this.route.path) {
-          this.set('route.path', '/');
-        }
+      observers: [
+        '_routePageChanged(routeData.page)'
+      ],
+      _routePageChanged: function(page) {
+        this.page = page || 'home';
+      },
+      _pageChanged: function(page) {
+        // load page import on demand.
+        this.importHref(
+          this.resolveUrl('psk-page-' + page + '.html'), null, null, true);
       },
       _drawerSelected() {
         if (!this.$.drawer.persistent) {
