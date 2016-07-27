@@ -5,9 +5,9 @@
 
 ### Included out of the box:
 
-* [Polymer](https://www.polymer-project.org/), [Paper](https://elements.polymer-project.org/browse?package=paper-elements), [Iron](https://elements.polymer-project.org/browse?package=iron-elements) elements
+* [Polymer](https://www.polymer-project.org/)
 * Initial design with [app-layout](https://polymerelements.github.io/app-layout/) elements 
-* Routing with [app-route](https://www.polymer-project.org/1.0/toolbox/app-layout)
+* Routing with [app-route](https://www.polymer-project.org/1.0/toolbox/routing)
 * Unit testing with [Web Component Tester](https://github.com/Polymer/web-component-tester)
 * End-to-end build and optional offline setup through [polymer-build](https://github.com/Polymer/polymer-build)
 
@@ -44,7 +44,7 @@ The full starter kit requires the following major dependencies:
 - npm, the node package manager, installed with Node.js and used to install Node.js packages.
 - gulp, a Node.js-based build tool.
 - bower, a Node.js-based package manager used to install front-end packages (like Polymer).
-- polymer-cli, for running the local dev server
+- polymer-cli, for linting and running the local dev server
 - The starter kit gulp build process uses platform specific tools which is handled by node-gyp which is included in node.js. See https://github.com/nodejs/node-gyp/blob/master/README.md for additional platform specific dependencies.
 
 **To install dependencies:**
@@ -101,10 +101,32 @@ To run tests Java 7 or higher is required. To update Java go to http://www.oracl
 gulp
 ```
 
-Build and optimize the current project, ready for deployment. This includes vulcanization, image, script, stylesheet and HTML optimization and minification.
+This command performs HTML, CSS, and JS minification on the application dependencies, and generates a service-worker.js file with code to pre-cache the dependencies based on the entrypoint and fragments specified in polymer.json.
+The minified files are output to the build/unbundled folder, and are suitable for serving from a HTTP/2+Push compatible server.
+
+In addition the command also creates a fallback build/bundled folder, generated using fragment bundling, suitable for serving from non H2/push-compatible servers or to clients that do not support H2/Push.
+
 While it is also possible to build the project using the `polymer build` command, PSK ships with a gulpfile which uses the `polymer-build` library directly.
 `polymer-build` does the same work as the Polymer CLI's `build` command, but also provides hooks for developers to add their own tasks. This means you can
-extend the build process to include additional transpilers like Babel or TypeScript, preprocessors like SASS and Autoprefixer, and minifier like imagemin. 
+extend the build process to include additional transpilers like Babel or TypeScript, preprocessors like SASS and Autoprefixer, and minifier like imagemin.
+
+#### Preview
+
+```sh
+polymer serve build/unbundled --open
+```
+
+This command serves the minified version of the app in an unbundled state, as it would be served by a push-compatible server
+
+```sh
+polymer serve build/bundled
+```
+
+This command serves the minified version of the app generated using fragment bundling
+
+#### Extend
+
+You can extend the app by adding more elements that will be demand-loaded e.g. based on the route, or to progressively render non-critical sections of the application. Each new demand-loaded fragment should be added to the list of fragments in the included polymer.json file. This will ensure those components and their dependencies are added to the list of pre-cached components (and will have bundles created in the fallback bundled build).
 
 ## Application Theming & Styling
 
