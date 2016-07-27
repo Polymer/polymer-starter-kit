@@ -33,7 +33,7 @@ gulp.task('default', () => {
   let sources = project.sources()
     .pipe(project.splitHtml())
     // add compilers or optimizers here!
-    .pipe(gulpif('*.{png,gif,jpg,svg}', imagemin({
+    .pipe(gulpif('**/*.{png,gif,jpg,svg}', imagemin({
       progressive: true, interlaced: true
     })))
     .pipe(project.rejoinHtml());
