@@ -15,6 +15,7 @@ const gulpif = require('gulp-if');
 const imagemin = require('gulp-imagemin');
 const logging = require('plylog');
 const mergeStream = require('merge-stream');
+const del = require('del');
 
 const polymer = require('polymer-build');
 
@@ -27,7 +28,12 @@ const fork = polymer.forkStream;
 let polymerJSON = require('./polymer.json');
 let project = new PolymerProject(polymerJSON);
 
-gulp.task('default', () => {
+// Clean build directory
+gulp.task('clean', () => {
+  return del(['build/**','!build']);
+});
+
+gulp.task('default',['clean'], (cb) => {
 
   // process source files in the project
   let sources = project.sources()
