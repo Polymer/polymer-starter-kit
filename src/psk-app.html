@@ -114,8 +114,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-header>
 
           <!-- drawer menu -->
-          <iron-selector selected="[[page]]" attr-for-selected="name"
-            on-iron-activate="_drawerSelected" role="navigation">
+          <iron-selector
+              selected="[[page]]"
+              attr-for-selected="name"
+              on-iron-activate="_drawerSelected"
+              role="navigation">
             <a name="home" href="/">Home</a>
             <a name="about" href="/about">About</a>
           </iron-selector>
@@ -133,7 +136,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-header-layout>
 
       <!-- main menu -->
-      <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="404">
+      <iron-pages
+          selected="[[page]]"
+          attr-for-selected="name"
+          fallback-selection="404"
+          role="main">
         <psk-page-home name="home"></psk-page-home>
         <psk-page-about name="about"></psk-page-about>
         <psk-page-404 name="404"></psk-page-404>
