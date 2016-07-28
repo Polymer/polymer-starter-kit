@@ -47,11 +47,6 @@ gulp.task('clean', () => {
 gulp.task('default',['clean'], (cb) => {
 
   let swConfig = {
-    staticFileGlobs: [
-      'index.html',
-      'src/psk-app.html',
-      'src/**',
-    ],
     navigateFallback: '/index.html',
   };
 
@@ -63,7 +58,6 @@ gulp.task('default',['clean'], (cb) => {
       progressive: true, interlaced: true
     })))
     .pipe(project.rejoinHtml());
-    // console.log('sources: ',sources);
 
   // process dependencies
   let dependencies = project.dependencies()
