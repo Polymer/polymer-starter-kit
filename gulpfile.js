@@ -41,7 +41,7 @@ let project = new PolymerProject(polymerJSON);
 
 // Clean build directory
 gulp.task('clean', () => {
-  return del(['build/**','!build']);
+  return del(['build/**']);
 });
 
 gulp.task('default',['clean'], (cb) => {
