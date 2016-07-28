@@ -10,8 +10,21 @@
 
 'use strict';
 
-// Load custom tasks from the `gulp-tasks` directory
-require('./gulp-tasks/clean.js');
-require('./gulp-tasks/default.js');
-require('./gulp-tasks/lint.js');
-require('./gulp-tasks/service-worker.js');
+const gulp = require('gulp');
+const eslint = require('gulp-eslint');
+
+// Lint JavaScript
+gulp.task('lint', () => {
+  let filesToLint = [
+    'gulpfile.js',
+    'gulp-tasks/**/*.js',
+    'index.html',
+    'src/**/*.{js,html}',
+    'test/**/*.{js,html}'
+  ];
+
+  return gulp.src(filesToLint)
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+});

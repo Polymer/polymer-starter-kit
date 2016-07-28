@@ -1,0 +1,35 @@
+{
+  "extends": "eslint:recommended",
+  "rules": {
+    "brace-style": "error",
+    "comma-spacing": ["error", {"before": false, "after": true}],
+    "indent": ["error", 2],
+    "keyword-spacing": "error",
+    "no-console": "warn",
+    "no-multi-spaces": "error",
+    "quotes": ["error", "single", "avoid-escape"],
+    "space-before-blocks": "error",
+    "space-before-function-paren": ["error", "never"]
+  },
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "plugins": [
+    "html"
+  ],
+  "settings": {
+    "html/indent": "+2",
+    "html/report-bad-indent": 2
+  },
+  "globals": {
+    "Polymer": false,
+    "WCT": false,
+    "assert": false,
+    "fixture": false,
+    "require": false,
+    "setup": false,
+    "suite": false,
+    "test": false
+  }
+}
