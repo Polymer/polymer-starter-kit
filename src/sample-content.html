@@ -1,6 +1,6 @@
 <!--
 @license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
@@ -11,14 +11,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
 <dom-module id="sample-content">
-
   <script>
-
     Polymer({
       is: 'sample-content',
 
       properties: {
-
         size: {
           type: Number,
           value: 0
@@ -39,7 +36,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         boxShadow: {
           value: '0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2)'
         }
-
       },
 
       observers: [
@@ -69,7 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _randomString: function(size) {
         var ls = this._lorem_ipsum_strings;
-        var s  = '';
+        var s = '';
         do {
           s += ls[Math.floor(Math.random() * ls.length)];
           size--;
@@ -85,18 +81,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var html = '';
         for (var i = 0; i < size; i++) {
           html +=
-            '<div style="box-shadow: ' + boxShadow +  '; padding: ' + padding + '; margin: ' + margin + '; border-radius: 5px; background-color: #fff; color: #757575;">' +
+            '<div style="box-shadow: ' + boxShadow + '; padding: ' + padding + '; margin: ' + margin + '; border-radius: 5px; background-color: #fff; color: #757575;">' +
             '<div style="display: inline-block; height: 64px; width: 64px; border-radius: 50%; background: #ddd; line-height: 64px; font-size: 30px; color: #555; text-align: center;">' + this._randomLetter() + '</div>' +
-            '<div style="font-size: 22px; margin: 16px 0; color: #212121;">' + this.label + ' '  + this._randomString() + '</div>' +
+            '<div style="font-size: 22px; margin: 16px 0; color: #212121;">' + this.label + ' ' + this._randomString() + '</div>' +
             '<p style="font-size: 16px;">' + this._randomString() + '</p>' +
             '<p style="font-size: 14px;">' + this._randomString(3) + '</p>' +
             '</div>';
           this.innerHTML = html;
         }
       }
-
     });
-
   </script>
-
 </dom-module>

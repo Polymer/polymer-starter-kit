@@ -9,40 +9,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <!doctype html>
-<html>
-<head>
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>psk-home</title>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="../bower_components/web-component-tester/browser.js"></script>
+    <title>psk-page-home</title>
 
-  <!-- Import the element to test -->
-  <link rel="import" href="../src/psk-page-home.html">
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
 
-</head>
-<body>
+    <!-- Import the element to test -->
+    <link rel="import" href="../src/psk-page-home.html">
+  </head>
+  <body>
+    <test-fixture id="basic">
+      <template>
+        <psk-page-home></psk-page-home>
+      </template>
+    </test-fixture>
 
-  <test-fixture id="basic">
-    <template>
-       <psk-page-home></psk-page-home>
-    </template>
-  </test-fixture>
+    <script>
+      suite('psk-page-home tests', function() {
+        var home;
 
-  <script>
-    suite('psk-page-home tests', function() {
-      var home;
+        setup(function() {
+          home = fixture('basic');
+        });
 
-      setup(function() {
-        home = fixture('basic');
+        test('Page title should be Home', function() {
+          var pageTitle = Polymer.dom(home.root).querySelector('.page-title');
+          assert.equal(pageTitle.textContent, 'Home');
+        })
       });
-
-      test('Page Title should be Home', function() {
-        var pageTitle = Polymer.dom(home.root).querySelector('.page-title');
-        assert.equal(pageTitle.textContent, 'Home');
-      })
-    });
-  </script>
-
-</body>
+    </script>
+  </body>
 </html>
