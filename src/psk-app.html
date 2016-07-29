@@ -191,8 +191,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl('psk-page-' + page + '.html');
-        this._announce('Page ' + page + ' loaded');
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        this.importHref(resolvedPageUrl, this._announce('Page ' + page + ' loaded'), this._showPage404, true);
       },
 
       _showPage404: function() {
