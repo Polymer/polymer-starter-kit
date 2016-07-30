@@ -10,95 +10,84 @@
  * Based on: https://github.com/Polymer/polymer-build/blob/master/test/test-project/gulpfile.js
  */
 
-'use strict';
+ 'use strict';
 
-const del = require('del');
-const gulp = require('gulp');
-const gulpif = require('gulp-if');
-const imagemin = require('gulp-imagemin');
-const logging = require('plylog');
-const mergeStream = require('merge-stream');
+ const del = require('del');
+ const gulp = require('gulp');
+ const gulpif = require('gulp-if');
+ const imagemin = require('gulp-imagemin');
+ const logging = require('plylog');
+ const mergeStream = require('merge-stream');
 
-const polymer = require('polymer-build');
+ // Got problems? Try logging 'em
+ // logging.setVerbose();
 
-// Got problems? Try logging 'em
-// logging.setVerbose();
+ const polymer = require('polymer-build');
+ const PolymerProject = polymer.PolymerProject;
+ const fork = polymer.forkStream;
+ const addServiceWorker = polymer.addServiceWorker;
 
-const PolymerProject = polymer.PolymerProject;
-const fork = polymer.forkStream;
-const addServiceWorker = polymer.addServiceWorker;
+ const polymerJSON = require('./polymer.json');
+ const project = new PolymerProject(polymerJSON);
 
-// Waits for the given ReadableStream
-function waitFor(stream) {
-  return new Promise((resolve, reject) => {
-    stream.on('end', resolve);
-    stream.on('error', reject);
-  });
-}
+ // Clean build directory
+ gulp.task('clean', () => {
+   return del('build');
+ });
 
-let polymerJSON = require('./polymer.json');
-let project = new PolymerProject(polymerJSON);
+ gulp.task('build', ['clean'], (cb) => {
+   // process source files in the project
+   const sources = project.sources()
+     .pipe(project.splitHtml())
+     // add compilers or optimizers here!
+     .pipe(gulpif('**/*.{png,gif,jpg,svg}', imagemin({
+       progressive: true, interlaced: true
+     })))
+     .pipe(project.rejoinHtml());
 
-// Clean build directory
-gulp.task('clean', () => {
-  return del('build');
-});
+   // process dependencies
+   const dependencies = project.dependencies()
+     .pipe(project.splitHtml())
+     // add compilers or optimizers here!
+     .pipe(project.rejoinHtml());
 
-gulp.task('default',['clean'], (cb) => {
+   // merge the source and dependencies streams to we can analyze the project
+   const mergedFiles = mergeStream(sources, dependencies)
+     .pipe(project.analyzer);
 
-  let swConfig = {
-    navigateFallback: '/index.html',
-  };
+   // this fork will vulcanize the project
+   const bundledPhase = fork(mergedFiles)
+     .pipe(project.bundler)
+     // write to the bundled folder
+     .pipe(gulp.dest('build/bundled'));
 
-  // process source files in the project
-  let sources = project.sources()
-    .pipe(project.splitHtml())
-    // add compilers or optimizers here!
-    .pipe(gulpif('**/*.{png,gif,jpg,svg}', imagemin({
-      progressive: true, interlaced: true
-    })))
-    .pipe(project.rejoinHtml());
+   const unbundledPhase = fork(mergedFiles)
+     // write to the unbundled folder
+     .pipe(gulp.dest('build/unbundled'));
 
-  // process dependencies
-  let dependencies = project.dependencies()
-    .pipe(project.splitHtml())
-    // add compilers or optimizers here!
-    .pipe(project.rejoinHtml());
+   cb();
+ });
 
-  // merge the source and dependencies streams to we can analyze the project
-  let allFiles = mergeStream(sources, dependencies)
-    .pipe(project.analyzer);
+ gulp.task('service-worker', ['build'], () => {
+   const swConfig = {
+     navigateFallback: '/index.html',
+   };
 
-  // fork the stream in case downstream transformers mutate the files
-  // this fork will vulcanize the project
-  let bundledPhase = fork(allFiles)
-    .pipe(project.bundler)
-    // write to the bundled folder
-    .pipe(gulp.dest('build/bundled'));
+   // Once the unbundled build stream is complete, create a service worker for the build
+   const unbundledPostProcessing = addServiceWorker({
+     project: project,
+     buildRoot: 'build/unbundled',
+     swConfig: swConfig,
+     serviceWorkerPath: 'service-worker.js',
+   });
 
-  let unbundledPhase = fork(allFiles)
-    // write to the unbundled folder
-    .pipe(gulp.dest('build/unbundled'));
+   // Once the bundled build stream is complete, create a service worker for the build
+   const bundledPostProcessing = addServiceWorker({
+     project: project,
+     buildRoot: 'build/bundled',
+     swConfig: swConfig,
+     bundled: true,
+   });
+ });
 
-  // Once the unbundled build stream is complete, create a service worker for the build
-  let unbundledPostProcessing = waitFor(unbundledPhase).then(() => {
-    return addServiceWorker({
-      project: project,
-      buildRoot: 'build/unbundled',
-      swConfig: swConfig,
-      serviceWorkerPath: 'service-worker.js',
-    });
-  });
-
-  // Once the bundled build stream is complete, create a service worker for the build
-  let bundledPostProcessing = waitFor(bundledPhase).then(() => {
-    return addServiceWorker({
-      project: project,
-      buildRoot: 'build/bundled',
-      swConfig: swConfig,
-      bundled: true,
-    });
-  });
-
-  return Promise.all([unbundledPostProcessing, bundledPostProcessing]);
-});
+ gulp.task('default', ['service-worker']);
