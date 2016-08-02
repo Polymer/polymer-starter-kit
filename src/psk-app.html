@@ -144,6 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- main menu -->
       <iron-pages
+          selected-attribute="visible"
           selected="[[page]]"
           attr-for-selected="name"
           fallback-selection="404"
@@ -176,12 +177,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '_routePageChanged(routeData.page)'
       ],
 
+      listeners : {
+        'change-section' : '_onChangeSection'
+      },
+
       // A11y announce the given message.
       _announce: function(message) {
         this._a11yLabel = '';
         this.debounce('_a11yAnnouncer', function() {
           this._a11yLabel = message;
         }, 100);
+      },
+
+      _onChangeSection: function(event) {
+        var detail = event.detail;
+        // Announce the page's title
+        if (detail.title) {
+          this._announce('Page ' + detail.title + ' loaded');
+        }
       },
 
       _routePageChanged: function(page) {
@@ -191,10 +204,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl('psk-page-' + page + '.html');
-        var onload = function() {
-          this._announce('Page ' + page + ' loaded');
-        };
-        this.importHref(resolvedPageUrl, onload, this._showPage404, true);
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
       },
 
       _showPage404: function() {
