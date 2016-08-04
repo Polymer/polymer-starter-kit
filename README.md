@@ -52,7 +52,7 @@ H2/push-compatible servers or to clients that do not support H2/Push.
 
     polymer build
 
-### Test the build
+### Preview the build
 
 This command serves the minified version of the app in an unbundled state, as it would
 be served by a push-compatible server:
@@ -62,6 +62,14 @@ be served by a push-compatible server:
 This command serves the minified version of the app generated using fragment bundling:
 
     polymer serve build/bundled --open
+
+### Run tests
+
+This command will run
+[Web Component Tester](https://github.com/Polymer/web-component-tester) against the
+browsers currently installed on your machine.
+
+    polymer test
 
 ### Extend
 
