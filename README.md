@@ -57,11 +57,13 @@ H2/push-compatible servers or to clients that do not support H2/Push.
 This command serves the minified version of the app in an unbundled state, as it would
 be served by a push-compatible server:
 
-    polymer serve build/unbundled --open
+    cd build/unbundled
+    polymer serve --open
 
 This command serves the minified version of the app generated using fragment bundling:
 
-    polymer serve build/bundled --open
+    cd build/bundled
+    polymer serve --open
 
 ### Run tests
 
