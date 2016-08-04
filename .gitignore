@@ -1,5 +1,3 @@
-node_modules
-dist
-bower_components
-.tmp
-.publish/
+bower_components/
+build/
+node_modules/
