@@ -15,10 +15,12 @@
   },
   "private": true,
   "devDependencies": {
-    "del": "^2.2.1",
-    "gulp": "^3.9.1",
-    "gulp-if": "^2.0.1",
-    "gulp-imagemin": "^3.0.1",
+    "del": "^2.2.0",
+    "eslint-plugin-html": "^1.5.0",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^3.0.0",
+    "gulp-if": "^2.0.0",
+    "gulp-imagemin": "^3.0.0",
     "merge-stream": "^1.0.0",
     "plylog": "^0.4.0",
     "polymer-build": "^0.3.0"

@@ -19,9 +19,10 @@ before_script:
   - 'export DISPLAY=:99.0'
   - sh -e /etc/init.d/xvfb start
   - sleep 3
-  - npm i -g bower@1.7.1 polymer-cli
-  - bower i
+  - npm install -g bower polymer-cli
+  - bower install
 script:
+  - gulp lint
   # - polymer lint --no-follow-dependencies (uncomment once polylint is fixed to handle lazy loaded elements)
   - polymer test
 env:
