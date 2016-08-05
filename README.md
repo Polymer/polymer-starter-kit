@@ -1,7 +1,7 @@
 # Polymer App Toolbox - Starter Kit
 
 This template is a starting point for building apps using a drawer-based
-layout.  The layout is provided by `app-layout` elements.
+layout. The layout is provided by `app-layout` elements.
 
 This template, along with the `polymer-cli` toolchain, also demonstrates use
 of the "PRPL pattern" This pattern allows fast first delivery and interaction with
