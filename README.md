@@ -75,9 +75,9 @@ browsers currently installed on your machine.
 
     polymer test
 
-### Extend
+### Adding a new view
 
-You can extend the app by adding more elements that will be demand-loaded
+You can extend the app by adding more views that will be demand-loaded
 e.g. based on the route, or to progressively render non-critical sections
 of the application.  Each new demand-loaded fragment should be added to the
 list of `fragments` in the included `polymer.json` file.  This will ensure
