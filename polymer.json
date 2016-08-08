@@ -7,6 +7,11 @@
     "src/my-view3.html",
     "src/my-view404.html"
   ],
+  "sourceGlobs": [
+   "src/**/*",
+   "images/**/*",
+   "bower.json"
+  ],
   "includeDependencies": [
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ]
