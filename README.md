@@ -59,13 +59,13 @@ H2/push-compatible servers or to clients that do not support H2/Push.
 This command serves the minified version of the app in an unbundled state, as it would
 be served by a push-compatible server:
 
-    cd build/unbundled
-    polymer serve --open
+    polymer serve build/unbundled
+    # Open your browser and navigate to localhost:8080
 
 This command serves the minified version of the app generated using fragment bundling:
 
-    cd build/bundled
-    polymer serve --open
+    polymer serve build/bundled
+    # Open your browser and navigate to localhost:8080
 
 ### Run tests
 
