@@ -7,21 +7,11 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-var path = require('path');
-
 var ret = {
   'suites': ['app/test'],
   'webserver': {
     'pathMappings': []
   }
 };
-
-var mapping = {};
-var rootPath = (__dirname).split(path.sep).slice(-1)[0];
-
-mapping['/components/' + rootPath  +
-'/app/bower_components'] = 'bower_components';
-
-ret.webserver.pathMappings.push(mapping);
 
 module.exports = ret;
