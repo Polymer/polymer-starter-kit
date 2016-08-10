@@ -56,16 +56,15 @@ H2/push-compatible servers or to clients that do not support H2/Push.
 
 ### Preview the build
 
-This command serves the minified version of the app in an unbundled state, as it would
-be served by a push-compatible server:
+This command serves the minified version of the app at `http://localhost:8080`
+in an unbundled state, as it would be served by a push-compatible server:
 
     polymer serve build/unbundled
-    # Open your browser and navigate to localhost:8080
 
-This command serves the minified version of the app generated using fragment bundling:
+This command serves the minified version of the app at `http://localhost:8080`
+generated using fragment bundling:
 
     polymer serve build/bundled
-    # Open your browser and navigate to localhost:8080
 
 ### Run tests
 
@@ -83,5 +82,3 @@ of the application.  Each new demand-loaded fragment should be added to the
 list of `fragments` in the included `polymer.json` file.  This will ensure
 those components and their dependencies are added to the list of pre-cached
 components (and will have bundles created in the fallback `bundled` build).
-
-
