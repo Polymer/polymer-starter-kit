@@ -5,24 +5,11 @@
 
 ### Included out of the box:
 
-* [Polymer](https://www.polymer-project.org/), [Paper](https://elements.polymer-project.org/browse?package=paper-elements), [Iron](https://elements.polymer-project.org/browse?package=iron-elements) and [Neon](https://elements.polymer-project.org/browse?package=neon-elements) elements
-* [Material Design](http://www.google.com/design/spec/material-design/introduction.html) layout
-* Routing with [Page.js](https://visionmedia.github.io/page.js/)
+* [Polymer](https://www.polymer-project.org/)
+* Initial design with [app-layout](https://polymerelements.github.io/app-layout/) elements 
+* Routing with [app-route](https://www.polymer-project.org/1.0/toolbox/routing)
 * Unit testing with [Web Component Tester](https://github.com/Polymer/web-component-tester)
-* Optional offline setup through [Platinum](https://elements.polymer-project.org/browse?package=platinum-elements) Service Worker elements
-* End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
-* [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor, Deploying to GitHub Pages, Deploying to Firebase, Mobile Chrome Apps and lint tools.
-
-### Demo
-See latest Polymer Starter Kit Demo (from master) at https://polymerelements.github.io/polymer-starter-kit/
-
-### Tutorials
-
-Check out the Polymer Starter Kit tutorials on [polymer-project.org](https://www.polymer-project.org):
-
-* [Set up the PSK](https://www.polymer-project.org/1.0/docs/start/psk/set-up.html)
-* [Create a page](https://www.polymer-project.org/1.0/docs/start/psk/create-a-page.html)
-* [Deploy the PSK to the web](https://www.polymer-project.org/1.0/docs/start/psk/deploy.html)
+* End-to-end build and optional offline setup through [polymer-build](https://github.com/Polymer/polymer-build)
 
 ## Getting Started
 
@@ -35,15 +22,9 @@ To take advantage of Polymer Starter Kit you need to:
 
 ### Get the code
 
-[Download](https://github.com/polymerelements/polymer-starter-kit/releases/latest) and extract Polymer Starter Kit to where you want to work. The project comes in two flavours - Light and Full.
+[Download](https://github.com/polymerelements/polymer-starter-kit/releases/latest) and extract Polymer Starter Kit to where you want to work.
 
-**Beginners**: Try Polymer Starter Kit Light. This doesn't require any extra dependencies nor knowledge of modern front-end tooling. This option is good for prototyping if you haven't build a Polymer app before.
-
-**Intermediate - Advanced**: Use the full version of Polymer Starter Kit. This comes with all the build tools you'll need for testing and productionising your app so it's nice and lean. You'll need to run a few extra commands to install the tools we recommend but it's worth it to make sure your final app is super optimised.
-
-:warning: **Important**: Polymer Starter Kit, and Polymer Starter Kit Light, both contain dotfiles (files starting with a `.`). If you're copying the contents of the Starter Kit to a new location make sure you bring along these dotfiles as well! On Mac, [enable showing hidden files](http://ianlunn.co.uk/articles/quickly-showhide-hidden-files-mac-os-x-mavericks/), then try extracting/copying Polymer Starter Kit again. This time the dotfiles needed should be visible so you can copy them over without issues.
-
-Rob Dodson has a fantastic [PolyCast video](https://www.youtube.com/watch?v=xz-yixRxZN8) available that walks through using Polymer Starter Kit. An [end-to-end with Polymer](https://www.youtube.com/watch?v=1f_Tj_JnStA) and Polymer Starter Kit talk is also available.
+:warning: **Important**: Polymer Starter Kit contains dotfiles (files starting with a `.`). If you're copying the contents of the Starter Kit to a new location make sure you bring along these dotfiles as well! On Mac, [enable showing hidden files](http://ianlunn.co.uk/articles/quickly-showhide-hidden-files-mac-os-x-mavericks/), then try extracting/copying Polymer Starter Kit again. This time the dotfiles needed should be visible so you can copy them over without issues.
 
 ### Install dependencies
 
@@ -52,7 +33,7 @@ Rob Dodson has a fantastic [PolyCast video](https://www.youtube.com/watch?v=xz-y
 With Node.js installed, run the following one liner from the root of your Polymer Starter Kit download:
 
 ```sh
-npm install -g gulp bower && npm install && bower install
+npm install -g gulp bower polymer-cli && npm install && bower install
 ```
 
 #### Prerequisites (for everyone)
@@ -63,6 +44,7 @@ The full starter kit requires the following major dependencies:
 - npm, the node package manager, installed with Node.js and used to install Node.js packages.
 - gulp, a Node.js-based build tool.
 - bower, a Node.js-based package manager used to install front-end packages (like Polymer).
+- polymer-cli, for linting and running the local dev server
 - The starter kit gulp build process uses platform specific tools which is handled by node-gyp which is included in node.js. See https://github.com/nodejs/node-gyp/blob/master/README.md for additional platform specific dependencies.
 
 **To install dependencies:**
@@ -73,17 +55,17 @@ The full starter kit requires the following major dependencies:
 node --version
 ```
 
-The version should be at or above 0.12.x.
+The version should be at or above 0.4.x.
 
 2)  If you don't have Node.js installed, or you have a lower version, go to [nodejs.org](https://nodejs.org) and click on the big green Install button.
 
-3)  Install `gulp` and `bower` globally.
+3)  Install `gulp`, `bower`, `polymer-cli` globally.
 
 ```sh
-npm install -g gulp bower
+npm install -g gulp bower polymer-cli
 ```
 
-This lets you run `gulp` and `bower` from the command line.
+This lets you run `gulp` and `bower` from the command line and use the local dev server in `polymer-cli`.
 
 4)  Install the starter kit's local `npm` and `bower` dependencies.
 
@@ -91,25 +73,25 @@ This lets you run `gulp` and `bower` from the command line.
 cd polymer-starter-kit && npm install && bower install
 ```
 
-This installs the element sets (Paper, Iron, Platinum) and tools the starter kit requires to build and serve apps.
+This installs the element sets (Paper, Iron, App Layout, and App Route) and tools the starter kit requires to build and serve apps.
 
 ### Development workflow
 
-#### Serve / watch
+#### Serve
 
 ```sh
-gulp serve
+polymer serve --open
 ```
 
-This outputs an IP address you can use to locally test and another that can be used on devices connected to your network.
+This will run a local server and open the `index.html` in your default browser
 
 #### Run tests
 
 ```sh
-gulp test:local
+polymer test
 ```
 
-This runs the unit tests defined in the `app/test` directory through [web-component-tester](https://github.com/Polymer/web-component-tester).
+This runs the unit tests defined in the `test` directory through [web-component-tester](https://github.com/Polymer/web-component-tester).
 
 To run tests Java 7 or higher is required. To update Java go to http://www.oracle.com/technetwork/java/javase/downloads/index.html and download ***JDK*** and install it.
 
@@ -119,39 +101,36 @@ To run tests Java 7 or higher is required. To update Java go to http://www.oracl
 gulp
 ```
 
-Build and optimize the current project, ready for deployment. This includes vulcanization, image, script, stylesheet and HTML optimization and minification.
+This command performs HTML, CSS, and JS minification on the application dependencies, and generates a service-worker.js file with code to pre-cache the dependencies based on the entrypoint and fragments specified in polymer.json.
+The minified files are output to the build/unbundled folder, and are suitable for serving from a HTTP/2+Push compatible server.
+
+In addition the command also creates a fallback build/bundled folder, generated using fragment bundling, suitable for serving from non H2/push-compatible servers or to clients that do not support H2/Push.
+
+While it is also possible to build the project using the `polymer build` command, PSK ships with a gulpfile which uses the `polymer-build` library directly.
+`polymer-build` does the same work as the Polymer CLI's `build` command, but also provides hooks for developers to add their own tasks. This means you can
+extend the build process to include additional transpilers like Babel or TypeScript, preprocessors like SASS and Autoprefixer, and minifier like imagemin.
+
+#### Preview
+
+```sh
+polymer serve build/unbundled --open
+```
+
+This command serves the minified version of the app in an unbundled state, as it would be served by a push-compatible server
+
+```sh
+polymer serve build/bundled
+```
+
+This command serves the minified version of the app generated using fragment bundling
+
+#### Extend
+
+You can extend the app by adding more elements that will be demand-loaded e.g. based on the route, or to progressively render non-critical sections of the application. Each new demand-loaded fragment should be added to the list of fragments in the included polymer.json file. This will ensure those components and their dependencies are added to the list of pre-cached components (and will have bundles created in the fallback bundled build).
 
 ## Application Theming & Styling
 
-Polymer 1.0 introduces a shim for CSS custom properties. We take advantage of this in `app/styles/app-theme.html` to provide theming for your application. You can also find our presets for Material Design breakpoints in this file.
-
-[Read more](https://www.polymer-project.org/1.0/docs/devguide/styling.html) about CSS custom properties.
-
-### Styling
-1. ***main.css*** - to define styles that can be applied outside of Polymer's custom CSS properties implementation. Some of the use-cases include defining styles that you want to be applied for a splash screen, styles for your application 'shell' before it gets upgraded using Polymer or critical style blocks that you want parsed before your elements are.
-2. ***app-theme.html*** - to provide theming for your application. You can also find our presets for Material Design breakpoints in this file.
-3. ***shared-styles.html*** - to share styles between elements and index.html.
-4. ***element styles only*** - styles specific to element. These styles should be inside the `<style></style>` inside `template`.
-
-  ```HTML
-  <dom-module id="my-list">
-    <template>
-      <style>
-        :host {
-          display: block;
-          background-color: yellow;
-        }
-      </style>
-      <ul>
-        <template is="dom-repeat" items="{{items}}">
-          <li><span class="paper-font-body1">{{item}}</span></li>
-        </template>
-      </ul>
-    </template>
-  </dom-module>
-  ```
-
-These style files are located in the [styles folder](app/styles/).
+Polymer 1.0 uses CSS custom properties for theming. You can [read more about CSS custom properties on the polymer-project.org](https://www.polymer-project.org/1.0/docs/devguide/styling.html).
 
 ## Unit Testing
 
@@ -163,164 +142,23 @@ Web apps built with Polymer Starter Kit come configured with support for [Web Co
 
 Polymer uses [Bower](http://bower.io) for package management. This makes it easy to keep your elements up to date and versioned. For tooling, we use npm to manage Node.js-based dependencies.
 
-Components installed by Bower live in the `app/bower_components` directory. This location is specified by the `.bowerrc` file. Many projects which follow Yeoman conventions place the `bower_components` directory outside of the `app` directory and then mount it using a server. This causes problems for tools like [Vulcanize](https://github.com/polymer/vulcanize) and [web-component-shards](https://github.com/PolymerLabs/web-component-shards) which rely on relative paths. We've chosen to simplify things and have `bower_components` live inside of `app` to resolve these issues.
-
 ## Deploy
-
-### Github Pages
-
-1. Uncomment this line  `// app.baseUrl = '/polymer-starter-kit/';` in app.js near the top
-2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `app.baseUrl = '/bobs-awesome-site/';`)
-3. Run `gulp build-deploy-gh-pages` from command line
-4. To see changes wait 1-2 minutes then load Github pages for your app (ex: https://polymerelements.github.io/polymer-starter-kit/)
-
-[See more details](/docs/deploy-to-github-pages.md/)
 
 ### Firebase
 
-[See detail recipe](/docs/deploy-to-firebase-pretty-urls.md/)
-
-## Service Worker
-
-Polymer Starter Kit offers an optional offline experience thanks to Service Worker and the [Platinum Service Worker elements](https://github.com/PolymerElements/platinum-sw). New to Service Worker? Read the following [introduction](http://www.html5rocks.com/en/tutorials/service-worker/introduction/) to understand how it works.
-
-Our optional offline setup should work well for relatively simple applications. For more complex apps, we recommend learning how Service Worker works so that you can make the most of the Platinum Service Worker element abstractions.
-
-### Enable Service Worker support?
-
-To enable Service Worker support for Polymer Starter Kit project use these 3 steps:
-
-1. Uncomment Service Worker code in index.html
-  ```HTML
-  <!-- Uncomment next block to enable Service Worker support (1/2) -->
-  <!--
-  <paper-toast id="caching-complete"
-               duration="6000"
-               text="Caching complete! This app will work offline.">
-  </paper-toast>
-
-  <platinum-sw-register auto-register
-                        clients-claim
-                        skip-waiting
-                        on-service-worker-installed="displayInstalledToast">
-    <platinum-sw-cache default-cache-strategy="networkFirst"
-                       cache-config-file="cache-config.json">
-    </platinum-sw-cache>
-  </platinum-sw-register>
-  -->
-  ```
-2. Uncomment Service Worker code in elements.html
-
-  ```HTML
-  <!-- Uncomment next block to enable Service Worker Support (2/2) -->
-  <!--
-  <link rel="import" href="../bower_components/platinum-sw/platinum-sw-cache.html">
-  <link rel="import" href="../bower_components/platinum-sw/platinum-sw-register.html">
-  -->
-  ```
-3. Uncomment 'cache-config' in the `runSequence()` section of the 'default' gulp task, like below:
-[(gulpfile.js)](https://github.com/PolymerElements/polymer-starter-kit/blob/master/gulpfile.js)
-
-  ```JavaScript
-  // Build Production Files, the Default Task
-  gulp.task('default', ['clean'], function (cb) {
-    runSequence(
-      ['copy', 'styles'],
-      'elements',
-      ['images', 'fonts', 'html'],
-      'vulcanize', 'cache-config',
-      cb);
-  });
-  ```
-
-#### Filing bugs in the right place
-
-If you experience an issue with Service Worker support in your application, check the origin of the issue and use the appropriate issue tracker:
-
-* [sw-toolbox](https://github.com/GoogleChrome/sw-toolbox/issues)
-* [platinum-sw](https://github.com/PolymerElements/platinum-sw/issues)
-* [platinum-push-notifications-manager](https://github.com/PolymerElements/platinum-push-messaging)
-* For all other issues, feel free to file them [here](https://github.com/polymerelements/polymer-starter-kit/issues).
-
-#### I get an error message about "Only secure origins are allowed"
-
-Service Workers are only available to "secure origins" (HTTPS sites, basically) in line with a policy to prefer secure origins for powerful new features. However http://localhost is also considered a secure origin, so if you can, developing on localhost is an easy way to avoid this error. For production, your site will need to support HTTPS.
-
-#### How do I debug Service Worker?
-
-If you need to debug the event listener wire-up use `chrome://serviceworker-internals`.
-
-#### What are those buttons on chrome://serviceworker-internals?
-
-This page shows your registered workers and provides some basic operations.
-
-* Unregister: Unregisters the worker.
-* Start: Starts the worker. This would happen automatically when you navigate to a page in the worker's scope.
-* Stop: Stops the worker.
-* Sync: Dispatches a 'sync' event to the worker. If you don't handle this event, nothing will happen.
-* Push: Dispatches a 'push' event to the worker. If you don't handle this event, nothing will happen.
-* Inspect: Opens the worker in the Inspector.
-
-#### Development flow
-
-In order to guarantee that the latest version of your Service Worker script is being used, follow these instructions:
-
-* After you made changes to your service worker script, close all but one of the tabs pointing to your web application
-* Hit shift-reload to bypass the service worker as to ensure that the remaining tab isn't under the control of a service worker
-* Hit reload to let the newer version of the Service Worker control the page.
-
-If you find anything to still be stale, you can also try navigating to `chrome:serviceworker-internals` (in Chrome), finding the relevant Service Worker entry for your application and clicking 'Unregister' before refreshing your app. This will (of course) only clear it from the local development machine. If you have already deployed to production then further work will be necessary to remove it from your users' machines.
-
-#### Disable Service Worker support after you enabled it
-
-If for any reason you need to disable Service Worker support after previously enabling it, you can remove it from your Polymer Starter Kit project using these 4 steps:
-
-1. Remove references to the platinum-sw elements from your application [index](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/index.html).
-2. Remove the two Platinum Service Worker elements (platinum-sw/..) in [app/elements/elements.html](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/elements/elements.html)
-3. Remove 'precache' from the list in the 'default' gulp task ([gulpfile.js](https://github.com/PolymerElements/polymer-starter-kit/blob/master/gulpfile.js))
-4. Navigate to `chrome://serviceworker-internals` and unregister any Service Workers registered by Polymer Starter Kit for your app just in case there's a copy of it cached.
-
-## Add to home screen banner
-
-If you've enabled Service Worker support, your app becomes eligible to trigger a Chrome [web app install banner](https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/) if you add a `start_url` property to `manifest.json`, and point it to a valid URL. The best practice here is to add a query parameter to that URL, in order to distinguish between the app being launched from the web vs. the homescreen. Simply add this to `manifest.json` and you'll be all set:
-
-    "start_url": "/?homescreen=1"
-
-If you are implementing an offline experince using Service Worker, make sure to cache `/?homescreen=1`. For a short explanation, you can refer to [this segment](https://youtu.be/g7f1Az5fxgU?t=1435) from Rob Dodson's talk Building Progressive Web Apps with Polymer. A more in-depth exploration can be found at [Service Workers in Production](https://developers.google.com/web/showcase/case-study/service-workers-iowa#watch-out-for-extra-query-parameters).
-
-## Yeoman support
-
-[generator-polymer](https://github.com/yeoman/generator-polymer/releases) now includes support for Polymer Starter Kit out of the box.
+[See this Polycast on using Polymer CLI and deploying to Firebase](https://www.youtube.com/watch?v=pj2lmXVa84U)
 
 ## Frequently Asked Questions
 
 ### Where do I customise my application theme?
 
-Theming can be achieved using [CSS Custom properties](https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling-details) via [app/styles/app-theme.html](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/styles/app-theme.html).
-You can also use `app/styles/main.css` for pure CSS stylesheets (e.g for global styles), however note that Custom properties will not work there under the shim.
+Theming can be achieved using [CSS Custom properties](https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling-details). Take a look at [https://github.com/PolymerElements/polymer-starter-kit/blob/master/src/psk-app.html](src/psk-app.html) for an example.
 
 A [Polycast](https://www.youtube.com/watch?v=omASiF85JzI) is also available that walks through theming using Polymer 1.0.
 
 ### Where do I configure routes in my application?
 
-This can be done via [`app/elements/routing.html`](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/elements/routing.html). We use Page.js for routing and new routes
-can be defined in this import. We then toggle which `<iron-pages>` page to display based on the [selected](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/index.html#L105) route.
-
-### Why are we using Page.js rather than a declarative router like `<more-routing>`?
-
-`<more-routing>` (in our opinion) is good, but lacks imperative hooks for getting full control
-over the routing in your application. This is one place where a pure JS router shines. We may
-at some point switch back to a declarative router when our hook requirements are tackled. That
-said, it should be trivial to switch to `<more-routing>` or another declarative router in your
-own local setup.
-
-### Where can I find the application layouts from your Google I/O 2015 talk?
-
-App layouts live in a separate repository called [app-layout-templates](https://github.com/PolymerElements/app-layout-templates).
-You can select a template and copy over the relevant parts you would like to reuse to Polymer Starter Kit.
-
-You will probably need to change paths to where your Iron and Paper dependencies can be found to get everything working.
-This can be done by adding them to the [`elements.html`](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/elements/elements.html) import.
+This can be done via the app-route element in `src/psk-app`. If you're new to app-route [check out the guide on polymer-project.org](https://www.polymer-project.org/1.0/toolbox/routing).
 
 ### Something has failed during installation. How do I fix this?
 
@@ -343,43 +181,9 @@ a dependency failed to correctly install. We recommend running `npm cache clean`
 `npm install` to see if this corrects the problem. If not, please check the [issue tracker](https://github.com/PolymerElements/polymer-starter-kit/issues) in case
 there is a workaround or fix already posted.
 
-### I'm having trouble getting Vulcanize to fully build my project on Windows. Help?
+### How do I add new files to Starter Kit so they're picked up by the build process?
 
-Some Windows users have run into trouble with the `elements.html` file in their `dist` folder
-not being correctly vulcanized. This can happen if your project is in a folder with a name containing a
-space. You can work around this issue by ensuring your path doesn't contain one.
-
-There is also an [in-flight](https://github.com/PolymerElements/polymer-starter-kit/issues/62#issuecomment-108974016) issue
-where some are finding they need to disable the `inlineCss` option in our configuration for Vulcanize
-to correctly build. We are still investigating this, however for the time-being use the workaround if
-you find your builds getting stuck here.
-
-
-### How do I add new JavaScript files to Starter Kit so they're picked up by the build process?
-
-At the bottom of `app/index.html`, you will find a build block that can be used to include additional
-scripts for your app. Build blocks are just normal script tags that are wrapped in a HTML
-comment that indicates where to concatenate and minify their final contents to.
-
-Below, we've added in `script2.js` and `script3.js` to this block. The line
-`<!-- build:js scripts/app.js -->` specifies that these scripts will be squashed into `scripts/app.js`
-during a build.
-
-```html
-<!-- build:js scripts/app.js -->
-<script src="scripts/app.js"></script>
-<script src="scripts/script2.js"></script>
-<script src="scripts/script3.js"></script>
-<!-- endbuild-->
-```
-
-If you are not using the build-blocks, but still wish for additional files (e.g scripts or stylesheets) to be included in the final `dist` directory, you will need to either copy these files as part of the gulpfile.js build process (see the `copy` task for how to automate this) or manually copy the files.
-
-### I'm finding the installation/tooling here overwhelming. What should I do?
-
-Don't worry! We've got you covered. Polymer Starter Kit tries to offer everything you need to build and optimize your apps for production, which is why we include the tooling we do. We realise however that our tooling setup may not be for everyone.
-
-If you find that you just want the simplest setup possible, we recommend using Polymer Starter Kit light, which is available from the [Releases](https://github.com/PolymerElements/polymer-starter-kit/releases) page. This takes next to no time to setup.
+Any files added to the `src` directory will be picked up by the build process.
 
 ## Licensing
 
