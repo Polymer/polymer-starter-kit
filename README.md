@@ -3,6 +3,11 @@
 
 > A starting point for building web applications with Polymer 1.0
 
+## Deprecation Warning
+
+Polymer Starter Kit v1.x is deprecated in favor of Polymer Starter Kit 2, which uses Polymer's [PRPL pattern](https://www.polymer-project.org/1.0/toolbox/server), and [app-layout elements](https://github.com/PolymerElements/app-layout).
+If you're starting a new project we **strongly** recommend you use Polymer Starter Kit 2.
+
 ### Included out of the box:
 
 * [Polymer](https://www.polymer-project.org/), [Paper](https://elements.polymer-project.org/browse?package=paper-elements), [Iron](https://elements.polymer-project.org/browse?package=iron-elements) and [Neon](https://elements.polymer-project.org/browse?package=neon-elements) elements
@@ -13,12 +18,9 @@
 * End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
 * [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor, Deploying to GitHub Pages, Deploying to Firebase, Mobile Chrome Apps and lint tools.
 
-### Demo
-See latest Polymer Starter Kit Demo (from master) at https://polymerelements.github.io/polymer-starter-kit/
-
 ### Tutorials
 
-Check out the Polymer Starter Kit tutorials on [polymer-project.org](https://www.polymer-project.org):
+Check out the Polymer Starter Kit tutorials on [polymer-project.org](https://docs-05-dot-polymer-project.appspot.com/1.0/docs/start/psk/set-up.html):
 
 * [Set up the PSK](docs/tutorials/set-up.md)
 * [Create a page](docs/tutorials/create-a-page.md)
@@ -35,7 +37,7 @@ To take advantage of Polymer Starter Kit you need to:
 
 ### Get the code
 
-[Download](https://github.com/polymerelements/polymer-starter-kit/releases/latest) and extract Polymer Starter Kit to where you want to work. The project comes in two flavours - Light and Full.
+[Download](https://github.com/PolymerElements/polymer-starter-kit/releases/tag/v1.4.0) and extract Polymer Starter Kit to where you want to work. The project comes in two flavours - Light and Full.
 
 **Beginners**: Try Polymer Starter Kit Light. This doesn't require any extra dependencies nor knowledge of modern front-end tooling. This option is good for prototyping if you haven't build a Polymer app before.
 
