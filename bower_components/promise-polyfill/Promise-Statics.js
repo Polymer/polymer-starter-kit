@@ -1,3 +1,12 @@
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
 Promise.all = Promise.all || function () {
   var args = Array.prototype.slice.call(arguments.length === 1 && Array.isArray(arguments[0]) ? arguments[0] : arguments);
 
@@ -27,10 +36,13 @@ Promise.all = Promise.all || function () {
   });
 };
 
-Promise.race = Promise.race || function (values) {
+Promise.race = Promise.race || function(values) {
+  // TODO(bradfordcsmith): To be consistent with the ECMAScript spec, this
+  //     method should take any iterable, not just an array.
+  var forcedArray = /** @type {!Array<!Thenable>} */ (values);
   return new Promise(function (resolve, reject) {
-    for(var i = 0, len = values.length; i < len; i++) {
-      values[i].then(resolve, reject);
+    for(var i = 0, len = forcedArray.length; i < len; i++) {
+      forcedArray[i].then(resolve, reject);
     }
   });
 };
