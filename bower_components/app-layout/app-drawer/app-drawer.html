@@ -1,0 +1,127 @@
+<html><head><link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+
+
+
+</head><body><dom-module id="app-drawer">
+  <template>
+    <style>
+      :host {
+        position: fixed;
+        top: -120px;
+        right: 0;
+        bottom: -120px;
+        left: 0;
+
+        visibility: hidden;
+
+        transition: visibility 0.2s ease;
+      }
+
+      :host([opened]) {
+        visibility: visible;
+      }
+
+      :host([persistent]) {
+        width: var(--app-drawer-width, 256px);
+      }
+
+      :host([persistent][position=left]) {
+        right: auto;
+      }
+
+      :host([persistent][position=right]) {
+        left: auto;
+      }
+
+      #contentContainer {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+
+        width: var(--app-drawer-width, 256px);
+        padding: 120px 0;
+
+        transition: 0.2s ease;
+        transition-property: -webkit-transform;
+        transition-property: transform;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+
+        background-color: #FFF;
+
+        @apply(--app-drawer-content-container);
+      }
+
+      :host([position=right]) > #contentContainer {
+        right: 0;
+        left: auto;
+
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+      }
+
+      :host([swipe-open]) > #contentContainer::after {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 100%;
+
+        visibility: visible;
+
+        width: 20px;
+
+        content: '';
+      }
+
+      :host([swipe-open][position=right]) > #contentContainer::after {
+        right: 100%;
+        left: auto;
+      }
+
+      :host([opened]) > #contentContainer {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+      }
+
+      #scrim {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        transition: opacity 0.2s ease;
+        -webkit-transform: translateZ(0);
+        transform:  translateZ(0);
+
+        opacity: 0;
+        background: var(--app-drawer-scrim-background, rgba(0, 0, 0, 0.5));
+      }
+
+      :host([opened]) > #scrim {
+        opacity: 1;
+      }
+
+      :host([opened][persistent]) > #scrim {
+        visibility: hidden;
+        /**
+         * NOTE(keanulee): Keep both opacity: 0 and visibility: hidden to prevent the
+         * scrim from showing when toggling between closed and opened/persistent.
+         */
+
+        opacity: 0;
+      }
+    </style>
+
+    <div id="scrim" on-tap="close"></div>
+
+    <div id="contentContainer">
+      <content></content>
+    </div>
+  </template>
+
+  <script>Polymer({is:"app-drawer",properties:{opened:{type:Boolean,value:!1,notify:!0,reflectToAttribute:!0},persistent:{type:Boolean,value:!1,reflectToAttribute:!0},align:{type:String,value:"left"},position:{type:String,readOnly:!0,reflectToAttribute:!0},swipeOpen:{type:Boolean,value:!1,reflectToAttribute:!0},noFocusTrap:{type:Boolean,value:!1}},observers:["resetLayout(position, isAttached)","_resetPosition(align, isAttached)"],_translateOffset:0,_trackDetails:null,_drawerState:0,_boundEscKeydownHandler:null,_firstTabStop:null,_lastTabStop:null,ready:function(){this._setTransitionDuration("0s")},attached:function(){Polymer.RenderStatus.afterNextRender(this,function(){this._setTransitionDuration(""),this._boundEscKeydownHandler=this._escKeydownHandler.bind(this),this._resetDrawerState(),this.addEventListener("transitionend",this._transitionend.bind(this)),this.addEventListener("keydown",this._tabKeydownHandler.bind(this)),this.listen(this,"track","_track"),this.setScrollDirection("y")})},detached:function(){document.removeEventListener("keydown",this._boundEscKeydownHandler)},open:function(){this.opened=!0},close:function(){this.opened=!1},toggle:function(){this.opened=!this.opened},getWidth:function(){return this.$.contentContainer.offsetWidth},resetLayout:function(){this.fire("app-drawer-reset-layout")},_isRTL:function(){return"rtl"===window.getComputedStyle(this).direction},_resetPosition:function(){switch(this.align){case"start":return void this._setPosition(this._isRTL()?"right":"left");case"end":return void this._setPosition(this._isRTL()?"left":"right")}this._setPosition(this.align)},_escKeydownHandler:function(t){var i=27;t.keyCode===i&&(t.preventDefault(),this.close())},_track:function(t){if(!this.persistent)switch(t.preventDefault(),t.detail.state){case"start":this._trackStart(t);break;case"track":this._trackMove(t);break;case"end":this._trackEnd(t)}},_trackStart:function(t){this._drawerState=this._DRAWER_STATE.TRACKING,this._setTransitionDuration("0s"),this.style.visibility="visible";var i=this.$.contentContainer.getBoundingClientRect();"left"===this.position?this._translateOffset=i.left:this._translateOffset=i.right-window.innerWidth,this._trackDetails=[]},_trackMove:function(t){this._translateDrawer(t.detail.dx+this._translateOffset),this._trackDetails.push({dx:t.detail.dx,timeStamp:Date.now()})},_trackEnd:function(t){var i=t.detail.dx+this._translateOffset,e=this.getWidth(),s="left"===this.position,n=s?i>=0||i<=-e:i<=0||i>=e;if(!n){var a=this._trackDetails;if(this._trackDetails=null,this._flingDrawer(t,a),this._drawerState===this._DRAWER_STATE.FLINGING)return}var r=e/2;t.detail.dx<-r?this.opened="right"===this.position:t.detail.dx>r&&(this.opened="left"===this.position),n&&this._resetDrawerState(),this._setTransitionDuration(""),this._resetDrawerTranslate(),this.style.visibility=""},_calculateVelocity:function(t,i){for(var e,s=Date.now(),n=s-100,a=0,r=i.length-1;a<=r;){var o=a+r>>1,h=i[o];h.timeStamp>=n?(e=h,r=o-1):a=o+1}if(e){var d=t.detail.dx-e.dx,l=s-e.timeStamp||1;return d/l}return 0},_flingDrawer:function(t,i){var e=this._calculateVelocity(t,i);if(!(Math.abs(e)<this._MIN_FLING_THRESHOLD)){this._drawerState=this._DRAWER_STATE.FLINGING;var s,n=t.detail.dx+this._translateOffset,a=this.getWidth(),r="left"===this.position,o=e>0,h=!o&&r,d=o&&!r;s=h?-(n+a):d?a-n:-n,o?(e=Math.max(e,this._MIN_TRANSITION_VELOCITY),this.opened="left"===this.position):(e=Math.min(e,-this._MIN_TRANSITION_VELOCITY),this.opened="right"===this.position),this._setTransitionDuration(this._FLING_INITIAL_SLOPE*s/e+"ms"),this._setTransitionTimingFunction(this._FLING_TIMING_FUNCTION),this._resetDrawerTranslate()}},_transitionend:function(t){var i=Polymer.dom(t).rootTarget;i!==this.$.contentContainer&&i!==this.$.scrim||(this._drawerState===this._DRAWER_STATE.FLINGING&&(this._setTransitionDuration(""),this._setTransitionTimingFunction(""),this.style.visibility=""),this._resetDrawerState())},_setTransitionDuration:function(t){this.$.contentContainer.style.transitionDuration=t,this.$.scrim.style.transitionDuration=t},_setTransitionTimingFunction:function(t){this.$.contentContainer.style.transitionTimingFunction=t,this.$.scrim.style.transitionTimingFunction=t},_translateDrawer:function(t){var i=this.getWidth();"left"===this.position?(t=Math.max(-i,Math.min(t,0)),this.$.scrim.style.opacity=1+t/i):(t=Math.max(0,Math.min(t,i)),this.$.scrim.style.opacity=1-t/i),this.translate3d(t+"px","0","0",this.$.contentContainer)},_resetDrawerTranslate:function(){this.$.scrim.style.opacity="",this.transform("",this.$.contentContainer)},_resetDrawerState:function(){var t=this._drawerState;this.opened?this._drawerState=this.persistent?this._DRAWER_STATE.OPENED_PERSISTENT:this._DRAWER_STATE.OPENED:this._drawerState=this._DRAWER_STATE.CLOSED,t!==this._drawerState&&(this._drawerState===this._DRAWER_STATE.OPENED?(this._setKeyboardFocusTrap(),document.addEventListener("keydown",this._boundEscKeydownHandler),document.body.style.overflow="hidden"):(document.removeEventListener("keydown",this._boundEscKeydownHandler),document.body.style.overflow=""),t!==this._DRAWER_STATE.INIT&&this.fire("app-drawer-transitioned"))},_setKeyboardFocusTrap:function(){if(!this.noFocusTrap){var t=['a[href]:not([tabindex="-1"])','area[href]:not([tabindex="-1"])','input:not([disabled]):not([tabindex="-1"])','select:not([disabled]):not([tabindex="-1"])','textarea:not([disabled]):not([tabindex="-1"])','button:not([disabled]):not([tabindex="-1"])','iframe:not([tabindex="-1"])','[tabindex]:not([tabindex="-1"])','[contentEditable=true]:not([tabindex="-1"])'].join(","),i=Polymer.dom(this).querySelectorAll(t);i.length>0?(this._firstTabStop=i[0],this._lastTabStop=i[i.length-1]):(this._firstTabStop=null,this._lastTabStop=null);var e=this.getAttribute("tabindex");e&&parseInt(e,10)>-1?this.focus():this._firstTabStop&&this._firstTabStop.focus()}},_tabKeydownHandler:function(t){if(!this.noFocusTrap){var i=9;this._drawerState===this._DRAWER_STATE.OPENED&&t.keyCode===i&&(t.shiftKey?this._firstTabStop&&Polymer.dom(t).localTarget===this._firstTabStop&&(t.preventDefault(),this._lastTabStop.focus()):this._lastTabStop&&Polymer.dom(t).localTarget===this._lastTabStop&&(t.preventDefault(),this._firstTabStop.focus()))}},_MIN_FLING_THRESHOLD:.2,_MIN_TRANSITION_VELOCITY:1.2,_FLING_TIMING_FUNCTION:"cubic-bezier(0.667, 1, 0.667, 1)",_FLING_INITIAL_SLOPE:1.5,_DRAWER_STATE:{INIT:0,OPENED:1,OPENED_PERSISTENT:2,CLOSED:3,TRACKING:4,FLINGING:5}});</script>
+</dom-module>
+</body></html>

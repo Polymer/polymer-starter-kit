@@ -1,0 +1,6 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-behaviors/iron-button-state.html">
+<link rel="import" href="paper-ripple-behavior.html">
+
+<script>Polymer.PaperInkyFocusBehaviorImpl={observers:["_focusedChanged(receivedFocusFromKeyboard)"],_focusedChanged:function(e){e&&this.ensureRipple(),this.hasRipple()&&(this._ripple.holdDown=e)},_createRipple:function(){var e=Polymer.PaperRippleBehavior._createRipple();return e.id="ink",e.setAttribute("center",""),e.classList.add("circle"),e}},Polymer.PaperInkyFocusBehavior=[Polymer.IronButtonState,Polymer.IronControlState,Polymer.PaperRippleBehavior,Polymer.PaperInkyFocusBehaviorImpl];</script>
+</head><body></body></html>

@@ -1,0 +1,103 @@
+<html><head><link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../app-scroll-effects/app-scroll-effects-behavior.html">
+
+
+
+</head><body><dom-module id="app-header">
+  <template>
+    <style>
+      :host {
+        position: relative;
+        display: block;
+        transition-timing-function: linear;
+        transition-property: -webkit-transform;
+        transition-property: transform;
+      }
+
+      :host::after {
+        position: absolute;
+        right: 0px;
+        bottom: -5px;
+        left: 0px;
+        width: 100%;
+        height: 5px;
+        content: "";
+        transition: opacity 0.4s;
+        pointer-events: none;
+        opacity: 0;
+        box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+        will-change: opacity;
+        @apply(--app-header-shadow);
+      }
+
+      :host([shadow])::after {
+        opacity: 1;
+      }
+
+      #contentContainer > ::content [condensed-title] {
+        -webkit-transform-origin: left top;
+        transform-origin: left top;
+        white-space: nowrap;
+        opacity: 0;
+      }
+
+      #contentContainer > ::content [main-title] {
+        -webkit-transform-origin: left top;
+        transform-origin: left top;
+        white-space: nowrap;
+      }
+
+      #background {
+        @apply(--layout-fit);
+        overflow: hidden;
+      }
+
+      #backgroundFrontLayer,
+      #backgroundRearLayer {
+        @apply(--layout-fit);
+        height: 100%;
+        pointer-events: none;
+        background-size: cover;
+      }
+
+      #backgroundFrontLayer {
+        @apply(--app-header-background-front-layer);
+      }
+
+      #backgroundRearLayer {
+        opacity: 0;
+        @apply(--app-header-background-rear-layer);
+      }
+
+      #contentContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      :host([disabled]),
+      :host([disabled])::after,
+      :host([disabled]) #backgroundFrontLayer,
+      :host([disabled]) #backgroundRearLayer,
+      :host([disabled]) ::content > app-toolbar:first-of-type,
+      :host([disabled]) ::content > [sticky],
+      /* Silent scrolling should not run CSS transitions */
+      :host-context(.app-layout-silent-scroll),
+      :host-context(.app-layout-silent-scroll)::after,
+      :host-context(.app-layout-silent-scroll) #backgroundFrontLayer,
+      :host-context(.app-layout-silent-scroll) #backgroundRearLayer,
+      :host-context(.app-layout-silent-scroll) ::content > app-toolbar:first-of-type,
+      :host-context(.app-layout-silent-scroll) ::content > [sticky] {
+        transition: none !important;
+      }
+    </style>
+    <div id="contentContainer">
+      <content id="content"></content>
+    </div>
+  </template>
+
+  <script>Polymer({is:"app-header",behaviors:[Polymer.AppScrollEffectsBehavior,Polymer.IronResizableBehavior],properties:{condenses:{type:Boolean,value:!1},fixed:{type:Boolean,value:!1},reveals:{type:Boolean,value:!1},shadow:{type:Boolean,reflectToAttribute:!0,value:!1}},observers:["resetLayout(isAttached, condenses, fixed)"],listeners:{"iron-resize":"_resizeHandler"},_height:0,_dHeight:0,_stickyElTop:0,_stickyEl:null,_top:0,_progress:0,_wasScrollingDown:!1,_initScrollTop:0,_initTimestamp:0,_lastTimestamp:0,_lastScrollTop:0,get _maxHeaderTop(){return this.fixed?this._dHeight:this._height+5},_getStickyEl:function(){for(var t,e=Polymer.dom(this.$.content).getDistributedNodes(),i=0;i<e.length;i++)if(e[i].nodeType===Node.ELEMENT_NODE){var s=e[i];if(s.hasAttribute("sticky")){t=s;break}t||(t=s)}return t},resetLayout:function(){this.fire("app-header-reset-layout"),this.debounce("_resetLayout",function(){if(0!==this.offsetWidth||0!==this.offsetHeight){var t=this._clampedScrollTop,e=0===this._height||0===t,i=this.disabled;this._height=this.offsetHeight,this._stickyEl=this._getStickyEl(),this.disabled=!0,e||this._updateScrollState(0,!0),this._mayMove()?this._dHeight=this._stickyEl?this._height-this._stickyEl.offsetHeight:0:this._dHeight=0,this._stickyElTop=this._stickyEl?this._stickyEl.offsetTop:0,this._setUpEffect(),e?this._updateScrollState(t,!0):(this._updateScrollState(this._lastScrollTop,!0),this._layoutIfDirty()),this.disabled=i}})},_updateScrollState:function(t,e){if(0!==this._height){var i=0,s=0,o=this._top,r=(this._lastScrollTop,this._maxHeaderTop),h=t-this._lastScrollTop,n=Math.abs(h),a=t>this._lastScrollTop,l=Date.now();if(this._mayMove()&&(s=this._clamp(this.reveals?o+h:t,0,r)),t>=this._dHeight&&(s=this.condenses&&!this.fixed?Math.max(this._dHeight,s):s,this.style.transitionDuration="0ms"),this.reveals&&!this.disabled&&n<100&&((l-this._initTimestamp>300||this._wasScrollingDown!==a)&&(this._initScrollTop=t,this._initTimestamp=l),t>=r))if(Math.abs(this._initScrollTop-t)>30||n>10){a&&t>=r?s=r:!a&&t>=this._dHeight&&(s=this.condenses&&!this.fixed?this._dHeight:0);var _=h/(l-this._lastTimestamp);this.style.transitionDuration=this._clamp((s-o)/_,0,300)+"ms"}else s=this._top;i=0===this._dHeight?t>0?1:0:s/this._dHeight,e||(this._lastScrollTop=t,this._top=s,this._wasScrollingDown=a,this._lastTimestamp=l),(e||i!==this._progress||o!==s||0===t)&&(this._progress=i,this._runEffects(i,s),this._transformHeader(s))}},_mayMove:function(){return this.condenses||!this.fixed},willCondense:function(){return this._dHeight>0&&this.condenses},isOnScreen:function(){return 0!==this._height&&this._top<this._height},isContentBelow:function(){return 0===this._top?this._clampedScrollTop>0:this._clampedScrollTop-this._maxHeaderTop>=0},_transformHeader:function(t){this.translate3d(0,-t+"px",0),this._stickyEl&&this.condenses&&t>=this._stickyElTop&&this.translate3d(0,Math.min(t,this._dHeight)-this._stickyElTop+"px",0,this._stickyEl)},_resizeHandler:function(){this.resetLayout()},_clamp:function(t,e,i){return Math.min(i,Math.max(e,t))},_ensureBgContainers:function(){this._bgContainer||(this._bgContainer=document.createElement("div"),this._bgContainer.id="background",this._bgRear=document.createElement("div"),this._bgRear.id="backgroundRearLayer",this._bgContainer.appendChild(this._bgRear),this._bgFront=document.createElement("div"),this._bgFront.id="backgroundFrontLayer",this._bgContainer.appendChild(this._bgFront),Polymer.dom(this.root).insertBefore(this._bgContainer,this.$.contentContainer))},_getDOMRef:function(t){switch(t){case"backgroundFrontLayer":return this._ensureBgContainers(),this._bgFront;case"backgroundRearLayer":return this._ensureBgContainers(),this._bgRear;case"background":return this._ensureBgContainers(),this._bgContainer;case"mainTitle":return Polymer.dom(this).querySelector("[main-title]");case"condensedTitle":return Polymer.dom(this).querySelector("[condensed-title]")}return null},getScrollState:function(){return{progress:this._progress,top:this._top}}});</script>
+</dom-module>
+</body></html>

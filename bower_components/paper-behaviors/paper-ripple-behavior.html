@@ -1,0 +1,5 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-ripple/paper-ripple.html">
+
+<script>Polymer.PaperRippleBehavior={properties:{noink:{type:Boolean,observer:"_noinkChanged"},_rippleContainer:{type:Object}},_buttonStateChanged:function(){this.focused&&this.ensureRipple()},_downHandler:function(e){Polymer.IronButtonStateImpl._downHandler.call(this,e),this.pressed&&this.ensureRipple(e)},ensureRipple:function(e){if(!this.hasRipple()){this._ripple=this._createRipple(),this._ripple.noink=this.noink;var i=this._rippleContainer||this.root;if(i&&Polymer.dom(i).appendChild(this._ripple),e){var n=Polymer.dom(this._rippleContainer||this),t=Polymer.dom(e).rootTarget;n.deepContains(t)&&this._ripple.uiDownAction(e)}}},getRipple:function(){return this.ensureRipple(),this._ripple},hasRipple:function(){return Boolean(this._ripple)},_createRipple:function(){return document.createElement("paper-ripple")},_noinkChanged:function(e){this.hasRipple()&&(this._ripple.noink=e)}};</script>
+</head><body></body></html>

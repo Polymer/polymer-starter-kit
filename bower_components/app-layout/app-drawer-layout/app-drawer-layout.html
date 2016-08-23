@@ -1,0 +1,43 @@
+<html><head><link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-media-query/iron-media-query.html">
+<link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../app-drawer/app-drawer.html">
+
+
+
+</head><body><dom-module id="app-drawer-layout">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      :host([fullbleed]) {
+        @apply(--layout-fit);
+      }
+
+      #contentContainer {
+        position: relative;
+
+        height: 100%;
+
+        transition: var(--app-drawer-layout-content-transition, none);
+      }
+
+      #contentContainer:not(.narrow) > ::content [drawer-toggle] {
+        display: none;
+      }
+    </style>
+
+    <div id="contentContainer">
+      <content select=":not(app-drawer)"></content>
+    </div>
+
+    <content id="drawerContent" select="app-drawer"></content>
+
+    <iron-media-query query="[[_computeMediaQuery(forceNarrow, responsiveWidth)]]" on-query-matches-changed="_onQueryMatchesChanged"></iron-media-query>
+  </template>
+
+  <script>Polymer({is:"app-drawer-layout",behaviors:[Polymer.IronResizableBehavior],properties:{forceNarrow:{type:Boolean,value:!1},responsiveWidth:{type:String,value:"640px"},narrow:{type:Boolean,readOnly:!0,notify:!0}},_notifyingResize:!1,listeners:{tap:"_tapHandler","app-drawer-reset-layout":"resetLayout","iron-resize":"_resizeHandler"},observers:["resetLayout(narrow, isAttached)"],get drawer(){return Polymer.dom(this.$.drawerContent).getDistributedNodes()[0]},_tapHandler:function(e){var t=Polymer.dom(e).localTarget;t&&t.hasAttribute("drawer-toggle")&&this.drawer.toggle()},resetLayout:function(){this.debounce("_resetLayout",function(){var e=this.drawer,t=this.$.contentContainer;if(this.narrow)e.opened=e.persistent=!1,t.classList.add("narrow"),t.style.marginLeft="",t.style.marginRight="";else{e.opened=e.persistent=!0,t.classList.remove("narrow");var r=this.drawer.getWidth();"right"==e.position?(t.style.marginLeft="",t.style.marginRight=r+"px"):(t.style.marginLeft=r+"px",t.style.marginRight="")}this._notifyingResize=!0,this.notifyResize(),this._notifyingResize=!1})},_resizeHandler:function(){this._notifyingResize||this.resetLayout()},_onQueryMatchesChanged:function(e){this._setNarrow(e.detail.value)},_computeMediaQuery:function(e,t){return e?"(min-width: 0px)":"(max-width: "+t+")"}});</script>
+</dom-module>
+</body></html>

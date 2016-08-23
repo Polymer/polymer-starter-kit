@@ -1,0 +1,5 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+
+
+<script>"use strict";Polymer({is:"iron-query-params",properties:{paramsString:{type:String,notify:!0,observer:"paramsStringChanged"},paramsObject:{type:Object,notify:!0,value:function(){return{}}},_dontReact:{type:Boolean,value:!1}},hostAttributes:{hidden:!0},observers:["paramsObjectChanged(paramsObject.*)"],paramsStringChanged:function(){this._dontReact=!0,this.paramsObject=this._decodeParams(this.paramsString),this._dontReact=!1},paramsObjectChanged:function(){this._dontReact||(this.paramsString=this._encodeParams(this.paramsObject))},_encodeParams:function(e){var t=[];for(var n in e){var a=e[n];""===a?t.push(encodeURIComponent(n)):a&&t.push(encodeURIComponent(n)+"="+encodeURIComponent(a.toString()))}return t.join("&")},_decodeParams:function(e){var t={};e=(e||"").replace(/\+/g,"%20");for(var n=e.split("&"),a=0;a<n.length;a++){var r=n[a].split("=");r[0]&&(t[decodeURIComponent(r[0])]=decodeURIComponent(r[1]||""))}return t}});</script>
+</head><body></body></html>

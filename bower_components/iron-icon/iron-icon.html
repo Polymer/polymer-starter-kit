@@ -1,0 +1,30 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-meta/iron-meta.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+
+
+
+</head><body><dom-module id="iron-icon">
+  <template>
+    <style>
+      :host {
+        @apply(--layout-inline);
+        @apply(--layout-center-center);
+        position: relative;
+
+        vertical-align: middle;
+
+        fill: var(--iron-icon-fill-color, currentcolor);
+        stroke: var(--iron-icon-stroke-color, none);
+
+        width: var(--iron-icon-width, 24px);
+        height: var(--iron-icon-height, 24px);
+        @apply(--iron-icon);
+      }
+    </style>
+  </template>
+
+  <script>Polymer({is:"iron-icon",properties:{icon:{type:String,observer:"_iconChanged"},theme:{type:String,observer:"_updateIcon"},src:{type:String,observer:"_srcChanged"},_meta:{value:Polymer.Base.create("iron-meta",{type:"iconset"}),observer:"_updateIcon"}},_DEFAULT_ICONSET:"icons",_iconChanged:function(i){var t=(i||"").split(":");this._iconName=t.pop(),this._iconsetName=t.pop()||this._DEFAULT_ICONSET,this._updateIcon()},_srcChanged:function(i){this._updateIcon()},_usesIconset:function(){return this.icon||!this.src},_updateIcon:function(){this._usesIconset()?(this._img&&this._img.parentNode&&Polymer.dom(this.root).removeChild(this._img),""===this._iconName?this._iconset&&this._iconset.removeIcon(this):this._iconsetName&&this._meta&&(this._iconset=this._meta.byKey(this._iconsetName),this._iconset?(this._iconset.applyIcon(this,this._iconName,this.theme),this.unlisten(window,"iron-iconset-added","_updateIcon")):this.listen(window,"iron-iconset-added","_updateIcon"))):(this._iconset&&this._iconset.removeIcon(this),this._img||(this._img=document.createElement("img"),this._img.style.width="100%",this._img.style.height="100%",this._img.draggable=!1),this._img.src=this.src,Polymer.dom(this.root).appendChild(this._img))}});</script>
+
+</dom-module>
+</body></html>

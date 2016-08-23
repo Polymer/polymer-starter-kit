@@ -1,0 +1,16 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-location/iron-location.html">
+<link rel="import" href="../iron-location/iron-query-params.html">
+<link rel="import" href="app-route-converter-behavior.html">
+
+
+</head><body><dom-module id="app-location">
+  <template>
+    <iron-location path="{{__path}}" query="{{__query}}" hash="{{__hash}}" url-space-regex="{{urlSpaceRegex}}">
+    </iron-location>
+    <iron-query-params params-string="{{__query}}" params-object="{{queryParams}}">
+    </iron-query-params>
+  </template>
+  <script>"use strict";Polymer({is:"app-location",properties:{route:{type:Object,notify:!0},useHashAsPath:{type:Boolean,value:!1},urlSpaceRegex:{type:String,notify:!0},__queryParams:{type:Object},__path:{type:String},__query:{type:String},__hash:{type:String},path:{type:String,observer:"__onPathChanged"}},behaviors:[Polymer.AppRouteConverterBehavior],observers:["__computeRoutePath(useHashAsPath, __hash, __path)"],__computeRoutePath:function(){this.path=this.useHashAsPath?this.__hash:this.__path},__onPathChanged:function(){this._readied&&(this.useHashAsPath?this.__hash=this.path:this.__path=this.path)}});</script>
+</dom-module>
+</body></html>

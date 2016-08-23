@@ -1,0 +1,25 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../iron-selector/iron-selectable.html">
+
+
+
+</head><body><dom-module id="iron-pages">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      :host > ::content > :not(.iron-selected) {
+        display: none !important;
+      }
+    </style>
+
+    <content></content>
+  </template>
+
+  <script>Polymer({is:"iron-pages",behaviors:[Polymer.IronResizableBehavior,Polymer.IronSelectableBehavior],properties:{activateEvent:{type:String,value:null}},observers:["_selectedPageChanged(selected)"],_selectedPageChanged:function(e,a){this.async(this.notifyResize)}});</script>
+</dom-module>
+</body></html>

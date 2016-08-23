@@ -1,0 +1,69 @@
+<html><head><link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
+
+
+
+</head><body><dom-module id="app-header-layout">
+  <template>
+    <style>
+      :host {
+        display: block;
+        /**
+         * Force app-header-layout to have its own stacking context so that its parent can
+         * control the stacking of it relative to other elements (e.g. app-drawer-layout).
+         * This could be done using `isolation: isolate`, but that's not well supported
+         * across browsers.
+         */
+        position: relative;
+        z-index: 0;
+      }
+
+      :host > ::content > app-header {
+        @apply(--layout-fixed-top);
+        z-index: 1;
+      }
+
+      :host([has-scrolling-region]) {
+        height: 100%;
+      }
+
+      :host([has-scrolling-region]) > ::content > app-header {
+        position: absolute;
+      }
+
+      :host([has-scrolling-region]) > #contentContainer {
+        @apply(--layout-fit);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      :host([fullbleed]) {
+        @apply(--layout-vertical);
+        @apply(--layout-fit);
+      }
+
+      :host([fullbleed]) > #contentContainer {
+        @apply(--layout-vertical);
+        @apply(--layout-flex);
+      }
+
+      #contentContainer {
+        /* Create a stacking context here so that all children appear below the header. */
+        position: relative;
+        z-index: 0;
+      }
+
+    </style>
+
+    <content id="header" select="app-header"></content>
+
+    <div id="contentContainer">
+      <content></content>
+    </div>
+
+  </template>
+
+  <script>Polymer({is:"app-header-layout",behaviors:[Polymer.IronResizableBehavior],properties:{hasScrollingRegion:{type:Boolean,value:!1,reflectToAttribute:!0}},listeners:{"iron-resize":"_resizeHandler","app-header-reset-layout":"resetLayout"},observers:["resetLayout(isAttached, hasScrollingRegion)"],get header(){return Polymer.dom(this.$.header).getDistributedNodes()[0]},resetLayout:function(){this._updateScroller(),this.debounce("_resetLayout",this._updateContentPosition)},_updateContentPosition:function(){var e=this.header;if(this.isAttached&&e){var t=e.offsetHeight;if(this.hasScrollingRegion)e.style.left="",e.style.right="";else{var i=this.getBoundingClientRect(),o=document.documentElement.clientWidth-i.right;e.style.left=i.left+"px",e.style.right=o+"px"}var n=this.$.contentContainer.style;e.fixed&&!e.willCondense()&&this.hasScrollingRegion?(n.marginTop=t+"px",n.paddingTop=""):(n.paddingTop=t+"px",n.marginTop="")}},_updateScroller:function(){if(this.isAttached){var e=this.header;e&&(e.scrollTarget=this.hasScrollingRegion?this.$.contentContainer:this.ownerDocument.documentElement)}},_resizeHandler:function(){this.resetLayout()}});</script>
+</dom-module>
+</body></html>
