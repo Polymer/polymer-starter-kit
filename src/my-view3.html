@@ -32,17 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'my-view3',
-      properties: {
-         visible: {
-           type: Boolean,
-           observer: '_visibleChanged'
-         }
-       },
-       _visibleChanged: function(visible) {
-         if (visible) {
-           Polymer.dom(this.root).querySelector('h1').focus();
-         }
-       }
+      behaviors: [Polymer.MyViewBehavior]
     });
   </script>
 </dom-module>
