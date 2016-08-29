@@ -20,12 +20,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    Oops you hit a 404. <a href="/">Head back to home.</a>
+    <h1 tabindex="-1">Oops you hit a 404. </h1>
+
+    <p><a href="/">Head back to home.</a></p>
   </template>
 
   <script>
     Polymer({
-      is: 'my-view404'
+      is: 'my-view404',
+      properties: {
+         visible: {
+           type: Boolean,
+           observer: '_visibleChanged'
+         }
+       },
+       _visibleChanged: function(visible) {
+         if (visible) {
+           Polymer.dom(this.root).querySelector('h1').focus();
+         }
+       }
     });
   </script>
 </dom-module>
