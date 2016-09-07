@@ -11,20 +11,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
 <script>
-  (function() {
-    'use strict';
-    Polymer.MyViewBehavior = {
-      properties: {
-         visible: {
-           type: Boolean,
-           observer: '_visibleChanged'
-         }
-      },
-      _visibleChanged: function(visible) {
-        if (visible) {
-          Polymer.dom(this.root).querySelector('h1').focus();
+  Polymer.ManageFocusBehavior = {
+    properties: {
+        visible: {
+          type: Boolean,
+          observer: '_visibleChanged'
         }
+    },
+    _visibleChanged: function(visible) {
+      var title = Polymer.dom(this.root).querySelector('h1'); 
+      if (visible && title) {
+        title.focus();
       }
-    };
-  })();
+    }
+  };
 </script>
