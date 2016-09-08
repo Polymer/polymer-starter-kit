@@ -13,10 +13,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
   Polymer.ManageFocusBehavior = {
     properties: {
-        visible: {
-          type: Boolean,
-          observer: '_visibleChanged'
-        }
+      visible: {
+        type: Boolean,
+        observer: '_visibleChanged'
+      }
     },
     _visibleChanged: function(visible) {
       var title = Polymer.dom(this.root).querySelector('h1'); 
