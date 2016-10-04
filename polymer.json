@@ -8,9 +8,9 @@
     "src/my-view404.html"
   ],
   "sourceGlobs": [
-   "src/**/*",
-   "images/**/*",
-   "bower.json"
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
   ],
   "includeDependencies": [
     "manifest.json",
