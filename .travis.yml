@@ -2,7 +2,7 @@ language: node_js
 sudo: required
 dist: trusty
 addons:
-  firefox: latest
+  firefox: '47'
   apt:
     sources:
       - google-chrome
