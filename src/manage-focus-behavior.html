@@ -10,25 +10,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
-<dom-module id="my-view404">
-  <template>
-    <style>
-      :host {
-        display: block;
-
-        padding: 10px 20px;
+<script>
+  Polymer.ManageFocusBehavior = {
+    properties: {
+      visible: {
+        type: Boolean,
+        observer: '_visibleChanged'
       }
-    </style>
-
-    <h1 tabindex="-1">Oops you hit a 404. </h1>
-
-    <p><a href="/">Head back to home.</a></p>
-  </template>
-
-  <script>
-    Polymer({
-      is: 'my-view404',
-      behaviors: [Polymer.MyViewBehavior]
-    });
-  </script>
-</dom-module>
+    },
+    _visibleChanged: function(visible) {
+      var title = Polymer.dom(this.root).querySelector('h1'); 
+      if (visible && title) {
+        title.focus();
+      }
+    }
+  };
+</script>

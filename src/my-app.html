@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
+<link rel="import" href="manage-focus-behavior.html">
 
 <dom-module id="my-app">
   <template>
@@ -93,6 +94,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <iron-pages
             selected="[[page]]"
+            selected-attribute="visible",
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
