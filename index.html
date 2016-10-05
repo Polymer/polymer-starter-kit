@@ -46,7 +46,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="msapplication-TileColor" content="#3f51b5">
     <meta name="msapplication-tap-highlight" content="no">
 
+    <!-- temporarily disable feature testing for polyfills -->
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <script>
+      /*
       // Setup Polymer options
       window.Polymer = {
         dom: 'shadow',
@@ -83,6 +86,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           onload();
         }
       })();
+      */
 
       // Load pre-caching Service Worker
       if ('serviceWorker' in navigator) {

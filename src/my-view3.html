@@ -30,8 +30,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    Polymer({
-      is: 'my-view3'
-    });
+    class MyView3 extends Polymer.Element {
+      static get is() { return 'my-view3'; }
+    }
+    customElements.define(MyView3.is, MyView3);
   </script>
 </dom-module>

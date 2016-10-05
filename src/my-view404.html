@@ -24,6 +24,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+    class MyView404 extends Polymer.Element {
+      static get is() { return 'my-view404'; }
+    }
+    customElements.define(MyView404.is, MyView404);
+  </script>
+  <script>
     Polymer({
       is: 'my-view404'
     });
