@@ -3,7 +3,7 @@
   "authors": [
     "The Polymer Authors"
   ],
-  "private": true,
+  "license": "https://polymer.github.io/LICENSE.txt",
   "dependencies": {
     "app-layout": "PolymerElements/app-layout#^0.10.0",
     "app-route": "PolymerElements/app-route#^0.9.0",
@@ -19,5 +19,6 @@
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
-  }
+  },
+  "private": true
 }
