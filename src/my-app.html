@@ -134,7 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // FIXME: Hack until resolveUrl works.
         // var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
         var resolvedPageUrl = `/src/my-${page}.html`;
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        Polymer.Base.importHref(resolvedPageUrl, null, ()=>this._showPage404(), true);
       }
 
       _showPage404() {
