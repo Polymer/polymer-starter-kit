@@ -1,6 +1,6 @@
 {
   "name": "polymer-starter-kit",
-  "license": "https://polymer.github.io/LICENSE.txt",
+  "license": "BSD-3-Clause",
   "devDependencies": {
     "eslint": "^3.12.0",
     "eslint-config-google": "^0.7.1",

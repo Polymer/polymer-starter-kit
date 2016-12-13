@@ -1,5 +1,5 @@
 {
-  "extends": "google",
+  "extends": ["eslint:recommended", "google"],
   "env": {
     "browser": true
   },
@@ -8,6 +8,9 @@
   ],
   "rules": {
     "no-var": "off",
-    "new-cap": "off"
+    "new-cap": ["error", { "capIsNewExceptions": ["Polymer"] }]
+  },
+  "globals": {
+    "Polymer": true
   }
 }
