@@ -7,11 +7,14 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
+
+/* eslint-env node */
+
 module.exports = {
   staticFileGlobs: [
     '/index.html',
     '/manifest.json',
-    '/bower_components/webcomponentsjs/webcomponents-lite.min.js'
+    '/bower_components/webcomponentsjs/webcomponents-lite.min.js',
   ],
-  navigateFallback: 'index.html'
+  navigateFallback: 'index.html',
 };
