@@ -7,7 +7,7 @@
     "eslint-plugin-html": "^1.7.0"
   },
   "scripts": {
-    "lint": "eslint . --ext js,html; exit 0;",
+    "lint": "eslint . --ext js,html --ignore-path .gitignore",
     "test": "npm run lint && polymer test"
   }
 }
