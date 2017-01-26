@@ -22,6 +22,16 @@ The PRPL pattern, in a nutshell:
 
 [Check out our blog post that covers what's changed in PSK2 and how to migrate!](https://www.polymer-project.org/1.0/blog/2016-08-18-polymer-starter-kit-or-polymer-cli.html)
 
+### Quickstart
+
+We've recorded a Polycast to get you up and running with PSK2 fast!
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=HgJ0XCyBwzY&list=PLNYkxOF6rcIDdS7HWIC_BYRunV6MHs5xo&index=10">
+    <img src="https://img.youtube.com/vi/HgJ0XCyBwzY/0.jpg" alt="Polymer Starter Kit 2 video">
+  </a>
+</p>
+
 ### Setup
 
 ##### Prerequisites
