@@ -31,14 +31,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <script>
       suite('my-view1 tests', function() {
-        var home;
-
-        setup(function() {
-          home = fixture('basic');
-        });
-
         test('Number in circle should be 1', function() {
-          var circle = Polymer.dom(home.root).querySelector('.circle');
+          var circle = this.shadowRoot.querySelector('.circle');
           assert.equal(circle.textContent, '1');
         });
       });
