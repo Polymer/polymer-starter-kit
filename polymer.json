@@ -13,7 +13,6 @@
     "bower.json"
   ],
   "includeDependencies": [
-    "manifest.json",
-    "bower_components/webcomponentsjs/webcomponents-lite.js"
+    "manifest.json"
   ]
 }
