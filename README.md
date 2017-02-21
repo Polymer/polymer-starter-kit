@@ -87,6 +87,13 @@ against the browsers currently installed on your machine:
 
     polymer test
 
+If running Windows you will need to set the following environment variables:
+
+- LAUNCHPAD_BROWSERS
+- LAUNCHPAD_CHROME
+
+Read More here [daffl/launchpad](https://github.com/daffl/launchpad#environment-variables-impacting-local-browsers-detection)
+
 ### Adding a new view
 
 You can extend the app by adding more views that will be demand-loaded
