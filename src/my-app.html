@@ -105,21 +105,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       static get is() { return 'my-app'; }
 
-      static get config() {
+      static get properties() {
         return {
-          properties: {
-            page: {
-              type: String,
-              reflectToAttribute: true,
-              observer: '_pageChanged',
-            },
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged',
           },
-          observers: [
-            '_routePageChanged(routeData.page)',
-          ],
         };
       }
 
+      static get observers() {
+        return [
+          '_routePageChanged(routeData.page)',
+        ];
+      }
       _routePageChanged(page) {
         // Polymer 2.0 will call with `undefined` on initialization.
         // Ignore until we are properly called with a string.
@@ -141,7 +141,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer.importHref(
             resolvedPageUrl,
             null,
-            () => this._showPage404()),
+            this._showPage404.bind(this),
             true);
       }
 
