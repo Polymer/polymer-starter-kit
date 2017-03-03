@@ -18,7 +18,8 @@
     "polymer": "Polymer/polymer#^1.6.0"
   },
   "devDependencies": {
-    "web-component-tester": "^4.0.0"
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0-rc.1"
   },
   "private": true,
   "ignore": []
