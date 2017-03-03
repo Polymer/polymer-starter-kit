@@ -20,5 +20,6 @@
   "devDependencies": {
     "web-component-tester": "^4.0.0"
   },
-  "private": true
+  "private": true,
+  "ignore": []
 }
