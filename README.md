@@ -41,6 +41,10 @@ First, install [Polymer CLI](https://github.com/Polymer/polymer-cli) using
 
     npm install -g polymer-cli
 
+Second, install [Bower](https://bower.io/) using [npm](https://www.npmjs.com)
+
+    npm install -g bower
+
 ##### Initialize project from template
 
     mkdir my-app
