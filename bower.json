@@ -22,7 +22,7 @@
     "polymer": "^2.0.0-rc.3"
   },
   "devDependencies": {
-    "web-component-tester": "6.0.0-prerelease.7"
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0-prerelease.7"
   },
   "private": true
 }
