@@ -129,7 +129,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       constructor() {
         super();
 
-        // Get root pattern for app-route
+        // Get root pattern for app-route, for more information about `rootPath` see:
+        // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
         this.rootPattern = (new URL(this.rootPath)).pathname;
       }
 
