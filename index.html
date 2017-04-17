@@ -53,10 +53,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="msapplication-TileColor" content="#3f51b5">
     <meta name="msapplication-tap-highlight" content="no">
 
-    <!-- Load and register pre-caching Service Worker -->
     <script>
+      // Register the base URL
       const baseUrl = document.querySelector('base').href;
 
+      // Load and register pre-caching Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register(baseUrl + 'service-worker.js');
