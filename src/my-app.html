@@ -61,7 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
-        pattern="/:page"
+        pattern="[[rootPattern]]:page"
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
@@ -70,9 +70,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
-          <a name="view3" href="/view3">View Three</a>
+          <a name="view1" href="[[rootPath]]view1">View One</a>
+          <a name="view2" href="[[rootPath]]view2">View Two</a>
+          <a name="view3" href="[[rootPath]]view3">View Three</a>
         </iron-selector>
       </app-drawer>
 
@@ -115,6 +115,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       observers: [
         '_routePageChanged(routeData.page)',
       ],
+
+      ready: function() {
+        // Get root pattern for app-route, for more info about `rootPath` see:
+        // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
+        this.rootPattern = (new URL(this.rootPath)).pathname;
+      },
 
       _routePageChanged: function(page) {
         this.page = page || 'view1';
