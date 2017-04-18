@@ -113,13 +113,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       observers: [
+        '_setRootPattern(rootPath)',
         '_routePageChanged(routeData.page)',
       ],
 
-      ready: function() {
+      _setRootPattern: function(rootPath) {
         // Get root pattern for app-route, for more info about `rootPath` see:
         // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
-        this.rootPattern = (new URL(this.rootPath)).pathname;
+        this.rootPattern = (new URL(rootPath)).pathname;
       },
 
       _routePageChanged: function(page) {
