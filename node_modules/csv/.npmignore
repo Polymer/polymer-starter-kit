@@ -1,0 +1,8 @@
+.*
+#*.tmp
+/node_modules
+lib-cov
+samples/sample.out
+samples/perf.out
+!.travis.yml
+!.gitignore

@@ -1,0 +1,34 @@
+{
+  "name": "iron-label",
+  "version": "1.0.2",
+  "description": "A version of the `<label>` element that works with custom elements as well as native elements",
+  "authors": "The Polymer Authors",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "label"
+  ],
+  "main": "iron-label.html",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/iron-label"
+  },
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/PolymerElements/iron-label",
+  "ignore": [],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#^1.0.0",
+    "paper-button": "PolymerElements/paper-button#^1.0.4",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^1.0.10",
+    "paper-slider": "PolymerElements/paper-slider#^1.0.4",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.11",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}

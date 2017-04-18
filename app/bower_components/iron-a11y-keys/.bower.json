@@ -1,0 +1,44 @@
+{
+  "name": "iron-a11y-keys",
+  "version": "1.0.4",
+  "description": "A basic element implementation of iron-a11y-keys-behavior, matching the legacy core-a11y-keys.",
+  "keywords": [
+    "web-components",
+    "web-component",
+    "polymer",
+    "a11y",
+    "input"
+  ],
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/iron-a11y-keys.git"
+  },
+  "main": "iron-a11y-keys.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "dependencies": {
+    "polymer": "polymer/polymer#^1.0.0",
+    "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#^1.0.0"
+  },
+  "devDependencies": {
+    "paper-styles": "PolymerElements/paper-styles#^1.0.2",
+    "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+    "test-fixture": "polymerelements/test-fixture#^1.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "web-component-tester": "polymer/web-component-tester#^3.4.0",
+    "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0"
+  },
+  "ignore": [],
+  "homepage": "https://github.com/PolymerElements/iron-a11y-keys",
+  "_release": "1.0.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.4",
+    "commit": "51a34396a392bcfb45592900973c35eceb11f0d7"
+  },
+  "_source": "git://github.com/PolymerElements/iron-a11y-keys.git",
+  "_target": "^1.0.0",
+  "_originalSource": "PolymerElements/iron-a11y-keys"
+}

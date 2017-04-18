@@ -1,0 +1,46 @@
+{
+  "name": "iron-doc-viewer",
+  "version": "1.0.14",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "description": "Elements for rendering Polymer component documentation.",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/iron-doc-viewer.git"
+  },
+  "main": "iron-doc-viewer.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/PolymerElements/iron-doc-viewer/",
+  "ignore": [
+    "/.*",
+    "/tests/"
+  ],
+  "dependencies": {
+    "marked-element": "PolymerElements/marked-element#^1.0.0",
+    "paper-button": "PolymerElements/paper-button#^1.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.0",
+    "polymer": "Polymer/polymer#^1.1.0",
+    "prism-element": "PolymerElements/prism-element#^1.0.2"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "_release": "1.0.14",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.14",
+    "commit": "f3989c9684dc4da5e246a0454f74b5b51031a004"
+  },
+  "_source": "git://github.com/PolymerElements/iron-doc-viewer.git",
+  "_target": "^1.0.0",
+  "_originalSource": "PolymerElements/iron-doc-viewer"
+}

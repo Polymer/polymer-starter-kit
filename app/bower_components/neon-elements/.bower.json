@@ -1,0 +1,35 @@
+{
+  "name": "neon-elements",
+  "version": "1.0.0",
+  "homepage": "https://github.com/PolymerElements/neon-elements",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "description": "\"Neon elements implement special effects.\"",
+  "main": "\"neon-elements.html\"",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "paper"
+  ],
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "neon-animation": "PolymerElements/neon-animation#^1.0.0"
+  },
+  "_release": "1.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.0",
+    "commit": "1e0e6c868c6c648b63ad84fdbde9025bc93505c2"
+  },
+  "_source": "git://github.com/PolymerElements/neon-elements.git",
+  "_target": "^1.0.0",
+  "_originalSource": "PolymerElements/neon-elements"
+}

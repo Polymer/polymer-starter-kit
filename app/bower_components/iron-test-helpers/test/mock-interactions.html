@@ -1,0 +1,93 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>mock-interactions basic tests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../mock-interactions.js"></script>
+
+  <link rel="import" href="../../paper-button/paper-button.html">
+</head>
+<body>
+
+  <test-fixture id="TrivialButton">
+    <template>
+      <paper-button>Hello</paper-button>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('MockInteractions', function() {
+      var button;
+
+      setup(function() {
+        button = fixture('TrivialButton');
+      });
+
+      teardown(function(done) {
+        // TODO(cdata): Remove when polymer/polymer#3540 is resolved
+        window.setTimeout(function() {
+          done();
+        }, 2500);
+      });
+
+      suite('simulating tap', function() {
+        test('only dispatches one tap event', function() {
+          var tapSpy = sinon.spy();
+          button.addEventListener('tap', tapSpy);
+          MockInteractions.tap(button);
+          button.removeEventListener('tap', tapSpy);
+          expect(tapSpy.callCount).to.be.eql(1);
+        });
+
+        suite('with touch emulation', function() {
+          test('only dispatches one tap event', function() {
+            var tapSpy = sinon.spy();
+            button.addEventListener('tap', tapSpy);
+            MockInteractions.tap(button, { emulateTouch: true });
+            button.removeEventListener('tap', tapSpy);
+            expect(tapSpy.callCount).to.be.eql(1);
+          });
+        });
+      });
+
+      suite('simulating down and up', function() {
+        test('only dispatches one tap event', function(done) {
+          var tapSpy = sinon.spy();
+          button.addEventListener('tap', tapSpy);
+          MockInteractions.downAndUp(button, function() {
+            button.removeEventListener('tap', tapSpy);
+            expect(tapSpy.callCount).to.be.eql(1);
+            done();
+          });
+        });
+
+        suite('with touch emulation', function() {
+          test('only dispatches one tap event', function(done) {
+            var tapSpy = sinon.spy();
+            button.addEventListener('tap', tapSpy);
+            MockInteractions.downAndUp(button, function() {
+              button.removeEventListener('tap', tapSpy);
+              expect(tapSpy.callCount).to.be.eql(1);
+              done();
+            }, { emulateTouch: true });
+          });
+        });
+      });
+    });
+
+  </script>
+</body>
+</html>

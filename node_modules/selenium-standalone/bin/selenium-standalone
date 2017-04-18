@@ -1,0 +1,115 @@
+#!/usr/bin/env node
+
+var minimist = require('minimist');
+var which = require('which');
+var merge = require('lodash').merge;
+
+var selenium = require('../');
+var defaultConfig = require('../lib/default-config');
+
+which('java', function javaFound(err, javaPath) {
+  if (err) {
+    console.error('Could not find `java`, make sure it is installed in your $PATH');
+    return;
+  }
+
+  var argv = minimist(process.argv.slice(2), {
+    string: ['version', 'drivers.chrome.version', 'drivers.ie.version']
+  });
+
+  var action = argv._[0];
+
+  if (action !== 'install' && action !== 'start') {
+    console.log('Usage: selenium-standalone install or selenium-standalone start');
+    return;
+  }
+
+  // everything after `selenium-standalone install [options] --` will be in argv._
+  var seleniumArgs = argv._.slice(1);
+
+  // build a new map removing `_` from argv
+  var options = Object.keys(argv).reduce(function(prev, cur) {
+    if (cur !== '_') {
+      prev[cur] = argv[cur];
+    }
+
+    return prev;
+  }, {});
+
+  // Merge in default options
+  options = merge({}, defaultConfig, options);
+
+  options.seleniumArgs = seleniumArgs;
+  options.spawnOptions = {
+    stdio: 'inherit'
+  };
+
+  options.logger = options.silent ? null : console.log;
+  options.javaPath = javaPath;
+
+  actions[action](options);
+});
+
+var actions = {
+  start: function(options) {
+    var killEvents = ['exit', 'SIGTERM', 'SIGINT'];
+
+    selenium.start(options, started);
+
+    function started(err, cp) {
+      if (err) {
+        throw err;
+      }
+
+      console.log('Selenium started');
+
+      killEvents.forEach(register);
+
+      function register(evName) {
+        process.on(evName, kill);
+      }
+
+      function unregister(evName) {
+        process.removeListener(evName, kill);
+      }
+
+      function kill() {
+        killEvents.forEach(unregister);
+        cp.kill('SIGTERM');
+      }
+    }
+  },
+  install: function(options) {
+    var ProgressBar = require('progress');
+    var bar;
+    var firstProgress = true;
+
+    options.progressCb = options.silent ? null : progressCb;
+
+    selenium.install(options, installed);
+
+    function installed(err) {
+      if (err) {
+        throw err;
+      }
+    }
+
+    function progressCb(total, progress, chunk) {
+      if (firstProgress) {
+        console.log('');
+        console.log('');
+        firstProgress = false;
+      }
+
+      bar = bar || new ProgressBar(
+        'selenium-standalone installation [:bar] :percent :etas', {
+        total: total,
+        complete: '=',
+        incomplete: ' ',
+        width: 20
+      });
+
+      bar.tick(chunk);
+    }
+  }
+};

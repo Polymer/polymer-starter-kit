@@ -1,0 +1,383 @@
+<!--
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+  /**
+   * The `<platinum-sw-register>` element handles
+   * [service worker](http://www.html5rocks.com/en/tutorials/service-worker/introduction/)
+   * registration, reflects the overall service worker state, and coordinates the configuration
+   * provided by other Service Worker Elements.
+   * `<platinum-sw-register>` is used as a parent element for child elements in the
+   * `<platinum-sw-*>` group.
+   *
+   *     <platinum-sw-register skip-waiting
+   *                           clients-claim
+   *                           auto-register
+   *                           state="{{state}}"
+   *                           on-service-worker-error="handleSWError"
+   *                           on-service-worker-updated="handleSWUpdated"
+   *                           on-service-worker-installed="handleSWInstalled">
+   *       ...one or more <platinum-sw-*> children which share the service worker registration...
+   *     </platinum-sw-register>
+   *
+   * Please see https://github.com/PolymerElements/platinum-sw#top-level-sw-importjs for a
+   * *crucial* prerequisite file you must create before `<platinum-sw-register>` can be used!
+   *
+   * @demo demo/index.html An offline-capable eReader demo.
+   */
+  Polymer({
+    is: 'platinum-sw-register',
+
+    // Used as an "emergency" switch if we make breaking changes in the way <platinum-sw-register>
+    // talks to service-worker.js. Otherwise, it shouldn't need to change, and isn't meant to be
+    // kept in sync with the element's release number.
+    _version: '1.0',
+
+    /**
+     * Fired when the initial service worker installation completes successfully.
+     * The service worker will normally only be installed once, the first time a page with a
+     * `<platinum-sw-register>` element is visited in a given browser. If the same page is visited
+     * again, the existing service worker will be reused, and there won't be another
+     * `service-worker-installed` fired.
+     *
+     * @event service-worker-installed
+     * @param {String} A message indicating that the installation succeeded.
+     */
+
+    /**
+     * Fired when the service worker update flow completes successfully.
+     * If you make changes to your `<platinum-sw-register>` configuration (i.e. by adding in new
+     * `<platinum-sw-*>` child elements, or changing their attributes), users who had the old
+     * service worker installed will get the update installed when they see the modified elements.
+     *
+     * @event service-worker-updated
+     * @param {String} A message indicating that the update succeeded.
+     */
+
+    /**
+     * Fired when an error prevents the service worker installation from completing.
+     *
+     * @event service-worker-error
+     * @param {String} A message indicating what went wrong.
+     */
+
+    properties: {
+      /**
+       * Whether this element should automatically register the corresponding service worker as
+       * soon as its added to a page.
+       *
+       * If set to `false`, then the service worker won't be automatically registered, and you
+       * must call this element's `register()` method if you want service worker functionality.
+       * This is useful if, for example, the service worker needs to be configured using
+       * information that isn't immediately available at the time the page loads.
+       *
+       * If set to `true`, the service worker will be automatically registered without having to
+       * call any methods.
+       */
+      autoRegister: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * The URI used as a base when constructing relative paths to service worker helper libraries
+       * that need to be loaded.
+       *
+       * This can normally be kept set to the default, which will use the directory containing this
+       * element as the base. However, if you [Vulcanize](https://github.com/polymer/vulcanize) your
+       * elements, then the default base might not be appropriate anymore. This will allow you to
+       * override it.
+       *
+       * See https://github.com/PolymerElements/platinum-sw#relative-paths--vulcanization for more
+       * information.
+       */
+      baseUri: {
+        type: String,
+        // Grab the URI of this file to use as a base when resolving relative paths.
+        // See https://github.com/webcomponents/webcomponentsjs/blob/88240ba9ef4cebb1579e07f7888c7b58ec017a39/src/HTMLImports/base.js#L31
+        // for background on document._currentScript. We want to support document.currentScript
+        // as well, on the off chance that the polyfills aren't loaded.
+        // Fallback to './' as a default, though current browsers that don't support
+        // document.currentScript also don't support service workers.
+        value: document._currentScript ? document._currentScript.baseURI :
+          (document.currentScript ? document.currentScript.baseURI : './')
+      },
+
+      /**
+       * Whether the activated service worker should [take immediate control](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#clients-claim-method)
+       * of any pages under its scope.
+       *
+       * If this is `false`, the service worker won't have any effect until the next time the page
+       * is visited/reloaded.
+       * If this is `true`, it will take control and start handling events for the current page
+       * (and any pages under the same scope open in other tabs/windows) as soon it's active.
+       * @see {@link https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#clients-claim-method}
+       */
+      clientsClaim: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * The service worker script that is [registered](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#navigator-service-worker-register).
+       * The script *should* be located at the top level of your site, to ensure that it is able
+       * to control all the pages on your site.
+       *
+       * It's *strongly* recommended that you create a top-level file named `sw-import.js`
+       * containing only:
+       *
+       * `importScripts('bower_components/platinum-sw/service-worker.js');`
+       *
+       * (adjust to match the path where your `platinum-sw` element directory can be found).
+       *
+       * This will ensure that your service worker script contains everything needed to play
+       * nicely with the Service Worker Elements group.
+       *
+       * @see {@link https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#navigator-service-worker-register}
+       */
+      href: {
+        type: String,
+        value: 'sw-import.js'
+      },
+
+      /**
+       * Whether the page should be automatically reloaded (via `window.location.reload()`) when
+       * the service worker is successfully installed.
+       *
+       * While it's perfectly valid to continue using a page with a freshly installed service
+       * worker, it's a common pattern to want to reload it immediately following the install.
+       * This ensures that, for example, if you're using a `<platinum-sw-cache>` with an on the
+       * fly caching strategy, it will get a chance to intercept all the requests needed to render
+       * your page and store them in the cache.
+       *
+       * If you don't immediately reload your page, then any resources that were loaded before the
+       * service worker was installed (e.g. this `platinum-sw-register.html` file) won't be present
+       * in the cache until the next time the page is loaded.
+       *
+       * Note that this reload will only happen when a service worker is installed for the first
+       * time. If the service worker is subsequently updated, it won't trigger another reload.
+       */
+      reloadOnInstall: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * By default, the service worker will use a scope that applies to all pages at the same
+       * directory level or lower. This is almost certainly what you want, as illustrated by the
+       * following hypothetical serving setup:
+       *
+       * ```
+       * /root/
+       *   service-worker.js
+       *   index.html
+       *   subdir1/
+       *     index.html
+       *   subdir2/
+       *     index.html
+       * ```
+       *
+       * So by default, registering `/root/service-worker.js` will cause the service worker's scope
+       * to cover `/root/index.html`, `/root/subdir1/index.html`, and /root/subdir2/index.html`.
+       *
+       * If, for some reason, you need to register `/root/service-worker.js` from within
+       * `/root/subdir1/index.html`, *and* you want that registration to only cover
+       * `/root/subdir1/**`, you can override this `scope` property and set it to `'./'`.
+       *
+       * There is more context about default scopes and how scope overrides work in
+       * [this Stack Overflow](http://stackoverflow.com/a/33881341/385997) response.
+       *
+       * @see {@link https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#navigator-service-worker-register}
+       */
+      scope: {
+        type: String,
+        value: null
+      },
+
+      /**
+       * Whether an updated service worker should [bypass the `waiting` state](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-global-scope-skipwaiting)
+       * and immediately become `active`.
+       *
+       * Normally, during an update, the new service worker stays in the
+       * `waiting` state until the current page and any other tabs/windows that are using the old
+       * service worker are unloaded.
+       *
+       * If this is `false`, an updated service worker won't be activated until all instances of
+       * the old server worker have been unloaded.
+       *
+       * If this is `true`, an updated service worker will become `active` immediately.
+       * @see {@link https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-global-scope-skipwaiting}
+       */
+      skipWaiting: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * The current state of the service worker registered by this element.
+       *
+       * One of:
+       * - 'installed'
+       * - 'updated'
+       * - 'error'
+       * - 'unsupported'
+       */
+      state: {
+        notify: true,
+        readOnly: true,
+        type: String
+      }
+    },
+
+    /**
+     * Registers the service worker based on the configuration options in this element and any
+     * child elements.
+     *
+     * If you set the `autoRegister` property to `true`, then this method is called automatically
+     * at page load.
+     * It can be useful to set `autoRegister` to `false` and then explicitly call this method if
+     * there are options that are only configured after the page is loaded.
+     */
+    register: function() {
+      if ('serviceWorker' in navigator) {
+        this._constructServiceWorkerUrl().then(function(serviceWorkerUrl) {
+          this._registerServiceWorker(serviceWorkerUrl);
+        }.bind(this));
+      } else {
+        this._setState('unsupported');
+        this.fire('service-worker-error', 'Service workers are not available in the current browser.');
+      }
+    },
+
+    _constructServiceWorkerUrl: function() {
+      var paramsPromises = [];
+      var children = Polymer.dom(this).children;
+      var baseUri = new URL(this.baseUri, window.location.href);
+
+      for (var i = 0; i < children.length; i++) {
+        if (typeof children[i]._getParameters === 'function') {
+          paramsPromises.push(children[i]._getParameters(baseUri));
+        }
+      }
+
+      return Promise.all(paramsPromises).then(function(paramsResolutions) {
+        var params = {
+          baseURI: baseUri,
+          version: this._version
+        };
+
+        paramsResolutions.forEach(function(childParams) {
+          Object.keys(childParams).forEach(function(key) {
+            if (Array.isArray(params[key])) {
+              params[key] = params[key].concat(childParams[key]);
+            } else {
+              params[key] = [].concat(childParams[key]);
+            }
+          });
+        });
+
+        return params;
+      }.bind(this)).then(function(params) {
+        if (params.importscriptLate) {
+          if (params.importscript) {
+            params.importscript = params.importscript.concat(params.importscriptLate);
+          } else {
+            params.importscript = params.importscriptLate;
+          }
+        }
+
+        if (params.importscript) {
+          params.importscript = this._unique(params.importscript);
+        }
+
+        // We've already concatenated importscriptLate, so don't include it in the serialized URL.
+        delete params.importscriptLate;
+
+        params.clientsClaim = this.clientsClaim;
+        params.skipWaiting = this.skipWaiting;
+
+        var serviceWorkerUrl = new URL(this.href, window.location);
+        // It's very important to ensure that the serialization is stable.
+        // Serializing the same settings should always produce the same URL.
+        // Serializing different settings should always produce a different URL.
+        // This ensures that the service worker upgrade flow is triggered when settings change.
+        serviceWorkerUrl.search = this._serializeUrlParams(params);
+
+        return serviceWorkerUrl;
+      }.bind(this));
+    },
+
+    _unique: function(arr) {
+      return arr.filter(function(item, index) {
+        return arr.indexOf(item) === index;
+      });
+    },
+
+    _serializeUrlParams: function(params) {
+      return Object.keys(params).sort().map(function(key) {
+        // encodeURIComponent(['a', 'b']) => 'a%2Cb',
+        // so this will still work when the values are Arrays.
+        // TODO: It won't work if the values in the Arrays have ',' characters in them.
+        return encodeURIComponent(key) + "=" + encodeURIComponent(params[key]);
+      }).join('&');
+    },
+
+    _registerServiceWorker: function(serviceWorkerUrl) {
+      var options = this.scope ? {scope: this.scope} : null;
+      navigator.serviceWorker.register(serviceWorkerUrl, options).then(function(registration) {
+        if (registration.active) {
+          this._setState('installed');
+        }
+
+        registration.onupdatefound = function() {
+          var installingWorker = registration.installing;
+          installingWorker.onstatechange = function() {
+            switch (installingWorker.state) {
+              case 'installed':
+                if (navigator.serviceWorker.controller) {
+                  this._setState('updated');
+                  this.fire('service-worker-updated',
+                    'A new service worker was installed, replacing the old service worker.');
+                } else {
+                  if (this.reloadOnInstall) {
+                    window.location.reload();
+                  } else {
+                    this._setState('installed');
+                    this.fire('service-worker-installed', 'A new service worker was installed.');
+                  }
+                }
+              break;
+
+              case 'redundant':
+                this._setState('error');
+                this.fire('service-worker-error', 'The installing service worker became redundant.');
+              break;
+            }
+          }.bind(this);
+        }.bind(this);
+      }.bind(this)).catch(function(error) {
+        this._setState('error');
+        this.fire('service-worker-error', error.toString());
+        if (error.name === 'NetworkError') {
+          var location = serviceWorkerUrl.origin + serviceWorkerUrl.pathname;
+          console.error('A valid service worker script was not found at ' + location + '\n' +
+            'To learn how to fix this, please see\n' +
+            'https://github.com/PolymerElements/platinum-sw#top-level-sw-importjs');
+        }
+      }.bind(this));
+    },
+
+    attached: function() {
+      if (this.autoRegister) {
+        this.async(this.register);
+      }
+    }
+  });
+</script>

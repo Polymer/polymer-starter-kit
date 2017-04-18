@@ -1,0 +1,40 @@
+{
+  "name": "accessibility-developer-tools",
+  "version": "2.10.0",
+  "homepage": "https://github.com/GoogleChrome/accessibility-developer-tools",
+  "authors": [
+    "Google"
+  ],
+  "description": "This is a library of accessibility-related testing and utility code.",
+  "main": "dist/js/axs_testing.js",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "accessibility",
+    "testing",
+    "WCAG",
+    "module"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "lib",
+    "scripts",
+    "src",
+    "test",
+    "tools",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "_release": "2.10.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.10.0",
+    "commit": "1a46baa0c53becec01f1892eeb2d70afbf2b060a"
+  },
+  "_source": "https://github.com/GoogleChrome/accessibility-developer-tools.git",
+  "_target": "^2.10.0",
+  "_originalSource": "accessibility-developer-tools"
+}

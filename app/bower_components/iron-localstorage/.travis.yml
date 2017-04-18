@@ -1,0 +1,22 @@
+language: node_js
+sudo: false
+before_script:
+  - npm install web-component-tester
+  - npm install bower
+  - 'export PATH=$PWD/node_modules/.bin:$PATH'
+  - bower install
+env:
+  global:
+    - secure: M9g4X5+1DMu2RMoaBaj+cOEVYjl6xflJGHs+ZpHk0/9P/1A4Ke8GzpJ5FBCGX98ELGWsIzHP6NGVqdj/8Jj9JsFswfFkir8QBK30WevnxVKgP2LZwwiehnppxcOpX7YSYXh66CPcnlXEarUEILoSi+yLh3s9XxhOyfVGwtny3D4=
+    - secure: CSq8pLnMKF9V+X3yBQXoUy9lpv3/OswkkT50HbSH3dBhik+Gda4osA197QyezXGolhuajOCX0vc59hDpyZBz37rgXKwVnWR9A/r8RH+ZZAGT74hnmbXMirOoAY+6ryWOn3PQaUhkOE7HxTE7/MqG2oLPmmMq5aEYxZxg/uPGWJg=
+node_js: 4
+addons:
+  firefox: '42.0'
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+script:
+  - xvfb-run wct
+  - "if [ \"${TRAVIS_PULL_REQUEST}\" = \"false\" ]; then wct -s 'default'; fi"

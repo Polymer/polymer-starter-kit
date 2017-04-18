@@ -1,0 +1,9 @@
+node_modules
+bower_components
+.DS_Store
+.idea
+
+typings/
+
+# Our typescript source and the ES6 it emits
+src/

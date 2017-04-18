@@ -1,0 +1,91 @@
+<!doctype html>
+<!--
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Platinum Service Worker Elements Demo</title>
+
+    <script src="../../fetch/fetch.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="../platinum-sw-elements.html">
+    <link rel="import" href="../../marked-element/marked-element.html">
+  </head>
+
+  <body>
+    <template is="dom-bind" id="page-template">
+      <platinum-sw-register skip-waiting
+                            clients-claim
+                            reload-on-install
+                            state="{{state}}">
+        <platinum-sw-cache default-cache-strategy="networkFirst"
+                           precache="{{precacheList}}"></platinum-sw-cache>
+      </platinum-sw-register>
+
+      <h1>Platinum Service Worker Elements Demo</h1>
+      <p>This is a simple offline-capable eBook reader.</p>
+      <p>
+        On browsers that support service workers, this page itself and all the books are all
+        available offline, by virtue of the <code>&lt;platinum-sw-register></code> and
+        <code>&lt;platinum-sw-cache></code> elements.
+      </p>
+      <p>
+        Service workers are meant to be a progressive enhancement, and browsers that lack service
+        worker support will still have a functional (online-only) eBook reader.
+      </p>
+
+      <template is="dom-if" if="[[state]]">
+        <select on-change="selectBook">
+          <option disabled selected>Select a Book...</option>
+          <template is="dom-repeat" id="books" items="[[books]]">
+            <option>{{item.title}}</option>
+          </template>
+        </select>
+      </template>
+
+      <marked-element markdown="{{text}}"></marked-element>
+    </template>
+
+    <script>
+      var t = document.querySelector('#page-template');
+
+      t.books = [{
+        title: 'Don Quixote',
+        url: 'https://cdn.rawgit.com/GITenberg/Don-Quixote_996/master/996.txt'
+      }, {
+        title: 'Dubliners',
+        url: 'https://cdn.rawgit.com/GITenberg/Dubliners_2814/master/2814.txt'
+      }, {
+        title: 'Pride & Prejudice',
+        url: 'https://cdn.rawgit.com/GITenberg/Pride-and-Prejudice_1342/master/1342.txt'
+      }];
+
+      t.precacheList = t.books.map(function(book) {
+        return book.url;
+      });
+
+      t.selectBook = function(e) {
+        var books = document.querySelector('#books');
+        var selectedBook = books.itemForElement(e.target.selectedOptions[0]);
+        window.fetch(selectedBook.url).then(function(response) {
+          return response.text();
+        }).then(function(text) {
+          t.text = text;
+        });
+      };
+
+      window.addEventListener('WebComponentsReady', function() {
+        // Explicitly call the register() method. We need to wait until the template's variables are
+        // all set first, since the configuration depends on bound variables.
+        document.querySelector('platinum-sw-register').register();
+      });
+    </script>
+  </body>
+</html>

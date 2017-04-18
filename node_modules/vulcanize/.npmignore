@@ -1,0 +1,8 @@
+node_modules
+
+# npmignore
+example
+CHANGELOG.md
+README.md
+util
+test

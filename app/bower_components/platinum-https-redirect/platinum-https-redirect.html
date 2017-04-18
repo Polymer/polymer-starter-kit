@@ -1,0 +1,63 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+The `<platinum-https-redirect>` element redirects the current page to HTTPS, unless the page is
+loaded from a web server running on `localhost`.
+
+Using [HTTP Strict Transport Security](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security)
+(HSTS) can be used to enforce HTTPS for an entire
+[origin](https://html.spec.whatwg.org/multipage/browsers.html#origin), following the first visit to
+any page on the origin. Configuring the underlying web server to
+[redirect](https://en.wikipedia.org/wiki/HTTP_301) all HTTP requests to their HTTPS equivalents
+takes care of enforcing HTTPS on the initial visit as well.
+Both options provide a more robust approach to enforcing HTTPS, but require access to the underlying
+web server's configuration in order to implement.
+
+This element provides a client-side option when HSTS and server-enforced redirects aren't possible,
+such as when deploying code on a shared-hosting provider like
+[GitHub Pages](https://pages.github.com/).
+
+It comes in handy when used with other `<platinum-*>` elements, since those elements use
+[features which are restricted to HTTPS](http://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features),
+with an exception to support local web servers.
+
+It can be used by just adding it to any page, e.g.
+
+    <platinum-https-redirect></platinum-https-redirect>
+
+@group Platinum Elements
+@element platinum-https-redirect
+@demo demo/index.html
+-->
+<dom-module id="platinum-https-redirect">
+  <script>
+    Polymer({
+      is: 'platinum-https-redirect',
+
+      _isLocalhost: function(hostname) {
+        // !! coerces the logical expression to evaluate to the values true or false.
+        return !!(hostname === 'localhost' ||
+                  // [::1] is the IPv6 localhost address.
+                  hostname === '[::1]' ||
+                  // 127.0.0.1/8 is considered localhost for IPv4.
+                  hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));
+      },
+
+      attached: function() {
+        if (window.location.protocol === 'http:' && !this._isLocalhost(window.location.hostname)) {
+          // Redirect to https: if we're currently using http: and we're not on localhost.
+          window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+        }
+      }
+    });
+  </script>
+</dom-module>

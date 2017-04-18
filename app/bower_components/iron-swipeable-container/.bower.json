@@ -1,0 +1,44 @@
+{
+  "name": "iron-swipeable-container",
+  "version": "1.0.2",
+  "description": "A container that alows any of its nested children to be swiped away.",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "swipe",
+    "swipeable"
+  ],
+  "main": "iron-swipeable-container.html",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/iron-swipeable-container.git"
+  },
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/PolymerElements/iron-swipeable-container",
+  "ignore": [],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "web-component-tester": "polymer/web-component-tester#^3.4.0",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#^1.0.0",
+    "paper-card": "PolymerElements/paper-card#^1.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.0"
+  },
+  "_release": "1.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.2",
+    "commit": "e1b7dbf60a8e00fc941381375593c3e9bb3e4c5d"
+  },
+  "_source": "git://github.com/PolymerElements/iron-swipeable-container.git",
+  "_target": "^1.0.0",
+  "_originalSource": "PolymerElements/iron-swipeable-container"
+}

@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script>WCT = <%= JSON.stringify(clientOptions) %>;</script>
+    <script>window.__generatedByWct = true;</script>
+    <script src="/web-component-tester/browser.js"></script>
+<% extraScripts.forEach(function(script) { %>    <script src="<%- script %>"></script>
+<% }); %>
+    <script src="/web-component-tester/data/a11ySuite.js"></script>
+</head>
+  <body>
+    <script>
+      WCT.loadSuites(<%= JSON.stringify(suites) %>);
+    </script>
+  </body>
+</html>

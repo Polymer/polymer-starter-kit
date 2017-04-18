@@ -1,0 +1,7 @@
+---
+extends:
+  - "defaults/configurations/walmart/es5-node"
+  - "defaults/configurations/walmart/es5-test"
+
+rules:
+  no-unused-expressions: 0

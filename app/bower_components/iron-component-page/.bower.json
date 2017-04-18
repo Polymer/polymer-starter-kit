@@ -1,0 +1,48 @@
+{
+  "name": "iron-component-page",
+  "description": "Turns a raw element definition into beautiful documentation",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "docs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/iron-component-page.git"
+  },
+  "version": "1.1.5",
+  "private": true,
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "dependencies": {
+    "hydrolysis": "Polymer/hydrolysis#^1.18",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
+    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^1.0.1",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^1.0.0",
+    "iron-selector": "PolymerElements/iron-selector#^1.0.0",
+    "paper-header-panel": "PolymerElements/paper-header-panel#^1.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.0",
+    "paper-toolbar": "PolymerElements/paper-toolbar#^1.0.0",
+    "polymer": "Polymer/polymer#^1.1.0"
+  },
+  "devDependencies": {
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "main": "iron-component-page.html",
+  "ignore": [],
+  "homepage": "https://github.com/PolymerElements/iron-component-page",
+  "_release": "1.1.5",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.1.5",
+    "commit": "904fada3ae25a016eafcdbe71fe934d165f1dafb"
+  },
+  "_source": "git://github.com/PolymerElements/iron-component-page.git",
+  "_target": "^1.0.0",
+  "_originalSource": "PolymerElements/iron-component-page"
+}
