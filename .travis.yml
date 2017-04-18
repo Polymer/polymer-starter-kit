@@ -9,9 +9,8 @@ addons:
     packages:
       - google-chrome-stable
 node_js:
+  - 'node'
   - '6'
-  - '5'
-  - '4'
 before_script:
   - npm install -g polymer-cli@next
   - polymer install
