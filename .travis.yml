@@ -11,7 +11,6 @@ addons:
 node_js:
   - node
   - '6'
-  - '4'
 before_script:
   - npm install -g polymer-cli@next
   - polymer install
