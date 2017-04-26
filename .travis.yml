@@ -2,18 +2,21 @@ language: node_js
 sudo: required
 dist: trusty
 addons:
-  firefox: latest
+  firefox: "latest"
   apt:
     sources:
       - google-chrome
     packages:
       - google-chrome-stable
 node_js:
-  - 'node'
-  - '6'
-before_script:
-  - npm install -g polymer-cli@next
+  - "node"
+  - "6"
+install:
+  - npm install
+  - npm install -g polymer-cli
   - polymer install
+before_script:
+  - npm run lint
 script:
-  - xvfb-run npm test
+  - xvfb-run npm run test
   - xvfb-run npm run test:integration
