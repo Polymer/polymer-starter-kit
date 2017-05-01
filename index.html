@@ -87,7 +87,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (!webComponentsSupported) {
           var script = document.createElement('script');
           script.async = true;
-          script.src = baseUrl + 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+          script.src = baseUrl +
+            'bower_components/webcomponentsjs/webcomponents-lite.min.js';
           script.onload = onload;
           document.head.appendChild(script);
         } else {
