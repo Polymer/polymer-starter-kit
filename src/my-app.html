@@ -105,6 +105,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'my-app',
 
       properties: {
+        rootPattern: {
+          type: String,
+          computed: '_computeRootPattern(rootPath)',
+        },
         page: {
           type: String,
           reflectToAttribute: true,
@@ -113,14 +117,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       observers: [
-        '_setRootPattern(rootPath)',
         '_routePageChanged(routeData.page)',
       ],
 
-      _setRootPattern: function(rootPath) {
+      _computeRootPattern: function(rootPath) {
         // Get root pattern for app-route, for more info about `rootPath` see:
         // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
-        this.rootPattern = (new URL(rootPath)).pathname;
+        return (new URL(rootPath)).pathname;
       },
 
       _routePageChanged: function(page) {
