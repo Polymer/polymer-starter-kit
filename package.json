@@ -7,9 +7,8 @@
     "eslint-plugin-html": "^2.0.0"
   },
   "scripts": {
-    "lint": "npm run lint:javascript && npm run lint:polymer",
+    "lint": "npm run lint:javascript && polymer lint",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
-    "lint:polymer": "polymer lint",
     "test": "polymer test",
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   }
