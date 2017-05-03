@@ -12,8 +12,8 @@ node_js:
   - "node"
   - "6"
 install:
-  - npm install -g polymer-cli
   - npm install
+  - npm install -g polymer-cli
   - polymer install
 before_script:
   - npm run lint
