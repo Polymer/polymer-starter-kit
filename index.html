@@ -63,9 +63,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         lazyRegister: true,
       };
 
-      // Register the base URL
-      var baseUrl = document.querySelector('base').href;
-
       // Load webcomponentsjs polyfill if browser does not support native
       // Web Components
       (function() {
@@ -90,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (!webComponentsSupported) {
           var script = document.createElement('script');
           script.async = true;
-          script.src = baseUrl +
+          script.src =
             'bower_components/webcomponentsjs/webcomponents-lite.min.js';
           script.onload = onload;
           document.head.appendChild(script);
@@ -102,7 +99,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // Load pre-caching Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register(baseUrl + 'service-worker.js');
+          navigator.serviceWorker.register('service-worker.js');
         });
       }
     </script>
