@@ -5,22 +5,19 @@
   ],
   "license": "https://polymer.github.io/LICENSE.txt",
   "dependencies": {
-    "app-layout": "PolymerElements/app-layout#2.0-preview",
-    "app-route": "PolymerElements/app-route#2.0-preview",
-    "iron-flex-layout": "PolymerElements/iron-flex-layout#2.0-preview",
-    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#2.0-preview",
-    "iron-media-query": "PolymerElements/iron-media-query#2.0-preview",
-    "iron-pages": "PolymerElements/iron-pages#2.0-preview",
-    "iron-selector": "PolymerElements/iron-selector#2.0-preview",
-    "paper-icon-button": "PolymerElements/paper-icon-button#2.0-preview",
-    "polymer": "Polymer/polymer#^2.0.0-rc.3",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0-rc.7"
-  },
-  "resolutions": {
-    "polymer": "^2.0.0-rc.3"
+    "app-layout": "PolymerElements/app-layout#^2.0.0",
+    "app-route": "PolymerElements/app-route#^2.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^2.0.0",
+    "iron-media-query": "PolymerElements/iron-media-query#^2.0.0",
+    "iron-pages": "PolymerElements/iron-pages#^2.0.0",
+    "iron-selector": "PolymerElements/iron-selector#^2.0.0",
+    "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0",
+    "polymer": "Polymer/polymer#^2.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
   },
   "devDependencies": {
-    "web-component-tester": "Polymer/web-component-tester#^6.0.0-prerelease.7"
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0"
   },
   "private": true
 }
