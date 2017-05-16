@@ -65,7 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // server root path to support differential serving; this setting is also
       // compatible with standard, single-build deployments. If you intend to
       // serve your app from a non-root path, comment out the line below.
-      window.Polymer.rootPath = window.location.origin;
+      window.Polymer = {rootPath: window.location.origin};
 
       // Load and register pre-caching Service Worker
       if ('serviceWorker' in navigator) {
