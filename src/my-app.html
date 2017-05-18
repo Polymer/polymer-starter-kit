@@ -112,6 +112,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+    /**
+     * @extends Polymer.Element
+     * @appliesMixin Polymer.LazyImportsMixin
+     */
     class MyApp extends Polymer.LazyImportsMixin(Polymer.Element) {
 
       static get is() { return 'my-app'; }
