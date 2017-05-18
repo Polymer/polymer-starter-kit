@@ -121,6 +121,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // preventable, allowing for better scrolling performance.
     Polymer.setPassiveTouchGestures(true);
 
+    /**
+     * @extends Polymer.Element
+     * @appliesMixin Polymer.LazyImportsMixin
+     */
     class MyApp extends Polymer.LazyImportsMixin(Polymer.Element) {
       static get is() { return 'my-app'; }
 
@@ -159,10 +163,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _pageChanged(page) {
         // Load page import on demand. Show 404 page if fails
         this.importLazyGroup(page).
-          then((results) => {
-            if (results.failed.length > 0 || results.loaded.length < 1)
-              this._showPage404();
-          });
+          catch(this._showPage404.bind(this));
       }
 
       _showPage404() {
