@@ -99,7 +99,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // Load pre-caching Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('service-worker.js');
+          navigator.serviceWorker.register('service-worker.js', {scope: Polymer.rootPath});
         });
       }
     </script>
