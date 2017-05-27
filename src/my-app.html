@@ -122,7 +122,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             reflectToAttribute: true,
             observer: '_pageChanged',
           },
-          rootPattern: String,
+          rootPattern: {
+            type: String,
+            computed: 'computeRootPattern(rootPath)',
+          },
           routeData: Object,
           subroute: String,
         };
@@ -134,12 +137,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ];
       }
 
-      constructor() {
-        super();
-
+      computeRootPattern(rootPath) {
         // Get root pattern for app-route, for more info about `rootPath` see:
         // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
-        this.rootPattern = (new URL(this.rootPath)).pathname;
+        if (window.URL && window.URL.prototype && ('href' in window.URL.prototype)) {
+          // Use `new URL()` if supported by the browser.
+          return (new URL(rootPath)).pathname;
+        } else {
+          // Use a regex if `new URL()` isn't supported. (IE11)
+          return rootPath.replace(/^(.+?\/\/)?(.*?)(\/|$)/, '/');
+        }
       }
 
       _routePageChanged(page) {
