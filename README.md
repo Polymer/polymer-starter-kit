@@ -53,10 +53,10 @@ Second, install [Bower](https://bower.io/) using [npm](https://www.npmjs.com)
 
 ### Start the development server
 
-This command serves the app at `http://localhost:8080` and provides basic URL
+This command serves the app at `http://127.0.0.1:8081` and provides basic URL
 routing for the app:
 
-    polymer serve --open
+    polymer serve
 
 ### Build
 
@@ -74,12 +74,12 @@ H2/push-compatible servers or to clients that do not support H2/Push.
 
 ### Preview the build
 
-This command serves the minified version of the app at `http://localhost:8080`
+This command serves the minified version of the app at `http://127.0.0.1:8081`
 in an unbundled state, as it would be served by a push-compatible server:
 
     polymer serve build/unbundled
 
-This command serves the minified version of the app at `http://localhost:8080`
+This command serves the minified version of the app at `http://127.0.0.1:8081`
 generated using fragment bundling:
 
     polymer serve build/bundled
