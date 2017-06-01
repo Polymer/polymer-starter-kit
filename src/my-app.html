@@ -141,7 +141,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Get root pattern for app-route, for more info about `rootPath` see:
         // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
 
-        // Use a regex if URL API isn't supported. (IE11)
+        // If URL API isn't supported (IE11), use a regex for the URL pathname.
         if (!URL.prototype || !('pathname' in URL.prototype)) {
           return rootPath.replace(/^.+?\/\/?.*?\/|$/, '/');
         }
