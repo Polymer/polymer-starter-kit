@@ -19,8 +19,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="description" content="My App description">
 
     <!--
-      If deploying to a non-root path, replace href="/" with the full path to the project root.
-      For example: href="/polymer-starter-kit/relative-path-example/"
+      The `<base>` tag below is present to support two advanced deployment options:
+      1) Differential serving. 2) Serving from a non-root path.
+
+      Instead of manually editing the `<base>` tag yourself, you should generally either:
+      a) Add a `basePath` property to the build configuration in your `polymer.json`.
+      b) Use the `--base-path` command-line option for `polymer build`.
+
+      Note: If you intend to serve from a non-root path, you will also need to manually
+      comment out one line of JavaScript, see [polymer-root-path] below.
     -->
     <base href="/">
 
@@ -54,13 +61,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="msapplication-tap-highlight" content="no">
 
     <script>
-      // Register the base URL
-      const baseUrl = document.querySelector('base').href;
+      // [polymer-root-path] By default, we set `Polymer.rootPath` to the
+      // server root path to support differential serving; this setting is also
+      // compatible with standard, single-build deployments. If you intend to
+      // serve your app from a non-root path, comment out the line below.
+      window.Polymer.rootPath = window.location.origin;
 
       // Load and register pre-caching Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register(baseUrl + 'service-worker.js');
+          navigator.serviceWorker.register('service-worker.js', {
+            scope: Polymer.rootPath,
+          });
         });
       }
     </script>
