@@ -140,13 +140,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       computeRootPattern(rootPath) {
         // Get root pattern for app-route, for more info about `rootPath` see:
         // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
-        if (window.URL && window.URL.prototype &&
-            ('href' in window.URL.prototype)) {
-          return (new URL(rootPath)).pathname;
-        } else {
-          // Use a regex if `new URL()` isn't supported. (IE11)
-          return rootPath.replace(/^(.+?\/\/)?(.*?)(\/|$)/, '/');
+
+        // Use a regex if URL API isn't supported. (IE11)
+        if (!URL.prototype || !('pathname' in URL.prototype)) {
+          return rootPath.replace(/^.+?\/\/?.*?\/|$/, '/');
         }
+
+        return (new URL(rootPath)).pathname;
       }
 
       _routePageChanged(page) {
