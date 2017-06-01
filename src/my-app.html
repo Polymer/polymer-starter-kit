@@ -142,7 +142,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
 
         // If URL API isn't supported (IE11), use a regex for the URL pathname.
-        if (!URL.prototype || !('pathname' in URL.prototype)) {
+        if (!(URL.prototype && 'pathname' in URL.prototype)) {
           return rootPath.replace(/^.+?\/\/?.*?\/|$/, '/');
         }
 
