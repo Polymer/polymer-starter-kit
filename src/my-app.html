@@ -19,10 +19,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/lazy-imports/lazy-imports-behavior.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
 <dom-module id="my-app">
+  <link rel="lazy-import" group="view1" href="my-view1.html">
+  <link rel="lazy-import" group="view2" href="my-view2.html">
+  <link rel="lazy-import" group="view3" href="my-view3.html">
+  <link rel="lazy-import" group="view404" href="my-view404.html">
+
   <template>
     <style>
       :host {
@@ -104,6 +110,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'my-app',
 
+      behaviors: [
+        Polymer.LazyImportsBehavior,
+      ],
+
       properties: {
         rootPattern: {
           type: String,
@@ -137,8 +147,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        this.importLazyGroup(page).
+          then(function(results) {
+            if (results.failed.length > 0 || results.loaded.length < 1)
+              this._showPage404();
+          }.bind(this));
       },
 
       _showPage404: function() {
