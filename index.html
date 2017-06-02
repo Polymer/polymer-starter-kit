@@ -61,11 +61,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="msapplication-tap-highlight" content="no">
 
     <script>
+      // Use a regex for `window.location.origin` for compatibility with IE11.
+      const locationOrigin = window.location.href.match(/^.+?\/\/.*?\//)[0];
+
       // [polymer-root-path] By default, we set `Polymer.rootPath` to the
       // server root path to support differential serving; this setting is also
       // compatible with standard, single-build deployments. If you intend to
       // serve your app from a non-root path, comment out the line below.
-      window.Polymer.rootPath = window.location.origin;
+      window.Polymer = {rootPath: locationOrigin};
 
       // Load and register pre-caching Service Worker
       if ('serviceWorker' in navigator) {
