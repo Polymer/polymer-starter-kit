@@ -71,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
-        pattern="[[rootPattern]]:page"
+        pattern="[[rootPath]]:page"
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
@@ -121,10 +121,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             reflectToAttribute: true,
             observer: '_pageChanged',
           },
-          rootPattern: {
-            type: String,
-            computed: 'computeRootPattern(rootPath)',
-          },
           routeData: Object,
           subroute: String,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
@@ -137,18 +133,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return [
           '_routePageChanged(routeData.page)',
         ];
-      }
-
-      computeRootPattern(rootPath) {
-        // Get root pattern for app-route, for more info about `rootPath` see:
-        // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
-
-        // If URL API isn't supported (IE11), use a regex for the URL pathname.
-        if (!(URL.prototype && 'pathname' in URL.prototype)) {
-          return rootPath.replace(/^.+?\/\/?.*?\/|$/, '/');
-        }
-
-        return (new URL(rootPath)).pathname;
       }
 
       _routePageChanged(page) {
