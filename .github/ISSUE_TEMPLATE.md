@@ -1,4 +1,4 @@
-<!-- Instructions: https://github.com/PolymerElements/polymer-starter-kit/CONTRIBUTING.md#filing-issues -->
+<!-- Instructions: https://github.com/Polymer/polymer/blob/master/CONTRIBUTING.md#contributing -->
 ### Description
 <!-- Example: The `paper-foo` element causes the page to turn pink when clicked. -->
 
@@ -11,11 +11,12 @@
 <!-- Example: The page turns pink. -->
 
 ### Live Demo
+
 <!-- Example: https://jsbin.com/cagaye/edit?html,output -->
 
 ### Steps to reproduce
 
-<!-- Example
+<!-- Example:
 1. Put a `paper-foo` element in the page.
 2. Open the page in a web browser.
 3. Click the `paper-foo` element.
@@ -24,10 +25,8 @@
 ### Browsers Affected
 <!-- Check all that apply -->
 - [ ] Chrome
-- [ ] Firefox
-- [ ] Safari 9
-- [ ] Safari 8
-- [ ] Safari 7
 - [ ] Edge
+- [ ] Firefox
 - [ ] IE 11
-- [ ] IE 10
+- [ ] Safari 8
+- [ ] Safari 9
