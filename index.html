@@ -26,8 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       a) Add a `basePath` property to the build configuration in your `polymer.json`.
       b) Use the `--base-path` command-line option for `polymer build`.
 
-      Note: If you intend to serve from a non-root path, you will also need to manually
-      comment out one line of JavaScript, see [polymer-root-path] below.
+      Note: If you intend to serve from a non-root path, see [polymer-root-path] below.
     -->
     <base href="/">
 
@@ -67,11 +66,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         lazyRegister: true,
       };
 
-      // [polymer-root-path] By default, we set `Polymer.rootPath` to the
-      // server root path to support differential serving; this setting is also
-      // compatible with standard, single-build deployments. If you intend to
-      // serve your app from a non-root path, comment out the line below.
-      window.Polymer.rootPath = window.location.origin;
+      /**
+      * [polymer-root-path]
+      *
+      * By default, we set `Polymer.rootPath` to the server root path (`/`).
+      * Leave this line unchanged if you intend to serve your app from the root
+      * path (e.g., with URLs like `my.domain/` and `my.domain/view1`).
+      *
+      * If you intend to serve your app from a non-root path (e.g., with URLs
+      * like `my.domain/my-app/` and `my.domain/my-app/view1`), edit this line
+      * to indicate the path from which you'll be serving, including leading
+      * and trailing slashes (e.g., `/my-app/`).
+      */
+      window.Polymer.rootPath = '/';
 
       // Load webcomponentsjs polyfill if browser does not support native
       // Web Components
