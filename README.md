@@ -49,7 +49,7 @@ Second, install [Bower](https://bower.io/) using [npm](https://www.npmjs.com)
 
     mkdir my-app
     cd my-app
-    polymer init starter-kit
+    polymer init polymer-2-starter-kit
 
 ### Start the development server
 
@@ -60,29 +60,30 @@ routing for the app:
 
 ### Build
 
-This command performs HTML, CSS, and JS minification on the application
-dependencies, and generates a service-worker.js file with code to pre-cache the
-dependencies based on the entrypoint and fragments specified in `polymer.json`.
-The minified files are output to the `build/unbundled` folder, and are suitable
-for serving from a HTTP/2+Push compatible server.
+This command builds your Polymer application for production. The `polymer build` command has options that support optimizations like code bundling, minification, and ES6 compilation to run on older browsers. 
 
-In addition the command also creates a fallback `build/bundled` folder,
-generated using fragment bundling, suitable for serving from non
-H2/push-compatible servers or to clients that do not support H2/Push.
+By default, most of these optimizations are disabled, and your build is output into the `build/default` folder.
 
-    polymer build
+To enable build optimizations, you can use command line options. For example, the following command builds a minified, bundled project:
+
+    polymer build --js-minify --css-minify --html-minify --bundle
+
+To make sure the correct build enhancements are always used, you can provide a set of build configurations via the "builds" field of your polymer.json file, like this:
+
+    "builds": [{
+      "bundle": true,
+      "js": {"minify": true},
+      "css": {"minify": true},
+      "html": {"minify": true}
+    }],
+
+Run `polymer help build` for the full list of available options and optimizations. Also, see the documentation on the [polymer.json specification](https://www.polymer-project.org/2.0/docs/tools/polymer-json) and [building your Polymer application for production](https://www.polymer-project.org/2.0/toolbox/build-for-production).
 
 ### Preview the build
 
-This command serves the minified version of the app at `http://127.0.0.1:8081`
-in an unbundled state, as it would be served by a push-compatible server:
+This command serves your app and opens a browser for you to view it: 
 
-    polymer serve build/unbundled
-
-This command serves the minified version of the app at `http://127.0.0.1:8081`
-generated using fragment bundling:
-
-    polymer serve build/bundled
+    polymer serve --open
 
 ### Run tests
 
@@ -105,4 +106,4 @@ e.g. based on the route, or to progressively render non-critical sections of the
 application. Each new demand-loaded fragment should be added to the list of
 `fragments` in the included `polymer.json` file. This will ensure those
 components and their dependencies are added to the list of pre-cached components
-and will be included in the `bundled` build.
+and will be included in a bundled build.
