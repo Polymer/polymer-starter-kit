@@ -60,24 +60,40 @@ routing for the app:
 
 ### Build
 
-This command builds your Polymer application for production. The `polymer build` command has options that support optimizations like code bundling, minification, and ES6 compilation to run on older browsers. 
+This command builds your Polymer application for production, using build configuration options provided by the command line or in your project's `polymer.json` file.  
 
-By default, most of these optimizations are disabled, and your build is output into the `build/default` folder.
+You can configure your `polymer.json` file to create multiple builds. This is necessary if you will be serving different builds optimized for different browsers. You can define your own named builds, or use presets. See the documentation on [building your project for production](https://www.polymer-project.org/2.0/toolbox/build-for-production) for more information.
 
-To enable build optimizations, you can use command line options. For example, the following command builds a minified, bundled project:
+The Polymer Starter Kit is configured to create three builds using the three supported presets:
 
-    polymer build --js-minify --css-minify --html-minify --bundle
+```
+"builds": [
+  {
+    "preset": "es5-bundled"
+  },
+  {
+    "preset": "es6-bundled"
+  },
+  {
+    "preset": "es6-unbundled"
+  }
+]
+```
 
-To make sure the correct build enhancements are always used, you can provide a set of build configurations via the "builds" field of your polymer.json file, like this:
+Builds will be output to a subdirectory under the `build/` directory as follows:
 
-    "builds": [{
-      "bundle": true,
-      "js": {"minify": true},
-      "css": {"minify": true},
-      "html": {"minify": true}
-    }],
+```
+build/
+  es5-bundled/
+  es6-bundled/
+  es6-unbundled/
+```
 
-Run `polymer help build` for the full list of available options and optimizations. Also, see the documentation on the [polymer.json specification](https://www.polymer-project.org/2.0/docs/tools/polymer-json) and [building your Polymer application for production](https://www.polymer-project.org/2.0/toolbox/build-for-production).
+* `es5-bundled` is a bundled, minified build with a service worker. ES6 code is compiled to ES5 for compatibility with older browsers.
+* `es6-bundled` is a bundled, minified build with a service worker. ES6 code is served as-is. This build is for browsers that can handle ES6 code - see [building your project for production](https://www.polymer-project.org/2.0/toolbox/build-for-production) for a list.
+* `es6-unbundled` is an unbundled, minified build with a service worker. ES6 code is served as-is. This build is for browsers that support HTTP/2 push.
+
+To configure a custom build, you can use command line options, or edit `polymer.json`. Run `polymer help build` for the full list of available options and optimizations. Also, see the documentation on the [polymer.json specification](https://www.polymer-project.org/2.0/docs/tools/polymer-json) and [building your Polymer application for production](https://www.polymer-project.org/2.0/toolbox/build-for-production).
 
 ### Preview the build
 
