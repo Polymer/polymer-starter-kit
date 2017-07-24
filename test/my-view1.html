@@ -23,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="../src/my-view1.html">
   </head>
   <body>
-    <test-fixture id="basic">
+    <test-fixture id="BasicView">
       <template>
         <my-view1></my-view1>
       </template>
@@ -31,14 +31,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <script>
       suite('my-view1 tests', function() {
-        var home;
-
-        setup(function() {
-          home = fixture('basic');
-        });
-
         test('Number in circle should be 1', function() {
-          var circle = Polymer.dom(home.root).querySelector('.circle');
+          var myView = fixture('BasicView');
+          var circle = myView.shadowRoot.querySelector('.circle');
           assert.equal(circle.textContent, '1');
         });
       });
