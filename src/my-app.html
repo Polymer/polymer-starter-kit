@@ -19,15 +19,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/lazy-imports/lazy-imports-mixin.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
-<link rel="lazy-import" href="my-view1.html">
-<link rel="lazy-import" href="my-view2.html">
-<link rel="lazy-import" href="my-view3.html">
-<link rel="lazy-import" href="my-view404.html">
-
 <dom-module id="my-app">
+  <link rel="lazy-import" group="view1" href="my-view1.html">
+  <link rel="lazy-import" group="view2" href="my-view2.html">
+  <link rel="lazy-import" group="view3" href="my-view3.html">
+  <link rel="lazy-import" group="view404" href="my-view404.html">
+
   <template>
     <style>
       :host {
@@ -111,7 +112,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    class MyApp extends Polymer.Element {
+    /**
+     * @extends Polymer.Element
+     * @appliesMixin Polymer.LazyImportsMixin
+     */
+    class MyApp extends Polymer.LazyImportsMixin(Polymer.Element) {
+
       static get is() { return 'my-app'; }
 
       static get properties() {
@@ -154,12 +160,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _pageChanged(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
-        Polymer.importHref(
-            resolvedPageUrl,
-            null,
-            this._showPage404.bind(this),
-            true);
+        this.importLazyGroup(page).
+          then((results) => {
+            if (results.failed.length > 0 || results.loaded.length < 1)
+              this._showPage404();
+          });
       }
 
       _showPage404() {
