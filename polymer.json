@@ -14,10 +14,10 @@
   ],
   "extraDependencies": [
     "manifest.json",
-    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+    "bower_components/webcomponentsjs/*.js"
   ],
   "lint": {
-    "rules": ["polymer-1"]
+    "rules": ["polymer-2"]
   },
   "builds": [
     {
