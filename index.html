@@ -12,7 +12,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="generator" content="Polymer Starter Kit">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
     <title>My App</title>
@@ -90,14 +89,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- Load your application shell -->
     <link rel="import" href="src/my-app.html">
 
-    <!-- Add any global styles for body, document, etc. -->
     <style>
+      html {
+        box-sizing: border-box;
+        font-family: sans-serif;
+        line-height: 1.15;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        -ms-overflow-style: scrollbar;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
       body {
         margin: 0;
-        font-family: 'Roboto', 'Noto', sans-serif;
+        font-family:
+          /* Safari for OS X and iOS (San Francisco) */
+          -apple-system,
+          /* Chrome >= 56 for OS X (San Francisco), Windows, Linux and Android */
+          system-ui,
+          /* Chrome < 56 for OS X (San Francisco) */
+          BlinkMacSystemFont,
+          /* Windows */
+          "Segoe UI",
+          /* Android */
+          "Roboto",
+          /* Basic web fallback */
+          "Helvetica Neue", Arial, sans-serif;
+        font-size: 1rem;
+        font-weight: normal;
         line-height: 1.5;
+        color: #000;
+        background-color: #EEE;
         min-height: 100vh;
-        background-color: #eeeeee;
+      }
+      [tabindex="-1"]:focus {
+        outline: none !important;
       }
     </style>
   </head>
@@ -106,6 +136,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>
-    <!-- Built with love using Polymer Starter Kit -->
   </body>
 </html>

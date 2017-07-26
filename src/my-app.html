@@ -1,39 +1,27 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
-<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
-<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/lazy-imports/lazy-imports-mixin.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
-<dom-module id="my-app">
-  <link rel="lazy-import" group="view1" href="my-view1.html">
-  <link rel="lazy-import" group="view2" href="my-view2.html">
-  <link rel="lazy-import" group="view3" href="my-view3.html">
-  <link rel="lazy-import" group="view404" href="my-view404.html">
 
+<dom-module id="my-app">
+  <link rel="lazy-import" group="view1" href="pages/my-view1.html">
+  <link rel="lazy-import" group="view404" href="pages/my-view404.html">
   <template>
     <style>
       :host {
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
+        --app-primary-color: #4285F4;
+        --app-secondary-color: #000;
 
         display: block;
       }
@@ -43,12 +31,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-header {
-        color: #fff;
+        color: #FFF;
         background-color: var(--app-primary-color);
       }
 
       app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
+        --paper-icon-button-ink-color: #FFF;
       }
 
       .drawer-list {
@@ -64,26 +52,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .drawer-list a.iron-selected {
-        color: black;
+        color: #000;
         font-weight: bold;
       }
     </style>
 
-    <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
+    <app-location
+      route="{{route}}"
+      url-space-regex="^[[rootPath]]"
+    ></app-location>
     <app-route
-        route="{{route}}"
-        pattern="[[rootPath]]:page"
-        data="{{routeData}}"
-        tail="{{subroute}}"></app-route>
+      route="{{route}}"
+      pattern="[[rootPath]]:page"
+      data="{{routeData}}"
+      tail="{{subroute}}"
+    ></app-route>
 
-    <app-drawer-layout fullbleed>
+    <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer">
+      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="view1" href="[[rootPath]]view1">View One</a>
-          <a name="view2" href="[[rootPath]]view2">View Two</a>
-          <a name="view3" href="[[rootPath]]view3">View Three</a>
         </iron-selector>
       </app-drawer>
 
@@ -103,9 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="view404"
             role="main">
           <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
-          <my-view404 name="view404"></my-view404>
+          <my-view404 name="view404" root-path="[[rootPath]]"></my-view404>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -117,9 +105,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @appliesMixin Polymer.LazyImportsMixin
      */
     class MyApp extends Polymer.LazyImportsMixin(Polymer.Element) {
-
-      static get is() { return 'my-app'; }
-
+      static get is() {
+        return 'my-app';
+      }
       static get properties() {
         return {
           page: {
@@ -142,12 +130,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _routePageChanged(page) {
-        // Polymer 2.0 will call with `undefined` on initialization.
-        // Ignore until we are properly called with a string.
-        if (page === undefined) {
-          return;
-        }
-
         // If no page was found in the route data, page will be an empty string.
         // Deault to 'view1' in that case.
         this.page = page || 'view1';
@@ -162,16 +144,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Load page import on demand. Show 404 page if fails
         this.importLazyGroup(page).
           then((results) => {
-            if (results.failed.length > 0 || results.loaded.length < 1)
-              this._showPage404();
+            if (results.failed.length > 0 || results.loaded.length < 1) {
+              this.page = 'view404';
+            }
           });
-      }
-
-      _showPage404() {
-        this.page = 'view404';
       }
     }
 
-    window.customElements.define(MyApp.is, MyApp);
+    customElements.define(MyApp.is, MyApp);
   </script>
 </dom-module>
