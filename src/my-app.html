@@ -68,12 +68,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
+    <app-location
+        route="{{route}}"
+        url-space-regex="^[[rootPath]]">
+    </app-location>
+
     <app-route
         route="{{route}}"
         pattern="[[rootPath]]:page"
         data="{{routeData}}"
-        tail="{{subroute}}"></app-route>
+        tail="{{subroute}}">
+    </app-route>
 
     <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
