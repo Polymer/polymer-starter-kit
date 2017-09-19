@@ -1,4 +1,4 @@
-<!--
+
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -10,9 +10,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
 
 <dom-module id="lm-login">
+  
   <template>
+    <style>
+      .button-class{
+        background-color:#DEE2E6;
+        width: 5%;
+            height: 45px;
+            display: block;
+            margin: 0 auto 15px;
+            padding: 0 px;
+            border: none;
+            border-bottom: 0 px solid;
+      }
+      .input_pass{
+            width: 35%;
+            height: 50px;
+            display: block;
+            margin: 0 auto 15px;
+            padding: 0 15px;
+            border: none;
+            border-bottom: 20px solid #ebebeb;
+            }
+            .input_reg{
+            width: 55%;
+            height: 10px;
+            display: block;
+            margin: 0 auto 15px;
+            padding: 0 15px;
+            border: none;
+            border-bottom: 20px solid #ebebeb;
+            }
+     
+    </style>
+
+      <div class="content-container">
+          <div id="Reg">
+            <form name="form">
+              <h2 class="header">Login to Lightning Mortgage</h2>
+  
+              <paper-input class="input_pass" name="username" id="username" value="{{loginDetails.useremail::input}}" type="text" placeholder="Enter Username Here !!" maxlength="6" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
+             <paper-input class="input_pass" name="password" id="password" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
+             <paper-button raised class="button-class" value="Login">Login</paper-button>
+              <div><a href="/" class="input_reg">Register</a></div>
+            </form>
+          </div>
+        </div>
+     
     <iron-ajax
                auto
                url="data/login.json"
@@ -20,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                last-response="{{ajaxResponse}}"
                >
     </iron-ajax>
-    <span>{{ajaxResponse.responseMessage}}</span>
+    <!-- <span>{{ajaxResponse.responseMessage}}</span> -->
   </template>
 
   <script>
@@ -30,4 +79,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     window.customElements.define(Login.is, Login);
   </script>
-</dom-module>
+</dom-module> 
+
+
