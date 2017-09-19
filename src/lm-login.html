@@ -23,12 +23,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 5%;
             height: 45px;
             display: block;
-            margin: 0 auto 15px;
+            margin: 0 auto -20px;
             padding: 0 px;
             border: none;
             border-bottom: 0 px solid;
+            text-align: center;
       }
-      .input_pass{
+      .input_field{
             width: 35%;
             height: 50px;
             display: block;
@@ -38,13 +39,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             border-bottom: 20px solid #ebebeb;
             }
             .input_reg{
-            width: 55%;
-            height: 10px;
-            display: block;
-            margin: 0 auto 15px;
-            padding: 0 15px;
-            border: none;
-            border-bottom: 20px solid #ebebeb;
+              float: left;
+              margin-left: 32%;
+              font-size: 23px
+            
+            }
+            .header
+            {
+              width: 100%;
+              text-align: center;
+              clear: left;  
             }
      
     </style>
@@ -54,8 +58,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <form name="form">
               <h2 class="header">Login to Lightning Mortgage</h2>
   
-              <paper-input class="input_pass" name="username" id="username" value="{{loginDetails.useremail::input}}" type="text" placeholder="Enter Username Here !!" maxlength="6" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
-             <paper-input class="input_pass" name="password" id="password" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
+              <paper-input class="input_field" name="username" id="username" value="{{loginDetails.useremail::input}}" type="text" placeholder="Enter Username Here !!" maxlength="6" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
+             <paper-input class="input_field" name="password" id="password" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
              <paper-button raised class="button-class" value="Login">Login</paper-button>
               <div><a href="/" class="input_reg">Register</a></div>
             </form>
