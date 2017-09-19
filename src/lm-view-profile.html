@@ -7,31 +7,36 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="lm-view-profile">
   <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
-
-        padding: 10px;
-      }
-    </style>
-
-    <div class="card">
-      <div class="circle">2</div>
-      <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-    </div>
+    <iron-ajax
+               auto
+               url="data/view-profile.json"
+               handle-as="json"
+               last-response="{{ajaxResponse}}"
+               >
+    </iron-ajax>
+    <span>{{ajaxResponse.responseMessage}}</span>
   </template>
 
   <script>
     class ViewProfile extends Polymer.Element {
       static get is() { return 'lm-view-profile'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: "bar"
+          }
+        }
+      }
+      
+      json(obj) {
+        return JSON.stringify(obj, null, 2);
+      }
     }
 
     window.customElements.define(ViewProfile.is, ViewProfile);
