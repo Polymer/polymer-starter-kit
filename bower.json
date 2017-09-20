@@ -22,7 +22,8 @@
     "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
     "paper-item": "PolymerElements/paper-item#^2.0.0",
     "iron-icon": "1 - 2",
-    "iron-icons": "^2.0.1"
+    "iron-icons": "^2.0.1",
+    "iron-autogrow-textarea":"PolymerElements/iron-autogrow-textarea#^2.0.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"
