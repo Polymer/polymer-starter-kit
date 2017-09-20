@@ -50,6 +50,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               text-align: center;
               clear: left;  
             }
+            .invalidUser
+            {
+              text-align: center;
+    padding-top: 45px;
+    color: red;
+            }
      
     </style>
 
@@ -61,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="Enter Username Here !!" maxlength="6" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
              <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
              <paper-button raised class="button-class" on-tap="login" value="Login">Login</paper-button>
-             <span hidden="{{hideMessage}}">{{ajaxResponse.message}}</span>
+            <div class = "invalidUser"> <span hidden="{{hideMessage}}">{{ajaxResponse.message}}</span></div>
               <div><a href="/" class="input_reg">Register</a></div>
             </form>
           </div>
