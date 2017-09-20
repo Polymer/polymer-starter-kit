@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .input_reg{
               float: left;
               margin-left: 32%;
-              font-size: 23px
+              font-size: 17px
             
             }
             .header
@@ -61,7 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="Enter Username Here !!" maxlength="6" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
              <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
              <paper-button raised class="button-class" on-tap="login" value="Login">Login</paper-button>
-             <span hidden="{{hideMessage}}">{{Errormessage}}</span>
+             <span hidden="{{hideMessage}}">{{ajaxResponse.message}}</span>
               <div><a href="/" class="input_reg">Register</a></div>
             </form>
           </div>
@@ -93,7 +93,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           postBody: {
             type: String,
             computed: 'getPostBody(userId, password)'
-        }
+        },
+        hideMessage:{
+          type:String,
+          value:""
+         }
         }
       }
       
@@ -109,6 +113,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         window.history.pushState({}, null, '/view-profile/'+result.userId);
         window.dispatchEvent(new CustomEvent('location-changed'));
         }
+     
        
       }
       getPostBody (userId, password) {
