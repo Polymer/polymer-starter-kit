@@ -82,6 +82,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}">
     </app-route>
+    <app-route
+      route="{{subroute}}"
+      pattern="/:id"
+      data="{{subrouteData}}">
+    </app-route>
 
     <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
