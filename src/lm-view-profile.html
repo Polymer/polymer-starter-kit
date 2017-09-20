@@ -15,11 +15,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel = "import" href = "../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel = "import" href = "../bower_components/paper-item/paper-item.html">
 <link rel = "import" href = "../bower_components/paper-listbox/paper-listbox.html">
-<link rel = "import" href = "../bower_components/paper-listbox/paper-listbox.html">
-<link rel = "import" href = "../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
+<link rel = "import" href = "../bower_components/paper-button/paper-button.html">
 <link rel = "import" href = "../bower_components/paper-styles/paper-styles.html">
 <link rel = "import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel = "import" href = "../bower_components/paper-input/paper-input.html">
+<link rel = "import" href = "../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
 <dom-module id="lm-view-profile">
@@ -51,20 +51,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<div class="card User_details">
       <h1>{{User.name}} Profile details</h1>
       <div class="data">
-        <div class="first_row"> 
-           <div>
-                <label>Salutation: </label>
-                <paper-dropdown-menu disabled>
-                        <paper-listbox  slot = "dropdown-content" selected = "1">
-                           <paper-item>Mr.</paper-item>
-                           <paper-item>Mrs.</paper-item>
-                        </paper-listbox>
-                </paper-dropdown-menu>
-
-            </div>
+        <div class="first_row">
+            <label>Salutation: </label>
+            <paper-dropdown-menu disabled>
+                    <paper-listbox  slot = "dropdown-content" selected = "1">
+                        <paper-item>Mr.</paper-item>
+                        <paper-item>Mrs.</paper-item>
+                    </paper-listbox>
+            </paper-dropdown-menu>
             
             <label>First Name:</label>
-            <paper-input disabled label = "First Name">
+            <paper-input disabled label = "First Name" value="{{ajaxResponse.responseMessage}}">
               <iron-icon icon = "account-circle"  prefix></iron-icon>
             </paper-input>
 
@@ -73,47 +70,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <iron-icon icon = "account-circle"  prefix></iron-icon>
             </paper-input>
         </div>
-       <!-- <div class="second_row"> 
+       <div class="second_row"> 
             <label>BSN(National Identifier):</label>
-            <paper-input disabled label = "Last Name">
+            <paper-input disabled label = "BSN">
               <iron-icon icon = "account-circle"  prefix></iron-icon>
             </paper-input>
             <label>Door Number:</label>
-            <paper-input disabled label = "Last Name">
+            <paper-input disabled label = "Door Number">
                 <iron-icon icon = "account-circle"  prefix></iron-icon>
             </paper-input>
             <label>Post code:</label>
-            <paper-input disabled label = "Last Name">
+            <paper-input disabled label = "Post code">
                 <iron-icon icon = "account-circle"  prefix></iron-icon>
             </paper-input>
-        </div>-->
-        <div class="third_row"> 
-            <label>Email:</label>
-            <paper-input disabled label="">
-                <iron-icon icon="mail" slot="prefix"></iron-icon>
-                   <div slot="suffix">rahuljetli27@email.com</div>
-            </paper-input>
+        </div>
+        <div class="third_row">             
             <label>Address Line 1:</label>
-           <iron-autogrow-textarea value="{{ajaxResponse.responseData.address}}"></iron-autogrow-textarea>
+            <iron-autogrow-textarea value="{{ajaxResponse.responseData.address}}"></iron-autogrow-textarea>
             <label>Address Line 2:</label>
             <iron-autogrow-textarea value="{{ajaxResponse.responseData.address}}"></iron-autogrow-textarea>
             <label>City:</label>
+			<paper-input disabled label = "City">
+                <iron-icon icon = "account-circle"  prefix></iron-icon>
+            </paper-input>
         </div>
         <div class="fourth_row"> 
             <label>Home Number:</label>
             <label>Mobile Number:</label>
             <label>Email Address:</label>
+            <paper-input disabled label="">
+                <iron-icon icon="mail" slot="prefix"></iron-icon>
+                   <div slot="suffix">rahuljetli27@email.com</div>
+            </paper-input>
         </div>
         <div class="fifth_row"> 
             <label>Marital Status:</label>
+            <paper-dropdown-menu disabled>
+                <paper-listbox  slot = "dropdown-content" selected = "1">
+                    <paper-item>Single</paper-item>
+                    <paper-item>Married</paper-item>
+                    <paper-item>Divorcee</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
             <label>No of Dependents:</label>
-            <label>Monthly Family Income(confirmed):</label>
+            <paper-dropdown-menu disabled>
+                <paper-listbox  slot = "dropdown-content" selected = "1">
+                    <paper-item>0</paper-item>
+                    <paper-item>1</paper-item>
+                    <paper-item>2</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
         </div>
-      </div>
-
-		<div class = "container">
-			<paper-button toggles raised class = "green">Next</paper-button>
-		</div>
+        
+      </div><paper-button toggles raised class = "green">Next</paper-button>
     </div>
 	
   </template>
