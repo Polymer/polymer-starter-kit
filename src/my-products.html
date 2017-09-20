@@ -76,7 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="flex-container">
       <template is="dom-repeat" items="[[products]]">
         <paper-card  heading="[[item.productName]]" on-click="_callProductDetails"  class="white flex-item">
-          <label>[[item.reference]]</label>
+          <label>[[item.productDesc]]</label>
         </paper-card>
       </template>
     </div>
@@ -87,9 +87,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </header>
 
        <div class="card">
-               <lm-slider title='Amount' prefix='$' minval='{{productItem.offerMinimumValue}}' selected='{{offeramount}}' maxval='{{productItem.offerMaximumValue}}'></lm-slider>      
-               <lm-slider title='Tenure' minval='{{productItem.offerMinimumTerm}}' maxval='{{productItem.offerMaximumTerm}}' selected='{{offerterm}}' interval='1' suffix='Years'></lm-slider>      
-               <lm-slider title='Down Payment' prefix='$' minval='{{productItem.offerMinimumDownPayment}}' selected='{{offerdownpayment}}' maxval='{{productItem.offerMaximumDownPayment}}'></lm-slider>
+               <lm-slider title='Amount' prefix='$' minval='{{productItem.minAmount}}' selected='{{offeramount}}' maxval='{{productItem.maxAmount}}'></lm-slider>      
+               <lm-slider title='Tenure' minval='{{productItem.minTenure}}' maxval='{{productItem.maxTenure}}' selected='{{offerterm}}' interval='1' suffix='Years'></lm-slider>      
+               <lm-slider title='Down Payment' prefix='$' minval='{{productItem.minDownpayment}}' selected='{{offerdownpayment}}' maxval='{{productItem.maxDownpayment}}'></lm-slider>
         </div>
         <div class="card flex-container-bleed"> 
            <div class="flex-item-4 bold-item">
@@ -99,7 +99,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div>Effective APR% : {{apr}}</div>                  
             </div>
         </div>
-        <term-conditions></term-conditions>
+        <term-conditions terms="[[termsArray]]"></term-conditions>
         <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
     </div>
     
@@ -164,7 +164,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type:String,
             value:"2455"
 
-          }
+          },
+          termsArray : Array
 
         }
       }
@@ -210,9 +211,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       {
         console.log("product will be called"+event.model.item);
         this.productItem = event.model.item;
-        this.offeramount=this.productItem.offerMaximumValue;
-        this.offerterm=this.productItem.offerMaximumTerm;
-        this.offerdownpayment=this.productItem.offerMinimumDownPayment;
+        this.offeramount=this.productItem.maxAmount;
+        this.offerterm=this.productItem.maxTenure;
+        this.offerdownpayment=this.productItem.maxDownpayment;
 
 
       }
@@ -240,9 +241,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if(this.products)
         {
         this.productItem=this.products[0];
-        this.offeramount=this.productItem.offerMaximumValue;
-        this.offerterm=this.productItem.offerMaximumTerm;
-        this.offerdownpayment=this.productItem.offerMinimumDownPayment;
+        this.offeramount=this.productItem.maxAmount;
+        this.offerterm=this.productItem.maxTenure;
+        this.offerdownpayment=this.productItem.minDownpayment;
+        this.termsArray = this.productItem.terms;
         
         }
       }
