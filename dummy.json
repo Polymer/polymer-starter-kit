@@ -1,0 +1,37 @@
+{
+  "array": [
+    {
+      "id": "01",
+      "value": "Term one"
+    },
+    {
+      "id": "02",
+      "value": "Term Two"
+    },
+    {
+      "id": "03",
+      "value": "Term Three"
+    },
+    {
+      "id": "04",
+      "value": "Term Four"
+    },
+    {
+      "id": "05",
+      "value": "Term five"
+    },
+    {
+      "id": "06",
+      "value": "Term six"
+    },
+    {
+      "id": "07",
+      "value": "Term Seven"
+    },
+    {
+      "id": "08",
+      "value": "Term Eight"
+    }
+
+  ]
+}

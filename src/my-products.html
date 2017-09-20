@@ -13,6 +13,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="./lm-slider.html">
+<link rel="import" href="./term-conditions.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="product-preference">
@@ -20,34 +22,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
       :host {
         display: block;
-
         padding: 10px;
       }
       header
       {
         text-align: center;
       }
-      .detailscontainer
+      .paper-button
       {
-        display: block;
-      }
-      .paperbutton
-      {
-        background-color: darkorange;
+        background-color: #f60;
         color: white
       }
-      .detailscontainer
+      .details-container
       {
         background-color: white;
         border-radius: 5px;
         overflow: auto;
         padding: 2em;
+         display: block;
       }
-      
-    </style>
-    <custom-style>
-      <style is="custom-style">
-        paper-card.white {
+      paper-card.white {
           --paper-card-header-color:black;
         }
         paper-card
@@ -56,7 +50,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           width:400px;
           cursor: pointer;
           margin: 20px;
-          
         }
         .flex-container{
           display: flex;
@@ -66,57 +59,70 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .flex-item{
           flex:1;
         }
-      </style>
-    </custom-style>
-    
+        .flex-container-bleed{
+            @apply(--layout-horizontal);
+            @apply(--layout-wrap);
+            justify-content: center;
+       }
+       .flex-item-4{
+           @apply(--layout-flex-4);
+       }
+       .bold-item{
+            font-weight: bold;
+       }
+      
+    </style>
+  
     <div class="flex-container">
       <template is="dom-repeat" items="[[products]]">
-      <paper-card  heading="[[item.name]]" on-click="callProductDetails(item)"  class="white flex-item">
-        <label>[[item.reference]]</label>
-      </paper-card>
-    </template>
+        <paper-card  heading="[[item.name]]" on-click="_callProductDetails(item)"  class="white flex-item">
+          <label>[[item.reference]]</label>
+        </paper-card>
+      </template>
     </div>
 
-    <div class="detailscontainer"> 
+    <div class="details-container"> 
       <header>
-      <h1>[[productName]]</h1>      
+        <h2>[[productName]]</h2>      
       </header>
-      <paper-input label="Loan Tenure" value="{{params.tenure::input}}"></paper-input>
-      {{params.tenure}}
-      <paper-button class="paperbutton" on-click="call">Submit</paper-button>
+
+       <div class="card">
+               <lm-slider title='Amount' prefix='$' minval='60000' selected='65000' maxval='100000'></lm-slider>      
+               <lm-slider title='Tenure' minval='5' maxval='10' selected='6' interval='1' suffix='Years'></lm-slider>      
+               <lm-slider title='Down Payment' prefix='$' selected='65000'></></lm-slider>
+        </div>
+        <div class="card flex-container-bleed"> 
+           <div class="flex-item-4 bold-item">
+                <div>Equated Periodic Installment(EPI) :  {{calculatedEPI}}</div>               
+           </div>
+            <div class="flex-item-4 bold-item">
+                <div>Effective APR% : {{calculatedAPR}}</div>                  
+            </div>
+        </div>
+        <term-conditions></term-conditions>
+        <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
     </div>
     
      <iron-ajax
-    auto
-    url="src/products.json"
-    params='{{params}}'
-    handle-as="json"
-    on-response="handleResponseForProducts"
-    debounce-duration="300">
-  </iron-ajax>
-
-  <!-- <iron-ajax
-  url="src/products.json"
-  params=''
-  handle-as="json"
-  on-response="handleResponseForProducts"
-  debounce-duration="300"> -->
-</iron-ajax>
+          auto
+          url="src/products.json"
+          params='{{params}}'
+          handle-as="json"
+          on-response="_handleResponseForProducts"
+          debounce-duration="300">
+     </iron-ajax>
 
   </template>
   
 
   <script>
     class ProductPreference extends Polymer.Element {
-
       constructor()
       {
         super();
         this.products=[];
         
-      }
-
-      
+      }     
 
       static get is() { return 'product-preference'; }
 
@@ -139,16 +145,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
       }
-      callProductDetails(productItem)
+      _callProductDetails(productItem)
       {
         console.log("product will be called"+productItem);
       }
 
-      handleResponse(data)
-      {
-        console.log("called"+JSON.stringify(data.detail.response));
-        this.productName = data.detail.response.name;
-      }
       _paramChanged(oldvalue,newvalue)
       {
         console.log(oldvalue+"new"+newvalue);
@@ -157,16 +158,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       {
         console.log(oldValue+"tenure changed");
       }
-      call()
+      _submitInfo()
       {
-        console.log("in call");
-        //this.params.name = "skdjf";
        let tempParam={};
         tempParam.name = "sss";
         this.params=tempParam;
         console.log(this.tempParam);
       }
-      handleResponseForProducts(data)
+      _handleResponseForProducts(data)
       {
         console.log("in response for products");
         this.products = data.detail.response;

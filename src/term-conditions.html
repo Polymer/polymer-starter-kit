@@ -12,16 +12,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="shared-styles.html">
 
-
-<dom-module id="term-condtions">
+<dom-module id="term-conditions">
     <template>
         <style include="shared-styles">
             :host {
                 display: block;
-                padding: 10px;
+                padding:0 0px;
             }
             .list{
-                overflow:auto;
+                overflow:hidden;
                 height:100px;
             }
         </style>
@@ -44,8 +43,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
     </template>
     <script>
-        class termCondtions extends Polymer.Element {
-            static get is() { return 'term-condtions'; }
+        class TermConditions extends Polymer.Element {
+            static get is() { return 'term-conditions'; }
             static get properties() {
                 return {
                     terms: {
@@ -72,6 +71,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
     }
 
-        window.customElements.define(termCondtions.is, termCondtions);
+        window.customElements.define(TermConditions.is, TermConditions);
     </script>
 </dom-module>

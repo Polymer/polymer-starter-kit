@@ -1,0 +1,126 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="shared-styles.html">
+<dom-module id="lm-slider">
+  <template>
+    <style include="shared-styles"> </style>
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+        --paper-slider-height : 10px;        
+        --paper-slider-active-color: #f60;
+        --paper-slider-knob-color:#f60;
+      }
+      .fill-space{
+        display: inline-block;
+        width: 10px;
+      }
+       .flex-container{
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+        justify-content: center;
+       }
+       .flex-item{
+        @apply(--layout-flex-4);
+       }
+       .flex-last-item{
+        @apply(--layout-flex-6);
+       }
+       .center-item{
+        @apply( --layout-baseline);
+      }
+      .center{
+         text-align:center;
+      }
+       .bold-item{
+        font-weight: bold;
+       }
+       
+   </style>
+   <div class='flex-container'>
+     <div class='bold-item'>{{title}}</div> 
+     <div class='flex-item center'>{{prefix}} {{_convertToLocale(selected)}} {{suffix}}</div>
+     <div class=" flex-last-item"></div>
+   </div>
+    <div class='flex-container'>
+      <div class='center-item'>       
+        <span class='pre-text'>{{prefix}} {{_convertToLocale(minval)}} {{suffix}}</span>    
+      </div>
+      <div class="flex-item">          
+            <paper-slider class="change-me"
+            min='{{minval}}'
+            max='{{maxval}}' 
+            value='{{selected}}' 
+            step='{{interval}}'></paper-slider>  
+        </div>
+      <div class='center-item flex-last-item'>{{prefix}} {{_convertToLocale(maxval)}} {{suffix}}</div>
+
+  </template>
+
+  <script>
+    class LmSlider extends Polymer.Element {
+      static get is() { return 'lm-slider'; }
+      static get properties(){
+        return {
+          prefix: {
+            type : String,
+            value : "",
+            reflectToAttribute : true
+          },
+          suffix: {
+            type : String,
+            value : "",
+            reflectToAttribute : true
+          },
+          title:{
+            type : String,
+            value : "",
+            reflectToAttribute:true
+          },
+          selected:{
+            type : Number,
+            notify: true,
+            reflectToAttribute: true
+          },
+          minval:{
+            type : Number,
+            value : 60000,
+            reflectToAttribute:true
+          },
+          maxval:{
+            type : Number,
+            value : 100000,
+            reflectToAttribute:true
+          },
+          interval : {
+            type : Number,
+            value : 5,
+            reflectToAttribute : true
+          },
+          maxmarkerinterval:{
+            type : Number,
+            value : 5
+          }
+        };
+      }
+      _convertToLocale(val){
+             return val.toLocaleString();
+           
+      }
+    }
+    window.customElements.define(LmSlider.is, LmSlider);
+  </script>
+</dom-module>
