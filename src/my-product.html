@@ -1,0 +1,179 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="product-preference">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      header
+      {
+        text-align: center;
+      }
+      .detailscontainer
+      {
+        display: block;
+      }
+      .paperbutton
+      {
+        background-color: darkorange;
+        color: white
+      }
+      .detailscontainer
+      {
+        background-color: white;
+        border-radius: 5px;
+        overflow: auto;
+        padding: 2em;
+      }
+      
+    </style>
+    <custom-style>
+      <style is="custom-style">
+        paper-card.white {
+          --paper-card-header-color:black;
+        }
+        paper-card
+        {
+          text-align: center;
+          width:400px;
+          cursor: pointer;
+          margin: 20px;
+          
+        }
+        .flex-container{
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+        .flex-item{
+          flex:1;
+        }
+      </style>
+    </custom-style>
+    
+    <div class="flex-container">
+      <template is="dom-repeat" items="[[products]]">
+      <paper-card  heading="[[item.name]]" on-click="callProductDetails(item)"  class="white flex-item">
+        <label>[[item.reference]]</label>
+      </paper-card>
+    </template>
+    </div>
+
+    <div class="detailscontainer"> 
+      <header>
+      <h1>[[productName]]</h1>      
+      </header>
+      <paper-input label="Loan Tenure" value="{{params.tenure::input}}"></paper-input>
+      {{params.tenure}}
+      <paper-button class="paperbutton" on-click="call">Submit</paper-button>
+    </div>
+    
+     <iron-ajax
+    auto
+    url="src/products.json"
+    params='{{params}}'
+    handle-as="json"
+    on-response="handleResponseForProducts"
+    debounce-duration="300">
+  </iron-ajax>
+
+  <!-- <iron-ajax
+  url="src/products.json"
+  params=''
+  handle-as="json"
+  on-response="handleResponseForProducts"
+  debounce-duration="300"> -->
+</iron-ajax>
+
+  </template>
+  
+
+  <script>
+    class ProductPreference extends Polymer.Element {
+
+      constructor()
+      {
+        super();
+        this.products=[];
+        
+      }
+
+      
+
+      static get is() { return 'product-preference'; }
+
+      static get properties()
+      {
+        return {
+          productName:{
+            type:String,
+            value:"Product Name"
+          },
+          params : { 
+            type :Object,
+            value : {},
+            observer:"_paramChanged"
+          },
+          tenure:{
+            type:String,
+            value:"Tenure",
+            observer:"_tenureChanged"
+          }
+        }
+      }
+      callProductDetails(productItem)
+      {
+        console.log("product will be called"+productItem);
+      }
+
+      handleResponse(data)
+      {
+        console.log("called"+JSON.stringify(data.detail.response));
+        this.productName = data.detail.response.name;
+      }
+      _paramChanged(oldvalue,newvalue)
+      {
+        console.log(oldvalue+"new"+newvalue);
+      }
+      _tenureChanged(oldValue,newValue)
+      {
+        console.log(oldValue+"tenure changed");
+      }
+      call()
+      {
+        console.log("in call");
+        //this.params.name = "skdjf";
+       let tempParam={};
+        tempParam.name = "sss";
+        this.params=tempParam;
+        console.log(this.tempParam);
+      }
+      handleResponseForProducts(data)
+      {
+        console.log("in response for products");
+        this.products = data.detail.response;
+      }
+
+    }
+
+    window.customElements.define(ProductPreference.is, ProductPreference);
+  </script>
+</dom-module>

@@ -1,0 +1,18 @@
+[
+    {
+        "name":"ProductOne",
+        "reference":"ReferenceOne"
+    },
+    {
+        "name":"ProductTwo",
+        "reference":"ReferenceTwo"
+    },
+    {
+        "name":"ProductThree",
+        "reference":"ReferenceThree"
+    },
+    {
+        "name":"ProductFour",
+        "reference":"ReferenceFour"
+    }
+]
