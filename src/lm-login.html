@@ -60,8 +60,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
               <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="Enter Username Here !!" maxlength="6" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
              <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
-             <paper-button raised class="button-class" on-tap="tasksLoaded" value="Login">Login</paper-button>
-             <span hidden="{{hideMessage}}">{{message}}</span>
+             <paper-button raised class="button-class" on-tap="login" value="Login">Login</paper-button>
+             <span hidden="{{hideMessage}}">{{Errormessage}}</span>
               <div><a href="/" class="input_reg">Register</a></div>
             </form>
           </div>
@@ -69,11 +69,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      
     <iron-ajax
               id="ironAjaxElement" 
-               url="data/login.json"
+               url="http://10.138.65.226:8080/lightningmortgage/customer/userLogin"
                handle-as="json"
                body='{{postBody}}'
                method="post"
-               on-response="tasksLoaded"
+               on-response="handleResponse"
                content-type="application/json"
                last-response="{{ajaxResponse}}"
                >
@@ -103,10 +103,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.ironAjaxElement.generateRequest();
         }
       }
-      tasksLoaded(data) {
-        var userID="Salman";
-        window.history.pushState({}, null, '/view-profile/'+userID);
+      handleResponse(data) {
+        var result= data.detail.response 
+        if(result && result.status ==="200") {
+        window.history.pushState({}, null, '/view-profile/'+result.userId);
         window.dispatchEvent(new CustomEvent('location-changed'));
+        }
+       
       }
       getPostBody (userId, password) {
         return {
