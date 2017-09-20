@@ -7,11 +7,37 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel = 'import' href='../bower_components/polymer/polymer.html'>
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel = "import" href = "../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel = "import" href = "../bower_components/paper-item/paper-item.html">
+<link rel = "import" href = "../bower_components/paper-listbox/paper-listbox.html">
+<link rel = "import" href = "../bower_components/paper-button/paper-button.html">
+<link rel = "import" href = "../bower_components/paper-styles/paper-styles.html">
+<link rel = "import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel = "import" href = "../bower_components/paper-input/paper-input.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
 <dom-module id="lm-view-profile">
   <template>
+   <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+        paper-dropdown-menu {width:200px; }
+        paper-dropdown-menu {height: 200px; display: block; }
+        #container {display: flex;}
+        paper-button{ padding: 10px; border-radius: 5px; float: right;}
+        paper-button.green:hover { background-color: var(--paper-green-400);}
+        paper-button.green { background-color: var(--paper-green-500); color: white;}
+        paper-button.green[active] {background-color: var(--paper-red-500);}
+        .style-scope.lm-view-profile {height: auto;}
+    </style>
+	
     <iron-ajax
                auto
                url="data/view-profile.json"
@@ -20,6 +46,75 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                >
     </iron-ajax>
     <span>{{ajaxResponse.responseMessage}}</span>
+	
+	<div class="card User_details">
+      <h1>{{User.name}} Profile details</h1>
+      <div class="data">
+        <div class="first_row"> 
+           <div>
+                <label>Salutation: </label>
+                <paper-dropdown-menu disabled>
+                        <paper-listbox  slot = "dropdown-content" selected = "1">
+                           <paper-item>Mr.</paper-item>
+                           <paper-item>Mrs.</paper-item>
+                        </paper-listbox>
+                </paper-dropdown-menu>
+
+            </div>
+            
+            <label>First Name:</label>
+            <paper-input disabled label = "First Name">
+              <iron-icon icon = "account-circle"  prefix></iron-icon>
+            </paper-input>
+
+            <label>Last Name:</label>
+            <paper-input disabled label = "Last Name">
+                <iron-icon icon = "account-circle"  prefix></iron-icon>
+            </paper-input>
+        </div>
+       <!-- <div class="second_row"> 
+            <label>BSN(National Identifier):</label>
+            <paper-input disabled label = "Last Name">
+              <iron-icon icon = "account-circle"  prefix></iron-icon>
+            </paper-input>
+            <label>Door Number:</label>
+            <paper-input disabled label = "Last Name">
+                <iron-icon icon = "account-circle"  prefix></iron-icon>
+            </paper-input>
+            <label>Post code:</label>
+            <paper-input disabled label = "Last Name">
+                <iron-icon icon = "account-circle"  prefix></iron-icon>
+            </paper-input>
+        </div>-->
+        <div class="third_row"> 
+            <label>Email:</label>
+            <paper-input disabled label="">
+                <iron-icon icon="mail" slot="prefix"></iron-icon>
+                   <div slot="suffix">rahuljetli27@email.com</div>
+            </paper-input>
+            <label>Address Line 1:</label>
+            <paper-textarea label="Textarea">hhhh</paper-textarea>
+            <label>Address Line 2:</label>
+            
+            <label>City:</label>
+        </div>
+        <div class="fourth_row"> 
+            <label>Home Number:</label>
+            <label>Mobile Number:</label>
+            <label>Email Address:</label>
+        </div>
+        <div class="fifth_row"> 
+            <label>Marital Status:</label>
+            <label>No of Dependents:</label>
+            <label>Monthly Family Income(confirmed):</label>
+        </div>
+      </div>
+
+		<div class = "container">
+			<paper-button toggles raised class = "green">Next</paper-button>
+		</div>
+    </div>
+	
   </template>
 
   <script>
