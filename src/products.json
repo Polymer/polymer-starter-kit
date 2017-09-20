@@ -5,8 +5,8 @@
         "reference":"ReferenceOne",
         "offerMinimumTerm":5,
         "offerMaximumTerm":10,
-        "offerMinimumValue":5,
-        "offerMaximumValue":10,
+        "offerMinimumValue":600,
+        "offerMaximumValue":1000,
         "offerMinimumDownPayment":5,
         "offerMaximumDownPayment":10
 
@@ -17,8 +17,8 @@
         "reference":"ReferenceTwo",
         "offerMinimumTerm":6,
         "offerMaximumTerm":15,
-        "offerMinimumValue":7,
-        "offerMaximumValue":10,
+        "offerMinimumValue":700,
+        "offerMaximumValue":1000,
         "offerMinimumDownPayment":4,
         "offerMaximumDownPayment":10
 
@@ -29,8 +29,8 @@
         "reference":"ReferenceThree",
         "offerMinimumTerm":3,
         "offerMaximumTerm":8,
-        "offerMinimumValue":3,
-        "offerMaximumValue":5,
+        "offerMinimumValue":500,
+        "offerMaximumValue":1000,
         "offerMinimumDownPayment":5,
         "offerMaximumDownPayment":10
 
