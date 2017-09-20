@@ -1,0 +1,9 @@
+{
+    "responseStatus":"Success",
+    "responseCode":"200",
+    "responseMessage":"Successfully loged-in",
+    "responseData":{
+        "userId":"Jack123",
+        "profileId":"1234"
+        }
+}

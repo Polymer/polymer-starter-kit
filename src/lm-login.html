@@ -1,4 +1,4 @@
-<!--
+
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -9,24 +9,71 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
 
 <dom-module id="lm-login">
+  
   <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
-
-        padding: 10px;
+    <style>
+      .button-class{
+        background-color:#DEE2E6;
+        width: 5%;
+            height: 45px;
+            display: block;
+            margin: 0 auto -20px;
+            padding: 0 px;
+            border: none;
+            border-bottom: 0 px solid;
+            text-align: center;
       }
+      .input_field{
+            width: 35%;
+            height: 50px;
+            display: block;
+            margin: 0 auto 15px;
+            padding: 0 15px;
+            border: none;
+            border-bottom: 20px solid #ebebeb;
+            }
+            .input_reg{
+              float: left;
+              margin-left: 32%;
+              font-size: 23px
+            
+            }
+            .header
+            {
+              width: 100%;
+              text-align: center;
+              clear: left;  
+            }
+     
     </style>
 
-    <div class="card">
-      <div class="circle">3</div>
-      <h1>View Three</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
-    </div>
+      <div class="content-container">
+          <div id="Reg">
+            <form name="form">
+              <h2 class="header">Login to Lightning Mortgage</h2>
+  
+              <paper-input class="input_field" name="username" id="username" value="{{loginDetails.useremail::input}}" type="text" placeholder="Enter Username Here !!" maxlength="6" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
+             <paper-input class="input_field" name="password" id="password" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
+             <paper-button raised class="button-class" value="Login">Login</paper-button>
+              <div><a href="/" class="input_reg">Register</a></div>
+            </form>
+          </div>
+        </div>
+     
+    <iron-ajax
+               auto
+               url="data/login.json"
+               handle-as="json"
+               last-response="{{ajaxResponse}}"
+               >
+    </iron-ajax>
+    <!-- <span>{{ajaxResponse.responseMessage}}</span> -->
   </template>
 
   <script>
@@ -36,4 +83,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     window.customElements.define(Login.is, Login);
   </script>
-</dom-module>
+</dom-module> 
+
+
