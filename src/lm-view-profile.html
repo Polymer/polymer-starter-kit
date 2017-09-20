@@ -29,8 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
         padding: 10px;
       }
-        paper-dropdown-menu {width:200px; }
-        paper-dropdown-menu {height: 200px; display: block; }
+        paper-dropdown-menu {width:100px;display: block;}
         #container {display: flex;}
         paper-button{ padding: 10px; border-radius: 5px; float: right;}
         paper-button.green:hover { background-color: var(--paper-green-400);}
@@ -39,6 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .style-scope.lm-view-profile {height: auto;}
         .next_button {overflow: auto;}
         .blocks {display: inline-block; width: 150px;}
+        /* iron-autogrow-textarea{width: 148px;height: 100px;} */
     </style>
 	
     <iron-ajax
@@ -86,26 +86,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="blocks">  <paper-input disabled label = "Door Number">
                 <iron-icon icon = "account-circle"  prefix></iron-icon>
             </paper-input></div>
-            <div class="blocks">  <label>Post code:</label></div>
-            <div class="blocks">
-                <paper-input disabled label="Post Code" type="number">
-              </paper-input>
-            </div>
-      </div>
-
-      <div>
-            <div class="blocks"><label>Address Line 1:</label></div>
-            <div class="blocks"><iron-autogrow-textarea disabled value="{{ajaxResponse.responseData.address}}"></iron-autogrow-textarea></div>
-            <div class="blocks"><label>Address Line 2:</label></div>
-            <div class="blocks"><iron-autogrow-textarea disabled value="{{ajaxResponse.responseData.address}}"></iron-autogrow-textarea></div>
-      </div>      
-
-      <div>  
             <div class="blocks"> <label>City:</label></div>
             <div class="blocks"> 
               	<paper-input disabled label = "City">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                  </paper-input>
+             </div>
+      </div>
+
+      <div>
+            <div class="blocks"><label>Address Line 1:</label></div>
+            <div class="blocks">
+              <iron-autogrow-textarea disabled value="{{ajaxResponse.responseData.address}}">
+              </iron-autogrow-textarea>
+            </div>
+            <div>
+            <div class="blocks"><label>Address Line 2:</label></div>
+            <div class="blocks">
+              <iron-autogrow-textarea disabled value="{{ajaxResponse.responseData.address}}">
+              </iron-autogrow-textarea>
+            </div></div>
+      </div>      
+
+      <div>  
+            
+             <div class="blocks">  <label>Post code:</label></div>
+             <div class="blocks">
+                 <paper-input disabled label="Post Code" type="number">
+               </paper-input>
              </div>
              <div class="blocks"><label>Home Number:</label></div>
               <div class="blocks"> <paper-input disabled label="" type="number">
