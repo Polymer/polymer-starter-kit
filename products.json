@@ -41,17 +41,17 @@
     "productName":"JumboMortgage",
     "productId":"10001",
     "productDesc":"JM10001",
-    "minTenure":2,
-    "maxTenure":20,
-    "minAmount":100000,
-    "maxAmount":100000000,
-    "minDownpayment":5000,
-    "maxDownpayment":500004,
+    "minTenure":"2",
+    "maxTenure":"20",
+    "minAmount":"100000",
+    "maxAmount":"100000000",
+    "minDownpayment":"5000",
+    "maxDownpayment":"500004",
     "terms":[
-                "Terms and conditions part1",
-                "Terms and conditions part2",
-                "Terms and conditions part3",
-                "Terms and conditions part4"
+                {"Terms and conditions part1"},
+                {"Terms and conditions part2"},
+                {"Terms and conditions part3"},
+                {"Terms and conditions part4"}
                     ]
 }
 ]
