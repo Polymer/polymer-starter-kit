@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel = "import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel = "import" href = "../bower_components/paper-input/paper-input.html">
 <link rel = "import" href = "../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
+<link rel="import" href=" ../bower_components/paper-pager.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
 <dom-module id="lm-view-profile">
@@ -37,8 +38,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         paper-button.green[active] {background-color: var(--paper-red-500);}
         .style-scope.lm-view-profile {height: auto;}
         .next_button {overflow: auto;}
-        .blocks {display: inline-block; width: 150px;}
-        /* iron-autogrow-textarea{width: 148px;height: 100px;} */
+        .row {display: flex;}
+        .col {flex: 1;padding: 1em;}
     </style>
 	
     <iron-ajax
@@ -48,115 +49,127 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                last-response='{{ajaxResponse}}'
                >
     </iron-ajax>
-    <span>{{ajaxResponse.responseMessage}}</span>
-	
-	<div class="card User_details">
-      <h1>{{User.name}} Profile details</h1>
-      <div class="data">
-        <div>
-          <div class="blocks"><label>Salutation: </label></div>
-          <div class="blocks"> 
-            <paper-dropdown-menu disabled label="{{ajaxResponse.salutation}}">
-                <paper-listbox  slot = "dropdown-content" >
+    <!-- <span>{{ajaxResponse.responseMessage}}</span> -->
+    <!-- <h1>Profile Details</h1> -->
+    
+    <div class="card User_details">          
+        <h3>Personal Details</h3><hr>        
+        <div class="row"> 
+          <div class="col"> 
+              <div class="blocks"> 
+                <paper-dropdown-menu disabled$="{{!edit}}" label="Salutation" value="{{ajaxResponse.salutation}}">
+                  <paper-listbox  slot = "dropdown-content" >
                     <paper-item>Mr.</paper-item>
                     <paper-item>Mrs.</paper-item>
-                </paper-listbox>
-            </paper-dropdown-menu>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+              </div>
           </div>
-            
-            <div class="blocks">  <label>First Name:</label></div>
-            <div class="blocks"> 
-              <paper-input auto-validate allowed-pattern="[a-zA-Z]" disabled label = "" value="{{ajaxResponse.firstName}}">
-                <iron-icon icon = "account-circle"  prefix></iron-icon>
-              </paper-input>
-            </div>
-            <div class="blocks">  <label>Last Name:</label></div>
-              <div class="blocks">  <paper-input auto-validate allowed-pattern="[a-zA-Z]" required disabled value= "{{ajaxResponse.lastName}}">
-                  <iron-icon icon = "account-circle"  prefix></iron-icon>
-              </paper-input>
-          </div
         </div>
-
-      <div>
-        <div class="blocks"><label>BSN(National Identifier):</label></div>
-            <div class="blocks"><paper-input disabled  value="{{ajaxResponse.bsn}}">
-              <iron-icon icon = "account-circle" value="" prefix></iron-icon>
-            </paper-input></div>
-            <div class="blocks">  <label>Door Number:</label></div>
-            <div class="blocks">  <paper-input disabled value="{{ajaxResponse.address.doorNumber}}">
-                <iron-icon icon = "account-circle"  prefix></iron-icon>
-            </paper-input></div>
-            <div class="blocks"> <label>City:</label></div>
-            <div class="blocks"> 
-              	<paper-input disabled value="{{ajaxResponse.address.city}}">
+          <div class="row"> 
+              <div class="col"> 
+                <paper-input auto-validate allowed-pattern="[a-zA-Z]" disabled$="{{!edit}}" 
+                  label = "first name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
-                 </paper-input>
-             </div>
-      </div>
-
-      <div>
-            <div class="blocks"><label>Address Line 1:</label></div>
-            <div class="blocks">
-              <iron-autogrow-textarea disabled value="{{ajaxResponse.address.addressLine1}}">{{ajaxResponse.address.addressLine1}}
-              </iron-autogrow-textarea>
-            </div>
-            <div>
-            <div class="blocks"><label>Address Line 2:</label></div>
-            <div class="blocks">
-              <iron-autogrow-textarea disabled value="{{ajaxResponse.address.addressLine2}}">
-              </iron-autogrow-textarea>
-            </div></div>
-      </div>      
-
-      <div>  
+                </paper-input>
+                <paper-dropdown-menu disabled$="{{!edit}}" label="Marital Status" value="{{ajaxResponse.maritalStatus}}">
+                    <paper-listbox  slot = "dropdown-content" >
+                      <paper-item value=""></paper-item>
+                      <paper-item>Single</paper-item>
+                      <paper-item>Married</paper-item>
+                      <paper-item>Divorced</paper-item>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+                  <paper-input readonly disabled$="{{!edit}}" label="BSN(National Identifier)" value="{{ajaxResponse.bsn}}">
+                  <iron-icon icon = "account-circle" value="" prefix></iron-icon>
+                </paper-input> 
+               <!-- <paper-input-container always-float-label auto-validate attr-for-value="value">
+                    <label slot="label">BSN(National Identifier)</label>
+                    <ssn-input class="paper-input-input" slot="input"></ssn-input>
+                    <paper-input-error slot="add-on">SSN invalid!</paper-input-error>
+                  </paper-input-container>-->
+              </div>
             
-             <div class="blocks">  <label>Post code:</label></div>
-             <div class="blocks">
-                 <paper-input disabled type="number" value="{{ajaxResponse.address.postCode}}">
-               </paper-input>
-             </div>
-             <div class="blocks"><label>Home Number:</label></div>
-              <div class="blocks"> <paper-input disabled value="{{ajaxResponse.address.postCode}}" type="number">
-                <div slot="prefix">0</div>
-            </paper-input></div>
-            <div class="blocks"> <label>Mobile Number:</label></div>
-            <div class="blocks">
-              <paper-input disabled label="{{ajaxResponse.mobileNumber}}" type="number">
-                <div slot="prefix">+91</div>
-            </paper-input></div>
-      </div>
+              <div class="col">  
+                <paper-input auto-validate allowed-pattern="[a-zA-Z]" 
+                  label="Last Name" required disabled$="{{!edit}}" value= "{{ajaxResponse.lastName}}">
+                  <iron-icon icon = "account-circle"  prefix></iron-icon>
+                </paper-input>
+                
+                <paper-dropdown-menu disabled$="{{!edit}}" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
+                    <paper-listbox  slot = "dropdown-content">
+                      <paper-item>0</paper-item>
+                      <paper-item>1</paper-item>
+                      <paper-item>2</paper-item>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+                  
+              </div>
+          </div>
 
-      <div>
-            <div class="blocks"><label>Email Address:</label></div>
-            <div class="blocks"> 
-                <paper-input disabled label="{{ajaxResponse.emailAddress}}">
-                  <iron-icon icon="mail" slot="prefix"></iron-icon>
-                   <div slot="suffix"></div>
-               </paper-input>
+          <h3>Address Details</h3><hr>
+          <div class="row">
+              <div class="col">  
+                <paper-input label="Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}">
+                  <iron-icon icon = "account-circle"  prefix></iron-icon>
+                </paper-input>
+
+                <paper-input disabled$="{{!edit}}" label="City" value="{{ajaxResponse.address.city}}">
+                    <iron-icon icon = "account-circle"  prefix></iron-icon>
+                   </paper-input>
+                <paper-input disabled$="{{!edit}}" label="locality" value="{{ajaxResponse.address.addressLine2}}">
+                  <iron-icon icon = "account-circle"  prefix></iron-icon>
+                </paper-input>
+                   
+              </div>
+                <div class="col">
+                    <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}">
+                    </paper-input>
+                    <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.addressLine1}}">
+                      </paper-input>
+                </div>
+          </div>
+          <h3>Contact Details</h3><hr>
+            <div class="row">  
+                <div class="col"> 
+                    <paper-input disabled$="{{!edit}}" label="Home Number" value="{{ajaxResponse.address.postCode}}" type="number">
+                      <div slot="prefix"></div>
+                    </paper-input>
+                    <paper-input disabled$="{{!edit}}" label="Email Address" value="{{ajaxResponse.emailAddress}}">
+                        <iron-icon icon="mail" slot="prefix"></iron-icon>
+                         <div slot="suffix"></div>
+                       </paper-input>
+                  </div>
+                
+                <div class="col">
+                  <paper-input disabled$="{{!edit}}" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" type="number">
+                  <div slot="prefix"></div>
+                </paper-input>
+              </div>
             </div>
-            <div class="blocks"> <label>Marital Status:</label></div>
-            <div class="blocks"> <paper-dropdown-menu disabled label="{{ajaxResponse.maritalStatus}}">
-                <paper-listbox  slot = "dropdown-content" >
-                    <paper-item value=""></paper-item>
-                    <paper-item>Single</paper-item>
-                    <paper-item>Married</paper-item>
-                    <paper-item>Divorced</paper-item>
-                </paper-listbox>
-            </paper-dropdown-menu></div>
-            <div class="blocks">  <label>No of Dependents:</label></div>
-            <div class="blocks"> 
-              <paper-dropdown-menu disabled label="{{ajaxResponse.noOfDependents}}">
-                <paper-listbox  slot = "dropdown-content">
-                    <paper-item>0</paper-item>
-                    <paper-item>1</paper-item>
-                    <paper-item>2</paper-item>
-                </paper-listbox>
-              </paper-dropdown-menu>
-            </div>
-      </div>
-      <div class="next_button"><paper-button toggles raised class = "green">Next</paper-button></div>
+
+          <h3>Finance Details</h3><hr>
+          <div class="row">
+              <div class="col">
+                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income(confirmed)" value="{{ajaxResponse.mobileNumber}}" type="number">
+                  </paper-input>
+                  <paper-input disabled$="{{!edit}}" label="Monthly Family Expense" value="{{ajaxResponse.mobileNumber}}" type="number">
+                    </paper-input>
+              </div>
+              <div class="col">
+                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income (additional)" value="{{ajaxResponse.mobileNumber}}" type="number">
+                    </paper-input>
+                  
+                </div>
+          </div>
+        <div class="next_button"><paper-button toggles raised on-click="eventClick" class = "green">Edit Profile</paper-button>
+        <paper-button hidden$="{{hide}}" toggles raised class = "green">Validate</paper-button></div>
+        <div class="next_button">
+          <paper-button hidden$="{{!hide}}" toggles raised class = "green">Save</paper-button>
+          <paper-button hidden$="{{!hide}}" toggles raised class = "button-class">Cancel</paper-button>
+        </div>
     </div>
-	</div>
+    
   </template>
 
   <script>
@@ -222,10 +235,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           {
             type:String,
             value:"1"
-          },getProfileUrl: {
+          },
+          getProfileUrl: {
             type: String,
             computed: 'getUrl()'
-        }
+          },
+          edit :{
+            type:Boolean,
+            value: false
+          },
+          hide:{
+            type:Boolean,
+            value:false
+          }
 
 
 
@@ -234,7 +256,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         }
       }
-      
+      eventClick() {
+                this.edit = true;
+                this.hide=true;
+            }
+
       getUrl() {
         var url = window.location.pathname;
         var splitUrl=url.split("/");
