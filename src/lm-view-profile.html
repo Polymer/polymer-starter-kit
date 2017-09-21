@@ -19,8 +19,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel = "import" href = "../bower_components/paper-styles/paper-styles.html">
 <link rel = "import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel = "import" href = "../bower_components/paper-input/paper-input.html">
+<link rel = "import" href = "../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 <link rel = "import" href = "../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
-<link rel="import" href=" ../bower_components/paper-pager.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
 <dom-module id="lm-view-profile">
@@ -40,13 +40,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .next_button {overflow: auto;}
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
+        .User_details{margin:47px auto;width:980px;}
     </style>
 	
     <iron-ajax
                auto
                url="{{getProfileUrl}}"
                handle-as="json"
-               last-response='{{ajaxResponse}}'
+               on-response = "handleResponse"
                >
     </iron-ajax>
     <iron-ajax
@@ -57,8 +58,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               content-type="application/json">
   </iron-ajax>
     <!-- <span>{{ajaxResponse.responseMessage}}</span> -->
-    <!-- <h1>Profile Details</h1> -->
+    <!-- <h1>Profile Details</h1> 
+               last-response='{{ajaxResponse}}'-->
     
+    <iron-ajax
+      id="saveProfile"
+      url="http://10.138.65.226:8080/lightningmortgage/customer/editCustomer"
+      handle-as="json"
+      method = "POST"
+      body='{{ajaxResponse}}'
+      content-type = "application/json"
+      >
+    </iron-ajax>
+    
+
+
     <div class="card User_details">          
         <h3>Personal Details</h3><hr>        
         <div class="row"> 
@@ -140,7 +154,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h3>Contact Details</h3><hr>
             <div class="row">  
                 <div class="col"> 
-                    <paper-input disabled$="{{!edit}}" label="Home Number" value="{{ajaxResponse.address.postCode}}" type="number">
+                    <paper-input disabled$="{{!edit}}" label="Home Number" value="{{ajaxResponse.homeNumber}}" type="number">
                       <div slot="prefix"></div>
                     </paper-input>
                     <paper-input disabled$="{{!edit}}" label="Email Address" value="{{ajaxResponse.emailAddress}}">
@@ -159,22 +173,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h3>Finance Details</h3><hr>
           <div class="row">
               <div class="col">
-                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income(confirmed)" value="{{ajaxResponse.mobileNumber}}" type="number">
+                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income(confirmed)" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
                   </paper-input>
-                  <paper-input disabled$="{{!edit}}" label="Monthly Family Expense" value="{{ajaxResponse.mobileNumber}}" type="number">
+                  <paper-input disabled$="{{!edit}}" label="Monthly Family Expense" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
                     </paper-input>
               </div>
               <div class="col">
-                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income (additional)" value="{{ajaxResponse.mobileNumber}}" type="number">
+                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income (additional)" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
                     </paper-input>
                   
                 </div>
           </div>
+          <paper-alert-dialog id="lmDialog" confirm-button="OK">
+            For changing KYC information document need to be submitted to the nearest Branch.
+          </paper-alert-dialog>
         <div class="next_button"><paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "green">Edit Profile</paper-button>
         <paper-button hidden$="{{hide}}" toggles raised class = "green" on-tap="knockOutCheck">Validate</paper-button></div>
         <div class="next_button">
-          <paper-button hidden$="{{!hide}}" toggles raised class = "green">Save</paper-button>
-          <paper-button hidden$="{{!hide}}" toggles raised class = "button-class">Cancel</paper-button>
+          <paper-button hidden$="{{!hide}}" toggles raised class = "green" on-tap="updateProfile">Save</paper-button>
+          <paper-button hidden$="{{!hide}}" toggles raised class = "button-class" on-tap="cancel">Cancel</paper-button>
         </div>
     </div>
     
@@ -188,6 +205,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           prop1: {
             type: String,
             value: "bar"
+          },
+          id:{
+            type:String
+
           },
           lastName: {
             type: String,
@@ -244,6 +265,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type:String,
             value:"1"
           },
+          getProfileSave:{
+            type:String,
+            computed : 'saveProfile(id, emailAddress)'
+          },
           getProfileUrl: {
             type: String,
             computed: 'getUrl()'
@@ -251,6 +276,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           getKnockOutUrl: {
             type: String,
             computed: 'getKnockUrl()'
+          },
+          ajaxResponse : {
+            type : Object,
+            value : {}
+          },
+          tempResponse : {
+            type : Object,
+            value : {}
           },
           edit :{
             type:Boolean,
@@ -263,10 +296,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
       eventClick() {
-                this.edit = true;
-                this.hide=true;
-            }
+        this.edit = true;
+        this.hide=true;
+        this.$.lmDialog.open();
+      }
+      updateProfile(){
+        this.$.saveProfile.generateRequest();
+      }
+      saveProfile(){
+        return this.ajaxResponse;
 
+      }
+      handleResponse(data) {
+          this.ajaxResponse = data.detail.response ;
+          this.tempResponse  = JSON.parse(JSON.stringify(data.detail.response));
+         // this.tempResponse = data.detail.response;
+        
+      }
+      cancel() {
+        this.ajaxResponse = this.tempResponse;
+        this.edit=false;
+        this.hide = false;
+      }
+        
+
+
+        
+        //console.log(JSON.stringify(this.saveProfile));
+
+          
       getUrl() {
         var url = window.location.pathname;
         var splitUrl=url.split("/");
