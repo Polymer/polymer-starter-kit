@@ -28,7 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: inline-block;
         width: 10px;
       }
-       .flex-container{
+      .flex-container{
         @apply(--layout-horizontal);
         @apply(--layout-wrap);
         justify-content: center;
@@ -117,7 +117,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
       }
       _convertToLocale(val){
-             return val.toLocaleString();
+        if(val){
+          return val.toLocaleString();
+        }
+             
            
       }
     }
