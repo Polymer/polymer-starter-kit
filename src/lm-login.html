@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="lm-login">
   
-  <template>
+  <template id="login" is="dom-bind">
     <style>
       .button-class{
         background-color:#DEE2E6;
@@ -58,18 +58,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <form name="form">
               <h2 class="header">Login to Lightning Mortgage</h2>
   
-              <paper-input class="input_field" name="username" id="username" value="{{loginDetails.useremail::input}}" type="text" placeholder="Enter Username Here !!" maxlength="6" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
-             <paper-input class="input_field" name="password" id="password" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
-             <paper-button raised class="button-class" value="Login">Login</paper-button>
+              <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="Enter Username Here !!" maxlength="6" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
+             <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
+             <paper-button raised class="button-class" on-tap="login" value="Login">Login</paper-button>
+             <span hidden="{{hideMessage}}">{{Errormessage}}</span>
               <div><a href="/" class="input_reg">Register</a></div>
             </form>
           </div>
         </div>
      
     <iron-ajax
-               auto
-               url="data/login.json"
+              id="ironAjaxElement" 
+               url="http://10.138.65.226:8080/lightningmortgage/customer/userLogin"
                handle-as="json"
+               body='{{postBody}}'
+               method="post"
+               on-response="handleResponse"
+               content-type="application/json"
                last-response="{{ajaxResponse}}"
                >
     </iron-ajax>
@@ -79,6 +84,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     class Login extends Polymer.Element {
       static get is() { return 'lm-login'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: "bar"
+          },
+          postBody: {
+            type: String,
+            computed: 'getPostBody(userId, password)'
+        }
+        }
+      }
+      
+      login() {
+        let userDetails = this.postBody;
+        if(userDetails && userDetails.userId && userDetails.password) {
+          this.$.ironAjaxElement.generateRequest();
+        }
+      }
+      handleResponse(data) {
+        var result= data.detail.response 
+        if(result && result.status ==="200") {
+        window.history.pushState({}, null, '/view-profile/'+result.userId);
+        window.dispatchEvent(new CustomEvent('location-changed'));
+        }
+       
+      }
+      getPostBody (userId, password) {
+        return {
+          userId: userId,
+          password: password
+        };
+      }
     }
 
     window.customElements.define(Login.is, Login);
