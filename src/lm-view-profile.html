@@ -49,6 +49,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                last-response='{{ajaxResponse}}'
                >
     </iron-ajax>
+    <iron-ajax
+              id="knockOutAjax"
+              url="{{getKnockOutUrl}}"
+              on-response="knockOutResponse"
+              handle-as="json"
+              content-type="application/json">
+  </iron-ajax>
     <!-- <span>{{ajaxResponse.responseMessage}}</span> -->
     <!-- <h1>Profile Details</h1> -->
     
@@ -164,7 +171,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
           </div>
         <div class="next_button"><paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "green">Edit Profile</paper-button>
-        <paper-button hidden$="{{hide}}" toggles raised class = "green">Validate</paper-button></div>
+        <paper-button hidden$="{{hide}}" toggles raised class = "green" on-tap="knockOutCheck">Validate</paper-button></div>
         <div class="next_button">
           <paper-button hidden$="{{!hide}}" toggles raised class = "green">Save</paper-button>
           <paper-button hidden$="{{!hide}}" toggles raised class = "button-class">Cancel</paper-button>
@@ -241,6 +248,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             computed: 'getUrl()'
           },
+          getKnockOutUrl: {
+            type: String,
+            computed: 'getKnockUrl()'
+          },
           edit :{
             type:Boolean,
             value: false
@@ -260,8 +271,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var url = window.location.pathname;
         var splitUrl=url.split("/");
         return "http://10.138.65.226:8080/lightningmortgage/customer/getCustomer/"+splitUrl[2];
+        
       }
-      
+      getKnockUrl() {
+        var url = window.location.pathname;
+        var splitUrl=url.split("/");
+        return "http://10.138.64.218:8080/lightningmortgage/knockoutCheck/"+splitUrl[2];
+        
+      }
+      knockOutCheck() {
+        this.$.knockOutAjax.generateRequest();
+      }
+      knockOutResponse(data) {
+        var result= data.detail.response 
+        if(result && result.responseCode ==="200") {
+        window.history.pushState({}, null, '/property-details/'+result.responseData.userId);
+        window.dispatchEvent(new CustomEvent('location-changed'));
+        }
+      }
       json(obj) {
         return JSON.stringify(obj, null, 2);
       }
