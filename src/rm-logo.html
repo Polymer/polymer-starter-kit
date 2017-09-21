@@ -1,0 +1,65 @@
+<dom-module id="rm-logo">
+  <template>
+    <style>
+  #logo {
+    float: left;
+  }
+  .logo {
+    float: left;
+    padding: 0 10px 0 0;
+    border-right: solid 2px #f60; /*#ff6600;*/
+  }
+  #logo img {
+    max-height: 40px;
+    float: left;
+  }
+  .tagline {
+    float: left;
+    vertical-align: bottom;
+    padding: 12px 0 0 10px;
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 1.2;
+    font-weight: bold;
+    color: #301067;
+  }
+
+
+</style>
+    <div id="logo">
+      <div class="logo"><img src="[[logopath]]" /></div>
+      <div class="tagline">[[tagline]] [[tagline1]]</div>
+    </div>
+  </template>
+  <script>
+  class rmLogo extends Polymer.Element {
+    constructor() {
+      super();
+    }
+    static get is(){
+      return 'rm-logo';
+    }
+    static get properties () {
+      return {
+        logopath:  {
+          type: String,
+          value: '../images/ThemeOrange.svg'
+        },
+        title: {
+          type: String,
+          value: 'Rocket Mortgage'
+        },
+        tagline: {
+          type: String,
+          value: 'Lightining'
+        },
+        tagline1: {
+          type: String,
+          value: 'Mortgage'
+        }
+      }
+    }
+  }
+  window.customElements.define(rmLogo.is, rmLogo);
+</script>
+</dom-module>
