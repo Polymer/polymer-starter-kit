@@ -21,6 +21,8 @@
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.0.0",
     "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
     "paper-item": "PolymerElements/paper-item#^2.0.0",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.1",
+    "paper-radio-button": "PolymerElements/paper-radio-button#^2.0.0",
     "paper-spinner": "^2.0.0"
   },
   "resolutions": {
