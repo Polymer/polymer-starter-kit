@@ -38,7 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: white;
         border-radius: 5px;
         overflow: auto;
-        padding: 2em;
+        padding:1em 2em;
          display: block;
       }
       paper-card.white {
@@ -50,6 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           width:400px;
           cursor: pointer;
           margin: 20px;
+          padding-bottom : 25px;
         }
         .flex-container{
           display: flex;
@@ -70,26 +71,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        .bold-item{
             font-weight: bold;
        }
+       paper-card.selected {
+        --paper-card-header-text:{
+          color : #f60;
+        }
+        --paper-card-content:{
+          color : #f60;
+        }
+       }
+       
+       label.center{
+        text-align: center;
+        margin-left: 23px;
+        font-weight: bold;
+       }
+       .center{
+         text-align:center;
+      }
+
       
     </style>
   
     <div class="flex-container">
       <template is="dom-repeat" items="[[products]]">
-        <paper-card  heading="[[item.productName]]" on-click="_callProductDetails"  class="white flex-item">
-          <label>[[item.productDesc]]</label>
+        <paper-card  heading="[[item.productName]]" on-click="_getProductDetails"  class="white flex-item">
+           <div class="card-content">[[item.productDesc]]</div>
         </paper-card>
       </template>
     </div>
 
     <div class="details-container"> 
-      <header>
-        <h2>[[productItem.productName]]</h2>      
-      </header>
+
+    
+        <label class='center'>[[productItem.productName]]</label>      
 
        <div class="card">
-               <lm-slider title='Amount' prefix='$' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>      
-               <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Years'></lm-slider>      
-               <lm-slider title='Down Payment' prefix='$' minval='{{offerdownpayment}}' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}'></lm-slider>
+
+
+        <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>      
+        <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>      
+        <lm-slider title='Down Payment' prefix='&euro;' minval='{{offerdownpayment}}' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></lm-slider>
+
         </div>
         <div class="card flex-container-bleed"> 
            <div class="flex-item-4 bold-item">
@@ -99,14 +121,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div>Effective APR% : 25</div>                  
             </div>
         </div>
+
         <term-conditions terms="[[termsArray]]"></term-conditions>
         <div class="center">
+
           <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
              
            </div>
           <template is="dom-if" if="[[datasubmitted]]" restamp>
               <label class="center" >Data submitted successfully!</label>
           </template> 
+
     </div>
     
      <iron-ajax
@@ -127,11 +152,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      content-type="application/json">
 </iron-ajax>
 
+
   </template>
   
 
   <script>
-    class ProductPreference extends Polymer.Element {
+    class ProductPreference extends Polymer.Element 
+    {
       constructor()
       {
         super();
@@ -172,8 +199,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             observer:"_termChanged"
           },
           offerdownpayment:{
-            type:Number,
-            observer:"_paymentChanged"
+            type:Number
           },
           epi:{
             type:String,
@@ -185,19 +211,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value:"2.4"
 
           },
+
           postBody: {
               type: Object,
               value: {
+
               }
           },
           datasubmitted: {
               type: Boolean,
               value: false
+
           },
           termsArray : Array
 
+          }
+
+
         }
-      }
+      
 
       updateEPI_APR(data,term,offer)
       {
@@ -211,6 +243,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
         }
+      }
         // console.log("updating");
         // this.epi = this.offeramount+this.offerterm+this.offerdownpayment;
         // console.log("EPI is ", this.epi);
@@ -219,7 +252,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         
 
+
+      _getProductDetails(event)
+      {
+        let selectedIndex = event.model.__data.index;
+        // this.productItem = event.model.item;
+        // this.offeramount=this.productItem.maxAmount;
+        // this.offerterm=this.productItem.maxTenure;
+        // this.offerdownpayment=this.productItem.maxDownpayment;
+        var classList = this.shadowRoot.querySelectorAll('paper-card');
+           classList.forEach((e)=>{
+               e.classList.remove('selected');
+           });
+          classList[selectedIndex].classList.add('selected');
       }
+
+     
       _amountChanged(newValue,oldValue)
       {
         console.log(newValue+"amount"+oldValue);
@@ -241,25 +289,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       
         }
       }
-      _paymentChanged(newValue,oldValue)
-      {
-        console.log(newValue+"amount"+oldValue);
-        if(oldValue!==undefined)
-        {
-        //this.updateEPI_APR();
-        }
-        
-      }
-      _callProductDetails(event)
-      {
-        console.log("product will be called"+event.model.item);
-        this.productItem = event.model.item;
-        this.offeramount=this.productItem.maxAmount;
-        this.offerterm=this.productItem.maxTenure;
-        this.offerdownpayment=this.productItem.maxDownpayment;
+      
 
-
-      }
       _productChanged(newValue,oldValue)
       {
         console.log("value changed "+newValue);
@@ -270,6 +301,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(oldValue+"new"+newValue);
       }
       
+
       // _submitInfo()
       // {
       //  let tempParam={};
@@ -278,7 +310,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       //   console.log(this.tempParam);
       // }
        //<!--code for submit data-->
-       _submitInfo() {
+       _submitInfo() 
+       {
           console.log("clicked submit");
           this.datasubmitted = true;
           this.postBody.term=this.offerterm;
@@ -291,9 +324,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.ironAjaxSubmit.generateRequest();
       }
       //<!--code for submit data-->
-      sendResponse(data) {
+      sendResponse(data)
+       {
           console.log('function called successfully')
-          if (result && result.status === "200") {
+          if (result && result.status === "200")
+           {
               this.datasubmitted = true
               console.log('Data sent successfully')
           }
@@ -360,7 +395,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         //this.productValues.minAmount = tempMin;
         //this.productValues.maxAmount = tempMax;
 
-
       }
       //getAPI
       _handleResponseForProducts(data)
@@ -374,7 +408,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log("hi"+JSON.stringify(this.products[0].productDetails));
           this.termValues = this.setTermMinMaxStep(this.products[0].productDetails);
 
-       this.offerterm=this.termValues.maxTerm;
+        this.offerterm=this.termValues.maxTerm;
         this.amountValues= this.setAmountMinMaxStep(this.products[0].productDetails,this.offerterm);
         this.offeramount=this.amountValues.maxAmount;
         this.termsArray = this.products[0].terms;
@@ -382,9 +416,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
         
         }
+
+
+      }
+      
       }
 
-    }
+    
+
+    
 
     window.customElements.define(ProductPreference.is, ProductPreference);
   </script>
