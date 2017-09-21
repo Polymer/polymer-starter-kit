@@ -23,7 +23,11 @@
     "paper-item": "PolymerElements/paper-item#^2.0.0",
     "iron-icon": "1 - 2",
     "iron-icons": "^2.0.1",
-    "iron-autogrow-textarea":"PolymerElements/iron-autogrow-textarea#^2.0.0"
+    "iron-autogrow-textarea":"PolymerElements/iron-autogrow-textarea#^2.0.0",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.1",
+    "paper-radio-button": "PolymerElements/paper-radio-button#^2.0.0",
+    "paper-spinner": "^2.0.0"
+
   },
   "resolutions": {
     "polymer": "^2.0.0"
