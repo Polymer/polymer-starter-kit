@@ -69,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="row"> 
               <div class="col"> 
                 <paper-input auto-validate allowed-pattern="[a-zA-Z]" disabled$="{{!edit}}" 
-                  label = "first name" value="{{ajaxResponse.firstName}}">
+                  label = "First name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
                 <paper-dropdown-menu disabled$="{{!edit}}" label="Marital Status" value="{{ajaxResponse.maritalStatus}}">
@@ -80,7 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <paper-item>Divorced</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
-                  <paper-input readonly disabled$="{{!edit}}" label="BSN(National Identifier)" value="{{ajaxResponse.bsn}}">
+                  <paper-input readonly disabled label="BSN(National Identifier)" value="{{ajaxResponse.bsn}}">
                   <iron-icon icon = "account-circle" value="" prefix></iron-icon>
                 </paper-input> 
                <!-- <paper-input-container always-float-label auto-validate attr-for-value="value">
@@ -117,7 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-input disabled$="{{!edit}}" label="City" value="{{ajaxResponse.address.city}}">
                     <iron-icon icon = "account-circle"  prefix></iron-icon>
                    </paper-input>
-                <paper-input disabled$="{{!edit}}" label="locality" value="{{ajaxResponse.address.addressLine2}}">
+                <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
                    
@@ -125,7 +125,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="col">
                     <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}">
                     </paper-input>
-                    <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.addressLine1}}">
+                    <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine1}}">
+                        <iron-icon icon = "account-circle"  prefix></iron-icon>
                       </paper-input>
                 </div>
           </div>
@@ -162,7 +163,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   
                 </div>
           </div>
-        <div class="next_button"><paper-button toggles raised on-click="eventClick" class = "green">Edit Profile</paper-button>
+        <div class="next_button"><paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "green">Edit Profile</paper-button>
         <paper-button hidden$="{{hide}}" toggles raised class = "green">Validate</paper-button></div>
         <div class="next_button">
           <paper-button hidden$="{{!hide}}" toggles raised class = "green">Save</paper-button>
@@ -248,12 +249,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type:Boolean,
             value:false
           }
-
-
-
-
-
-
         }
       }
       eventClick() {
