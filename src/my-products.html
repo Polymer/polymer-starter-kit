@@ -93,40 +93,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
   
     <div class="flex-container">
-      <template is="dom-repeat" items="[[products]]" >
-        <paper-card heading="[[item.name]]" on-click="_getProductDetails"  class="white flex-item">
-        <div class="card-content">[[item.reference]]</div>         
+      <template is="dom-repeat" items="[[products]]">
+        <paper-card  heading="[[item.productName]]" on-click="_getProductDetails"  class="white flex-item">
+           <div class="card-content">[[item.productDesc]]</div>
         </paper-card>
       </template>
     </div>
 
     <div class="details-container"> 
+
     
-        <label class='center'>[[productName]]</label>      
+        <label class='center'>[[productItem.productName]]</label>      
 
        <div class="card">
-               <lm-slider title='Amount' prefix='&euro;' minval='60000' selected='65000' maxval='100000'></lm-slider>      
-               <lm-slider title='Tenure' minval='0' maxval='9' selected='0' interval='5' suffix='Yrs'></lm-slider>      
-               <lm-slider title='Down Payment' prefix='&euro;' selected='65000' isdisabled='true'></></lm-slider>
+                <lm-slider title='Tenure' minval='{{productItem.minTenure}}' maxval='{{productItem.maxTenure}}' selected='{{offerterm}}' interval='1' suffix='Yrs'></lm-slider>
+               <lm-slider title='Amount' prefix='&euro;' minval='{{productItem.minAmount}}' selected='{{offeramount}}' maxval='{{productItem.maxAmount}}'></lm-slider>
+               <lm-slider title='Down Payment' prefix='&euro;' minval='{{productItem.minDownpayment}}' selected='{{offerdownpayment}}' maxval='{{productItem.maxDownpayment}}' isdisabled='true'></></lm-slider>
+
         </div>
         <div class="card flex-container-bleed"> 
            <div class="flex-item-4 bold-item">
-                <div>Equated Periodic Installment(EPI) :  {{calculatedEPI}}</div>               
+                <div>Equated Periodic Installment(EPI) :  {{epi}}</div>               
            </div>
             <div class="flex-item-4 bold-item">
-                <div>Effective APR% : {{calculatedAPR}}</div>                  
+                <div>Effective APR% : 25</div>                  
             </div>
         </div>
-        <term-conditions></term-conditions>
+
+        <term-conditions terms="[[termsArray]]"></term-conditions>
         <div class="center">
-          <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
-        </div>
-        
+        <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
+         </div>
     </div>
     
      <iron-ajax
           auto
-          url="10.138.65.58:8080/lightningmortgage/product/identifyProduct"
+          url="./src/products.json"
           params='{{params}}'
           handle-as="json"
           on-response="_handleResponseForProducts"
@@ -159,27 +161,95 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value : {},
             observer:"_paramChanged"
           },
-          tenure:{
+          productItem:{
+            type:Object,
+            value:{},
+            observer:"_productChanged"
+          },
+          offeramount:{
+            type:Number,
+            observer:"_amountChanged"
+          },
+          offerterm:{
+            type:Number,
+            observer:"_termChanged"
+          },
+          offerdownpayment:{
+            type:Number,
+            observer:"_paymentChanged"
+          },
+          epi:{
             type:String,
-            value:"Tenure",
-            observer:"_tenureChanged"
-          }
+            value:"100"
+
+          },
+          apr:{
+            type:String,
+            value:"2.4"
+
+          },
+          termsArray : Array
+
         }
       }
+
       _getProductDetails(event)
       {
-        console.log(event);
-        console.log("product will be called");
+        let selectedIndex = event.model.__data.index;
+        this.productItem = event.model.item;
+        this.offeramount=this.productItem.maxAmount;
+        this.offerterm=this.productItem.maxTenure;
+        this.offerdownpayment=this.productItem.maxDownpayment;
+        var classList = this.shadowRoot.querySelectorAll('paper-card');
+           classList.forEach((e)=>{
+               e.classList.remove('selected');
+           });
+          classList[selectedIndex].classList.add('selected');
       }
 
-      _paramChanged(oldvalue,newvalue)
+      updateEPI_APR()
       {
-        console.log(oldvalue+"new"+newvalue);
+        console.log("updating");
+        this.epi = this.offeramount+this.offerterm+this.offerdownpayment;
+        console.log("EPI is ", this.epi);
+        this.apr = this.offeramount-this.offerterm+this.offerdownpayment;
+        console.log("APR  is ",this.apr);
       }
-      _tenureChanged(oldValue,newValue)
+      _amountChanged(newValue,oldValue)
       {
-        console.log(oldValue+"tenure changed");
+        console.log(newValue+"amount"+oldValue);
+        if(oldValue!==undefined)
+        {
+        this.updateEPI_APR();
+        }
       }
+      _termChanged(newValue,oldValue)
+      {
+        console.log(newValue+"amount"+oldValue);
+        if(oldValue!==undefined)
+        {
+        this.updateEPI_APR();
+        }
+      }
+      _paymentChanged(newValue,oldValue)
+      {
+        console.log(newValue+"amount"+oldValue);
+        if(oldValue!==undefined)
+        {
+        this.updateEPI_APR();
+        }
+        
+      }
+      _productChanged(newValue,oldValue)
+      {
+        console.log("value changed "+newValue);
+      }
+
+      _paramChanged(newValue,oldValue)
+      {
+        console.log(oldValue+"new"+newValue);
+      }
+      
       _submitInfo()
       {
        let tempParam={};
@@ -191,6 +261,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       {
         console.log("in response for products");
         this.products = data.detail.response;
+        if(this.products)
+        {
+        this.productItem=this.products[0];
+        this.offeramount=this.productItem.maxAmount;
+        this.offerterm=this.productItem.maxTenure;
+        this.offerdownpayment=this.productItem.minDownpayment;
+        this.termsArray = this.productItem.terms;
+        
+        }
       }
 
     }

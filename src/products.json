@@ -1,18 +1,38 @@
 [
     {
-        "name":"ProductOne",
-        "reference":"ReferenceOne"
+        "id":"custid",
+        "productName":"ProductOne",
+        "reference":"ReferenceOne",
+        "offerMinimumTerm":5,
+        "offerMaximumTerm":10,
+        "offerMinimumValue":600,
+        "offerMaximumValue":1000,
+        "offerMinimumDownPayment":5,
+        "offerMaximumDownPayment":10
+
     },
     {
-        "name":"ProductTwo",
-        "reference":"ReferenceTwo"
+        "id":"custid2",
+        "productName":"ProductTwo",
+        "reference":"ReferenceTwo",
+        "offerMinimumTerm":6,
+        "offerMaximumTerm":15,
+        "offerMinimumValue":700,
+        "offerMaximumValue":1000,
+        "offerMinimumDownPayment":4,
+        "offerMaximumDownPayment":10
+
     },
     {
-        "name":"ProductThree",
-        "reference":"ReferenceThree"
-    },
-    {
-        "name":"ProductFour",
-        "reference":"ReferenceFour"
+        "id":"custid3",
+        "productName":"ProductThree",
+        "reference":"ReferenceThree",
+        "offerMinimumTerm":3,
+        "offerMaximumTerm":8,
+        "offerMinimumValue":500,
+        "offerMaximumValue":1000,
+        "offerMinimumDownPayment":5,
+        "offerMaximumDownPayment":10
+
     }
 ]
