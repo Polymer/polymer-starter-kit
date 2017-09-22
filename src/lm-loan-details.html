@@ -14,9 +14,9 @@
             }
             .loan-details{
               width:90%;
-              float:left;              
+              /* float:left; */
               min-height: 300px;              
-              padding:10px 20px;
+              padding:10px 13%;
               box-sizing: border-box;              
               //margin:auto 5%;
               //margin-top: 80px;
@@ -37,12 +37,16 @@
           .loan-details paper-input.largeBox{
             width: 60%;
           }
+          .loan-details paper-button {
+            float: right;
+          }
           paper-spinner-lite {
             --paper-spinner-color: #FF6600;
             position: absolute;
             top: 290px;
             left: 600px;
           }
+
         </style>
         <div class="loan-details">
           <section>
@@ -50,17 +54,19 @@
             <paper-dropdown-menu label="Current Lender"  id="id" name="bank">
               <paper-listbox slot="dropdown-content" on-iron-select="itemSelected">
                 <paper-item value="aegon">AEGON</paper-item>
-                <paper-item value="abnAmro">ABN AMRO Bank</paper-item>
-                <paper-item value="deltaLloyd">Delta Lloyd</paper-item>
+                <paper-item value="abnamrobank">ABN AMRO Bank</paper-item>
+                <paper-item value="deltalloyd">Delta Lloyd</paper-item>
                 <paper-item value="asr">ASR</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
-            <paper-input name="mortgageContractNumber"  class="mediumBox" label="Mortgage Contract Number" id="mortgageContractNumber" value="{{loandetails.mortgageContractNumber::input}}" on-blur="getOutstandingAmount"></paper-input>
-            <paper-input name="OutstandingBal"  class="mediumBox" label="Current Outstanding Balance" id="outstandingBal" value="{{loandetails.outstandingBal::input}}"></paper-input>
+            <paper-input name="mortgageContractNumber"  class="" label="Mortgage Contract Number" id="mortgageContractNumber" value="{{loandetails.mortgageContractNumber::input}}" on-blur="getOutstandingAmount"></paper-input>
+            <paper-input name="OutstandingBal" readonly class="" label="Current Outstanding Balance" id="outstandingBal" value="{{loandetails.outstandingBal::input}}"></paper-input>
             <br/>
             <paper-button raised class="custom orange" on-click="submitDetails">Submit</paper-button>
+            <paper-button raised class="custom LM-gray">Save</paper-button>
 
-            <iron-ajax id="outstandingDetailsReq" url="http://10.138.13.156:8080/lightningmortgage/existingLoan/outStandingAmount" method="post" body='{{loandetails}}' handle-as="json" content-type="application/json" on-response="handleOutstandingDetailsResponse">
+
+            <iron-ajax id="outstandingDetailsReq" url="{{outstandingBalReqAPI}}" method="get" body='{{loandetails}}' handle-as="json" content-type="application/json" on-response="handleOutstandingDetailsResponse">
             </iron-ajax>
           </section>
         </div>
@@ -95,20 +101,24 @@
               }
             }
             getOutstandingAmount(){
-             console.log("req data "+JSON.stringify(this.loandetails));
+             //console.log("req data "+JSON.stringify(this.loandetails));
              this.isActive = true;
+             this.outstandingBalReqAPI = "http://10.138.64.218:8080/lightningmortgage/existingLoan/outStandingAmount?bankName="+this.loandetails.bankName+"&mortgageContractNumber="+this.loandetails.mortgageContractNumber;
 
-             let that= this;
-             setTimeout(function(){
-              handleOutstandingDetailsResponse();
-             },100000);
-             //this.$.outstandingDetailsReq.generateRequest();
+             this.$.outstandingDetailsReq.generateRequest();
             }
-            handleOutstandingDetailsResponse(){
+            handleOutstandingDetailsResponse(res){
               this.isActive = false;
+              let response = res.detail.response;
+              //console.log("jjjjjj"+JSON.stringify(res.detail.response));
+              this.$.outstandingBal.value = res.detail.response.outstandingAmount;
+              this.loandetails.outstandingBal = res.detail.response.outstandingAmount;
             }
             submitDetails(){
-
+              localStorage.postalCode = "";
+              localStorage.outstandingBalance = this.loandetails.outstandingBal;
+              window.history.pushState({},"", '/products/');
+              window.dispatchEvent(new CustomEvent('location-changed'));
             }
         }
         window.customElements.define(LoanDetails.is, LoanDetails);

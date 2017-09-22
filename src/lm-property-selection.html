@@ -11,18 +11,27 @@
                 display: block
             }
             .prop-details{
-              //width:90%;              
-              margin:auto 5%;
-              margin-top: 80px;
+                width: 980px;
+                margin: 100px auto 0;
+                overflow: hidden;
+                position: relative;
               //border: 2px solid #F60;
             } 
-            paper-radio-button {
-            	margin: 5px;
+            .prop-details h3{
+                text-align: center;
             }
+            .propSelection{
+                width: 60%;
+                margin: 0 auto;
+            }
+            paper-radio-button {
+                margin: 5px;
+            }
+
         </style>
-        <div class="prop-details">
-         <h3>Do you want mortgage loan on a new property or refinance an existing mortgage loan?</h3>
-        	<section>        		
+        <div class="prop-details card">
+         <h3>Do you want mortgage on a new property or refinance an existing mortgage?</h3>
+        	<section  class="propSelection">        		
 				<paper-radio-group id="propSelection">
 			        <paper-radio-button name="getPropDetails" on-click="showPropDetails">Enter property details</paper-radio-button>
 			        <paper-radio-button name="getLoanDetails" on-click="showLoanDetails">Refinance Existing mortgage loan</paper-radio-button>
