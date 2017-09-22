@@ -42,32 +42,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .next_button {overflow: auto;}
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
-        .confirm_info{
-          font-size: 13px;
-        }
+        .confirm_info{font-size: 13px;        }
         .User_details{margin:47px auto;width:980px;}
+        .User_details paper-dropdown-menu{margin-bottom: 0;}
         paper-dropdown-menu.salutation{width: 11%;}
         paper-dropdown-menu.Marital_Status{width:27%;}
         paper-dropdown-menu.dependents{width:34%;}
         paper-dropdown-menu.mob_code{width:29%;}
 		    :host paper-input[disabled] {
         --paper-input-container-input-color: #afafaf;
-        --paper-input-container-disabled: {
-        opacity: 0.6;
-        }
+        --paper-input-container-disabled: {  opacity: 0.6;}
         }
         :host paper-dropdown-menu[disabled] {
         --paper-input-container-input-color: #afafaf;
-        --paper-input-container-disabled: {
-        opacity: 0.6;
-        }
+        --paper-input-container-disabled: { opacity: 0.6;}
         } 
         paper-spinner-lite {
             --paper-spinner-color: #FF6600;
             position: absolute;
             top: 290px;
             left: 600px;
-          }
+          } 
+          .mob_code {width: 15%; float: left;}
+          .mobile_number {padding: 1px 0 0 0;}
+          .declaration_text{margin:25px 0;}
     </style>
 	
     <iron-ajax
@@ -114,7 +112,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <h3>Personal Details</h3><hr>        
         <div class="row"> 
           <div class="col"> 
-              <div class="blocks">
                 <paper-dropdown-menu disabled$="{{!edit}}" class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
                     <paper-listbox  slot = "dropdown-content" >
                       <paper-item value=""></paper-item>
@@ -122,8 +119,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <paper-item>Mrs.</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
-
-              </div>
           </div>
         </div>
           <div class="row"> 
@@ -155,7 +150,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
                 
-                <paper-dropdown-menu readonly  class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
+                <paper-dropdown-menu disabled$="{{!edit}}" class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
                     <paper-listbox  slot = "dropdown-content">
                       <paper-item>0</paper-item>
                       <paper-item>1</paper-item>
@@ -164,53 +159,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <paper-item>4</paper-item>
                       <paper-item>5</paper-item>
                       <paper-item>6</paper-item>
-        
                     </paper-listbox>
                 </paper-dropdown-menu>
-                  
               </div>
           </div>
 
           <h3>Address Details</h3><hr>
           <div class="row">
               <div class="col">  
+                
                 <paper-input label="Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
+                <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
+                    <iron-icon icon = "account-circle"  prefix></iron-icon>
+                  </paper-input>
                 <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo">
                   </paper-input>
-                  <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
-                      <iron-icon icon = "account-circle"  prefix></iron-icon>
-                    </paper-input>
+                
               </div>
                 <div class="col">
                     <paper-input disabled$="{{!edit}}" label="Street Name" value="{{ajaxResponse.address.addressLine1}}"></paper-input>
-
                     <paper-input disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
 
                 </div>
           </div>
           <h3>Contact Details</h3><hr>
-            <div class="row">  
+            <div class="row Contact_details">  
                 <div class="col"> 
                     <paper-input disabled$="{{!edit}}" label="Home Number" value="{{ajaxResponse.homeNumber}}" type="number">
                       <div slot="prefix"></div>
                     </paper-input>
-                  </div>
-                  <div class="col"></div>
-                
-                <div class="col">
-                    <paper-dropdown-menu disabled$="{{!edit}}" class="mob_code" label="Code" value="{{ajaxResponse.salutation}}">
+                  </div>                
+                <div class="col mob_number">
+                  <div class="mob_code">
+                    <paper-dropdown-menu disabled$="{{!edit}}" class="" label="Code" value="{{ajaxResponse.salutation}}">
                         <paper-listbox  slot = "dropdown-content" >
                           <paper-item>+31</paper-item>
                           <paper-item>+91</paper-item>
                         </paper-listbox>
                       </paper-dropdown-menu>
+                  </div>
+                  <div class="mobile_number">
+                    <paper-input disabled$="{{!edit}}" required maxlength="10" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" type="number">
+                      <div slot="prefix"></div>
+                    </paper-input>
                 </div>
-                <div class="col">
-                  <paper-input disabled$="{{!edit}}" required maxlength="10" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" type="number">
-                    <div slot="prefix"></div>
-                  </paper-input>
               </div>
             </div>
             <div class="row">  
@@ -250,7 +244,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <paper-alert-dialog id="confirmText" confirm-button="OK">
              <p> Please ensure that the information you update matches with official records. </p> <p>You will be required to 
-              submit documents to support the change before the mortgage is processed </p>
+              submit documents to support the change before the mortgage is processed. </p>
           </paper-alert-dialog>
         <div class="next_button">
           <paper-button hidden$="{{!hide}}" toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
