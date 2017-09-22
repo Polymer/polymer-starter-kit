@@ -7,7 +7,6 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -17,8 +16,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./lm-vas.html">
 <link rel="import" href="./term-conditions.html">
 <link rel="import" href="shared-styles.html">
-
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-down-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
 <dom-module id="product-preference">
+
   <template>
     <style include="shared-styles">
       :host {
@@ -102,10 +107,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .slider-contianer{
         margin: 50px 0 0 15px;
       }
-
       .productContainer{
         width: 980px;
-        margin: 0 auto;
+        margin: 70px auto 0;
+
       }
       .slide-detail{
         margin: 20px 25px;
@@ -124,10 +129,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 300px;
         width: 100px;
       }
+      paper-dialog
+      {
+        width: 70%;
+        height: auto;
+        padding: 2%;
+        border-radius: 5px;
+      }
+      .fontincrease
+      {
+        font-size:15px;
+        font-weight: 20px;
+      }
 
       
     </style>
-  <div class="productContainer">
+  <div class="productContainer card">
     <div class="flex-container">
       <template is="dom-repeat" items="[[products.product]]">
         <paper-card id='paper_card_{{index}}'  heading="[[item.productName]]" on-click="_getProductDetails"  class="white flex-item" class$="{{getSelectedClass(index)}}">
@@ -139,22 +156,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="details-container"> 
       <div class="center">&nbsp;</div>
        <div class="slide-detail">Equated Periodic Installment(EPI) :  <span>&euro; {{_convertToLocale(epi)}}</span></div>
-       <div class="slide-detail">Effective APR% : <span>25</span></div>
-       <div class="slide-detail">Total Offer Value : <span>&euro;{{_convertToLocale(25)}}</span></div>
+       <div class="slide-detail">Effective APR% : <span>{{apr}}</span></div>
+       <div class="slide-detail">Total Offer Value : <span>&euro;{{_convertToLocale(totaloffervalue)}}</span></div>
         
        <div class="slider-contianer">
-                <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
+               <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
                <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
-               <lm-slider title='Down Payment' prefix='&euro;' minval='1' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider>
+               <lm-slider title='Down Payment' prefix='&euro;' minval='0' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider>
 
         <term-conditions terms="[[termsArray]]"></term-conditions>
         <div class="right">
         <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
          </div>
 
-          <template is="dom-if" if="[[datasubmitted]]" restamp>
-              <label class="center" >Data submitted successfully!</label>
-          </template>  
+         <paper-dialog id="dialoge" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+          <label class="center">Congratulations on your Mortgage Offer</label>
+          <paper-button style="float: right;" class="paper-button" disabled="true">Print</paper-button>
+          <paper-button style="float: right;" class="paper-button" disabled="true">Email</paper-button>
+          <div><label><b>Here are details of the offer:</b></label> </div>
+          <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
+          <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
+          <div><label><span class="fontincrease">Offer Amount:</span> {{offeramount}} &euro;</label></div>
+          <div><label><span class="fontincrease">Down payment:</span> [[offerdownpayment]] &euro;</label></div>
+          <div><label><span class="fontincrease">EPI:</span> {{epi}} &euro;</label></div>
+          <div><label><b>Additional Documents</b></label></div>
+          <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
+      </paper-dialog> 
 
 
     </div>
@@ -164,16 +191,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </div>
     </div>
-        <!-- url="http://10.138.65.58:8080/lightningmortgage/identifyProduct/" -->
     
-     <iron-ajax
-          auto
-          url="src/products.json"
-          params='{{params}}'
-          handle-as="json"
-          on-response="_handleResponseForProducts"
-          debounce-duration="300">
-     </iron-ajax>
+    <iron-ajax
+        id="ironAjaxOnload"
+        url="{{onloadurl}}"
+        params='{{params}}'
+        handle-as="json"
+        on-response="_handleResponseForProducts"
+        debounce-duration="300">
+    </iron-ajax>
+        
+         <!-- <iron-ajax
+              auto
+              url="src/products.json"
+              params='{{params}}'
+              handle-as="json"
+              on-response="_handleResponseForProducts"
+              debounce-duration="300">
+         </iron-ajax> -->
 
      <iron-ajax id="ironAjaxSubmit"
        url="http://127.0.0.1:8081/products"
@@ -188,16 +223,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     class ProductPreference extends Polymer.Element 
-    {
+
+{
       constructor()
       {
         super();
         this.products=[];
-        
-      }     
-
+      } 
+      connectedCallback()
+      {
+        super.connectedCallback();
+        let customerId=localStorage.getItem("userId");
+        let postalCode=localStorage.getItem("postalCode");
+        let balance = localStorage.getItem("outstandingBalance");
+        if(postalCode==null)
+        {
+          postalCode="0";
+        }
+        if(balance==null)
+        {
+          balance=0;
+        }
+        console.log("local storage values"+customerId+postalCode+balance);
+        this.onloadurl="src/products.json";//"http://10.138.13.58:8080/lightningmortgage/identifyProduct/"+customerId+"/"+postalCode+"/"+balance;
+        console.log("url "+this.onloadurl);
+        this.$.ironAjaxOnload.generateRequest();
+      }
       static get is() { return 'product-preference'; }
-
       static get properties()
       {
         return {
@@ -234,24 +286,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           epi:{
             type:String,
             value:"392"
-
           },
           apr:{
             type:String,
             value:"2.4"
-
           },
-
           postBody: {
               type: Object,
               value: {
-
               }
           },
           datasubmitted: {
               type: Boolean,
               value: false
-
+          },
+          totaloffervalue:{
+            type:Number
           },
           termsArray : Array,
           vasArray : {
@@ -263,16 +313,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           }
 
-          
     }
      _convertToLocale(val){
         if(val){
           return val.toLocaleString();
         }
-             
-           
-      }
 
+
+      }
       updateEPI_APR(data,term,offer)
       {
         for(let i=0;i<data.length;i++)
@@ -285,8 +333,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
         }
+        this.totaloffervalue = this.offeramount + this.offerdownpayment;
+        let tmp = this.shadowRoot.querySelector('vas-service');
+        //this.totaloffervalue += tmp.getAttribute('totalvas');
       }
-        
+
       _getProductDetails(event)
       {
         let selectedIndex = event.model.__data.index;
@@ -295,14 +346,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                e.classList.remove('selected');
            });
           classList[selectedIndex].classList.add('selected');
+          this.productIndex=selectedIndex;
       }
 
-     
+
       _amountChanged(newValue,oldValue)
       {
         if(oldValue!==undefined)
         {
           this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
+  
         }
       }
       _termChanged(newValue,oldValue)
@@ -314,6 +367,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
         }
       }
+
       _productChanged(newValue,oldValue)
       {
         console.log("value changed "+newValue);
@@ -323,26 +377,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       {
         console.log(oldValue+"new"+newValue);
       }
-      
-       _submitInfo() 
-       {
-          this.datasubmitted = true;
-          this.postBody.term=this.offerterm;
-          this.postBody.offeramount=this.offeramount;
-          this.postBody.downPayment=20000;//hardcoded;
-          this.postBody.epi=this.epi;
-          this.postBody.apr=this.apr;
-          this.postBody.productId=this.productId;
-          this.$.ironAjaxSubmit.generateRequest();
-      }
 
+      _submitInfo()
+       {
+
+          this.datasubmitted = true;
+          console.log("clicked submit");
+          this.postBody.customerId = 111;
+          this.postBody.epi = this.epi;
+          this.postBody.offerTerm = this.offerterm;
+          this.postBody.offerValue = this.offeramount;
+          this.postBody.downPayment = 20000;
+          this.postBody.annualPercentageRate = 2.3;
+          this.$.ironAjaxSubmit.generateRequest();
+          this.$.dialoge.open();
+          //dialoge.toggle();
+      }
       sendResponse(data)
        {
           if (result && result.status === "200")
            {
               this.datasubmitted = true
           }
-      } 
+      }
       setTermMinMaxStep(data)
       {
         let tempMin=data[0].productTerm;
@@ -363,9 +420,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tempObj.minTerm = tempMin;
         tempObj.maxTerm = tempMax;
         tempObj.termStep = tempStep;
-
         return tempObj;
-        
+
       }
       setAmountMinMaxStep(data,term)
       {
@@ -396,40 +452,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tempObj.minAmount = tempMin;
         tempObj.maxAmount = tempMax;
         tempObj.amountStep = tempStep;
-
         return tempObj;
-
       }
       //getAPI
       _handleResponseForProducts(data)
       {
-
         this.products = data.detail.response;
         this.productDetails = this.products.offer;
+        this.productIndex=0;
+        this.productObject = this.products.product[this.productIndex];
         if(this.products)
         {
 
-          this.productId = this.products.product.productId;
+          this.productId = this.productObject.productId;
+          console.log("hi"+JSON.stringify(this.productDetails));
           this.termValues = this.setTermMinMaxStep(this.productDetails);
 
-        this.offerterm=this.termValues.maxTerm;
-        this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
-        this.offeramount=this.amountValues.maxAmount;
-        this.termsArray = this.products.product[0].terms;
-        this.offerdownpayment=10000; 
-        
-        
+          this.offerterm=this.termValues.maxTerm;
+          this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
+          this.offeramount=this.amountValues.maxAmount;
+          this.termsArray = this.productObject.terms;
+        // this.offerdownpayment=10000; 
+          this.epi = this.productDetails[this.productDetails.length-1].epi;
+          this.apr = this.productDetails[0].annualPercentageRate;
+          this.offerdownpayment = this.productDetails[0].minDownpayment;
+          this.totaloffervalue = this.offeramount + this.offerdownpayment;
+          this.currentDate = "22 Sep 2017";
+          var today = new Date();
+          var dated = today.getDate();
+          var monthd = today.getMonth() + 1;
+          var years = today.getFullYear();
+          this.currentDate=  dated +"-" + monthd + "-" + years 
+          // classList.classList.add('selected');
+  
+
         }
-
-
       }
       getSelectedClass(index){
         if(index == 0){
           return 'selected';
         }
       }
-      
+
       }
     window.customElements.define(ProductPreference.is, ProductPreference);
+
   </script>
 </dom-module>
+
