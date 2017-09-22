@@ -58,7 +58,7 @@
         			<paper-input name="propAddressLine1" class="largeBox" label="Address Line 1" id="propAddressLine1" value="{{propertydetails.propAddressLine1::input}}"></paper-input>
         			<paper-input name="propAddressLine2"  class="largeBox" label="Address Line 2" id="propAddressLine2" value="{{propertydetails.propAddressLine2::input}}"></paper-input>
               <paper-input name="propPostCode" class="mediumBox floatBox" label="Post Code" id="propPostCode" value="{{propertydetails.propPostCode::input}}" required auto-validate error-message="Post code required" on-blur="getCityInfo"></paper-input>
-        			<paper-input name="propCity" class="mediumBox floatBox" label="City" id="propCity" value="{{propertydetails.propCity::input}}"></paper-input>
+        			<paper-input name="propCity" class="mediumBox floatBox" disabled label="City" id="propCity" value="{{propertydetails.propCity::input}}"></paper-input>
               <div style="clear: both"></div>
               <br/>
               <paper-button raised class="custom orange" on-click="submitDetails">Submit</paper-button>
