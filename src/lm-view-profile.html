@@ -41,7 +41,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
         .User_details{margin:47px auto;width:980px;}
-		    paper-input { --paper-input-container-disabled: { opacity: 0.66; };} 
+        paper-dropdown-menu.salutation{width: 11%;}
+        paper-dropdown-menu.Marital_Status{width:27%;}
+        paper-dropdown-menu.dependents{width:34%;}
+        paper-dropdown-menu.mob_code{width:29%;}
+		    paper-input { --paper-input-container-disabled: { opacity: 0.96; };} 
     </style>
 	
     <iron-ajax
@@ -106,9 +110,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   label = "First name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
-                <paper-dropdown-menu disabled$="{{!edit}}" label="Marital Status" value="{{ajaxResponse.maritalStatus}}">
+                <paper-dropdown-menu disabled$="{{!edit}}" class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" required auto-validate>
                     <paper-listbox  slot = "dropdown-content" >
-                      <paper-item value=""></paper-item>
                       <paper-item>Single</paper-item>
                       <paper-item>Married</paper-item>
                       <paper-item>Divorced</paper-item>
@@ -130,7 +133,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
                 
-                <paper-dropdown-menu disabled$="{{!edit}}" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
+                <paper-dropdown-menu disabled$="{{!edit}}" class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
                     <paper-listbox  slot = "dropdown-content">
                       <paper-item>0</paper-item>
                       <paper-item>1</paper-item>
@@ -163,7 +166,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
                 <div class="col">
                     <paper-input disabled$="{{!edit}}" label="Street Name" value="{{ajaxResponse.address.addressLine1}}"></paper-input>
-                    <paper-input disabled$="{{!edit}}" type="number" label="City" value="{{ajaxResponse.address.city}}">
+                    <paper-input disabled$="{{!edit}}" label="City" value="{{ajaxResponse.address.city}}">
                       </paper-input>
                 </div>
           </div>
@@ -173,20 +176,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-input disabled$="{{!edit}}" label="Home Number" value="{{ajaxResponse.homeNumber}}" type="number">
                       <div slot="prefix"></div>
                     </paper-input>
-                    
                   </div>
+                  <div class="col"></div>
                 
                 <div class="col">
-                    <paper-dropdown-menu disabled$="{{!edit}}" label="Code" value="{{ajaxResponse.salutation}}">
+                    <paper-dropdown-menu disabled$="{{!edit}}" class="mob_code" label="Code" value="{{ajaxResponse.salutation}}">
                         <paper-listbox  slot = "dropdown-content" >
                           <paper-item>+31</paper-item>
+                          <paper-item>+91</paper-item>
                         </paper-listbox>
                       </paper-dropdown-menu>
                 </div>
                 <div class="col">
                   <paper-input disabled$="{{!edit}}" required maxlength="10" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" type="number">
-                  <div slot="prefix"></div>
-                </paper-input>
+                    <div slot="prefix"></div>
+                  </paper-input>
               </div>
             </div>
             <div class="row">  
