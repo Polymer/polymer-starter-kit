@@ -108,7 +108,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       .productContainer{
         width: 980px;
-        margin: 0 auto;
+        margin: 70px auto 0;
+
       }
       .slide-detail{
         margin: 20px 25px;
@@ -134,7 +135,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       
     </style>
-  <div class="productContainer">
+  <div class="productContainer card">
     <div class="flex-container">
       <template is="dom-repeat" items="[[products.product]]">
         <paper-card id='paper_card_{{index}}'  heading="[[item.productName]]" on-click="_getProductDetails"  class="white flex-item" class$="{{getSelectedClass(index)}}">
