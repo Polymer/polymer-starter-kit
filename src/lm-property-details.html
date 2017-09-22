@@ -13,20 +13,20 @@
             }
             .prop-details{
               width:90%;
-              float:left;              
+              /* float:left; */
               min-height: 300px;              
-              padding:10px 20px;
+              padding:10px 13%;
               box-sizing: border-box;              
               //margin:auto 5%;
               //margin-top: 80px;
               //border: 2px solid #F60;
             } 
 
-	        .prop-details paper-input,.prop-details paper-dropdown-menu{
-	             //width:100%;
-	             //float:left;
-	             margin:0 1% 0 ; 
-	        }
+          .prop-details paper-input,.prop-details paper-dropdown-menu{
+               //width:100%;
+               //float:left;
+               margin:0 1% 0 ; 
+          }
           .prop-details paper-input.smallBox{
             width: 10%;
           }
@@ -40,8 +40,7 @@
             float: left;
           }
           .prop-details paper-button {
-            align: center;
-            margin:0 1% 0 ;
+            float: right;
           }
           paper-spinner-lite {
             --paper-spinner-color: #FF6600;
@@ -49,24 +48,26 @@
             top: 290px;
             left: 600px;
           }
+
         </style>
         <div class="prop-details">
          <!-- <h3>Property Details</h3> -->
         	<section>
             <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite>
-          		<paper-input name="propDoorNo" class="smallBox" label="Door Number" id="propDoorNo" value="{{propertydetails.propDoorNo::input}}"></paper-input>
-        			<paper-input name="propAddressLine1" class="largeBox" label="Address Line 1" id="propAddressLine1" value="{{propertydetails.propAddressLine1::input}}"></paper-input>
-        			<paper-input name="propAddressLine2"  class="largeBox" label="Address Line 2" id="propAddressLine2" value="{{propertydetails.propAddressLine2::input}}"></paper-input>
-              <paper-input name="propPostCode" class="mediumBox floatBox" label="Post Code" id="propPostCode" value="{{propertydetails.propPostCode::input}}" required auto-validate error-message="Post code required" on-blur="getCityInfo"></paper-input>
-        			<paper-input name="propCity" class="mediumBox floatBox" label="City" id="propCity" value="{{propertydetails.propCity::input}}"></paper-input>
+          		<paper-input name="propDoorNo" class="" label="Door Number" id="propDoorNo" value="{{propertydetails.propDoorNo::input}}"></paper-input>
+        			<paper-input name="propAddressLine1" class="" label="Address Line 1" id="propAddressLine1" value="{{propertydetails.propAddressLine1::input}}"></paper-input>
+        			<paper-input name="propAddressLine2"  class="" label="Address Line 2" id="propAddressLine2" value="{{propertydetails.propAddressLine2::input}}"></paper-input>
+              <paper-input name="propPostCode" class="floatBox" label="Post Code" id="propPostCode" value="{{propertydetails.propPostCode::input}}" required auto-validate error-message="Post code required" on-blur="getCityInfo"></paper-input>
+        			<paper-input name="propCity" class="floatBox" readonly label="City" id="propCity" value="{{propertydetails.propCity::input}}"></paper-input>
               <div style="clear: both"></div>
               <br/>
               <paper-button raised class="custom orange" on-click="submitDetails">Submit</paper-button>
+              <paper-button raised class="custom LM-gray">Save</paper-button>
               
               <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="post"
                          body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse">
               </iron-ajax>
-              <iron-ajax id="propDetailsReq" url="http://10.138.13.156:8080/lightningmortgage/property/add" method="post" body='{{propDetailsData}}' handle-as="json" content-type="application/json" on-response="handlePropDetailsResponse">
+              <iron-ajax id="propDetailsReq" url="http://10.138.64.218:8080/lightningmortgage/property/add" method="post" body='{{propDetailsData}}' handle-as="json" content-type="application/json" on-response="handlePropDetailsResponse">
               </iron-ajax>
         	  </section>
         </div>
@@ -107,6 +108,7 @@
               this.$.cityInfoReq.generateRequest();
             }
             submitDetails() {
+              this.isActive = true;
               //API URL -- http://10.138.13.156:8080/lightningmortgage/property/add
               console.log("hi"+JSON.stringify(this.propertydetails));
               //{"propDoorNo":"11","propAddressLine1":"Address1","propAddressLine2":"Address2","propPostCode":"8211"}
@@ -129,7 +131,11 @@
               this.propDetailsData.propertyDetails["city"]="";
               if(this.propertydetails["city"]!="undefined")
                 this.propDetailsData.propertyDetails["city"]=this.propertydetails["propCity"];
-              
+              console.log("LOC "+localStorage.userId);
+              if(localStorage.userId!=undefined && localStorage.userId!="" )
+                this.propDetailsData.propertyDetails["customerId"]=localStorage.userId;
+              else 
+                this.propDetailsData.propertyDetails["customerId"] = 2;
               console.log("hi"+JSON.stringify(this.propDetailsData));
               this.$.propDetailsReq.generateRequest();
             }
@@ -147,7 +153,19 @@
               this.isActive = false;
             }
             handlePropDetailsResponse(res){
-              console.log(JSON.stringify(res.detail.response));
+              console.log("jjjjjj"+JSON.stringify(res.detail.response));
+              let response = res.detail.response;
+              this.isActive = false;
+              let customerId = this.propDetailsData.propertyDetails["customerId"];
+              if(response.responseCode == 200 && response.responseData.propertyStatus==true){
+                localStorage.postalCode = this.propDetailsData.propertyDetails["postalCode"];
+                localStorage.outstandingBalance = "";
+                window.history.pushState({},"", '/products/');
+                window.dispatchEvent(new CustomEvent('location-changed'));
+              } 
+              else if(response.responseCode == 500){
+                
+              }
             }
         }
         window.customElements.define(PropertyDetails.is, PropertyDetails);
