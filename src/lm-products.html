@@ -120,6 +120,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: bold;
         color: #f60;
       }
+      paper-dialog
+      {
+        width: 70%;
+        height: auto;
+        padding: 2%;
+        border-radius: 5px;
+        text-align: center;
+      }
       
     </style>
   <div class="productContainer">
@@ -154,6 +162,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div><label>Offer Amount: {{offeramount}}</label></div>
           <div><label>Down payment: [[offerdownpayment]]</label></div>
           <div><label>Offer EPI: {{epi}}</label></div>
+          <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
       </paper-dialog> 
 
 
