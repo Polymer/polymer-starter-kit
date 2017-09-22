@@ -126,7 +126,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: auto;
         padding: 2%;
         border-radius: 5px;
-        text-align: center;
+      }
+      .fontincrease
+      {
+        font-size:15px;
+        font-weight: 20px;
       }
       
     </style>
@@ -156,12 +160,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          </div>
 
          <paper-dialog id="dialoge" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-          <label class="center">Data submitted successfully!</label>
-          <div><label>Here are details of offer:</label></div>
-          <div><label>Offer Term: {{offerterm}}</label></div>
-          <div><label>Offer Amount: {{offeramount}}</label></div>
-          <div><label>Down payment: [[offerdownpayment]]</label></div>
-          <div><label>Offer EPI: {{epi}}</label></div>
+          <label class="center">Congratulations on your Mortgage Offer</label>
+          <paper-button style="float: right;" class="paper-button" disabled="true">Print</paper-button>
+          <paper-button style="float: right;" class="paper-button" disabled="true">Email</paper-button>
+          <div><label><b>Here are details of the offer:</b></label> </div>
+          <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
+          <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
+          <div><label><span class="fontincrease">Offer Amount:</span> {{offeramount}} &euro;</label></div>
+          <div><label><span class="fontincrease">Down payment:</span> [[offerdownpayment]] &euro;</label></div>
+          <div><label><span class="fontincrease">EPI:</span> {{epi}} &euro;</label></div>
+          <div><label><b>Additional Documents</b></label></div>
           <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
       </paper-dialog> 
 
@@ -445,6 +453,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.apr = this.productDetails[0].annualPercentageRate;
           this.offerdownpayment = this.productDetails[0].minDownpayment;
           this.totaloffervalue = this.offeramount + this.offerdownpayment;
+          this.currentDate = "22 Sep 2017";
+          var today = new Date();
+          var dated = today.getDate();
+          var monthd = today.getMonth() + 1;
+          var yeard = today.getFullYear();
+          this.currentDate=  dated +"-" + monthd + "-" + yeard 
           // classList.classList.add('selected');
   
         }
