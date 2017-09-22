@@ -32,6 +32,7 @@
     "paper-dialog": "PolymerElements/paper-dialog#^2.0.0",
     "paper-alert-dialog": "Collaborne/paper-alert-dialog#^2.0.1",
     "paper-radio-group": "^2.0.0"
+
   },
   "resolutions": {
     "polymer": "^2.0.0"

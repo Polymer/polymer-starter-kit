@@ -130,8 +130,8 @@
             "productDetails": null
         },
         {
-            "productId": 10001,
-            "productDesc": "JM10001",
+            "productId": 10002,
+            "productDesc": "JM10002",
             "productName": "JumboMortgage",
             "minTenure": 5,
             "maxTenure": 60,
@@ -140,10 +140,10 @@
             "minDownpayment": 5000,
             "maxDownpayment": 150000,
             "terms": [
-                "Terms and conditions part1",
-                "Terms and conditions part2",
-                "Terms and conditions part3",
-                "Terms and conditions part4"
+                "Terms and conditions part5",
+                "Terms and conditions part6",
+                "Terms and conditions part7",
+                "Terms and conditions part8"
             ],
             "interestRate": 2.6,
             "productDetails": null
