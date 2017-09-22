@@ -31,14 +31,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .paper-button
       {
         background-color: #f60;
-        color: white
+        color: white;
       }
       .details-container
       {
         background-color: white;
         border-radius: 5px;
         overflow: auto;
-        padding:1em 2em;
          display: block;
       }
       paper-card.white {
@@ -46,14 +45,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         paper-card
         {
+          background: #fdfdfd;
+          border: 1px solid #f1f1f1;
+          box-shadow: none;
+          border-radius: 5px;
           text-align: center;
-          width:400px;
+          width:280px;
           cursor: pointer;
           margin: 20px;
-          padding-bottom : 25px;
+          /*padding-bottom : 25px;*/
         }
         .flex-container{
-          display: flex;
+          /*display: flex;*/
           flex-direction: row;
           flex-wrap: wrap;
         }
@@ -72,26 +75,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             font-weight: bold;
        }
        paper-card.selected {
-        --paper-card-header-text:{
+        /*--paper-card-header-text:{
           color : #f60;
         }
         --paper-card-content:{
           color : #f60;
-        }
+        }*/
+        border-bottom:4px solid #f60;
        }
        
-       label.center{
-        text-align: center;
+      .center{
         margin-left: 23px;
         font-weight: bold;
+        font-size: 20px;
+        color:#1f1f1f;
+        border-bottom: 1px solid #e8e8e8;
+        padding-bottom: 10px;
        }
-       .center{
+       /*.center{
          text-align:center;
+      }*/
+      .right{
+        text-align: right;
+      }
+      .slider-contianer{
+        margin: 50px 0 0 15px;
+      }
+
+      .productContainer{
+        width: 980px;
+        margin: 0 auto;
+      }
+      .slide-detail{
+        margin: 20px 25px;
+        display: inline-block;
+        font-size: 18px;
+      }
+      .slide-detail span{
+        font-size: 24px;
+        font-weight: bold;
+        color: #f60;
       }
 
       
     </style>
-  
+  <div class="productContainer">
     <div class="flex-container">
       <template is="dom-repeat" items="[[products]]">
         <paper-card  heading="[[item.productName]]" on-click="_getProductDetails"  class="white flex-item">
@@ -102,26 +130,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="details-container"> 
 
-    
-        <label class='center'>[[productItem.productName]]</label>      
-
-       <div class="card">
+      <div class="center">&nbsp;</div>
+        <!-- <div class='center'>[[productItem.productName]]</div> -->
+       <div class="slide-detail">Equated Periodic Installment(EPI) :  <span>&euro; {{epi}}</span></div>
+       <div class="slide-detail">Effective APR% : <span>25</span></div>
+        
+       <div class="slider-contianer">
                 <lm-slider title='Tenure' minval='{{productItem.minTenure}}' maxval='{{productItem.maxTenure}}' selected='{{offerterm}}' interval='1' suffix='Yrs'></lm-slider>
                <lm-slider title='Amount' prefix='&euro;' minval='{{productItem.minAmount}}' selected='{{offeramount}}' maxval='{{productItem.maxAmount}}'></lm-slider>
                <lm-slider title='Down Payment' prefix='&euro;' minval='{{productItem.minDownpayment}}' selected='{{offerdownpayment}}' maxval='{{productItem.maxDownpayment}}' isdisabled='true'></></lm-slider>
 
         </div>
-        <div class="card flex-container-bleed"> 
+        <!-- <div class="card flex-container-bleed"> 
            <div class="flex-item-4 bold-item">
                 <div>Equated Periodic Installment(EPI) :  {{epi}}</div>               
            </div>
             <div class="flex-item-4 bold-item">
                 <div>Effective APR% : 25</div>                  
             </div>
-        </div>
+        </div> -->
 
         <term-conditions terms="[[termsArray]]"></term-conditions>
-        <div class="center">
+        <div class="right">
         <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
          </div>
     </div>
@@ -134,7 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           on-response="_handleResponseForProducts"
           debounce-duration="300">
      </iron-ajax>
-
+</div>
   </template>
   
 
