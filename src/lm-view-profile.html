@@ -106,12 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     <div class="card User_details">         
-       <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite> 
-
-		<div class="next_button">
-      <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>
-      <paper-button hidden$="{{hide}}" toggles raised class = "LM-blue" on-tap="knockOutCheck">Validate</paper-button>      
-    </div>  
+    <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite> 
     <div class="confirm_info">
         "So that we can offer you the best mortgage options, please confirm if the following information is accurate"
     </div>       
@@ -119,7 +114,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <h3>Personal Details</h3><hr>        
         <div class="row Salutation_detail"> 
           <div class="col"> 
-                <paper-dropdown-menu disabled$="{{!edit}}" class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
+                <paper-dropdown-menu class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
                     <paper-listbox  slot = "dropdown-content" >
                       <paper-item value=""></paper-item>
                       <paper-item>Mr.</paper-item>
@@ -130,36 +125,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
           <div class="row"> 
               <div class="col"> 
-                <paper-input required auto-validate error-message="Fill User name first" autocapitalize allowed-pattern="[a-zA-Z]" disabled$="{{!edit}}" 
-                  label = "First name" value="{{ajaxResponse.firstName}}">
+                <paper-input required auto-validate error-message="Fill User name first" autocapitalize allowed-pattern="[a-zA-Z]" 
+                label = "First name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
-                <paper-dropdown-menu disabled$="{{!edit}}" auto-validate error-message="Fill Marital Status" class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" required auto-validate>
+              </div>
+              <div class="col"> 
+                <paper-input auto-validate error-message="Fill Last name" autocapitalize allowed-pattern="[a-zA-Z]" 
+                  label="Last Name" required value= "{{ajaxResponse.lastName}}">
+                </paper-input>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col">  
+                <paper-dropdown-menu auto-validate error-message="Fill Marital Status" 
+                class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" 
+                 required auto-validate>
                     <paper-listbox  slot = "dropdown-content" >
                       <paper-item>Single</paper-item>
                       <paper-item>Married</paper-item>
                       <paper-item>Divorced</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
-                  <paper-input readonly disabled label="BSN(National Identifier)" value="{{ajaxResponse.bsn}}">
-                  <iron-icon icon = "account-circle" value="" prefix></iron-icon>
-                </paper-input> 
-               <!-- <paper-input-container always-float-label auto-validate attr-for-value="value">
-                    <label slot="label">BSN(National Identifier)</label>
-                    <ssn-input class="paper-input-input" slot="input"></ssn-input>
-                    <paper-input-error slot="add-on">SSN invalid!</paper-input-error>
-                  </paper-input-container>-->
-              </div>
-            
-              <div class="col">  
-                <paper-input auto-validate error-message="Fill Last name" autocapitalize allowed-pattern="[a-zA-Z]" 
-                  label="Last Name" required disabled$="{{!edit}}" value= "{{ajaxResponse.lastName}}">
-                  <iron-icon icon = "account-circle"  prefix></iron-icon>
-                </paper-input>
-                
-
-                <paper-dropdown-menu disabled$="{{!edit}}"  class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
-
+            </div>
+            <div class="col">
+                <paper-dropdown-menu required auto-validate error-message="No. of Dependents" 
+                class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
                     <paper-listbox  slot = "dropdown-content">
                       <paper-item>0</paper-item>
                       <paper-item>1</paper-item>
@@ -172,37 +163,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </paper-dropdown-menu>
               </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <paper-input readonly label="BSN(National Identifier)" value="{{ajaxResponse.bsn}}">
+              </paper-input>
+            </div>
+            <div class="col"></div>
+          </div>
 
           <h3>Address Details</h3><hr>
           <div class="row">
-              <div class="col">  
-                
-                <paper-input label="Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}">
+            <div class="col">  
+              <paper-input label="Door Number" required auto-validate error-message="Fill Door Number" 
+              value="{{ajaxResponse.address.doorNumber}}">
+              </paper-input>
+            </div>
+            <div class="col">
+                <paper-input label="Street Name" required auto-validate error-message="Fill Street Name" value="{{ajaxResponse.address.addressLine1}}">
                 </paper-input>
-                
-                <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo">
-                  </paper-input>
-                  <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
-                      <iron-icon icon = "account-circle"  prefix></iron-icon>
-                    </paper-input>
-                
-              </div>
-                <div class="col">
-                    <paper-input disabled$="{{!edit}}" label="Street Name" value="{{ajaxResponse.address.addressLine1}}"></paper-input>
-                    <paper-input disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
-
-                </div>
+            </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <paper-input label="Locality" required auto-validate error-message="Fill Locality" 
+              value="{{ajaxResponse.address.addressLine2}}">
+                  <iron-icon icon = "account-circle"  prefix></iron-icon>
+                </paper-input>
+            </div>
+            <div class="col"></div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <paper-input type="number" required auto-validate error-message="Fill Post code" 
+              label="Post code" 
+                value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo"></paper-input>
+            </div>
+            <div class="col">
+                <paper-input disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
+            </div>
+          </div>
+
           <h3>Contact Details</h3><hr>
             <div class="row Contact_details">  
-                <div class="col"> 
-                    <paper-input disabled$="{{!edit}}" label="Home Number" value="{{ajaxResponse.homeNumber}}" type="number">
-                      <div slot="prefix"></div>
-                    </paper-input>
-                  </div>                
+              <div class="col"> 
+                <paper-input label="Home Number" required auto-validate error-message="Fill Home Number"
+                 value="{{ajaxResponse.homeNumber}}" 
+                  type="number">
+                  <div slot="prefix"></div>
+                </paper-input>
+              </div>                
                 <div class="col mob_number">
                   <div class="mob_code">
-                    <paper-dropdown-menu disabled$="{{!edit}}" class="" label="Code" value="{{ajaxResponse.salutation}}">
+                    <paper-dropdown-menu class="" label="Code" value="{{ajaxResponse.salutation}}">
                         <paper-listbox  slot = "dropdown-content" >
                           <paper-item>+31</paper-item>
                           <paper-item>+91</paper-item>
@@ -210,40 +222,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       </paper-dropdown-menu>
                   </div>
                   <div class="mobile_number">
-                    <paper-input disabled$="{{!edit}}" required maxlength="10" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" type="number">
+                    <paper-input required auto-validate error-message="Fill Mobile Number"  maxlength="10" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" 
+                    type="number">
                       <div slot="prefix"></div>
                     </paper-input>
                 </div>
               </div>
             </div>
             <div class="row">  
-                <div class="col">
-                  <paper-input disabled$="{{!edit}}" required label="Email Address" value="{{ajaxResponse.emailAddress}}">
-                    <iron-icon icon="mail" slot="prefix"></iron-icon>
-                     <div slot="suffix"></div>
-                   </paper-input>
-                </div>
-                <div class="col"></div><div class="col"></div>
+              <div class="col">
+                <paper-input required label="Email Address" required auto-validate error-message="Fill Email Address" 
+                  value="{{ajaxResponse.emailAddress}}">
+                  <iron-icon icon="mail" slot="prefix"></iron-icon>
+                  <div slot="suffix"></div>
+                </paper-input>
+              </div>
+              <div class="col"></div><div class="col"></div>
             </div>
 
           <h3>Finance Details</h3><hr>
           <div class="row">
-              <div class="col">
-                  <paper-input disabled$="{{!edit}}" required label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
-                      <div slot="prefix">€</div>
-                  </paper-input>
-                  <paper-input disabled$="{{!edit}}" required label="Monthly Family Expense" step="200" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
-                      <div slot="prefix">€</div>
-                  </paper-input>
-              </div>
-              <div class="col">
-                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income (additional)" step="200" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
-                      <div slot="prefix">€</div>
-                  </paper-input>
-                  
-                </div>
+            <div class="col">
+              <paper-input required label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
+                <div slot="prefix">€</div>
+              </paper-input>
+            </div>
+            <div class="col">
+              <paper-input required label="Monthly Family Expense" step="200" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
+                <div slot="prefix">€</div>
+              </paper-input>
+            </div>
           </div>
-          <div hidden$="{{!edit}}" class="declaration_text">
+          <div class="row">
+            <div class="col">
+              <paper-input label="Monthly Family Income (additional)" step="200" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
+                <div slot="prefix">€</div>
+              </paper-input>
+            </div>
+            <div class="col"></div>                
+          </div>
+          <div class="declaration_text">
               <span><input type="checkbox" name="decaration" id="declaration-text" on-change="sub"/></span>
               I hereby confirm that the information provided above is true and fair to the 
               best of your knowledge and that you authorize ING to contact 
@@ -259,13 +277,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               submit documents to support the change before the mortgage is processed. </p>
           </paper-alert-dialog>
         <div class="next_button">
-          <paper-button hidden$="{{!hide}}" toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
-          <paper-button disabled$="{{checked}}" hidden$="{{!hide}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+
+          <paper-button toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
+          <paper-button hidden$="{{hide}}" toggles raised class ="" on-tap="knockOutCheck">Validate</paper-button>      
+          <!--<paper-button disbled$="{{checked}}" hidden$="{{!hide}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+           <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>  -->
+
         </div>
     </div>
     <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="GET"
-    body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse">
-</iron-ajax>
+        body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse">
+    </iron-ajax>
     
   </template>
 
