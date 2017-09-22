@@ -53,13 +53,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		    :host paper-input[disabled] {
         --paper-input-container-input-color: #afafaf;
         --paper-input-container-disabled: {
-        opacity: 0.6;
+        opacity: 0.7;
         }
         }
         :host paper-dropdown-menu[disabled] {
         --paper-input-container-input-color: #afafaf;
         --paper-input-container-disabled: {
-        opacity: 0.6;
+        opacity: 0.7;
         }
         } 
         paper-spinner-lite {
@@ -155,7 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
                 
-                <paper-dropdown-menu readonly  class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
+                <paper-dropdown-menu disabled$="{{!edit}}"  class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
                     <paper-listbox  slot = "dropdown-content">
                       <paper-item>0</paper-item>
                       <paper-item>1</paper-item>
@@ -254,7 +254,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </paper-alert-dialog>
         <div class="next_button">
           <paper-button hidden$="{{!hide}}" toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
-          <paper-button hidden$="{{!hide}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+          <paper-button disbled$="{{checked}}" hidden$="{{!hide}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
         </div>
     </div>
     <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="GET"
@@ -361,7 +361,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           checked:{
             type:Boolean,
-            value:false
+            value:true
           },
           hide:{
             type:Boolean,
@@ -417,7 +417,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       sub()
       {
-        console.log("");
+
+        this.checked= false;
       }
         
 
