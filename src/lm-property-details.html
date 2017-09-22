@@ -12,44 +12,63 @@
                 display: block
             }
             .prop-details{
-              width:100%;
+              width:90%;
               float:left;              
               min-height: 300px;              
               padding:10px 20px;
-              box-sizing: border-box;
+              box-sizing: border-box;              
+              //margin:auto 5%;
+              //margin-top: 80px;
               //border: 2px solid #F60;
             } 
 
 	        .prop-details paper-input,.prop-details paper-dropdown-menu{
-	             width:100%;
-	             float:left;
+	             //width:100%;
+	             //float:left;
 	             margin:0 1% 0 ; 
 	        }
+          .prop-details paper-input.smallBox{
+            width: 10%;
+          }
+          .prop-details paper-input.mediumBox{
+            width: 29%;
+          }
+          .prop-details paper-input.largeBox{
+            width: 60%;
+          }
+          .prop-details .floatBox {
+            float: left;
+          }
+          .prop-details paper-button {
+            align: center;
+            margin:0 1% 0 ;
+          }
           paper-spinner-lite {
             --paper-spinner-color: #FF6600;
             position: absolute;
             top: 290px;
-            left: 500px;
+            left: 600px;
           }
         </style>
         <div class="prop-details">
-         <h3>Property Details</h3>
+         <!-- <h3>Property Details</h3> -->
         	<section>
-          <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite>
-        		<paper-input name="propDoorNo" always-float-label label="Door Number" id="propDoorNo" value="{{propertydetails.propDoorNo::input}}"></paper-input>
-      			<paper-input name="propAddressLine1" always-float-label label="Address Line 1" id="propAddressLine1" value="{{propertydetails.propAddressLine1::input}}"></paper-input>
-      			<paper-input name="propAddressLine2" always-float-label label="Address Line 2" id="propAddressLine2" value="{{propertydetails.propAddressLine2::input}}"></paper-input>
-            <paper-input name="propPostCode" always-float-label label="Post Code" id="propPostCode" value="{{propertydetails.propPostCode::input}}" required auto-validate error-message="Post code required" on-blur="getCityInfo"></paper-input>
-      			<paper-input name="propCity" always-float-label label="City" id="propCity" value="{{propertydetails.propCity::input}}"></paper-input>
-            <br/>
-            <paper-button raised class="custom orange" on-click="submitDetails">Submit</paper-button>
-            
-            <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="post"
-                       body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse">
-            </iron-ajax>
-            <iron-ajax id="propDetailsReq" url="http://10.138.13.156:8080/lightningmortgage/property/add" method="post" body='{{propDetailsData}}' handle-as="json" content-type="application/json" on-response="handlePropDetailsResponse">
-            </iron-ajax>
-        	</section>
+            <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite>
+          		<paper-input name="propDoorNo" class="smallBox" label="Door Number" id="propDoorNo" value="{{propertydetails.propDoorNo::input}}"></paper-input>
+        			<paper-input name="propAddressLine1" class="largeBox" label="Address Line 1" id="propAddressLine1" value="{{propertydetails.propAddressLine1::input}}"></paper-input>
+        			<paper-input name="propAddressLine2"  class="largeBox" label="Address Line 2" id="propAddressLine2" value="{{propertydetails.propAddressLine2::input}}"></paper-input>
+              <paper-input name="propPostCode" class="mediumBox floatBox" label="Post Code" id="propPostCode" value="{{propertydetails.propPostCode::input}}" required auto-validate error-message="Post code required" on-blur="getCityInfo"></paper-input>
+        			<paper-input name="propCity" class="mediumBox floatBox" label="City" id="propCity" value="{{propertydetails.propCity::input}}"></paper-input>
+              <div style="clear: both"></div>
+              <br/>
+              <paper-button raised class="custom orange" on-click="submitDetails">Submit</paper-button>
+              
+              <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="post"
+                         body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse">
+              </iron-ajax>
+              <iron-ajax id="propDetailsReq" url="http://10.138.13.156:8080/lightningmortgage/property/add" method="post" body='{{propDetailsData}}' handle-as="json" content-type="application/json" on-response="handlePropDetailsResponse">
+              </iron-ajax>
+        	  </section>
         </div>
     </template>
     <script>
