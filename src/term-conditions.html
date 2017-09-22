@@ -28,14 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-bottom: 10px;
             }
         </style>
-        <iron-ajax
-            id="termsId"
-            auto
-            url = "dummy.json"
-            params = ""
-            handle-as = "json"
-            on-response = "handleResponse">
-        </iron-ajax>
+        
 
         <div class='term-conditions'>
             <h1>Term and Conditions:</h1>
@@ -68,11 +61,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 
                }
 
-            handleResponse(data) {
-                console.log('Data is ', data.detail.response);
-                console.log('Here is response');
-                this.terms = data.detail.response.array;
-            }
     }
 
         window.customElements.define(TermConditions.is, TermConditions);
