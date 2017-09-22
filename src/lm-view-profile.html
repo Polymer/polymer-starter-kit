@@ -145,7 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                    
               </div>
                 <div class="col">
-                    <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}">
+                    <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo">
                     </paper-input>
                     <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine1}}">
                         <iron-icon icon = "account-circle"  prefix></iron-icon>
