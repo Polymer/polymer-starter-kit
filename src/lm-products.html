@@ -101,7 +101,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .slider-contianer{
         margin: 50px 0 0 15px;
       }
-
       .productContainer{
         width: 980px;
         margin: 0 auto;
@@ -116,7 +115,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: bold;
         color: #f60;
       }
-
       
     </style>
   <div class="productContainer">
@@ -129,29 +127,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
 
     <div class="details-container"> 
-
-    
-        <label class='center'>[[productItem.productName]]</label>      
-
-       <div class="card">
-
-
-        <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>      
-        <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>      
-        <lm-slider title='Down Payment' prefix='&euro;' minval='{{offerdownpayment}}' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></lm-slider>
-
-        </div>
-        <div class="card flex-container-bleed"> 
-           <div class="flex-item-4 bold-item">
-                <div>Equated Periodic Installment(EPI) :  {{epi}}</div>               
-           </div>
-            <div class="flex-item-4 bold-item">
-                <div>Effective APR% : 2.0</div>                  
-            </div>
-            <div class="flex-item-4 bold-item">
-              <div>Total Disbursement Value : {{totaloffervalue}}</div>                  
-          </div>
-        </div>
+      <div class="center">&nbsp;</div>
+       <div class="slide-detail">Equated Periodic Installment(EPI) :  <span>&euro; {{_convertToLocale(epi)}}</span></div>
+       <div class="slide-detail">Effective APR% : <span>{{apr}}</span></div>
+       <div class="slide-detail">Total Offer Value : <span>&euro;{{_convertToLocale(totaloffervalue)}}</span></div>
+        
+       <div class="slider-contianer">
+               <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
+               <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
+               <lm-slider title='Down Payment' prefix='&euro;' minval='0' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider>
 
         <term-conditions terms="[[termsArray]]"></term-conditions>
         <div class="right">
@@ -166,27 +150,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
     </div>
     </div>
-
-
-     <iron-ajax
-    id="ironAjaxOnload"
-    url="{{onloadurl}}"
-    params='{{params}}'
-    handle-as="json"
-    on-response="_handleResponseForProducts"
-    debounce-duration="300">
-</iron-ajax>
-
-        <!-- url="http://10.138.65.58:8080/lightningmortgage/identifyProduct/" -->
     
-     <!-- <iron-ajax
-          auto
-          url="http://10.138.13.58:8080/lightningmortgage/identifyProduct/"
-          params='{{params}}'
-          handle-as="json"
-          on-response="_handleResponseForProducts"
-          debounce-duration="300">
-     </iron-ajax> -->
+    <iron-ajax
+        id="ironAjaxOnload"
+        url="{{onloadurl}}"
+        params='{{params}}'
+        handle-as="json"
+        on-response="_handleResponseForProducts"
+        debounce-duration="300">
+    </iron-ajax>
+        
+         <!-- <iron-ajax
+              auto
+              url="src/products.json"
+              params='{{params}}'
+              handle-as="json"
+              on-response="_handleResponseForProducts"
+              debounce-duration="300">
+         </iron-ajax> -->
 
      <iron-ajax id="ironAjaxSubmit"
        url="http://127.0.0.1:8081/products"
@@ -207,7 +188,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         super();
         this.products=[];
         
-      }
+      } 
       connectedCallback()
       {
         super.connectedCallback();
@@ -223,13 +204,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           balance=0;
         }
         console.log("local storage values"+customerId+postalCode+balance);
-        this.onloadurl="http://10.138.13.58:8080/lightningmortgage/identifyProduct/"+customerId+"/"+postalCode+"/"+balance;
-       // this.$.ironAjaxOnload.generateRequest();
-      }
-
-
+        this.onloadurl="src/products.json";//"http://10.138.13.58:8080/lightningmortgage/identifyProduct/"+customerId+"/"+postalCode+"/"+balance;
+        console.log("url "+this.onloadurl);
+        this.$.ironAjaxOnload.generateRequest();
+      }    
       static get is() { return 'product-preference'; }
-
       static get properties()
       {
         return {
@@ -266,30 +245,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           epi:{
             type:String,
             value:"392"
-
           },
           apr:{
             type:String,
             value:"2.4"
-
           },
-
           postBody: {
               type: Object,
               value: {
-
               }
           },
           datasubmitted: {
               type: Boolean,
               value: false
-
           },
           totaloffervalue:{
             type:Number
-          },
-          onloadurl:{
-            type: String
           },
           termsArray : Array
           }
@@ -302,7 +273,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
              
            
       }
-
       updateEPI_APR(data,term,offer)
       {
         for(let i=0;i<data.length;i++)
@@ -315,6 +285,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
         }
+        this.totaloffervalue = this.offeramount + this.offerdownpayment;
       }
         
       _getProductDetails(event)
@@ -325,14 +296,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                e.classList.remove('selected');
            });
           classList[selectedIndex].classList.add('selected');
+          this.productIndex=selectedIndex;
       }
-
      
       _amountChanged(newValue,oldValue)
       {
         if(oldValue!==undefined)
         {
           this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
+  
         }
       }
       _termChanged(newValue,oldValue)
@@ -344,15 +316,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
         }
       }
-      _productChanged(newValue,oldValue)
-      {
-        console.log("value changed "+newValue);
-      }
-
-      _paramChanged(newValue,oldValue)
-      {
-        console.log(oldValue+"new"+newValue);
-      }
+      
       
        _submitInfo() 
        {
@@ -365,7 +329,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.postBody.productId=this.productId;
           this.$.ironAjaxSubmit.generateRequest();
       }
-
       sendResponse(data)
        {
           if (result && result.status === "200")
@@ -393,7 +356,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tempObj.minTerm = tempMin;
         tempObj.maxTerm = tempMax;
         tempObj.termStep = tempStep;
-
         return tempObj;
         
       }
@@ -426,35 +388,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tempObj.minAmount = tempMin;
         tempObj.maxAmount = tempMax;
         tempObj.amountStep = tempStep;
-
         return tempObj;
-
       }
       //getAPI
       _handleResponseForProducts(data)
       {
-
         this.products = data.detail.response;
         this.productDetails = this.products.offer;
+        this.productIndex=0;
+        this.productObject = this.products.product[this.productIndex];
         if(this.products)
         {
-
-          this.productId = this.products.product.productId;
+          this.productId = this.productObject.productId;
           console.log("hi"+JSON.stringify(this.productDetails));
           this.termValues = this.setTermMinMaxStep(this.productDetails);
-
-        this.offerterm=this.termValues.maxTerm;
-        this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
-        this.offeramount=this.amountValues.maxAmount;
-
-        this.termsArray = this.products.product[0].terms;//this.products[0].terms;
-        this.offerdownpayment=10000; //change according to json from service
-        this.epi = this.productDetails[this.productDetails.length-1].epi;
-        this.totaloffervalue = this.offeramount + this.offerdownpayment;
-      
+          this.offerterm=this.termValues.maxTerm;
+          this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
+          this.offeramount=this.amountValues.maxAmount;
+          this.termsArray = this.productObject.terms;
+        // this.offerdownpayment=10000; 
+          this.epi = this.productDetails[this.productDetails.length-1].epi;
+          this.apr = this.productDetails[0].annualPercentageRate;
+          this.offerdownpayment = this.productDetails[0].minDownpayment;
+          this.totaloffervalue = this.offeramount + this.offerdownpayment;
+          // classList.classList.add('selected');
+        
+        
         }
-
-
       }
       getSelectedClass(index){
         if(index == 0){
