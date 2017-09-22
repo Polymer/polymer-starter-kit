@@ -23,6 +23,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 overflow:hidden;
                 height:100px;
             }
+            .term-conditions h1{
+                border-bottom: 1px solid #e8e8e8;
+                margin-bottom: 10px;
+            }
         </style>
         <iron-ajax
             id="termsId"
@@ -33,7 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             on-response = "handleResponse">
         </iron-ajax>
 
-        <div class="card" >
+        <div class='term-conditions'>
             <h1>Term and Conditions:</h1>
              <ul class="list">
                 <template is='dom-repeat' items="[[terms]]">

@@ -1,0 +1,23 @@
+[
+  {
+    "productId": 10001,
+    "productDesc": "JM10001",
+    "productName": "JumboMortgage",
+    "productDetails":[  
+      {"term":20,"offer":35000,"epi":187},
+      {"term":20,"offer":45000,"epi":189},
+      {"term":20,"offer":55000,"epi":200},
+      {"term":20,"offer":65000,"epi":167},
+      {"term":40,"offer":55000,"epi":187},
+      {"term":40,"offer":60000,"epi":189},
+      {"term":40,"offer":65000,"epi":200},
+      {"term":40,"offer":70000,"epi":167},
+      {"term":60,"offer":45000,"epi":187},
+      {"term":60,"offer":55000,"epi":239},
+      {"term":60,"offer":65000,"epi":250},
+      {"term":60,"offer":75000,"epi":187}
+    ],
+    "terms": [ "Terms and comditions part2", "Terms and comditions part2", "Terms and comditions part3", "Terms and comditions part4" ],
+    "interestRate": 6.0
+  }
+]
