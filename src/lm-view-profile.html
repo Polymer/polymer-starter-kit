@@ -102,7 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     <div class="card User_details">         
-      <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite>
+      <!-- <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite> -->
 		<div class="next_button">
       <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>
       <paper-button hidden$="{{hide}}" toggles raised class = "LM-blue" on-tap="knockOutCheck">Validate</paper-button>      
@@ -238,7 +238,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
           </div>
           <div hidden$="{{!edit}}" class="declaration_text">
-              <span><input type="checkbox" name="decaration" id="declaration-text"/></span>
+              <span><input type="checkbox" name="decaration" id="declaration-text" on-change="sub"/></span>
               I hereby confirm that the information provided above is true and fair to the 
               best of your knowledge and that you authorize ING to contact 
               such agencies as needed to verify the correctness of the information provided
@@ -359,6 +359,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type:Boolean,
             value: false
           },
+          checked:{
+            type:Boolean,
+            value:false
+          },
           hide:{
             type:Boolean,
             value:false
@@ -411,6 +415,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.edit=false;
         this.hide = false;
       }
+      sub()
+      {
+        console.log("");
+      }
         
 
 
@@ -420,12 +428,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           
       getUrl() {
         var userId=localStorage.getItem('userId');
-        return "http://10.138.64.202:8080/lightningmortgage/customer/getCustomer/"+userId;
+        return "http://10.138.65.226:8080/lightningmortgage/customer/getCustomer/"+userId;
         
       }
       getKnockUrl() {
         var userId=localStorage.getItem('userId');
-        return "http://10.138.64.202:8080/lightningmortgage/knockoutCheck/"+userId;
+        return "http://10.138.65.226:8080/lightningmortgage/knockoutCheck/"+userId;
         
       }
       knockOutCheck() {
