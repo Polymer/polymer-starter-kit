@@ -51,9 +51,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           cursor: pointer;
           margin: 20px;
           padding-bottom : 25px;
+          border-radius: 5px; 
+          
+          
+
         }
         .flex-container{
-          display: flex;
+          
           flex-direction: row;
           flex-wrap: wrap;
         }
@@ -79,6 +83,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           color : #f60;
         }
        }
+       .submittedClass {
+            padding: 10px;
+            color: green;
+            font-weight: normal;
+            font-size: 15px;
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+        } 
        
        label.center{
         text-align: center;
@@ -93,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
   
     <div class="flex-container">
-      <template is="dom-repeat" items="[[products]]">
+      <template is="dom-repeat" items="[[products.product]]">
         <paper-card  heading="[[item.productName]]" on-click="_getProductDetails"  class="white flex-item">
            <div class="card-content">[[item.productDesc]]</div>
         </paper-card>
@@ -118,7 +131,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div>Equated Periodic Installment(EPI) :  {{epi}}</div>               
            </div>
             <div class="flex-item-4 bold-item">
-                <div>Effective APR% : 25</div>                  
+                <div>Effective APR% : 2.0</div>                  
             </div>
         </div>
 
@@ -136,7 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
      <iron-ajax
           auto
-          url="src/dummy.json"
+          url="http://10.138.65.58:8080/lightningmortgage/identifyProduct/"
           params='{{params}}'
           handle-as="json"
           on-response="_handleResponseForProducts"
@@ -203,7 +216,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           epi:{
             type:String,
-            value:"100"
+            value:"392"
 
           },
           apr:{
@@ -235,9 +248,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       {
         for(let i=0;i<data.length;i++)
         {
-          if(term==data[i].term)
+          if(term==data[i].productTerm)
           {
-            if(offer==data[i].offer)
+            if(offer==data[i].offerValue)
             {
               this.epi=data[i].epi;
             }
@@ -274,7 +287,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if(oldValue!==undefined)
         {
           console.log("called amount changed");
-        this.updateEPI_APR(this.products[0].productDetails,this.offerterm,this.offeramount);
+        this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
         }
       }
       _termChanged(newValue,oldValue)
@@ -282,10 +295,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(newValue+"amount"+oldValue);
         if(oldValue!==undefined)
         {
-          this.amountValues= this.setAmountMinMaxStep(this.products[0].productDetails,this.offerterm);
+          this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
           this.offeramount=this.amountValues.maxAmount;
        // this.updateEPI_APR();
-       this.updateEPI_APR(this.products[0].productDetails,this.offerterm,this.offeramount);
+       this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
       
         }
       }
@@ -335,18 +348,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       } 
       setTermMinMaxStep(data)
       {
-        let tempMin=data[0].term;
+        let tempMin=data[0].productTerm;
         let tempMax=0;
         let tempStep=0;
         for(let i=0;i<data.length;i++)
         {
-          if(data[i].term  < tempMin  ){
-            tempStep=tempMin-data[i].term;
-            tempMin = data[i].term;
+          if(data[i].productTerm  < tempMin  ){
+            tempStep=tempMin-data[i].productTerm;
+            tempMin = data[i].productTerm;
           }
-          if(data[i].term  > tempMax ){
-            tempStep=data[i].term-tempMax;
-            tempMax = data[i].term;
+          if(data[i].productTerm  > tempMax ){
+            tempStep=data[i].productTerm-tempMax;
+            tempMax = data[i].productTerm;
           }
         }
         console.log("min"+tempMin + " " + tempMax + " " + this.termValues.termStep);
@@ -367,22 +380,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         let tempStep=0;
         for(let i=0;i<data.length;i++)
         {
-          console.log("term is "+data[i].term);
-          if(term==data[i].term)
+          console.log("term is "+data[i].productTerm);
+          if(term==data[i].productTerm)
           {
             if(tempMin==0)
             {
-            tempMin=data[i].offer;
+            tempMin=data[i].offerValue;
             }
-            if(data[i].offer  < tempMin  )
+            if(data[i].offerValue  < tempMin  )
             {
-              tempStep=tempMin-data[i].offer;
-            tempMin = data[i].offer;
+              tempStep=tempMin-data[i].offerValue;
+            tempMin = data[i].offerValue;
             }
-           if(data[i].offer  > tempMax )
+           if(data[i].offerValue  > tempMax )
             {
-              tempStep=data[i].offer-tempMax;
-            tempMax = data[i].offer;
+              tempStep=data[i].offerValue-tempMax;
+            tempMax = data[i].offerValue;
             }
           }
         }
@@ -399,20 +412,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       //getAPI
       _handleResponseForProducts(data)
       {
-        console.log("in response for products");
+        console.log("in response for products"+data.detail.response);
         this.products = data.detail.response;
+        console.log("product values "+JSON.stringify(this.products));
+        this.productDetails = this.products.offer;
 
+        console.log("prod de"+this.productDetails);
         if(this.products)
         {
-          this.productId = this.products[0].productId;
-          console.log("hi"+JSON.stringify(this.products[0].productDetails));
-          this.termValues = this.setTermMinMaxStep(this.products[0].productDetails);
+
+          this.productId = this.products.product.productId//this.products[0].productId;
+          console.log("hi"+JSON.stringify(this.productDetails));
+          this.termValues = this.setTermMinMaxStep(this.productDetails);
 
         this.offerterm=this.termValues.maxTerm;
-        this.amountValues= this.setAmountMinMaxStep(this.products[0].productDetails,this.offerterm);
+        this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
         this.offeramount=this.amountValues.maxAmount;
-        this.termsArray = this.products[0].terms;
-        this.offerdownpayment=20000; //change according to json from service
+        this.termsArray = this.products.product[0].terms;//this.products[0].terms;
+        this.offerdownpayment=10000; //change according to json from service
         
         
         }
