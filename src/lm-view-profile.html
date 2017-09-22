@@ -43,7 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
         .confirm_info{font-size: 13px;        }
-        .User_details{margin:47px auto;width:980px;}
+        .User_details{margin:70px auto;width:980px;}
         .User_details paper-dropdown-menu{margin-bottom: 0;}
         paper-dropdown-menu.salutation{width: 11%;}
         .Salutation_detail{height: 50px;}
@@ -169,7 +169,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="row">
               <div class="col">  
                 
-                <paper-input label="Door Number" auto-validate error-message="Fill Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}"> 
+                <paper-input label="Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}">
                 </paper-input>
                 
                 <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo">
