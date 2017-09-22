@@ -78,12 +78,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="card User_details">  
 		<div class="next_button"><paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "green">Edit Profile</paper-button>
           <paper-button hidden$="{{hide}}" toggles raised class = "green" on-tap="knockOutCheck">Validate</paper-button></div>        
+      <div class="confirm_info">
+          "So that we can offer you the best mortgage options, please confirm if the following information is accurate"
+      </div>       
         <h3>Personal Details</h3><hr>        
         <div class="row"> 
           <div class="col"> 
               <div class="blocks"> 
                 <paper-dropdown-menu disabled$="{{!edit}}" label="Salutation" value="{{ajaxResponse.salutation}}">
-                  <paper-listbox  slot = "dropdown-content" >
+                  <paper-listbox  slot = "dropdown-oncontent" >
                     <paper-item>Mr.</paper-item>
                     <paper-item>Mrs.</paper-item>
                   </paper-listbox>
@@ -213,11 +216,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   
                 </div>
           </div>
-          <paper-alert-dialog id="lmDialog" confirm-button="OK">
-            For changing KYC information document need to be submitted to the nearest Branch.
+          <div class="declaration_text">
+              <span><input type="checkbox" name="decaration" id="declaration-text"/></span>
+              I hereby confirm that the information provided above is true and fair to the 
+              best of your knowledge and that you authorize ING to contact 
+              such agencies as needed to verify the correctness of the information provided
+            </div>
+          <paper-alert-dialog id="validateText" confirm-button="OK">
+              Request call back and Visit nearest branch
+              In order to understand reject reason and provide necessary documents. 
           </paper-alert-dialog>
-        <div class="next_button"><paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "green">Edit Profile</paper-button>
-        <paper-button hidden$="{{hide}}" toggles raised class = "green" on-tap="knockOutCheck">Validate</paper-button></div>
+
+          <paper-alert-dialog id="confirmText" confirm-button="OK">
+              Please ensure that the information you update matches with official records. You will be required to 
+              submit documents to support the change before the mortgage is processed 
+          </paper-alert-dialog>
+        <!-- <div class="next_button"><paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "green">Edit Profile</paper-button>
+        <paper-button hidden$="{{hide}}" toggles raised class = "green" on-tap="knockOutCheck">Validate</paper-button></div> -->
+
+        
         <div class="next_button">
           <paper-button hidden$="{{!hide}}" toggles raised class = "green" on-tap="updateProfile">Save</paper-button>
           <paper-button hidden$="{{!hide}}" toggles raised class = "button-class" on-tap="cancel">Cancel</paper-button>
@@ -330,14 +347,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.lmDialog.open();
       }
       updateProfile(){
+        this.$.confirmText.open();
         this.$.saveProfile.generateRequest();
       }
       saveProfile(){
         this.edit=false;
         this.hide = false;
         return this.ajaxResponse;
-        
-
       }
       handleResponse(data) {
        
@@ -379,6 +395,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if(result && result.responseCode ==="200") {
         window.history.pushState({}, null, '/property-details/'+result.responseData.userId);
         window.dispatchEvent(new CustomEvent('location-changed'));
+        }else{
+          this.$.validateText.open();
         }
       }
       updateEditProfile() {
