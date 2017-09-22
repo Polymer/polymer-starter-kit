@@ -90,8 +90,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <div class = "invalidUser"> <span hidden="{{hideMessage}}">{{ajaxResponse.message}}</span></div>
   
 
-              <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="Please Enter the Username !!" maxlength="10" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
-             <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
+              <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="Username" maxlength="10" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
+             <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Password" auto-validate placeholder="Password"></paper-input>
              <div class="regi_btn"><a href="register-profile" class="input_reg">Register</a></div>
              <paper-button raised class="button-class" on-tap="login" value="Login">Login</paper-button>
             </form>
