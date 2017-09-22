@@ -46,6 +46,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .User_details{margin:47px auto;width:980px;}
         .User_details paper-dropdown-menu{margin-bottom: 0;}
         paper-dropdown-menu.salutation{width: 11%;}
+        .Salutation_detail{height: 50px;}
         paper-dropdown-menu.Marital_Status{width:27%;}
         paper-dropdown-menu.dependents{width:34%;}
         paper-dropdown-menu.mob_code{width:29%;}
@@ -110,7 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>       
 
         <h3>Personal Details</h3><hr>        
-        <div class="row"> 
+        <div class="row Salutation_detail"> 
           <div class="col"> 
                 <paper-dropdown-menu disabled$="{{!edit}}" class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
                     <paper-listbox  slot = "dropdown-content" >
@@ -123,11 +124,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
           <div class="row"> 
               <div class="col"> 
-                <paper-input auto-validate autocapitalize allowed-pattern="[a-zA-Z]" disabled$="{{!edit}}" 
+                <paper-input required auto-validate error-message="Fill User name first" autocapitalize allowed-pattern="[a-zA-Z]" disabled$="{{!edit}}" 
                   label = "First name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
-                <paper-dropdown-menu disabled$="{{!edit}}" class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" required auto-validate>
+                <paper-dropdown-menu disabled$="{{!edit}}" auto-validate error-message="Fill Marital Status" class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" required auto-validate>
                     <paper-listbox  slot = "dropdown-content" >
                       <paper-item>Single</paper-item>
                       <paper-item>Married</paper-item>
@@ -145,12 +146,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
             
               <div class="col">  
-                <paper-input auto-validate autocapitalize allowed-pattern="[a-zA-Z]" 
+                <paper-input auto-validate error-message="Fill Last name" autocapitalize allowed-pattern="[a-zA-Z]" 
                   label="Last Name" required disabled$="{{!edit}}" value= "{{ajaxResponse.lastName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
                 
-                <paper-dropdown-menu disabled$="{{!edit}}" class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
+                <paper-dropdown-menu auto-validate error-message="Fill no. of dependents" disabled$="{{!edit}}" class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
                     <paper-listbox  slot = "dropdown-content">
                       <paper-item>0</paper-item>
                       <paper-item>1</paper-item>
@@ -168,14 +169,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="row">
               <div class="col">  
                 
-                <paper-input label="Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}">
-                  <iron-icon icon = "account-circle"  prefix></iron-icon>
+                <paper-input label="Door Number" auto-validate error-message="Fill Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}"> 
                 </paper-input>
-                <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
-                    <iron-icon icon = "account-circle"  prefix></iron-icon>
-                  </paper-input>
+                
                 <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo">
                   </paper-input>
+                  <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
+                      <iron-icon icon = "account-circle"  prefix></iron-icon>
+                    </paper-input>
                 
               </div>
                 <div class="col">
