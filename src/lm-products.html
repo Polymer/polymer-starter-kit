@@ -62,6 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         
         .flex-container{
+          display: flex;
           flex-direction: row;
           flex-wrap: wrap;
         }
@@ -162,7 +163,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        <div class="slider-contianer">
                <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
                <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
-               <lm-slider title='Down Payment' prefix='&euro;' minval='0' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider>
+               <!-- <lm-slider title='Down Payment' prefix='&euro;' minval='0' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider> -->
+               <div class="" style="margin-left:0px;">Down Payment : <span style='margin-left:42px;'>&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
 
         <term-conditions terms="[[termsArray]]"></term-conditions>
         <div class="right">
@@ -246,6 +248,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         } 
         console.log("local storage values"+customerId+postalCode+balance);
         this.onloadurl = "http://10.138.13.58:8080/lightningmortgage/identifyProduct/123/1012CM/0";
+        // this.onloadurl = "http://10.138.13.58:8080/lightningmortgage/identifyProduct/" + customerId + "/" + postalCode + "/" + balance;
         console.log("url "+this.onloadurl); 
         console.log("url "+this.onloadurl);
         this.$.ironAjaxOnload.generateRequest();
