@@ -162,24 +162,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-input>
               </div>
                 <div class="col">
-
-                    <paper-input disabled$="{{!edit}}" label="Street Name" value="{{ajaxResponse.address.addressLine1}}">
-                        <paper-input disabled$="{{!edit}}" label="City" value="{{ajaxResponse.address.city}}">
-                            <iron-icon icon = "account-circle" prefix></iron-icon>
-                        </paper-input> 
-                      
-                    
+                    <paper-input disabled$="{{!edit}}" label="Street Name" value="{{ajaxResponse.address.addressLine1}}"></paper-input>
+                    <paper-input disabled$="{{!edit}}" type="number" label="City" value="{{ajaxResponse.address.city}}">
+                      </paper-input>
                 </div>
           </div>
           <h3>Contact Details</h3><hr>
             <div class="row">  
-                <div class="col">
-                    <paper-dropdown-menu disabled$="{{!edit}}" label="Code" value="{{ajaxResponse.salutation}}">
-                        <paper-listbox  slot = "dropdown-content" >
-                          <paper-item>+31</paper-item>
-                        </paper-listbox>
-                      </paper-dropdown-menu>
-                </div>
                 <div class="col"> 
                     <paper-input disabled$="{{!edit}}" label="Home Number" value="{{ajaxResponse.homeNumber}}" type="number">
                       <div slot="prefix"></div>
