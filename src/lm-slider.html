@@ -1,0 +1,172 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="shared-styles.html">
+<dom-module id="lm-slider">
+  <template>
+    <style include="shared-styles"> </style>
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+        --paper-slider-height : 3px;        
+        --paper-slider-active-color: #f60;
+        --paper-slider-knob-color:#f60;
+      }
+      .fill-space{
+        display: inline-block;
+        width: 10px;
+      }
+      .flex-container{
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+        justify-content: center;
+       }
+       .flex-item-1{
+        @apply(--layout-flex-1);
+       }
+       .flex-item-2{
+        @apply(--layout-flex-1);
+        width: 150px;
+       }
+       .flex-item-4{
+        @apply(--layout-flex-4);
+       }
+       .flex-item-8{
+        @apply(--layout-flex-8);
+       }
+       .flex-item-9{
+        @apply(--layout-flex-9);
+       }
+       .flex-last-item{
+        @apply(--layout-flex-6);
+       }
+       .center-item{
+        @apply( --layout-baseline);
+      }
+      .center{
+         text-align:center;
+      }
+       .bold-item{
+        font-weight: bold;
+       }
+       paper-slider{
+        width: 60%;
+        display: inline-block;
+       }
+       .pre-text{        
+        position: relative;
+        bottom: 15px;
+        display: inline-block;
+        float: left;
+        width: 30%;
+       }
+       .post-text{
+        position: relative;
+        bottom: 15px;
+        display: inline-block;
+        float: right;
+        width: 25%;
+        text-align: right;
+       }
+       .selected-text{
+        position: relative;
+        bottom: 60px;
+        width: 40%;
+        float: left;
+        text-align: center;
+       }
+       .msg-container{
+        width : 63.5%;
+       }
+       .label-msg{
+        padding-top: 10px;
+       }
+   </style>
+    <div class='flex-container'>
+      <div class="flex-item-2 lebel-msg">{{title}}</div>        
+        <div class="flex-item-9">
+            <paper-slider 
+              min='{{minval}}'
+              max='{{maxval}}' 
+              value='{{selected}}' 
+              step='{{interval}}'
+              disabled='[[isdisabled]]'
+              ></paper-slider> 
+          <div class='msg-container'>
+            <div class='pre-text'>{{prefix}} {{_convertToLocale(minval)}} {{suffix}}</div>
+            <div class='selected-text'>{{prefix}} {{_convertToLocale(selected)}} {{suffix}}</div>
+            <div class='post-text'>{{prefix}} {{_convertToLocale(maxval)}} {{suffix}}</div>
+          </div>
+        </div>     
+  </div>
+  </template>
+
+  <script>
+    class LmSlider extends Polymer.Element {
+      static get is() { return 'lm-slider'; }
+      static get properties(){
+        return {
+          prefix: {
+            type : String,
+            value : "",
+            reflectToAttribute : true
+          },
+          suffix: {
+            type : String,
+            value : "",
+            reflectToAttribute : true
+          },
+          title:{
+            type : String,
+            value : "",
+            reflectToAttribute:true
+          },
+          selected:{
+            type : Number,
+            notify: true,
+            reflectToAttribute: true
+          },
+          minval:{
+            type : Number,
+            value : 60000,
+            reflectToAttribute:true
+          },
+          maxval:{
+            type : Number,
+            value : 100000,
+            reflectToAttribute:true
+          },
+          interval : {
+            type : Number,
+            value : 1,
+            reflectToAttribute : true
+          },
+          isdisabled:{
+            type:Boolean,
+            value:false
+          }
+        };
+      }
+      _convertToLocale(val){
+        if(val){
+          return val.toLocaleString();
+        }
+             
+           
+      }
+    }
+    window.customElements.define(LmSlider.is, LmSlider);
+  </script>
+</dom-module>  
