@@ -21,6 +21,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel = "import" href = "../bower_components/paper-input/paper-input.html">
 <link rel = "import" href = "../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 <link rel = "import" href = "../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
 <dom-module id="lm-view-profile">
@@ -51,15 +53,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		    :host paper-input[disabled] {
         --paper-input-container-input-color: #afafaf;
         --paper-input-container-disabled: {
-        opacity: o.5;
+        opacity: 0.6;
         }
         }
         :host paper-dropdown-menu[disabled] {
         --paper-input-container-input-color: #afafaf;
         --paper-input-container-disabled: {
-        opacity: 0.5;
+        opacity: 0.6;
         }
         } 
+        paper-spinner-lite {
+            --paper-spinner-color: #FF6600;
+            position: absolute;
+            top: 290px;
+            left: 600px;
+          }
     </style>
 	
     <iron-ajax
@@ -94,7 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     <div class="card User_details">         
-       
+      <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite>
 		<div class="next_button">
       <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>
       <paper-button hidden$="{{hide}}" toggles raised class = "LM-blue" on-tap="knockOutCheck">Validate</paper-button>      
@@ -147,7 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
                 
-                <paper-dropdown-menu disabled$="{{!edit}}" class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
+                <paper-dropdown-menu readonly  class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
                     <paper-listbox  slot = "dropdown-content">
                       <paper-item>0</paper-item>
                       <paper-item>1</paper-item>
@@ -288,6 +296,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type:String,
             value:"22"
           },
+          isActive:{
+                      type : Boolean,
+                      value : false
+                    },
           addressLine1:
           {
             type:String,
@@ -377,9 +389,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
       }
             getCityInfo(){
-              //this.ajaxResponse= this.tempResponse.address.postCode;
-              this.$;
-              // this.isActive = true;
+              this.isActive = true;
               let postCode = this.ajaxResponse.address.postCode;
                if(postCode!="undefined" && postCode!="")
                this.postCodeApiUrl = "https://api.bring.com/shippingguide/api/postalCode.json?clientUrl=t&country=NL&pnr="+postCode;
