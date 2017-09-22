@@ -130,30 +130,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   label = "First name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
-                <paper-dropdown-menu disabled$="{{!edit}}" auto-validate error-message="Fill Marital Status" class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" required auto-validate>
+                <paper-dropdown-menu disabled$="{{!edit}}" auto-validate error-message="Fill Marital Status" 
+                class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" 
+                 required auto-validate>
                     <paper-listbox  slot = "dropdown-content" >
                       <paper-item>Single</paper-item>
                       <paper-item>Married</paper-item>
                       <paper-item>Divorced</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
+                  
                   <paper-input readonly disabled label="BSN(National Identifier)" value="{{ajaxResponse.bsn}}">
                   <iron-icon icon = "account-circle" value="" prefix></iron-icon>
-                </paper-input> 
+                </paper-input>  
                <!-- <paper-input-container always-float-label auto-validate attr-for-value="value">
                     <label slot="label">BSN(National Identifier)</label>
                     <ssn-input class="paper-input-input" slot="input"></ssn-input>
                     <paper-input-error slot="add-on">SSN invalid!</paper-input-error>
                   </paper-input-container>-->
               </div>
-            
               <div class="col">  
                 <paper-input auto-validate error-message="Fill Last name" autocapitalize allowed-pattern="[a-zA-Z]" 
                   label="Last Name" required disabled$="{{!edit}}" value= "{{ajaxResponse.lastName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
                 
-                <paper-dropdown-menu disabled$="{{!edit}}" class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
+                <paper-dropdown-menu disabled$="{{!edit}}" required auto-validate error-message="No. of Dependents" 
+                class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
                     <paper-listbox  slot = "dropdown-content">
                       <paper-item>0</paper-item>
                       <paper-item>1</paper-item>
@@ -173,16 +176,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 
                 <paper-input label="Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}">
                 </paper-input>
-                
+                <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
+                    <iron-icon icon = "account-circle"  prefix></iron-icon>
+                  </paper-input>
+                 
                 <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo">
                   </paper-input>
-                  <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
-                      <iron-icon icon = "account-circle"  prefix></iron-icon>
-                    </paper-input>
+                  
                 
               </div>
                 <div class="col">
                     <paper-input disabled$="{{!edit}}" label="Street Name" value="{{ajaxResponse.address.addressLine1}}"></paper-input>
+                    <div class="col"></div><div class="col"></div>
                     <paper-input disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
 
                 </div>
