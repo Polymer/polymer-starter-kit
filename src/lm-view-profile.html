@@ -66,6 +66,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       url="http://10.138.65.226:8080/lightningmortgage/customer/editCustomer"
       handle-as="json"
       method = "POST"
+      on-response = "updateEditProfile"
       body='{{ajaxResponse}}'
       content-type = "application/json"
       >
@@ -304,12 +305,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.saveProfile.generateRequest();
       }
       saveProfile(){
+        this.edit=false;
+        this.hide = false;
         return this.ajaxResponse;
+        
 
       }
       handleResponse(data) {
+       
           this.ajaxResponse = data.detail.response ;
           this.tempResponse  = JSON.parse(JSON.stringify(data.detail.response));
+          
          // this.tempResponse = data.detail.response;
         
       }
@@ -346,6 +352,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         window.history.pushState({}, null, '/property-details/'+result.responseData.userId);
         window.dispatchEvent(new CustomEvent('location-changed'));
         }
+      }
+      updateEditProfile() {
+        this.edit=false;
+        this.hide = false;
       }
       json(obj) {
         return JSON.stringify(obj, null, 2);
