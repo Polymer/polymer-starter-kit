@@ -133,6 +133,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="flex-item-4 bold-item">
                 <div>Effective APR% : 2.0</div>                  
             </div>
+            <div class="flex-item-4 bold-item">
+              <div>Total Disbursement Value : {{totaloffervalue}}</div>                  
+          </div>
         </div>
 
         <term-conditions terms="[[termsArray]]"></term-conditions>
@@ -146,15 +149,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </template> 
 
     </div>
+
+    <iron-ajax
+    id="ironAjaxOnload"
+    url="{{onloadurl}}"
+    params='{{params}}'
+    handle-as="json"
+    on-response="_handleResponseForProducts"
+    debounce-duration="300">
+</iron-ajax>
     
-     <iron-ajax
+     <!-- <iron-ajax
           auto
-          url="http://10.138.65.58:8080/lightningmortgage/identifyProduct/"
+          url="http://10.138.13.58:8080/lightningmortgage/identifyProduct/"
           params='{{params}}'
           handle-as="json"
           on-response="_handleResponseForProducts"
           debounce-duration="300">
-     </iron-ajax>
+     </iron-ajax> -->
 
      <iron-ajax id="ironAjaxSubmit"
      url="http://127.0.0.1:8081/products"
@@ -177,7 +189,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         super();
         this.products=[];
         
-      }     
+      }
+      connectedCallback()
+      {
+        let customerId=localStorage.getItem("userId");
+        let postalCode=localStorage.getItem("postalCode");
+        let balance = localStorage.getItem("outstandingBalance");
+        if(postalCode==null)
+        {
+          postalCode="0";
+        }
+        if(balance==null)
+        {
+          balance=0;
+        }
+        console.log("local storage values"+customerId+postalCode+balance);
+        this.onloadurl="http://10.138.13.58:8080/lightningmortgage/identifyProduct/"+customerId+"/"+postalCode+"/"+balance;
+        this.$.ironAjaxOnload.generateRequest();
+      }
+
 
       static get is() { return 'product-preference'; }
 
@@ -235,6 +265,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               type: Boolean,
               value: false
 
+          },
+          totaloffervalue:{
+            type:Number
+          },
+          onloadurl:{
+            type: String
           },
           termsArray : Array
 
@@ -430,6 +466,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.offeramount=this.amountValues.maxAmount;
         this.termsArray = this.products.product[0].terms;//this.products[0].terms;
         this.offerdownpayment=10000; //change according to json from service
+        this.epi = this.productDetails[this.productDetails.length-1].epi;
+        this.totaloffervalue = this.offeramount + this.offerdownpayment;
         
         
         }
