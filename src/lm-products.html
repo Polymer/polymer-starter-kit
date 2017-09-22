@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="./lm-slider.html">
+<link rel="import" href="./lm-vas.html">
 <link rel="import" href="./term-conditions.html">
 <link rel="import" href="shared-styles.html">
 
@@ -116,6 +117,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: bold;
         color: #f60;
       }
+      .vas-icons{
+        position: fixed;
+        top: 250px;
+        right: 10px;
+        height: 300px;
+        width: 100px;
+      }
 
       
     </style>
@@ -150,6 +158,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     </div>
+    </div>
+    <div class="vas-icons">
+       <vas-service itemindex='{{vasArray}}'></vas-service>
+
     </div>
     </div>
         <!-- url="http://10.138.65.58:8080/lightningmortgage/identifyProduct/" -->
@@ -241,8 +253,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               value: false
 
           },
-          termsArray : Array
+          termsArray : Array,
+          vasArray : {
+            type: Array,
+            value : [{'id':0,'name':'Renovation','value':1000},
+            {'id':1,'name':'Landscape','value':3000},
+            {'id':2,'name':'Brick Wall','value':4000},
+            {'id':3,'name':'Garage','value':5000}]
           }
+          }
+
           
     }
      _convertToLocale(val){
@@ -390,7 +410,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         {
 
           this.productId = this.products.product.productId;
-          console.log("hi"+JSON.stringify(this.productDetails));
           this.termValues = this.setTermMinMaxStep(this.productDetails);
 
         this.offerterm=this.termValues.maxTerm;
@@ -398,9 +417,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.offeramount=this.amountValues.maxAmount;
         this.termsArray = this.products.product[0].terms;
         this.offerdownpayment=10000; 
-        var temp = this.shadowRoot.querySelector('paper_card_0');
-           console.log(temp);
-         // classList.classList.add('selected');
         
         
         }

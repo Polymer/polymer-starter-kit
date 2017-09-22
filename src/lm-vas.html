@@ -1,0 +1,115 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="vas-service">
+<template>
+	<style type="text/css">
+		:host{
+			display: inline-block;
+			
+		}
+		;
+		div.container{
+			width:80%;
+			text-align: center;
+			padding-left: 5			
+		}
+		div.container img{
+			width : 70%;
+		}
+		paper-card{
+			border-radius: 50px;
+			margin-top: 10px;
+		}
+		paper-card:hover{
+			cursor: pointer;
+			transform: scale(1.1);
+			transition-duration: 0.1s;
+			transition-timing-function: ease-in;
+		}
+		paper-card.selected {
+        border-bottom:4px solid #f60;
+       }
+
+	</style>
+	<div class='container'>
+	<template is="dom-repeat" items="{{itemindex}}">
+        <paper-card id='paper_card_{{index}}' on-click="_getDetails" class='default'>
+           <div class="card-content"> 
+           <img src='../images/icon-{{item.id}}.png' title="{{item.name}}"  />
+           </div>
+        </paper-card>
+      </template>	
+	</div>
+	
+</template>
+
+	<script type="text/javascript">
+		class VasService extends Polymer.Element{
+			constructor(){
+				super();
+				this.actualVas=[];
+			}
+			static get is(){
+				return 'vas-service';
+			}
+
+			ready(){
+				super.ready();
+				this.actualVas =this.itemindex;
+				console.log(this.actualVas);
+			}
+			static get properties(){
+				return {
+					itemindex:{
+						type : Array,
+					},
+					selectedVas:{
+						type :Array,
+						value:[],
+						reflectToAttribute : true,
+						notify:true,
+						observer:'_getTotal'
+					},
+					totalvas:{
+						type:Number,
+						value:0,
+						reflectToAttribute : true,
+						notify:true
+								}
+					
+
+				};
+			}
+			_getTotal(){
+				let sum = 0;
+				for(var counter=0; counter < this.selectedVas.length; counter++){
+					sum +=this.selectedVas[counter];
+				} 
+				this.totalvas = sum;
+			}
+			_getDetails(event){
+		        let selectedIndex = event.model.__data.index;
+		        console.log(selectedIndex);
+		        var paperCards = this.shadowRoot.querySelectorAll('paper-card');
+		        if(paperCards[selectedIndex].classList.contains('selected')){
+		        	paperCards[selectedIndex].classList.remove('selected');
+		        	for(var counter=0; counter < this.selectedVas.length;counter++){
+		        		if(this.selectedVas[counter] == this.itemindex[selectedIndex].value)
+		        			this.splice('selectedVas',counter,1);
+		        		this._getTotal();
+		        		console.log(this.selectedVas);
+		        	}
+		        	return;
+		        }        	
+		        	paperCards[selectedIndex].classList.add('selected');
+		        	this.push('selectedVas',this.itemindex[selectedIndex].value);
+		        	this._getTotal();
+		        	console.log(this.selectedVas);
+      }
+
+
+		}
+
+		window.customElements.define(VasService.is,VasService);
+	</script>
+</dom-module>
