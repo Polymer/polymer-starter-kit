@@ -7,7 +7,6 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -16,8 +15,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./lm-slider.html">
 <link rel="import" href="./term-conditions.html">
 <link rel="import" href="shared-styles.html">
-
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-down-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
 <dom-module id="product-preference">
+
   <template>
     <style include="shared-styles">
       :host {
@@ -142,9 +147,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
          </div>
 
-          <template is="dom-if" if="[[datasubmitted]]" restamp>
-              <label class="center" >Data submitted successfully!</label>
-          </template>  
+         <paper-dialog id="dialoge" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+          <label class="center">Data submitted successfully!</label>
+          <div><label>Here are details of offer:</label></div>
+          <div><label>Offer Term: {{offerterm}}</label></div>
+          <div><label>Offer Amount: {{offeramount}}</label></div>
+          <div><label>Down payment: [[offerdownpayment]]</label></div>
+          <div><label>Offer EPI: {{epi}}</label></div>
+      </paper-dialog> 
 
 
     </div>
@@ -182,12 +192,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     class ProductPreference extends Polymer.Element 
-    {
+
+{
       constructor()
       {
         super();
         this.products=[];
-        
       } 
       connectedCallback()
       {
@@ -207,7 +217,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.onloadurl="src/products.json";//"http://10.138.13.58:8080/lightningmortgage/identifyProduct/"+customerId+"/"+postalCode+"/"+balance;
         console.log("url "+this.onloadurl);
         this.$.ironAjaxOnload.generateRequest();
-      }    
+      }
       static get is() { return 'product-preference'; }
       static get properties()
       {
@@ -264,14 +274,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           termsArray : Array
           }
-          
+
     }
      _convertToLocale(val){
         if(val){
           return val.toLocaleString();
         }
-             
-           
+
+
       }
       updateEPI_APR(data,term,offer)
       {
@@ -287,7 +297,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         this.totaloffervalue = this.offeramount + this.offerdownpayment;
       }
-        
+
       _getProductDetails(event)
       {
         let selectedIndex = event.model.__data.index;
@@ -298,7 +308,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           classList[selectedIndex].classList.add('selected');
           this.productIndex=selectedIndex;
       }
-     
+
+
       _amountChanged(newValue,oldValue)
       {
         if(oldValue!==undefined)
@@ -316,18 +327,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
         }
       }
-      
-      
-       _submitInfo() 
+
+      _productChanged(newValue,oldValue)
+      {
+        console.log("value changed "+newValue);
+      }
+
+      _paramChanged(newValue,oldValue)
+      {
+        console.log(oldValue+"new"+newValue);
+      }
+
+      _submitInfo()
        {
+
           this.datasubmitted = true;
-          this.postBody.term=this.offerterm;
-          this.postBody.offeramount=this.offeramount;
-          this.postBody.downPayment=20000;//hardcoded;
-          this.postBody.epi=this.epi;
-          this.postBody.apr=this.apr;
-          this.postBody.productId=this.productId;
+          console.log("clicked submit");
+          this.postBody.customerId = 111;
+          this.postBody.epi = this.epi;
+          this.postBody.offerTerm = this.offerterm;
+          this.postBody.offerValue = this.offeramount;
+          this.postBody.downPayment = 20000;
+          this.postBody.annualPercentageRate = 2.3;
           this.$.ironAjaxSubmit.generateRequest();
+          this.$.dialoge.open();
+          //dialoge.toggle();
       }
       sendResponse(data)
        {
@@ -335,7 +359,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
            {
               this.datasubmitted = true
           }
-      } 
+      }
       setTermMinMaxStep(data)
       {
         let tempMin=data[0].productTerm;
@@ -357,7 +381,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tempObj.maxTerm = tempMax;
         tempObj.termStep = tempStep;
         return tempObj;
-        
+
       }
       setAmountMinMaxStep(data,term)
       {
@@ -402,6 +426,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.productId = this.productObject.productId;
           console.log("hi"+JSON.stringify(this.productDetails));
           this.termValues = this.setTermMinMaxStep(this.productDetails);
+
           this.offerterm=this.termValues.maxTerm;
           this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
           this.offeramount=this.amountValues.maxAmount;
@@ -412,8 +437,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.offerdownpayment = this.productDetails[0].minDownpayment;
           this.totaloffervalue = this.offeramount + this.offerdownpayment;
           // classList.classList.add('selected');
-        
-        
+  
         }
       }
       getSelectedClass(index){
@@ -421,8 +445,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return 'selected';
         }
       }
-      
+
       }
     window.customElements.define(ProductPreference.is, ProductPreference);
+
   </script>
 </dom-module>
+
