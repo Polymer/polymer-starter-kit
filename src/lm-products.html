@@ -168,7 +168,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
 
 
-    <iron-ajax
+     <iron-ajax
     id="ironAjaxOnload"
     url="{{onloadurl}}"
     params='{{params}}'
@@ -210,6 +210,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       connectedCallback()
       {
+        super.connectedCallback();
         let customerId=localStorage.getItem("userId");
         let postalCode=localStorage.getItem("postalCode");
         let balance = localStorage.getItem("outstandingBalance");
@@ -223,7 +224,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         console.log("local storage values"+customerId+postalCode+balance);
         this.onloadurl="http://10.138.13.58:8080/lightningmortgage/identifyProduct/"+customerId+"/"+postalCode+"/"+balance;
-        this.$.ironAjaxOnload.generateRequest();
+       // this.$.ironAjaxOnload.generateRequest();
       }
 
 
