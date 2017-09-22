@@ -1,0 +1,380 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel = 'import' href='../bower_components/polymer/polymer.html'>
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel = "import" href = "../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel = "import" href = "../bower_components/paper-item/paper-item.html">
+<link rel = "import" href = "../bower_components/paper-listbox/paper-listbox.html">
+<link rel = "import" href = "../bower_components/paper-button/paper-button.html">
+<link rel = "import" href = "../bower_components/paper-styles/paper-styles.html">
+<link rel = "import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel = "import" href = "../bower_components/paper-input/paper-input.html">
+<link rel = "import" href = "../bower_components/paper-alert-dialog/paper-alert-dialog.html">
+<link rel = "import" href = "../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+<dom-module id="lm-register-profile">
+  <template>
+   <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+        
+        #container {display: flex;}
+        paper-button{ padding: 10px; border-radius: 5px; float: right;}
+        paper-button.green:hover { background-color: var(--paper-green-400);}
+        paper-button.green { background-color: var(--paper-green-500); color: white;}
+        paper-button.green[active] {background-color: var(--paper-red-500);}
+        .style-scope.lm-view-profile {height: auto;}
+        .next_button {overflow: auto;}
+        .row {display: flex;}
+        .col {flex: 1;padding: 1em;}
+        .confirm_info{
+          font-size: 13px;
+        }
+        .User_details{margin:47px auto;width:980px;}
+        paper-dropdown-menu.salutation{width: 11%;}
+        paper-dropdown-menu.Marital_Status{width:27%;}
+        paper-dropdown-menu.dependents{width:34%;}
+        paper-dropdown-menu.mob_code{width:29%;}
+		    :host paper-input[disabled] {
+        --paper-input-container-input-color: #afafaf;
+        --paper-input-container-disabled: {
+        opacity: o.5;
+        }
+        }
+        :host paper-dropdown-menu[disabled] {
+        --paper-input-container-input-color: #afafaf;
+        --paper-input-container-disabled: {
+        opacity: 0.5;
+        }
+        } 
+    </style>
+	
+    
+    <!-- <span>{{ajaxResponse.responseMessage}}</span> -->
+    <!-- <h1>Profile Details</h1> 
+               last-response='{{ajaxResponse}}'-->
+    
+    <iron-ajax
+      id="saveProfile"
+      url="http://10.138.64.202:8880/lightningmortgage/customer/addCustomer"
+      handle-as="json"
+      method = "POST"
+      on-response = "updateEditProfile"
+      body='{{ajaxResponse}}'
+      content-type = "application/json"
+      >
+    </iron-ajax>
+    
+
+
+    <div class="card User_details">         
+       
+		 
+    <div class="confirm_info">
+        "So that we can offer you the best mortgage options, please provide correct information"
+    </div>       
+
+        <h3>Personal Details</h3><hr>        
+        <div class="row"> 
+          <div class="col"> 
+              <div class="blocks">
+                <paper-dropdown-menu  class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
+                    <paper-listbox  slot = "dropdown-content" >
+                      <paper-item value=""></paper-item>
+                      <paper-item>Mr.</paper-item>
+                      <paper-item>Mrs.</paper-item>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+
+              </div>
+          </div>
+        </div>
+          <div class="row"> 
+              <div class="col"> 
+                <paper-input auto-validate autocapitalize allowed-pattern="[a-zA-Z]"  
+                  label = "First name" value="{{ajaxResponse.firstName}}">
+                  <iron-icon icon = "account-circle"  prefix></iron-icon>
+                </paper-input>
+                <paper-dropdown-menu  class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" required auto-validate>
+                    <paper-listbox  slot = "dropdown-content" >
+                      <paper-item>Single</paper-item>
+                      <paper-item>Married</paper-item>
+                      <paper-item>Divorced</paper-item>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+                  <paper-input  label="BSN(National Identifier)" value="{{ajaxResponse.bsn}}">
+                  <iron-icon icon = "account-circle" value="" prefix></iron-icon>
+                </paper-input> 
+               <!-- <paper-input-container always-float-label auto-validate attr-for-value="value">
+                    <label slot="label">BSN(National Identifier)</label>
+                    <ssn-input class="paper-input-input" slot="input"></ssn-input>
+                    <paper-input-error slot="add-on">SSN invalid!</paper-input-error>
+                  </paper-input-container>-->
+              </div>
+            
+              <div class="col">  
+                <paper-input auto-validate autocapitalize allowed-pattern="[a-zA-Z]" 
+                  label="Last Name" required  value= "{{ajaxResponse.lastName}}">
+                  <iron-icon icon = "account-circle"  prefix></iron-icon>
+                </paper-input>
+                
+                <paper-dropdown-menu  class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
+                    <paper-listbox  slot = "dropdown-content">
+                      <paper-item>0</paper-item>
+                      <paper-item>1</paper-item>
+                      <paper-item>2</paper-item>
+                      <paper-item>3</paper-item>
+                      <paper-item>4</paper-item>
+                      <paper-item>5</paper-item>
+                      <paper-item>6</paper-item>
+        
+                    </paper-listbox>
+                </paper-dropdown-menu>
+                  
+              </div>
+          </div>
+
+          <h3>Address Details</h3><hr>
+          <div class="row">
+              <div class="col">  
+                <paper-input label="Door Number"  value="{{ajaxResponse.address.doorNumber}}">
+                  <iron-icon icon = "account-circle"  prefix></iron-icon>
+                </paper-input>
+                <paper-input  type="number" label="Post code" value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo">
+                  </paper-input>
+                  <paper-input  label="Locality" value="{{ajaxResponse.address.addressLine2}}">
+                      <iron-icon icon = "account-circle"  prefix></iron-icon>
+                    </paper-input>
+              </div>
+                <div class="col">
+                    <paper-input  label="Street Name" value="{{ajaxResponse.address.addressLine1}}"></paper-input>
+
+                    <paper-input disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
+
+                </div>
+          </div>
+          <h3>Contact Details</h3><hr>
+            <div class="row">  
+                <div class="col"> 
+                    <paper-input  label="Home Number" value="{{ajaxResponse.homeNumber}}" type="number">
+                      <div slot="prefix"></div>
+                    </paper-input>
+                  </div>
+                  <div class="col"></div>
+                
+                <div class="col">
+                    <paper-dropdown-menu  class="mob_code" label="Code" value="{{ajaxResponse.salutation}}">
+                        <paper-listbox  slot = "dropdown-content" >
+                          <paper-item>+31</paper-item>
+                          <paper-item>+91</paper-item>
+                        </paper-listbox>
+                      </paper-dropdown-menu>
+                </div>
+                <div class="col">
+                  <paper-input  required maxlength="10" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" type="number">
+                    <div slot="prefix"></div>
+                  </paper-input>
+              </div>
+            </div>
+            <div class="row">  
+                <div class="col">
+                  <paper-input  required label="Email Address" value="{{ajaxResponse.emailAddress}}">
+                    <iron-icon icon="mail" slot="prefix"></iron-icon>
+                     <div slot="suffix"></div>
+                   </paper-input>
+                </div>
+                <div class="col"></div><div class="col"></div>
+            </div>
+
+          <h3>Finance Details</h3><hr>
+          <div class="row">
+              <div class="col">
+                  <paper-input  required label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
+                  </paper-input>
+                  <paper-input  required label="Monthly Family Expense" step="200" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
+                    </paper-input>
+              </div>
+              <div class="col">
+                  <paper-input  label="Monthly Family Income (additional)" step="200" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
+                    </paper-input>
+                  
+                </div>
+          </div>
+          <div  class="declaration_text">
+              <span><input type="checkbox" name="decaration" id="declaration-text"/></span>
+              I hereby confirm that the information provided above is true and fair to the 
+              best of your knowledge and that you authorize ING to contact 
+              such agencies as needed to verify the correctness of the information provided
+            </div>
+          <paper-alert-dialog id="validateText" confirm-button="OK">
+              Request call back and Visit nearest branch
+              In order to understand reject reason and provide necessary documents. 
+          </paper-alert-dialog>
+
+          <paper-alert-dialog id="confirmText" confirm-button="OK">
+             <p> Please ensure that the information you update matches with official records. </p> <p>You will be required to 
+              submit documents to support the change before the mortgage is processed </p>
+          </paper-alert-dialog>
+        <div class="next_button">
+          <paper-button  toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+        </div>
+    </div>
+    <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="GET"
+    body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse">
+</iron-ajax>
+    
+  </template>
+
+  <script>
+    class RegisterProfile extends Polymer.Element {
+      static get is() { return 'lm-register-profile'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: "bar"
+          },
+          id:{
+            type:String
+
+          },
+          lastName: {
+            type: String,
+            value: "William"
+          },
+          firstName: {
+            type: String,
+            value: "Andrew"
+          },
+          salutation:{
+            type:String,
+            value:"Mr."
+          },
+          bSN:{
+            type:String,
+            value:"BSN"
+          },
+          doorNumber:{
+            type:String,
+            value:"22"
+          },
+          addressLine1:
+          {
+            type:String,
+            value:"Netherlands---------------"
+          },
+          addressLine2:
+          {
+            type:String,
+            value:"Netherlands---------------"
+          },
+          city:{
+            type:String,
+            value:"Amsterdam"
+          },
+          homeNumber:{
+            type:String,
+            value:"Amsterdam"
+          },
+          mobileNumber:{
+            type:String,
+            value:"9015291725"
+          },
+          emailAddress:{
+            type:String,
+            value:"abc@gmail.com"
+          },
+          maritalStatus:{
+            type:String,
+            value:"Single"
+          },
+          noOfDependents:
+          {
+            type:String,
+            value:"1"
+          },
+          getProfileSave:{
+            type:String,
+            computed : 'saveProfile(id, emailAddress)'
+          },
+          ajaxResponse : {
+            type : Object,
+            value : {}
+          },
+          tempResponse : {
+            type : Object,
+            value : {}
+          },
+          edit :{
+            type:Boolean,
+            value: false
+          },
+          hide:{
+            type:Boolean,
+            value:false
+          }
+        }
+      }
+      eventClick() {
+        this.edit = true;
+        this.hide=true;
+        this.$.lmDialog.open();
+      }
+
+      updateProfile(){
+        this.$.confirmText.open();
+        this.$.saveProfile.generateRequest();
+      }
+      saveProfile(){
+        this.edit=false;
+        this.hide = false;
+        return this.ajaxResponse;
+      }
+            getCityInfo(){
+              //this.ajaxResponse= this.tempResponse.address.postCode;
+              this.$;
+              // this.isActive = true;
+              let postCode = this.ajaxResponse.address.postCode;
+               if(postCode!="undefined" && postCode!="")
+               this.postCodeApiUrl = "https://api.bring.com/shippingguide/api/postalCode.json?clientUrl=t&country=NL&pnr="+postCode;
+              this.$.cityInfoReq.generateRequest();
+            }
+     
+      handleCityInfoResponse(res){
+              let valid = res.detail.response.valid;
+              if(valid){
+                this.$.cityName.value = res.detail.response.result;
+                //this.propertydetails["propCity"] = res.detail.response.result;
+              } else {
+                this.$.cityName.value = "";
+              }
+              this.isActive = false;
+            }
+        
+        //console.log(JSON.stringify(this.saveProfile));
+      
+      updateEditProfile() {
+        this.edit=false;
+        this.hide = false;
+      }
+      json(obj) {
+        return JSON.stringify(obj, null, 2);
+      }
+    }
+
+    window.customElements.define(RegisterProfile.is, RegisterProfile);
+  </script>
+</dom-module>
