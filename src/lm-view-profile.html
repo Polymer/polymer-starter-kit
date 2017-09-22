@@ -155,7 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-input label="Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
-                <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}">
+                <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo">
                   </paper-input>
                   <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
                       <iron-icon icon = "account-circle"  prefix></iron-icon>
@@ -163,7 +163,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
                 <div class="col">
                     <paper-input disabled$="{{!edit}}" label="Street Name" value="{{ajaxResponse.address.addressLine1}}"></paper-input>
-                    <paper-input disabled$="{{!edit}}" type="number" label="City" value="{{ajaxResponse.address.city}}">
+                    <paper-input disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
                       </paper-input>
                 </div>
           </div>
@@ -233,6 +233,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-button hidden$="{{!hide}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
         </div>
     </div>
+    <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="GET"
+    body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse">
+</iron-ajax>
     
   </template>
 
@@ -339,6 +342,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.hide=true;
         this.$.lmDialog.open();
       }
+
       updateProfile(){
         this.$.confirmText.open();
         this.$.saveProfile.generateRequest();
@@ -356,6 +360,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          // this.tempResponse = data.detail.response;
         
       }
+            getCityInfo(){
+              //this.ajaxResponse= this.tempResponse.address.postCode;
+              this.$;
+              // this.isActive = true;
+              let postCode = this.ajaxResponse.address.postCode;
+               if(postCode!="undefined" && postCode!="")
+               this.postCodeApiUrl = "https://api.bring.com/shippingguide/api/postalCode.json?clientUrl=t&country=NL&pnr="+postCode;
+              this.$.cityInfoReq.generateRequest();
+            }
+     
+      handleCityInfoResponse(res){
+              let valid = res.detail.response.valid;
+              if(valid){
+                this.$.cityName.value = res.detail.response.result;
+                //this.propertydetails["propCity"] = res.detail.response.result;
+              } else {
+                this.$.cityName.value = "";
+              }
+              this.isActive = false;
+            }
       cancel() {
         this.ajaxResponse = this.tempResponse;
         this.edit=false;
