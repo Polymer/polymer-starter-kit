@@ -19,7 +19,8 @@
     "paper-button": "^2.0.0",
     "paper-input": "^2.0.2",
     "paper-card": "PolymerElements/paper-card#^2.0.0",
-    "paper-slider": "^2.0.2"
+    "paper-slider": "^2.0.2",
+    "paper-dialog": "PolymerElements/paper-dialog#^2.0.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"

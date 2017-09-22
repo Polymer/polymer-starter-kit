@@ -13,407 +13,401 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="./lm-slider.html">
 <link rel="import" href="./term-conditions.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-down-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
 
 <dom-module id="product-preference">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
-        padding: 10px;
-      }
-      header
-      {
-        text-align: center;
-      }
-      .paper-button
-      {
-        background-color: #f60;
-        color: white;
-      }
-      .details-container
-      {
-        background-color: white;
-        border-radius: 5px;
-        overflow: auto;
-         display: block;
-      }
-      paper-card.white {
-          --paper-card-header-color:black;
-        }
-        paper-card
-        {
-          background: #fdfdfd;
-          border: 1px solid #f1f1f1;
-          box-shadow: none;
-          border-radius: 5px;
-          text-align: center;
-          width:280px;
-          cursor: pointer;
-          margin: 20px;
-        }
-        
-        .flex-container{
-          flex-direction: row;
-          flex-wrap: wrap;
-        }
-        .flex-item{
-          flex:1;
-        }
-        .flex-container-bleed{
-            @apply(--layout-horizontal);
-            @apply(--layout-wrap);
-            justify-content: center;
-       }
-       .flex-item-4{
-           @apply(--layout-flex-4);
-       }
-       .bold-item{
-            font-weight: bold;
-       }
-       paper-card.selected {
-        border-bottom:4px solid #f60;
-       }
-       .submittedClass {
-            padding: 10px;
-            color: green;
-            font-weight: normal;
-            font-size: 15px;
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-        } 
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
+
+            header {
+                text-align: center;
+            }
+
+            .paper-button {
+                background-color: #f60;
+                color: white;
+            }
+
+            .details-container {
+                background-color: white;
+                border-radius: 5px;
+                overflow: auto;
+                display: block;
+            }
+
+            paper-card.white {
+                --paper-card-header-color: black;
+            }
+
+            paper-card {
+                background: #fdfdfd;
+                border: 1px solid #f1f1f1;
+                box-shadow: none;
+                border-radius: 5px;
+                text-align: center;
+                width: 280px;
+                cursor: pointer;
+                margin: 20px;
+            }
+
+            .flex-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .flex-item {
+                flex: 1;
+            }
+
+            .flex-container-bleed {
+                @apply(--layout-horizontal);
+                @apply(--layout-wrap);
+                justify-content: center;
+            }
+
+            .flex-item-4 {
+                @apply(--layout-flex-4);
+            }
+
+            .bold-item {
+                font-weight: bold;
+            }
+
+            paper-card.selected {
+                border-bottom: 4px solid #f60;
+            }
+
+            .submittedClass {
+                padding: 10px;
+                color: green;
+                font-weight: normal;
+                font-size: 15px;
+                display: block;
+                margin-top: 10px;
+                text-align: center;
+            }
+
+            .center {
+                margin-left: 23px;
+                font-weight: bold;
+                font-size: 20px;
+                color: #1f1f1f;
+                border-bottom: 1px solid #e8e8e8;
+                padding-bottom: 10px;
+            }
+
+            .right {
+                text-align: right;
+            }
+
+            .slider-contianer {
+                margin: 50px 0 0 15px;
+            }
+
+            .productContainer {
+                width: 980px;
+                margin: 0 auto;
+            }
+
+            .slide-detail {
+                margin: 20px 25px;
+                display: inline-block;
+                font-size: 18px;
+            }
+
+                .slide-detail span {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #f60;
+                }
+        </style>
+        <div class="productContainer">
+            <div class="flex-container">
+                <template is="dom-repeat" items="[[products.product]]">
+                    <paper-card id='paper_card_{{index}}' heading="[[item.productName]]" on-click="_getProductDetails" class="white flex-item" class$="{{getSelectedClass(index)}}">
+                        <div class="card-content">[[item.productDesc]]</div>
+                    </paper-card>
+                </template>
+            </div>
+
+            <div class="details-container">
+                <div class="center">&nbsp;</div>
+                <div class="slide-detail">Equated Periodic Installment(EPI) :  <span>&euro; {{_convertToLocale(epi)}}</span></div>
+                <div class="slide-detail">Effective APR% : <span>25</span></div>
+                <div class="slide-detail">Total Offer Value : <span>&euro;{{_convertToLocale(25)}}</span></div>
+
+                <div class="slider-contianer">
+                    <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
+                    <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
+                    <lm-slider title='Down Payment' prefix='&euro;' minval='1' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider>
+
+                    <term-conditions terms="[[termsArray]]"></term-conditions>
+                    <div class="right">
+                        <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
+                    </div>
+
+                  
+                        <paper-dialog id="dialoge"  entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+                            <label class="center">Data submitted successfully!</label>
+                            <div><label>Here are details of offer:</label></div>
+                            <div><label>Offer Term: {{termValues.minTerm}}</label></div>
+                            <div><label>Offer Amount: {{offeramount}}</label></div>
+                            <div><label>Down payment: [[offerdownpayment]]</label></div>
+                            <div><label>Offer EPI: {{epi}}</label></div>
+                        </paper-dialog>
+
+
+                </div>
+            </div>
+        </div>
        
-      .center{
-        margin-left: 23px;
-        font-weight: bold;
-        font-size: 20px;
-        color:#1f1f1f;
-        border-bottom: 1px solid #e8e8e8;
-        padding-bottom: 10px;
-       }
-       
-      .right{
-        text-align: right;
-      }
-      .slider-contianer{
-        margin: 50px 0 0 15px;
-      }
+        <iron-ajax auto
+                   url="src/products.json"
+                   params='{{params}}'
+                   handle-as="json"
+                   on-response="_handleResponseForProducts"
+                   debounce-duration="300">
+        </iron-ajax>
 
-      .productContainer{
-        width: 980px;
-        margin: 0 auto;
-      }
-      .slide-detail{
-        margin: 20px 25px;
-        display: inline-block;
-        font-size: 18px;
-      }
-      .slide-detail span{
-        font-size: 24px;
-        font-weight: bold;
-        color: #f60;
-      }
-
-      
-    </style>
-  <div class="productContainer">
-    <div class="flex-container">
-      <template is="dom-repeat" items="[[products.product]]">
-        <paper-card id='paper_card_{{index}}'  heading="[[item.productName]]" on-click="_getProductDetails"  class="white flex-item" class$="{{getSelectedClass(index)}}">
-           <div class="card-content">[[item.productDesc]]</div>
-        </paper-card>
-      </template>
-    </div>
-
-    <div class="details-container"> 
-      <div class="center">&nbsp;</div>
-       <div class="slide-detail">Equated Periodic Installment(EPI) :  <span>&euro; {{_convertToLocale(epi)}}</span></div>
-       <div class="slide-detail">Effective APR% : <span>25</span></div>
-       <div class="slide-detail">Total Offer Value : <span>&euro;{{_convertToLocale(25)}}</span></div>
-        
-       <div class="slider-contianer">
-                <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
-               <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
-               <lm-slider title='Down Payment' prefix='&euro;' minval='1' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider>
-
-        <term-conditions terms="[[termsArray]]"></term-conditions>
-        <div class="right">
-        <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
-         </div>
-
-          <template is="dom-if" if="[[datasubmitted]]" restamp>
-              <label class="center" >Data submitted successfully!</label>
-          </template> 
+        <iron-ajax id="ironAjaxSubmit"
+                   url="http://127.0.0.1:8081/products"
+                   handle-as="json"
+                   body='{{postBody}}'
+                   method="post"
+                   on-response="sendResponse"
+                   content-type="application/json">
+        </iron-ajax>
+    </template>
 
 
-    </div>
-    </div>
-    </div>
-        <!-- url="http://10.138.65.58:8080/lightningmortgage/identifyProduct/" -->
-    
-     <iron-ajax
-          auto
-          url="src/products.json"
-          params='{{params}}'
-          handle-as="json"
-          on-response="_handleResponseForProducts"
-          debounce-duration="300">
-     </iron-ajax>
+    <script>
+        class ProductPreference extends Polymer.Element {
+            constructor() {
+                super();
+                this.products = [];
 
-     <iron-ajax id="ironAjaxSubmit"
-       url="http://127.0.0.1:8081/products"
-       handle-as="json"
-       body='{{postBody}}'
-       method="post"
-       on-response="sendResponse"
-       content-type="application/json">
-    </iron-ajax>
-</template>
-  
-
-  <script>
-    class ProductPreference extends Polymer.Element 
-    {
-      constructor()
-      {
-        super();
-        this.products=[];
-        
-      }     
-
-      static get is() { return 'product-preference'; }
-
-      static get properties()
-      {
-        return {
-          productName:{
-            type:String,
-            value:"Product Name"
-          },
-          productItem:{
-            type:Object,
-            value:{},
-            observer:"_productChanged"
-          },
-          termValues:{
-            type:Object,
-            value:{},
-            observer:"_productChanged"
-          },
-          amountValues:{
-            type:Object,
-            value:{},
-            observer:"_productChanged"
-          },
-          offeramount:{
-            type:Number,
-            observer:"_amountChanged"
-          },
-          offerterm:{
-            type:Number,
-            observer:"_termChanged"
-          },
-          offerdownpayment:{
-            type:Number
-          },
-          epi:{
-            type:String,
-            value:"392"
-
-          },
-          apr:{
-            type:String,
-            value:"2.4"
-
-          },
-
-          postBody: {
-              type: Object,
-              value: {
-
-              }
-          },
-          datasubmitted: {
-              type: Boolean,
-              value: false
-
-          },
-          termsArray : Array
-          }
-          
-    }
-     _convertToLocale(val){
-        if(val){
-          return val.toLocaleString();
-        }
-             
-           
-      }
-
-      updateEPI_APR(data,term,offer)
-      {
-        for(let i=0;i<data.length;i++)
-        {
-          if(term==data[i].productTerm)
-          {
-            if(offer==data[i].offerValue)
-            {
-              this.epi=data[i].epi;
             }
-          }
-        }
-      }
-        
-      _getProductDetails(event)
-      {
-        let selectedIndex = event.model.__data.index;
-        var classList = this.shadowRoot.querySelectorAll('paper-card');
-           classList.forEach((e)=>{
-               e.classList.remove('selected');
-           });
-          classList[selectedIndex].classList.add('selected');
-      }
 
-     
-      _amountChanged(newValue,oldValue)
-      {
-        if(oldValue!==undefined)
-        {
-          this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
-        }
-      }
-      _termChanged(newValue,oldValue)
-      {
-        if(oldValue!==undefined)
-        {
-          this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
-          this.offeramount=this.amountValues.maxAmount;
-          this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
-        }
-      }
-      _productChanged(newValue,oldValue)
-      {
-        console.log("value changed "+newValue);
-      }
+            static get is() { return 'product-preference'; }
 
-      _paramChanged(newValue,oldValue)
-      {
-        console.log(oldValue+"new"+newValue);
-      }
-      
-       _submitInfo() 
-       {
-          this.datasubmitted = true;
-          this.postBody.term=this.offerterm;
-          this.postBody.offeramount=this.offeramount;
-          this.postBody.downPayment=20000;//hardcoded;
-          this.postBody.epi=this.epi;
-          this.postBody.apr=this.apr;
-          this.postBody.productId=this.productId;
-          this.$.ironAjaxSubmit.generateRequest();
-      }
+            static get properties() {
+                return {
+                    productName: {
+                        type: String,
+                        value: "Product Name"
+                    },
+                    productItem: {
+                        type: Object,
+                        value: {},
+                        observer: "_productChanged"
+                    },
+                    termValues: {
+                        type: Object,
+                        value: {},
+                        observer: "_productChanged"
+                    },
+                    amountValues: {
+                        type: Object,
+                        value: {},
+                        observer: "_productChanged"
+                    },
+                    offeramount: {
+                        type: Number,
+                        observer: "_amountChanged"
+                    },
+                    offerterm: {
+                        type: Number,
+                        observer: "_termChanged"
+                    },
+                    offerdownpayment: {
+                        type: Number
+                    },
+                    epi: {
+                        type: String,
+                        value: "392"
 
-      sendResponse(data)
-       {
-          if (result && result.status === "200")
-           {
-              this.datasubmitted = true
-          }
-      } 
-      setTermMinMaxStep(data)
-      {
-        let tempMin=data[0].productTerm;
-        let tempMax=0;
-        let tempStep=0;
-        for(let i=0;i<data.length;i++)
-        {
-          if(data[i].productTerm  < tempMin  ){
-            tempStep=tempMin-data[i].productTerm;
-            tempMin = data[i].productTerm;
-          }
-          if(data[i].productTerm  > tempMax ){
-            tempStep=data[i].productTerm-tempMax;
-            tempMax = data[i].productTerm;
-          }
-        }
-        var tempObj = {};
-        tempObj.minTerm = tempMin;
-        tempObj.maxTerm = tempMax;
-        tempObj.termStep = tempStep;
+                    },
+                    apr: {
+                        type: String,
+                        value: "2.4"
 
-        return tempObj;
-        
-      }
-      setAmountMinMaxStep(data,term)
-      {
-        let tempMin=0;
-        let tempMax=0;
-        let tempStep=0;
-        for(let i=0;i<data.length;i++)
-        {
-          if(term==data[i].productTerm)
-          {
-            if(tempMin==0)
-            {
-            tempMin=data[i].offerValue;
+                    },
+
+                    postBody: {
+                        type: Object,
+                        value: {
+
+                        }
+                    },
+                    datasubmitted: {
+                        type: Boolean,
+                        value: false
+
+                    },
+                    termsArray: Array
+                }
+
             }
-            if(data[i].offerValue  < tempMin  )
-            {
-              tempStep=tempMin-data[i].offerValue;
-            tempMin = data[i].offerValue;
+            _convertToLocale(val) {
+                if (val) {
+                    return val.toLocaleString();
+                }
+
+
             }
-           if(data[i].offerValue  > tempMax )
-            {
-              tempStep=data[i].offerValue-tempMax;
-            tempMax = data[i].offerValue;
+
+            updateEPI_APR(data, term, offer) {
+                for (let i = 0; i < data.length; i++) {
+                    if (term == data[i].productTerm) {
+                        if (offer == data[i].offerValue) {
+                            this.epi = data[i].epi;
+                        }
+                    }
+                }
             }
-          }
+
+            _getProductDetails(event) {
+                let selectedIndex = event.model.__data.index;
+                var classList = this.shadowRoot.querySelectorAll('paper-card');
+                classList.forEach((e) => {
+                    e.classList.remove('selected');
+                });
+                classList[selectedIndex].classList.add('selected');
+            }
+
+
+            _amountChanged(newValue, oldValue) {
+                if (oldValue !== undefined) {
+                    this.updateEPI_APR(this.productDetails, this.offerterm, this.offeramount);
+                }
+            }
+            _termChanged(newValue, oldValue) {
+                if (oldValue !== undefined) {
+                    this.amountValues = this.setAmountMinMaxStep(this.productDetails, this.offerterm);
+                    this.offeramount = this.amountValues.maxAmount;
+                    this.updateEPI_APR(this.productDetails, this.offerterm, this.offeramount);
+                }
+            }
+            _productChanged(newValue, oldValue) {
+                console.log("value changed " + newValue);
+            }
+
+            _paramChanged(newValue, oldValue) {
+                console.log(oldValue + "new" + newValue);
+            }
+
+            _submitInfo() {
+                this.datasubmitted = true;
+                console.log("clicked submit");
+                this.postBody.customerId = 111;
+                this.postBody.epi = this.epi;
+                this.postBody.offerTerm = this.offerterm;
+                this.postBody.offerValue = this.offeramount;
+                this.postBody.downPayment = 20000;
+                this.postBody.annualPercentageRate = 2.3;
+                //this.$.ironAjaxSubmit.generateRequest();
+                this.$.dialoge.open();
+                //dialoge.toggle();
+            }
+
+            sendResponse(data) {
+                if (result && result.status === "200") {
+                    this.datasubmitted = true
+                }
+            }
+            setTermMinMaxStep(data) {
+                let tempMin = data[0].productTerm;
+                let tempMax = 0;
+                let tempStep = 0;
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].productTerm < tempMin) {
+                        tempStep = tempMin - data[i].productTerm;
+                        tempMin = data[i].productTerm;
+                    }
+                    if (data[i].productTerm > tempMax) {
+                        tempStep = data[i].productTerm - tempMax;
+                        tempMax = data[i].productTerm;
+                    }
+                }
+                var tempObj = {};
+                tempObj.minTerm = tempMin;
+                tempObj.maxTerm = tempMax;
+                tempObj.termStep = tempStep;
+
+                return tempObj;
+
+            }
+            setAmountMinMaxStep(data, term) {
+                let tempMin = 0;
+                let tempMax = 0;
+                let tempStep = 0;
+                for (let i = 0; i < data.length; i++) {
+                    if (term == data[i].productTerm) {
+                        if (tempMin == 0) {
+                            tempMin = data[i].offerValue;
+                        }
+                        if (data[i].offerValue < tempMin) {
+                            tempStep = tempMin - data[i].offerValue;
+                            tempMin = data[i].offerValue;
+                        }
+                        if (data[i].offerValue > tempMax) {
+                            tempStep = data[i].offerValue - tempMax;
+                            tempMax = data[i].offerValue;
+                        }
+                    }
+                }
+                var tempObj = {};
+                tempObj.minAmount = tempMin;
+                tempObj.maxAmount = tempMax;
+                tempObj.amountStep = tempStep;
+
+                return tempObj;
+
+            }
+            //getAPI
+            _handleResponseForProducts(data) {
+
+                this.products = data.detail.response;
+                this.productDetails = this.products.offer;
+                if (this.products) {
+
+                    this.productId = this.products.product.productId;
+                    console.log("hi" + JSON.stringify(this.productDetails));
+                    this.termValues = this.setTermMinMaxStep(this.productDetails);
+
+                    this.offerterm = this.termValues.maxTerm;
+                    this.amountValues = this.setAmountMinMaxStep(this.productDetails, this.offerterm);
+                    this.offeramount = this.amountValues.maxAmount;
+                    this.termsArray = this.products.product[0].terms;
+                    this.offerdownpayment = 10000;
+                    var temp = this.shadowRoot.querySelector('paper_card_0');
+                    console.log(temp);
+                    // classList.classList.add('selected');
+
+
+                }
+
+
+            }
+            getSelectedClass(index) {
+                if (index == 0) {
+                    return 'selected';
+                }
+            }
+
         }
-        var tempObj = {};
-        tempObj.minAmount = tempMin;
-        tempObj.maxAmount = tempMax;
-        tempObj.amountStep = tempStep;
-
-        return tempObj;
-
-      }
-      //getAPI
-      _handleResponseForProducts(data)
-      {
-
-        this.products = data.detail.response;
-        this.productDetails = this.products.offer;
-        if(this.products)
-        {
-
-          this.productId = this.products.product.productId;
-          console.log("hi"+JSON.stringify(this.productDetails));
-          this.termValues = this.setTermMinMaxStep(this.productDetails);
-
-        this.offerterm=this.termValues.maxTerm;
-        this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
-        this.offeramount=this.amountValues.maxAmount;
-        this.termsArray = this.products.product[0].terms;
-        this.offerdownpayment=10000; 
-        var temp = this.shadowRoot.querySelector('paper_card_0');
-           console.log(temp);
-         // classList.classList.add('selected');
-        
-        
-        }
-
-
-      }
-      getSelectedClass(index){
-        if(index == 0){
-          return 'selected';
-        }
-      }
-      
-      }
-    window.customElements.define(ProductPreference.is, ProductPreference);
-  </script>
+        window.customElements.define(ProductPreference.is, ProductPreference);
+    </script>
 </dom-module>
