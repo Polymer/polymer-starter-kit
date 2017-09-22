@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
         .User_details{margin:47px auto;width:980px;}
-		    :root { --paper-input-container-color: #0E0202;}
+		    paper-input { --paper-input-container-disabled: { opacity: 0.66; };} 
     </style>
 	
     <iron-ajax
@@ -76,8 +76,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     <div class="card User_details">  
-		<div class="next_button"><paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "green">Edit Profile</paper-button>
-          <paper-button hidden$="{{hide}}" toggles raised class = "green" on-tap="knockOutCheck">Validate</paper-button></div>        
+		<div class="next_button">
+      <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>
+      <paper-button hidden$="{{hide}}" toggles raised class = "LM-blue" on-tap="knockOutCheck">Validate</paper-button>
+      <paper-button hidden$="{{!hide}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+      
+    </div>     
         <h3>Personal Details</h3><hr>        
         <div class="row"> 
           <div class="col"> 
@@ -191,7 +195,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
             <div class="row">  
                 <div class="col">
-                  <paper-input disabled$="{{!edit}}" label="Email Address" value="{{ajaxResponse.emailAddress}}">
+                  <paper-input disabled$="{{!edit}}" required label="Email Address" value="{{ajaxResponse.emailAddress}}">
                     <iron-icon icon="mail" slot="prefix"></iron-icon>
                      <div slot="suffix"></div>
                    </paper-input>
@@ -202,9 +206,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h3>Finance Details</h3><hr>
           <div class="row">
               <div class="col">
-                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
+                  <paper-input disabled$="{{!edit}}" required label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
                   </paper-input>
-                  <paper-input disabled$="{{!edit}}" label="Monthly Family Expense" step="200" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
+                  <paper-input disabled$="{{!edit}}" required label="Monthly Family Expense" step="200" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
                     </paper-input>
               </div>
               <div class="col">
@@ -216,11 +220,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-alert-dialog id="lmDialog" confirm-button="OK">
             For changing KYC information document need to be submitted to the nearest Branch.
           </paper-alert-dialog>
-        <div class="next_button"><paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "green">Edit Profile</paper-button>
-        <paper-button hidden$="{{hide}}" toggles raised class = "green" on-tap="knockOutCheck">Validate</paper-button></div>
         <div class="next_button">
-          <paper-button hidden$="{{!hide}}" toggles raised class = "green" on-tap="updateProfile">Save</paper-button>
-          <paper-button hidden$="{{!hide}}" toggles raised class = "button-class" on-tap="cancel">Cancel</paper-button>
+          <paper-button hidden$="{{!hide}}" toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
         </div>
     </div>
     
