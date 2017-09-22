@@ -31,14 +31,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .paper-button
       {
         background-color: #f60;
-        color: white
+        color: white;
       }
       .details-container
       {
         background-color: white;
         border-radius: 5px;
         overflow: auto;
-        padding:1em 2em;
          display: block;
       }
       paper-card.white {
@@ -46,18 +45,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         paper-card
         {
+          background: #fdfdfd;
+          border: 1px solid #f1f1f1;
+          box-shadow: none;
+          border-radius: 5px;
           text-align: center;
-          width:400px;
+          width:280px;
           cursor: pointer;
           margin: 20px;
-          padding-bottom : 25px;
-          border-radius: 5px; 
-          
-          
-
         }
+        
         .flex-container{
-          
           flex-direction: row;
           flex-wrap: wrap;
         }
@@ -76,12 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             font-weight: bold;
        }
        paper-card.selected {
-        --paper-card-header-text:{
-          color : #f60;
-        }
-        --paper-card-content:{
-          color : #f60;
-        }
+        border-bottom:4px solid #f60;
        }
        .submittedClass {
             padding: 10px;
@@ -93,21 +86,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             text-align: center;
         } 
        
-       label.center{
-        text-align: center;
+      .center{
         margin-left: 23px;
         font-weight: bold;
+        font-size: 20px;
+        color:#1f1f1f;
+        border-bottom: 1px solid #e8e8e8;
+        padding-bottom: 10px;
        }
-       .center{
-         text-align:center;
+       
+      .right{
+        text-align: right;
+      }
+      .slider-contianer{
+        margin: 50px 0 0 15px;
+      }
+
+      .productContainer{
+        width: 980px;
+        margin: 0 auto;
+      }
+      .slide-detail{
+        margin: 20px 25px;
+        display: inline-block;
+        font-size: 18px;
+      }
+      .slide-detail span{
+        font-size: 24px;
+        font-weight: bold;
+        color: #f60;
       }
 
       
     </style>
-  
+  <div class="productContainer">
     <div class="flex-container">
       <template is="dom-repeat" items="[[products.product]]">
-        <paper-card  heading="[[item.productName]]" on-click="_getProductDetails"  class="white flex-item">
+        <paper-card id='paper_card_{{index}}'  heading="[[item.productName]]" on-click="_getProductDetails"  class="white flex-item" class$="{{getSelectedClass(index)}}">
            <div class="card-content">[[item.productDesc]]</div>
         </paper-card>
       </template>
@@ -139,16 +154,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
 
         <term-conditions terms="[[termsArray]]"></term-conditions>
-        <div class="center">
+        <div class="right">
+        <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
+         </div>
 
-          <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
-             
-           </div>
           <template is="dom-if" if="[[datasubmitted]]" restamp>
               <label class="center" >Data submitted successfully!</label>
           </template> 
 
+
     </div>
+    </div>
+    </div>
+
 
     <iron-ajax
     id="ironAjaxOnload"
@@ -158,6 +176,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     on-response="_handleResponseForProducts"
     debounce-duration="300">
 </iron-ajax>
+
+        <!-- url="http://10.138.65.58:8080/lightningmortgage/identifyProduct/" -->
     
      <!-- <iron-ajax
           auto
@@ -169,16 +189,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      </iron-ajax> -->
 
      <iron-ajax id="ironAjaxSubmit"
-     url="http://127.0.0.1:8081/products"
-     handle-as="json"
-     body='{{postBody}}'
-     method="post"
-     on-response="sendResponse"
-     content-type="application/json">
-</iron-ajax>
-
-
-  </template>
+       url="http://127.0.0.1:8081/products"
+       handle-as="json"
+       body='{{postBody}}'
+       method="post"
+       on-response="sendResponse"
+       content-type="application/json">
+    </iron-ajax>
+</template>
   
 
   <script>
@@ -273,12 +291,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String
           },
           termsArray : Array
-
           }
-
-
+          
+    }
+     _convertToLocale(val){
+        if(val){
+          return val.toLocaleString();
         }
-      
+             
+           
+      }
 
       updateEPI_APR(data,term,offer)
       {
@@ -293,22 +315,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
       }
-        // console.log("updating");
-        // this.epi = this.offeramount+this.offerterm+this.offerdownpayment;
-        // console.log("EPI is ", this.epi);
-        // this.apr = this.offeramount-this.offerterm+this.offerdownpayment;
-        // console.log("APR  is ",this.apr);
-
         
-
-
       _getProductDetails(event)
       {
         let selectedIndex = event.model.__data.index;
-        // this.productItem = event.model.item;
-        // this.offeramount=this.productItem.maxAmount;
-        // this.offerterm=this.productItem.maxTenure;
-        // this.offerdownpayment=this.productItem.maxDownpayment;
         var classList = this.shadowRoot.querySelectorAll('paper-card');
            classList.forEach((e)=>{
                e.classList.remove('selected');
@@ -319,27 +329,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      
       _amountChanged(newValue,oldValue)
       {
-        console.log(newValue+"amount"+oldValue);
         if(oldValue!==undefined)
         {
-          console.log("called amount changed");
-        this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
+          this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
         }
       }
       _termChanged(newValue,oldValue)
       {
-        console.log(newValue+"amount"+oldValue);
         if(oldValue!==undefined)
         {
           this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
           this.offeramount=this.amountValues.maxAmount;
-       // this.updateEPI_APR();
-       this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
-      
+          this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
         }
       }
-      
-
       _productChanged(newValue,oldValue)
       {
         console.log("value changed "+newValue);
@@ -350,18 +353,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(oldValue+"new"+newValue);
       }
       
-
-      // _submitInfo()
-      // {
-      //  let tempParam={};
-      //   tempParam.name = "sss";
-      //   this.params=tempParam;
-      //   console.log(this.tempParam);
-      // }
-       //<!--code for submit data-->
        _submitInfo() 
        {
-          console.log("clicked submit");
           this.datasubmitted = true;
           this.postBody.term=this.offerterm;
           this.postBody.offeramount=this.offeramount;
@@ -369,17 +362,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.postBody.epi=this.epi;
           this.postBody.apr=this.apr;
           this.postBody.productId=this.productId;
-          //if customer id set it
           this.$.ironAjaxSubmit.generateRequest();
       }
-      //<!--code for submit data-->
+
       sendResponse(data)
        {
-          console.log('function called successfully')
           if (result && result.status === "200")
            {
               this.datasubmitted = true
-              console.log('Data sent successfully')
           }
       } 
       setTermMinMaxStep(data)
@@ -398,15 +388,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             tempMax = data[i].productTerm;
           }
         }
-        console.log("min"+tempMin + " " + tempMax + " " + this.termValues.termStep);
         var tempObj = {};
         tempObj.minTerm = tempMin;
         tempObj.maxTerm = tempMax;
         tempObj.termStep = tempStep;
 
         return tempObj;
-        //  this.productValues.minTerm = tempMin;
-        //  this.productValues.maxTerm = tempMax;
         
       }
       setAmountMinMaxStep(data,term)
@@ -416,7 +403,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         let tempStep=0;
         for(let i=0;i<data.length;i++)
         {
-          console.log("term is "+data[i].productTerm);
           if(term==data[i].productTerm)
           {
             if(tempMin==0)
@@ -441,46 +427,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tempObj.amountStep = tempStep;
 
         return tempObj;
-        //this.productValues.minAmount = tempMin;
-        //this.productValues.maxAmount = tempMax;
 
       }
       //getAPI
       _handleResponseForProducts(data)
       {
-        console.log("in response for products"+data.detail.response);
-        this.products = data.detail.response;
-        console.log("product values "+JSON.stringify(this.products));
-        this.productDetails = this.products.offer;
 
-        console.log("prod de"+this.productDetails);
+        this.products = data.detail.response;
+        this.productDetails = this.products.offer;
         if(this.products)
         {
 
-          this.productId = this.products.product.productId//this.products[0].productId;
+          this.productId = this.products.product.productId;
           console.log("hi"+JSON.stringify(this.productDetails));
           this.termValues = this.setTermMinMaxStep(this.productDetails);
 
         this.offerterm=this.termValues.maxTerm;
         this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
         this.offeramount=this.amountValues.maxAmount;
+
         this.termsArray = this.products.product[0].terms;//this.products[0].terms;
         this.offerdownpayment=10000; //change according to json from service
         this.epi = this.productDetails[this.productDetails.length-1].epi;
         this.totaloffervalue = this.offeramount + this.offerdownpayment;
-        
-        
+      
         }
 
 
       }
+      getSelectedClass(index){
+        if(index == 0){
+          return 'selected';
+        }
+      }
       
       }
-
-    
-
-    
-
     window.customElements.define(ProductPreference.is, ProductPreference);
   </script>
 </dom-module>

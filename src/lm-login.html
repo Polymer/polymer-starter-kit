@@ -12,64 +12,99 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
-
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="lm-login">
   
-  <template>
-    <style>
+  <template id="login" is="dom-bind">
+    <style include="shared-styles">
+      .login-container{
+        margin: 100px auto;
+        width: 30%;
+        border: 1px solid #e8e8e8;
+        
+        padding: 15px;
+      }
       .button-class{
-        background-color:#DEE2E6;
+        margin-top: 15px;
+      }
+
+      /* .button-class{
         width: 5%;
             height: 45px;
             display: block;
-            margin: 0 auto -20px;
             padding: 0 px;
             border: none;
             border-bottom: 0 px solid;
             text-align: center;
-      }
-      .input_field{
+      } */
+      /* .input_field{
             width: 35%;
             height: 50px;
             display: block;
             margin: 0 auto 15px;
             padding: 0 15px;
             border: none;
-            border-bottom: 20px solid #ebebeb;
-            }
-            .input_reg{
+            } */
+            /* .input_reg{
               float: left;
               margin-left: 32%;
-              font-size: 23px
+              font-size: 17px
             
-            }
+            } */
             .header
             {
-              width: 100%;
+              padding: 10px;
+              border-bottom: 1px solid #e8e8e8;
+              margin-top: 50px;
+              color: #f60;
+              font-weight: bold;
+            }
+            .invalidUser
+            {
               text-align: center;
-              clear: left;  
+              padding-top: 45px;
+              color: red;
+              font-size: 13px;
+              margin-top: 10px;
+              padding:2px 5px;
+            }
+            .regi_btn{
+              display: inline-block;
+              float: right;
+              margin-top: 25px;
+            }
+            .regi_btn a{
+              font-size: 14px;
+              color: #301067;
             }
      
     </style>
 
-      <div class="content-container">
+      <div class="header">Login</div>
+      <div class="login-container">
           <div id="Reg">
             <form name="form">
-              <h2 class="header">Login to Lightning Mortgage</h2>
+              
+              <!-- <h2 class="header">Login to Lightning Mortgage</h2> -->
+              <div class = "invalidUser"> <span hidden="{{hideMessage}}">{{ajaxResponse.message}}</span></div>
   
-              <paper-input class="input_field" name="username" id="username" value="{{loginDetails.useremail::input}}" type="text" placeholder="Enter Username Here !!" maxlength="6" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
-             <paper-input class="input_field" name="password" id="password" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
-             <paper-button raised class="button-class" value="Login">Login</paper-button>
-              <div><a href="/" class="input_reg">Register</a></div>
+              <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="Please Enter the Username !!" maxlength="10" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
+             <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
+             <div class="regi_btn"><a href="/" class="input_reg">Register</a></div>
+             <paper-button raised class="button-class" on-tap="login" value="Login">Login</paper-button>
             </form>
           </div>
         </div>
      
     <iron-ajax
-               auto
-               url="data/login.json"
+              id="ironAjaxElement" 
+               url="http://10.138.65.226:8080/lightningmortgage/customer/userLogin"
                handle-as="json"
+               body='{{postBody}}'
+               method="post"
+               on-response="handleResponse"
+               content-type="application/json"
                last-response="{{ajaxResponse}}"
                >
     </iron-ajax>
@@ -79,6 +114,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     class Login extends Polymer.Element {
       static get is() { return 'lm-login'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: "bar"
+          },
+          postBody: {
+            type: String,
+            computed: 'getPostBody(userId, password)'
+        },
+        hideMessage:{
+          type:String,
+          value:""
+         }
+        }
+      }
+      
+      login() {
+        let userDetails = this.postBody;
+        if(userDetails && userDetails.userId && userDetails.password) {
+          this.$.ironAjaxElement.generateRequest();
+        }
+      }
+      handleResponse(data) {
+        var result= data.detail.response 
+        if(result && result.status ==="200") {
+        window.history.pushState({}, null, '/view-profile/'+result.userId);
+        window.dispatchEvent(new CustomEvent('location-changed'));
+        }
+     
+       
+      }
+      getPostBody (userId, password) {
+        return {
+          userId: userId,
+          password: password
+        };
+      }
     }
 
     window.customElements.define(Login.is, Login);

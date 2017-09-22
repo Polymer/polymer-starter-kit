@@ -1,57 +1,152 @@
-// [
-//     {
-//         "id":"custid",
-//         "productName":"ProductOne",
-//         "reference":"ReferenceOne",
-//         "offerMinimumTerm":5,
-//         "offerMaximumTerm":10,
-//         "offerMinimumValue":600,
-//         "offerMaximumValue":1000,
-//         "offerMinimumDownPayment":5,
-//         "offerMaximumDownPayment":10
-
-//     },
-//     {
-//         "id":"custid2",
-//         "productName":"ProductTwo",
-//         "reference":"ReferenceTwo",
-//         "offerMinimumTerm":6,
-//         "offerMaximumTerm":15,
-//         "offerMinimumValue":700,
-//         "offerMaximumValue":1000,
-//         "offerMinimumDownPayment":4,
-//         "offerMaximumDownPayment":10
-
-//     },
-//     {
-//         "id":"custid3",
-//         "productName":"ProductThree",
-//         "reference":"ReferenceThree",
-//         "offerMinimumTerm":3,
-//         "offerMaximumTerm":8,
-//         "offerMinimumValue":500,
-//         "offerMaximumValue":1000,
-//         "offerMinimumDownPayment":5,
-//         "offerMaximumDownPayment":10
-
-//     }
-// ]
-[
 {
-    "productName":"JumboMortgage",
-    "productId":"10001",
-    "productDesc":"JM10001",
-    "minTenure":2,
-    "maxTenure":20,
-    "minAmount":100000,
-    "maxAmount":100000000,
-    "minDownpayment":5000,
-    "maxDownpayment":500004,
-    "terms":[
+    "offer": [
+        {
+            "productTerm": 20,
+            "frequency": "Monthly",
+            "offerValue": 36000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 4000,
+            "effectiveDisbursementValue": 40000,
+            "epi": 187
+        },
+        {
+            "productTerm": 20,
+            "frequency": "Monthly",
+            "offerValue": 45000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 5000,
+            "effectiveDisbursementValue": 50000,
+            "epi": 234
+        },
+        {
+            "productTerm": 20,
+            "frequency": "Monthly",
+            "offerValue": 54000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 6000,
+            "effectiveDisbursementValue": 60000,
+            "epi": 281
+        },
+        {
+            "productTerm": 20,
+            "frequency": "Monthly",
+            "offerValue": 63000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 7000,
+            "effectiveDisbursementValue": 70000,
+            "epi": 328
+        },
+        {
+            "productTerm": 20,
+            "frequency": "Monthly",
+            "offerValue": 72000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 8000,
+            "effectiveDisbursementValue": 80000,
+            "epi": 375
+        },
+        {
+            "productTerm": 40,
+            "frequency": "Monthly",
+            "offerValue": 90000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 10000,
+            "effectiveDisbursementValue": 100000,
+            "epi": 287
+        },
+        {
+            "productTerm": 40,
+            "frequency": "Monthly",
+            "offerValue": 99000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 11000,
+            "effectiveDisbursementValue": 110000,
+            "epi": 316
+        },
+        {
+            "productTerm": 40,
+            "frequency": "Monthly",
+            "offerValue": 108000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 12000,
+            "effectiveDisbursementValue": 120000,
+            "epi": 344
+        },
+        {
+            "productTerm": 40,
+            "frequency": "Monthly",
+            "offerValue": 117000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 13000,
+            "effectiveDisbursementValue": 130000,
+            "epi": 373
+        },
+        {
+            "productTerm": 60,
+            "frequency": "Monthly",
+            "offerValue": 135000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 15000,
+            "effectiveDisbursementValue": 150000,
+            "epi": 346
+        },
+        {
+            "productTerm": 60,
+            "frequency": "Monthly",
+            "offerValue": 144000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 16000,
+            "effectiveDisbursementValue": 160000,
+            "epi": 369
+        },
+        {
+            "productTerm": 60,
+            "frequency": "Monthly",
+            "offerValue": 153000,
+            "annualPercentageRate": 2,
+            "minDownpayment": 17000,
+            "effectiveDisbursementValue": 170000,
+            "epi": 392
+        }
+    ],
+    "product": [
+        {
+            "productId": 10001,
+            "productDesc": "JM10001",
+            "productName": "JumboMortgage",
+            "minTenure": 5,
+            "maxTenure": 60,
+            "minAmount": 100000,
+            "maxAmount": 2500000,
+            "minDownpayment": 5000,
+            "maxDownpayment": 150000,
+            "terms": [
                 "Terms and conditions part1",
                 "Terms and conditions part2",
                 "Terms and conditions part3",
                 "Terms and conditions part4"
-                    ]
+            ],
+            "interestRate": 2.6,
+            "productDetails": null
+        },
+        {
+            "productId": 10001,
+            "productDesc": "JM10001",
+            "productName": "JumboMortgage",
+            "minTenure": 5,
+            "maxTenure": 60,
+            "minAmount": 100000,
+            "maxAmount": 2500000,
+            "minDownpayment": 5000,
+            "maxDownpayment": 150000,
+            "terms": [
+                "Terms and conditions part1",
+                "Terms and conditions part2",
+                "Terms and conditions part3",
+                "Terms and conditions part4"
+            ],
+            "interestRate": 2.6,
+            "productDetails": null
+        }
+    ]
 }
-]
