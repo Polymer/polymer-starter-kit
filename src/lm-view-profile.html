@@ -41,6 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
         .User_details{margin:47px auto;width:980px;}
+		    :root { --paper-input-container-color: #0E0202;}
     </style>
 	
     <iron-ajax
@@ -73,7 +74,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
 
 
-    <div class="card User_details">          
+    <div class="card User_details">  
+		<div class="next_button"><paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "green">Edit Profile</paper-button>
+          <paper-button hidden$="{{hide}}" toggles raised class = "green" on-tap="knockOutCheck">Validate</paper-button></div>        
         <h3>Personal Details</h3><hr>        
         <div class="row"> 
           <div class="col"> 
@@ -163,10 +166,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-input disabled$="{{!edit}}" label="Home Number" value="{{ajaxResponse.homeNumber}}" type="number">
                       <div slot="prefix"></div>
                     </paper-input>
-                    <paper-input disabled$="{{!edit}}" label="Email Address" value="{{ajaxResponse.emailAddress}}">
-                        <iron-icon icon="mail" slot="prefix"></iron-icon>
-                         <div slot="suffix"></div>
-                       </paper-input>
+                    
                   </div>
                 
                 <div class="col">
@@ -181,6 +181,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <div slot="prefix"></div>
                 </paper-input>
               </div>
+            </div>
+            <div class="row">  
+                <div class="col">
+                  <paper-input disabled$="{{!edit}}" label="Email Address" value="{{ajaxResponse.emailAddress}}">
+                    <iron-icon icon="mail" slot="prefix"></iron-icon>
+                     <div slot="suffix"></div>
+                   </paper-input>
+                </div>
+                <div class="col"></div><div class="col"></div>
             </div>
 
           <h3>Finance Details</h3><hr>
