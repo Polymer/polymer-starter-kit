@@ -35,7 +35,7 @@
 	<template is="dom-repeat" items="{{itemindex}}">
         <paper-card id='paper_card_{{index}}' on-click="_getDetails" class='default'>
            <div class="card-content"> 
-           <img src='../images/icon-{{item.id}}.png' title="{{item.name}}"  />
+           <img src='../images/icon-{{item.id}}.png' title="{{item.name}} of amount {{item.value}}"  />
            </div>
         </paper-card>
       </template>	
@@ -75,7 +75,8 @@
 						value:0,
 						reflectToAttribute : true,
 						notify:true
-								}
+						},
+
 					
 
 				};
@@ -86,6 +87,7 @@
 					sum +=this.selectedVas[counter];
 				} 
 				this.totalvas = sum;
+				this.dispatchEvent(new CustomEvent('totalvas-changed', {detail: {valuechanged: true}}));
 			}
 			_getDetails(event){
 		        let selectedIndex = event.model.__data.index;

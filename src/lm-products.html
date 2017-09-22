@@ -109,7 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       .productContainer{
         width: 980px;
-        margin: 70px auto 0;
+        margin: 70px auto;
 
       }
       .slide-detail{
@@ -187,7 +187,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
     </div>
     <div class="vas-icons">
-       <vas-service itemindex='{{vasArray}}'></vas-service>
+       <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
 
     </div>
     </div>
@@ -211,7 +211,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          </iron-ajax> -->
 
      <iron-ajax id="ironAjaxSubmit"
-       url="http://127.0.0.1:8081/products"
+       url="http://10.138.13.58:8080/lightningmortgage/customerOffer"
        handle-as="json"
        body='{{postBody}}'
        method="post"
@@ -236,16 +236,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         let customerId=localStorage.getItem("userId");
         let postalCode=localStorage.getItem("postalCode");
         let balance = localStorage.getItem("outstandingBalance");
-        if(postalCode==null)
+         if(postalCode==null || postalCode=="")
         {
           postalCode="0";
         }
-        if(balance==null)
+        if(balance==null || balance=="")
         {
           balance=0;
-        }
+        } 
         console.log("local storage values"+customerId+postalCode+balance);
-        this.onloadurl="src/products.json";//"http://10.138.13.58:8080/lightningmortgage/identifyProduct/"+customerId+"/"+postalCode+"/"+balance;
+        this.onloadurl = "http://10.138.13.58:8080/lightningmortgage/identifyProduct/123/1012CM/0";
+        console.log("url "+this.onloadurl); 
         console.log("url "+this.onloadurl);
         this.$.ironAjaxOnload.generateRequest();
       }
@@ -335,9 +336,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         this.totaloffervalue = this.offeramount + this.offerdownpayment;
         let tmp = this.shadowRoot.querySelector('vas-service');
-        //this.totaloffervalue += tmp.getAttribute('totalvas');
+        this.totaloffervalue += tmp.totalvas;
       }
-
+      updateOfferAmount(){
+        let tmp = this.shadowRoot.querySelector('vas-service');
+        this.totaloffervalue = parseInt(this.offeramount) + parseInt(this.offerdownpayment)+ parseInt(tmp.totalvas);
+      }
       _getProductDetails(event)
       {
         let selectedIndex = event.model.__data.index;
@@ -395,11 +399,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       sendResponse(data)
        {
-          if (result && result.status === "200")
+          if (data && data.status === "200")
            {
               this.datasubmitted = true
           }
-      }
+      } 
       setTermMinMaxStep(data)
       {
         let tempMin=data[0].productTerm;
@@ -493,6 +497,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return 'selected';
         }
       }
+
+      // window.addEventListener('totalvas-changed',function(){
+      //     alert(1);
+      // });
 
       }
     window.customElements.define(ProductPreference.is, ProductPreference);
