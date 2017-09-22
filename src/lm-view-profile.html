@@ -40,12 +40,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .next_button {overflow: auto;}
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
+        .confirm_info{
+          font-size: 13px;
+        }
         .User_details{margin:47px auto;width:980px;}
         paper-dropdown-menu.salutation{width: 11%;}
         paper-dropdown-menu.Marital_Status{width:27%;}
         paper-dropdown-menu.dependents{width:34%;}
         paper-dropdown-menu.mob_code{width:29%;}
-		    paper-input { --paper-input-container-disabled: { opacity: 0.96; };} 
+		    :host paper-input[disabled] {
+        --paper-input-container-input-color: #afafaf;
+        --paper-input-container-disabled: {
+        opacity: o.5;
+        }
+        }
+        :host paper-dropdown-menu[disabled] {
+        --paper-input-container-input-color: #afafaf;
+        --paper-input-container-disabled: {
+        opacity: 0.5;
+        }
+        } 
     </style>
 	
     <iron-ajax
@@ -142,10 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <paper-item>4</paper-item>
                       <paper-item>5</paper-item>
                       <paper-item>6</paper-item>
-                      <paper-item>7</paper-item>
-                      <paper-item>8</paper-item>
-                      <paper-item>9</paper-item>
-                      <paper-item>10</paper-item>
+        
                     </paper-listbox>
                 </paper-dropdown-menu>
                   
@@ -166,8 +177,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
                 <div class="col">
                     <paper-input disabled$="{{!edit}}" label="Street Name" value="{{ajaxResponse.address.addressLine1}}"></paper-input>
+
                     <paper-input disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
 
+                </div>
           </div>
           <h3>Contact Details</h3><hr>
             <div class="row">  
@@ -228,8 +241,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </paper-alert-dialog>
 
           <paper-alert-dialog id="confirmText" confirm-button="OK">
-              Please ensure that the information you update matches with official records. You will be required to 
-              submit documents to support the change before the mortgage is processed 
+             <p> Please ensure that the information you update matches with official records. </p> <p>You will be required to 
+              submit documents to support the change before the mortgage is processed </p>
           </paper-alert-dialog>
         <div class="next_button">
           <paper-button hidden$="{{!hide}}" toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
