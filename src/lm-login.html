@@ -140,7 +140,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       handleResponse(data) {
         var result= data.detail.response 
         if(result && result.status ==="200") {
-        window.history.pushState({}, null, '/view-profile/'+result.userId);
+        localStorage.setItem('userId', result.userId);
+        window.history.pushState({}, null, '/view-profile');
         window.dispatchEvent(new CustomEvent('location-changed'));
         }
      

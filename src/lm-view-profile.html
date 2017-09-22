@@ -332,15 +332,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           
       getUrl() {
-        var url = window.location.pathname;
-        var splitUrl=url.split("/");
-        return "http://10.138.65.226:8080/lightningmortgage/customer/getCustomer/"+splitUrl[2];
+        var userId=localStorage.getItem('userId');
+        return "http://10.138.65.226:8080/lightningmortgage/customer/getCustomer/"+userId;
         
       }
       getKnockUrl() {
-        var url = window.location.pathname;
-        var splitUrl=url.split("/");
-        return "http://10.138.64.218:8080/lightningmortgage/knockoutCheck/"+splitUrl[2];
+        var userId=localStorage.getItem('userId');
+        return "http://10.138.64.218:8080/lightningmortgage/knockoutCheck/"+userId;
         
       }
       knockOutCheck() {
@@ -349,7 +347,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       knockOutResponse(data) {
         var result= data.detail.response 
         if(result && result.responseCode ==="200") {
-        window.history.pushState({}, null, '/property-details/'+result.responseData.userId);
+        window.history.pushState({}, null, '/property-details');
         window.dispatchEvent(new CustomEvent('location-changed'));
         }
       }
