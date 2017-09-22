@@ -30,7 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
         padding: 10px;
       }
-        paper-dropdown-menu {width:100px;display: block;}
+        
         #container {display: flex;}
         paper-button{ padding: 10px; border-radius: 5px; float: right;}
         paper-button.green:hover { background-color: var(--paper-green-400);}
@@ -41,6 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
         .User_details{margin:47px auto;width:980px;}
+		    paper-input { --paper-input-container-disabled: { opacity: 0.66; };} 
     </style>
 	
     <iron-ajax
@@ -74,13 +75,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
 
 
-    <div class="card User_details">          
+    <div class="card User_details">         
+       
+		<div class="next_button">
+      <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>
+      <paper-button hidden$="{{hide}}" toggles raised class = "LM-blue" on-tap="knockOutCheck">Validate</paper-button>
+      <paper-button hidden$="{{!hide}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+      
+    </div>  
+    <div class="confirm_info">
+        "So that we can offer you the best mortgage options, please confirm if the following information is accurate"
+    </div>       
+
         <h3>Personal Details</h3><hr>        
         <div class="row"> 
           <div class="col"> 
               <div class="blocks"> 
                 <paper-dropdown-menu disabled$="{{!edit}}" label="Salutation" value="{{ajaxResponse.salutation}}">
-                  <paper-listbox  slot = "dropdown-content" >
+                  <paper-listbox  slot = "dropdown-oncontent" >
                     <paper-item>Mr.</paper-item>
                     <paper-item>Mrs.</paper-item>
                   </paper-listbox>
@@ -90,7 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
           <div class="row"> 
               <div class="col"> 
-                <paper-input auto-validate allowed-pattern="[a-zA-Z]" disabled$="{{!edit}}" 
+                <paper-input auto-validate autocapitalize allowed-pattern="[a-zA-Z]" disabled$="{{!edit}}" 
                   label = "First name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
@@ -113,7 +125,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
             
               <div class="col">  
-                <paper-input auto-validate allowed-pattern="[a-zA-Z]" 
+                <paper-input auto-validate autocapitalize allowed-pattern="[a-zA-Z]" 
                   label="Last Name" required disabled$="{{!edit}}" value= "{{ajaxResponse.lastName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
@@ -135,64 +147,98 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-input label="Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
-
-                <paper-input disabled$="{{!edit}}" label="City" value="{{ajaxResponse.address.city}}">
-                    <iron-icon icon = "account-circle"  prefix></iron-icon>
-                   </paper-input>
-                <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
-                  <iron-icon icon = "account-circle"  prefix></iron-icon>
-                </paper-input>
-                   
+                <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}">
+                  </paper-input>
+                  <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
+                      <iron-icon icon = "account-circle"  prefix></iron-icon>
+                    </paper-input>
               </div>
                 <div class="col">
+
+                    <paper-input disabled$="{{!edit}}" label="Street Name" value="{{ajaxResponse.address.addressLine1}}">
+
                     <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo">
                     </paper-input>
                     <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine1}}">
+
                         <iron-icon icon = "account-circle"  prefix></iron-icon>
                       </paper-input>
+                      <paper-input disabled$="{{!edit}}" label="City" value="{{ajaxResponse.address.city}}">
+                          <iron-icon icon = "account-circle"  prefix></iron-icon>
+                         </paper-input>
+                    
                 </div>
           </div>
           <h3>Contact Details</h3><hr>
             <div class="row">  
+                <div class="col">
+                    <paper-dropdown-menu disabled$="{{!edit}}" label="Code" value="{{ajaxResponse.salutation}}">
+                        <paper-listbox  slot = "dropdown-content" >
+                          <paper-item>+31</paper-item>
+                        </paper-listbox>
+                      </paper-dropdown-menu>
+                </div>
                 <div class="col"> 
                     <paper-input disabled$="{{!edit}}" label="Home Number" value="{{ajaxResponse.homeNumber}}" type="number">
                       <div slot="prefix"></div>
                     </paper-input>
-                    <paper-input disabled$="{{!edit}}" label="Email Address" value="{{ajaxResponse.emailAddress}}">
-                        <iron-icon icon="mail" slot="prefix"></iron-icon>
-                         <div slot="suffix"></div>
-                       </paper-input>
+                    
                   </div>
                 
                 <div class="col">
-                  <paper-input disabled$="{{!edit}}" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" type="number">
+                    <paper-dropdown-menu disabled$="{{!edit}}" label="Code" value="{{ajaxResponse.salutation}}">
+                        <paper-listbox  slot = "dropdown-content" >
+                          <paper-item>+31</paper-item>
+                        </paper-listbox>
+                      </paper-dropdown-menu>
+                </div>
+                <div class="col">
+                  <paper-input disabled$="{{!edit}}" required maxlength="10" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" type="number">
                   <div slot="prefix"></div>
                 </paper-input>
               </div>
+            </div>
+            <div class="row">  
+                <div class="col">
+                  <paper-input disabled$="{{!edit}}" required label="Email Address" value="{{ajaxResponse.emailAddress}}">
+                    <iron-icon icon="mail" slot="prefix"></iron-icon>
+                     <div slot="suffix"></div>
+                   </paper-input>
+                </div>
+                <div class="col"></div><div class="col"></div>
             </div>
 
           <h3>Finance Details</h3><hr>
           <div class="row">
               <div class="col">
-                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income(confirmed)" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
+                  <paper-input disabled$="{{!edit}}" required label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
                   </paper-input>
-                  <paper-input disabled$="{{!edit}}" label="Monthly Family Expense" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
+                  <paper-input disabled$="{{!edit}}" required label="Monthly Family Expense" step="200" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
                     </paper-input>
               </div>
               <div class="col">
-                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income (additional)" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
+                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income (additional)" step="200" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
                     </paper-input>
                   
                 </div>
           </div>
-          <paper-alert-dialog id="lmDialog" confirm-button="OK">
-            For changing KYC information document need to be submitted to the nearest Branch.
+          <div class="declaration_text">
+              <span><input type="checkbox" name="decaration" id="declaration-text"/></span>
+              I hereby confirm that the information provided above is true and fair to the 
+              best of your knowledge and that you authorize ING to contact 
+              such agencies as needed to verify the correctness of the information provided
+            </div>
+          <paper-alert-dialog id="validateText" confirm-button="OK">
+              Request call back and Visit nearest branch
+              In order to understand reject reason and provide necessary documents. 
           </paper-alert-dialog>
-        <div class="next_button"><paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "green">Edit Profile</paper-button>
-        <paper-button hidden$="{{hide}}" toggles raised class = "green" on-tap="knockOutCheck">Validate</paper-button></div>
+
+          <paper-alert-dialog id="confirmText" confirm-button="OK">
+              Please ensure that the information you update matches with official records. You will be required to 
+              submit documents to support the change before the mortgage is processed 
+          </paper-alert-dialog>
         <div class="next_button">
-          <paper-button hidden$="{{!hide}}" toggles raised class = "green" on-tap="updateProfile">Save</paper-button>
-          <paper-button hidden$="{{!hide}}" toggles raised class = "button-class" on-tap="cancel">Cancel</paper-button>
+          <paper-button hidden$="{{!hide}}" toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
         </div>
     </div>
     
@@ -302,14 +348,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.lmDialog.open();
       }
       updateProfile(){
+        this.$.confirmText.open();
         this.$.saveProfile.generateRequest();
       }
       saveProfile(){
         this.edit=false;
         this.hide = false;
         return this.ajaxResponse;
-        
-
       }
       handleResponse(data) {
        
@@ -349,6 +394,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if(result && result.responseCode ==="200") {
         window.history.pushState({}, null, '/property-details');
         window.dispatchEvent(new CustomEvent('location-changed'));
+        }else{
+          this.$.validateText.open();
         }
       }
       updateEditProfile() {
