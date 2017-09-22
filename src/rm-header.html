@@ -1,5 +1,5 @@
 <link rel="import" href="rm-logo.html">
-
+<link rel="import" href="rm-progress.html">
 <dom-module id="rm-header">
   <template>
   <style >
@@ -7,11 +7,12 @@
         float: left;
         width: 100%;
         box-sizing: border-box;
-        padding: 15px;
-        background:#fff;
-        border-bottom: 1px solid #ff6600;
+        padding: 10px 15px;
+        background:#FF6200;
+        border-bottom: 1px solid #d0c2c2;
         position: fixed;
         top:0;
+        z-index: 10;
       }
       .container {
         width:  100%;
@@ -22,42 +23,14 @@
         float: left;
         clear: left;
       }
-      rm-logo {
-        float: left;
-      }
-      rm-menu {
-        float: right;
-      }
-      #logo {
-        float: left;
-      }
-      .logo {
-        float: left;
-        padding: 0 10px 0 0;
-        border-right: solid 1px #ff6600;
-        width: 70px;
-        height: 60px;
-      }
-      #logo img {
-        max-height: 40px;
-        float: left;
-        width: 100px;
-        height: 100px;
-      }
-      .tagline {
-        float: left;
-        vertical-align: bottom;
-        padding: 12px 0 0 10px;
-        font-size: 12px;
-        text-transform: uppercase;
-        line-height: 1.2;
-        font-weight: bold;
-      }
-      .footer{
-        float:left;
-        vertical-align: bottom;
-        position:fixed;
-        bottom:0px;
+      .navbar{
+        display: block;
+        z-index: 100;
+        position: fixed;
+        float:right;
+        width: 300px;
+
+
       }
   </style>
 
@@ -65,13 +38,16 @@
         <div class="container">
           <div id="header">
             <rm-logo on-click=""></rm-logo>
-            <!-- <div><img class="logo" src="../images/ThemeIcon2.svg" /></div>
-            <div class="tagline">Lightning<br />Mortgage</div> -->
           </div>
             
           </div>
         </div>
+
       </header>
+<!-- 
+      <div class="navbar">
+        <rm-progress></rm-progress>
+      </div> -->
   </template>
   <script>
     

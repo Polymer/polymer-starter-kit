@@ -4,6 +4,9 @@
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 
 
 <dom-module id="loan-details">
@@ -14,9 +17,9 @@
             }
             .loan-details{
               width:90%;
-              float:left;              
+              /* float:left; */
               min-height: 300px;              
-              padding:10px 20px;
+              padding:10px 13%;
               box-sizing: border-box;              
               //margin:auto 5%;
               //margin-top: 80px;
@@ -37,12 +40,16 @@
           .loan-details paper-input.largeBox{
             width: 60%;
           }
+          .loan-details paper-button {
+            float: right;
+          }
           paper-spinner-lite {
             --paper-spinner-color: #FF6600;
             position: absolute;
-            top: 290px;
-            left: 600px;
+            top: 200px;
+            left: 500px;
           }
+
         </style>
         <div class="loan-details">
           <section>
@@ -50,16 +57,27 @@
             <paper-dropdown-menu label="Current Lender"  id="id" name="bank">
               <paper-listbox slot="dropdown-content" on-iron-select="itemSelected">
                 <paper-item value="aegon">AEGON</paper-item>
-                <paper-item value="abnAmro">ABN AMRO Bank</paper-item>
-                <paper-item value="deltaLloyd">Delta Lloyd</paper-item>
+                <paper-item value="abnamrobank">ABN AMRO Bank</paper-item>
+                <paper-item value="deltalloyd">Delta Lloyd</paper-item>
                 <paper-item value="asr">ASR</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
-            <paper-input name="IBAN" class="mediumBox" label="IBAN" id="IBAN" value="{{loandetails.IBAN::input}}"></paper-input>
-            <paper-input name="OutstandingBal" class="mediumBox" label="Current Outstanding Balance" id="outstandingBal" value="{{loandetails.outstandingBal::input}}"></paper-input>
-            <paper-input name="mortContractNo" class="mediumBox" label="Mortgage Contract Number" id="mortContractNo" value="{{loandetails.mortContractNo::input}}"></paper-input>
+            <paper-input name="mortgageContractNumber"  class="" label="Mortgage Contract Number" id="mortgageContractNumber" value="{{loandetails.mortgageContractNumber::input}}" on-blur="getOutstandingAmount"></paper-input>
+            <paper-input name="OutstandingBal" readonly class="" label="Current Outstanding Balance" id="outstandingBal" value="{{loandetails.outstandingBal::input}}">
+              <iron-icon icon="euro-symbol" slot="prefix"></iron-icon>
+            </paper-input>
+            
             <br/>
             <paper-button raised class="custom orange" on-click="submitDetails">Submit</paper-button>
+            <paper-button raised class="custom LM-gray">Save</paper-button>
+            <paper-alert-dialog id="dialogBox" confirm-button="Ok">
+              
+                <label>Please provide Current lender and Mortgage contract number</label>
+                
+              </paper-alert-dialog>
+
+            <iron-ajax id="outstandingDetailsReq" url="{{outstandingBalReqAPI}}" method="get" body='{{loandetails}}' handle-as="json" content-type="application/json" on-response="handleOutstandingDetailsResponse">
+            </iron-ajax>
           </section>
         </div>
       </template>
@@ -87,13 +105,36 @@
            itemSelected(e) {
               var selectedItem = e.target.selectedItem;
               //console.log(selectedItem.getAttribute("value"));
-              this.loandetails.currentLender = "";
+              this.loandetails.bankName = "";
               if (selectedItem) {
-                this.loandetails.currentLender = selectedItem.getAttribute("value");
+                this.loandetails.bankName = selectedItem.getAttribute("value");
               }
             }
-            submitDetails(){
+            getOutstandingAmount(){
+             //console.log("req data "+JSON.stringify(this.loandetails));
+             this.isActive = true;
+             this.outstandingBalReqAPI = "http://10.138.64.218:8080/lightningmortgage/existingLoan/outStandingAmount?bankName="+this.loandetails.bankName+"&mortgageContractNumber="+this.loandetails.mortgageContractNumber;
 
+             this.$.outstandingDetailsReq.generateRequest();
+            }
+            handleOutstandingDetailsResponse(res){
+              this.isActive = false;
+              let response = res.detail.response;
+              //console.log("jjjjjj"+JSON.stringify(res.detail.response));
+              this.$.outstandingBal.value = res.detail.response.outstandingAmount;
+              this.loandetails.outstandingBal = res.detail.response.outstandingAmount;
+            }
+            submitDetails(){
+              if(this.loandetails.bankName==undefined || this.loandetails.mortgageContractNumber==undefined){
+                this.$.dialogBox.open();
+                this.isActive = false;
+                return;
+              } else {
+                localStorage.postalCode = "";
+                localStorage.outstandingBalance = this.loandetails.outstandingBal;
+                window.history.pushState({},"", '/products/');
+                window.dispatchEvent(new CustomEvent('location-changed'));
+              }
             }
         }
         window.customElements.define(LoanDetails.is, LoanDetails);

@@ -1,0 +1,204 @@
+
+// [
+//     {
+//         "id":"custid",
+//         "productName":"ProductOne",
+//         "reference":"ReferenceOne",
+//         "offerMinimumTerm":5,
+//         "offerMaximumTerm":10,
+//         "offerMinimumValue":600,
+//         "offerMaximumValue":1000,
+//         "offerMinimumDownPayment":5,
+//         "offerMaximumDownPayment":10
+
+//     },
+//     {
+//         "id":"custid2",
+//         "productName":"ProductTwo",
+//         "reference":"ReferenceTwo",
+//         "offerMinimumTerm":6,
+//         "offerMaximumTerm":15,
+//         "offerMinimumValue":700,
+//         "offerMaximumValue":1000,
+//         "offerMinimumDownPayment":4,
+//         "offerMaximumDownPayment":10
+
+//     },
+//     {
+//         "id":"custid3",
+//         "productName":"ProductThree",
+//         "reference":"ReferenceThree",
+//         "offerMinimumTerm":3,
+//         "offerMaximumTerm":8,
+//         "offerMinimumValue":500,
+//         "offerMaximumValue":1000,
+//         "offerMinimumDownPayment":5,
+//         "offerMaximumDownPayment":10
+
+//     }
+// ]
+[
+{
+    "productName":"JumboMortgage",
+    "productId":"10001",
+    "productDesc":"JM10001",
+    "minTenure":"2",
+    "maxTenure":"20",
+    "minAmount":"100000",
+    "maxAmount":"100000000",
+    "minDownpayment":"5000",
+    "maxDownpayment":"500004",
+    "terms":[
+                {"Terms and conditions part1"},
+                {"Terms and conditions part2"},
+                {"Terms and conditions part3"},
+                {"Terms and conditions part4"}
+                    ]
+}
+]
+
+[
+  {
+    "productId": 10001,
+    "productDesc": "JM10001",
+    "productName": "Jumbo Mortgage",
+    "interestRate": 6.0,
+    "productDetails": [
+      {
+        "term": 20,
+        "offer": 35000,
+        "epi": 187
+      },
+      {
+        "term": 20,
+        "offer": 45000,
+        "epi": 189
+      },
+      {
+        "term": 20,
+        "offer": 55000,
+        "epi": 200
+      },
+      {
+        "term": 20,
+        "offer": 65000,
+        "epi": 167
+      },
+      {
+        "term": 40,
+        "offer": 55000,
+        "epi": 187
+      },
+      {
+        "term": 40,
+        "offer": 60000,
+        "epi": 189
+      },
+      {
+        "term": 40,
+        "offer": 65000,
+        "epi": 200
+      },
+      {
+        "term": 40,
+        "offer": 70000,
+        "epi": 167
+      },
+      {
+        "term": 60,
+        "offer": 45000,
+        "epi": 187
+      },
+      {
+        "term": 60,
+        "offer": 55000,
+        "epi": 239
+      },
+      {
+        "term": 60,
+        "offer": 65000,
+        "epi": 250
+      },
+      {
+        "term": 60,
+        "offer": 75000,
+        "epi": 187
+      }
+    ],
+
+    "terms": [ "Terms and conditions one", "Terms and conditions two", "Terms and conditions three", "Terms and conditions four" ]
+
+  },
+  {
+    "productId": 10002,
+    "productDesc": "JM10002",
+    "productName": "Jumbo Mortgage 2",
+    "interestRate": 6.0,
+    "productDetails": [
+      {
+        "term": 20,
+        "offer": 35000,
+        "epi": 187
+      },
+      {
+        "term": 20,
+        "offer": 45000,
+        "epi": 189
+      },
+      {
+        "term": 20,
+        "offer": 55000,
+        "epi": 200
+      },
+      {
+        "term": 20,
+        "offer": 65000,
+        "epi": 167
+      },
+      {
+        "term": 40,
+        "offer": 55000,
+        "epi": 187
+      },
+      {
+        "term": 40,
+        "offer": 60000,
+        "epi": 189
+      },
+      {
+        "term": 40,
+        "offer": 65000,
+        "epi": 200
+      },
+      {
+        "term": 40,
+        "offer": 70000,
+        "epi": 167
+      },
+      {
+        "term": 60,
+        "offer": 45000,
+        "epi": 187
+      },
+      {
+        "term": 60,
+        "offer": 55000,
+        "epi": 239
+      },
+      {
+        "term": 60,
+        "offer": 65000,
+        "epi": 250
+      },
+      {
+        "term": 60,
+        "offer": 75000,
+        "epi": 187
+      }
+    ],
+
+    "terms": [ "Terms and conditions 1", "Terms and conditions 2", "Terms and conditions three", "Terms and conditions four" ]
+
+  }
+]
+

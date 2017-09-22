@@ -36,6 +36,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="lm-register-profile.html">
 <link rel="lazy-import" href="lm-profile-status.html">
 <link rel="lazy-import" href="lm-property-selection.html">
+<link rel="lazy-import" href="lm-products.html">
+
 
 <dom-module id="my-app">
   <template>
@@ -43,27 +45,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         --app-primary-color: #4285f4;
         --app-secondary-color: black;
-
         display: block;
       }
-
       app-drawer-layout:not([narrow]) [drawer-toggle] {
         display: none;
       }
-
       app-header {
         color: #fff;
         background-color: var(--app-primary-color);
       }
-
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
       }
-
       .drawer-list {
         margin: 0 20px;
       }
-
       .drawer-list a {
         display: block;
         padding: 0 16px;
@@ -71,7 +67,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: var(--app-secondary-color);
         line-height: 40px;
       }
-
       .drawer-list a.iron-selected {
         color: black;
         font-weight: bold;
@@ -133,6 +128,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <lm-view-profile name="view-profile"></lm-view-profile>
           <lm-register-profile name="register-profile"></lm-register-profile>
           <property-selection name="property-selection"></property-selection>
+          <product-preference name="products"></product-preference>
+
           
           <my-view404 name="view404"></my-view404>
         </iron-pages>
@@ -144,7 +141,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     class MyApp extends Polymer.Element {
       static get is() { return 'my-app'; }
-
       static get properties() {
         return {
           page: {
@@ -159,24 +155,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           rootPath: String,
         };
       }
-
       static get observers() {
         return [
           '_routePageChanged(routeData.page)',
         ];
       }
-
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
         this.page = page || 'login';
-
         // Close a non-persistent drawer when the page & route are changed.
         // if (!this.$.drawer.persistent) {
         //   this.$.drawer.close();
         // }
       }
-
       _pageChanged(page) {
         // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl('lm-'+page + '.html');
@@ -186,12 +178,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this._showPage404.bind(this),
             true);
       }
-
       _showPage404() {
         this.page = 'view404';
       }
     }
-
     window.customElements.define(MyApp.is, MyApp);
   </script>
 </dom-module>
