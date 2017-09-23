@@ -135,13 +135,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     color: #f60;
                 }
 
-            .vas-icons {
-                position: fixed;
-                top: 250px;
-                right: 10px;
-                height: 300px;
-                width: 100px;
-            }
+            
 
             paper-dialog {
                 width: 70%;
@@ -154,6 +148,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-size: 15px;
                 font-weight: 20px;
             }
+         .close {
+            position: absolute;
+            top: 1%;
+            right: 30px;
+            transition: all 200ms;
+            font-size: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #333;
+            cursor: pointer;
+          }
+          .close:hover {
+            color: #f60;
+          }
         </style>
         <div class="productContainer card">
             <div class="flex-container">
@@ -175,17 +183,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
                     <!-- <lm-slider title='Down Payment' prefix='&euro;' minval='0' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider> -->
                     <div class="" style="margin-left:0px;">Down Payment : <span style='margin-left:42px;'>&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
-
+                <div class="center">&nbsp;</div>               
+                <div class="vas-icons">
+                    <h3>checkout some services offered for you</h3>
+                <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
+                 </div>
+                <div class="center">&nbsp;</div>                 
                     <term-conditions terms="[[termsArray]]"></term-conditions>
-                    <paper-checkbox>Place holder  text for Aggrement with term and conditions...</paper-checkbox>
+                    <paper-checkbox checked="{{checked}}">Place holder  text for Aggrement with term and conditions...</paper-checkbox>
                     <div class="right">
-                        <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
+                        <paper-button class="paper-button" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
                     </div>
 
                     <paper-dialog id="dialoge">
-                        <label class="center">Congratulations on your Mortgage Offer</label>
-                        <!--<paper-button style="float: right;" class="paper-button" disabled="true">Print</paper-button>
-                        <paper-button style="float: right;" class="paper-button" disabled="true">Email</paper-button>-->
+                        <label  class="center">Congratulations on your Mortgage Offer</label>
+                        <a  class="close" dialog-confirm>X</a>
+                        <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>X</paper-button>-->
                         <div><label><b>Here are details of the offer:</b></label> </div>
                         <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
                         <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
@@ -200,10 +213,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 </div>
             </div>
-            <div class="vas-icons">
-                <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
-
-            </div>
+            
         </div>
 
         <iron-ajax id="ironAjaxOnload"
@@ -458,7 +468,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var dated = today.getDate();
                     var monthd = today.getMonth() + 1;
                     var years = today.getFullYear();
-                    this.currentDate = dated + "-" + monthd + "-" + years
+                    this.currentDate = dated + "-" + monthd + "-" + years;
+                    this.checked=false;
                     // classList.classList.add('selected');
 
                 }
