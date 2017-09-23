@@ -60,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .input_width_add{width:65%;margin-bottom: 10%;margin-top:1%;}
         .input_width_loc{width:65%;margin-bottom: 10%;margin-top:-22%;}
         .input_width_post{width:65%;margin-bottom: 10%;margin-top:-22%;}
-        .User_details{margin:70px auto;width:50%;}
+        .User_details{margin:35px auto;width:50%;}
         .User_details paper-dropdown-menu{margin-bottom: 0;}
         paper-dropdown-menu.salutation{width: 35%;}
         .men_btn{display: block;
@@ -132,8 +132,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="confirm_info"><iron-icon icon="icons:verified-user" class="icon_space" slot="prefix"></iron-icon>
         "So that we can offer you the best mortgage options, please confirm if the below information is accurate"
     </div>       
-
-        <h3>Personal Details</h3><hr class="separate_sec">        
+        <h3><iron-icon icon="account-box" class="icon_space" slot="prefix"></iron-icon>Personal Details</h3><hr class="separate_sec">        
         <div class="row Salutation_detail"> 
           <div class="col"> 
                 <paper-dropdown-menu class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
@@ -192,7 +191,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="col"></div>
           </div>
 
-          <h3>Address Details</h3><hr class="separate_sec">
+          <h3><iron-icon icon="home" class="icon_space" slot="prefix"></iron-icon>Address Details</h3><hr class="separate_sec">
           <div class="row">
             <div class="col">  
               <paper-input class="input_width_add"label="Door Number" required auto-validate error-message="Fill Door Number" 
@@ -224,7 +223,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
           </div>
 
-          <h3 class="contact_div">Contact Details</h3><hr class="separate_sec">
+          <h3 class="contact_div"><iron-icon icon="settings-phone" class="icon_space" slot="prefix"></iron-icon>Contact Details</h3><hr class="separate_sec">
             <div class="row Contact_details">  
               <div class="col"> 
                 <paper-input class="input_width"label="Home Number" required auto-validate error-message="Fill Home Number"
@@ -260,7 +259,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <div class="col"></div><div class="col"></div>
             </div>
 
-          <h3>Finance Details</h3><hr class="separate_sec">
+          <h3><iron-icon icon="account-balance" class="icon_space" slot="prefix"></iron-icon>Finance Details</h3><hr class="separate_sec">
           <div class="row">
             <div class="col">
               <paper-input required class="input_width"label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
