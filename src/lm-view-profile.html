@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel = "import" href = "../bower_components/paper-styles/paper-styles.html">
 <link rel = "import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel = "import" href = "../bower_components/paper-input/paper-input.html">
+<link rel = "import" href = "../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel = "import" href = "../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 <link rel = "import" href = "../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
@@ -124,12 +125,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </iron-ajax>
     
 
-<iron-form>
+<iron-form id="userForm">
   <form>
     <div class="card User_details">         
     <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite> 
-    <div class="confirm_info">
-        "So that we can offer you the best mortgage options, please confirm if the following information is accurate"
+    <div class="confirm_info"><iron-icon icon="icons:verified-user" class="icon_space" slot="prefix"></iron-icon>
+        "So that we can offer you the best mortgage options, please confirm if the below information is accurate"
     </div>       
 
         <h3>Personal Details</h3><hr class="separate_sec">        
@@ -281,10 +282,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="col"></div>                
           </div>
           <div class="declaration_text">
-              <span><input type="checkbox" name="decaration" id="declaration-text" on-change="sub"/></span>
-              I hereby confirm that the information provided above is true and fair to the 
-              best of my knowledge and that I authorize ING to contact 
-              such agencies as needed to verify the correctness of the information provided
+      <paper-checkbox name="read" on-change ="sub" required> I hereby confirm that the information provided above is true and fair to the 
+                best of my knowledge and that I authorize ING to contact 
+                such agencies as needed to verify the correctness of the information provided</paper-checkbox>
             </div>
           <paper-alert-dialog id="validateText" confirm-button="OK">
               Request call back and Visit nearest branch
@@ -299,8 +299,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <paper-button toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
           <paper-button hidden$="{{hide}}" toggles raised class ="" on-tap="knockOutCheck">Validate</paper-button>      
-          <!--<paper-button disbled$="{{checked}}" hidden$="{{!hide}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
-           <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>  -->
+          <paper-button disabled$="{{!checked}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+           <!-- <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>  -->
 
         </div>
     </div>
@@ -407,7 +407,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           checked:{
             type:Boolean,
-            value:true
+            value:false
           },
           hide:{
             type:Boolean,
@@ -465,8 +465,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       sub()
       {
-
-        this.checked= false;
+        this.checked= !this.checked;
       }
         
 
