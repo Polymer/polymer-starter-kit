@@ -1,0 +1,49 @@
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="rm-progress.html">
+
+
+<dom-module id="rm-content">
+  
+  <template>
+<style>
+	  .rmcontent{
+  	margin:auto 5%;
+    margin-top: 80px;
+  }
+</style>
+
+  <div>
+  	
+  	<section class="rmcontent">
+      
+
+
+      <!-- <paper-progress value="100" secondary-progress="80" class="blue"></paper-progress> -->
+
+      <!-- <rm-progress></rm-progress> -->
+    <!-- Please add your content here -->
+
+
+
+
+
+
+
+    </section>
+  </div>
+  </template>
+  <script>
+  class Rmcontent extends Polymer.Element {
+    constructor() {
+      super();
+    }
+    static get is(){
+      return 'rm-content';
+    }
+    static get properties () {
+      
+    }
+  }
+  window.customElements.define(Rmcontent.is, Rmcontent);
+</script>
+</dom-module>

@@ -1,0 +1,12 @@
+{
+    "responseStatus":"Success",
+    "responseCode":"200",
+    "responseMessage":"User Profile",
+    "responseData":{
+        "userId":"Jack123",
+        "profileId":"1234",
+        "address":"Amsterdam Porte, Netherlands",
+        "gender":"Male",
+        "occupation":"service"
+        }
+}

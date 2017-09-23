@@ -1,0 +1,165 @@
+
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="lm-login">
+  
+  <template id="login" is="dom-bind">
+    <style include="shared-styles">
+      .login-container{
+        margin: 100px auto;
+        width: 30%;
+        border: 1px solid #e8e8e8;
+        
+        padding: 15px;
+      }
+      .button-class{
+        margin-top: 15px;
+      }
+
+      /* .button-class{
+        width: 5%;
+            height: 45px;
+            display: block;
+            padding: 0 px;
+            border: none;
+            border-bottom: 0 px solid;
+            text-align: center;
+      } */
+      /* .input_field{
+            width: 35%;
+            height: 50px;
+            display: block;
+            margin: 0 auto 15px;
+            padding: 0 15px;
+            border: none;
+            } */
+            /* .input_reg{
+              float: left;
+              margin-left: 32%;
+              font-size: 17px
+            
+            } */
+            .header
+            {
+              padding: 10px;
+              border-bottom: 1px solid #e8e8e8;
+              margin-top: 50px;
+              color: #f60;
+              font-weight: bold;
+            }
+            .invalidUser
+            {
+              text-align: center;
+              padding-top: 45px;
+              color: red;
+              font-size: 13px;
+              margin-top: 10px;
+              padding:2px 5px;
+            }
+            .regi_btn{
+              display: inline-block;
+              float: right;
+              margin-top: 25px;
+            }
+            .regi_btn a{
+              font-size: 14px;
+              color: #301067;
+            }
+     
+    </style>
+
+      <div class="header">Login</div>
+      <div class="login-container">
+          <div id="Reg">
+            <form name="form">
+              
+              <!-- <h2 class="header">Login to Lightning Mortgage</h2> -->
+              <div class = "invalidUser"> <span hidden="{{hideMessage}}">{{ajaxResponse.message}}</span></div>
+  
+
+              <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="Please Enter the Username !!" maxlength="10" required error-message="Please Enter Username!" auto-validate allowed-pattern="[a-zA-Z]"></paper-input>
+             <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Password Required!" auto-validate placeholder="Please Enter the Password"></paper-input>
+             <div class="regi_btn"><a href="register-profile" class="input_reg">Register</a></div>
+             <paper-button raised class="button-class" on-tap="login" value="Login">Login</paper-button>
+            </form>
+          </div>
+        </div>
+     
+    <iron-ajax
+              id="ironAjaxElement" 
+               url="http://10.138.65.226:8080/lightningmortgage/customer/userLogin"
+               handle-as="json"
+               body='{{postBody}}'
+               method="post"
+               on-response="handleResponse"
+               content-type="application/json"
+               last-response="{{ajaxResponse}}"
+               >
+    </iron-ajax>
+    <!-- <span>{{ajaxResponse.responseMessage}}</span> -->
+  </template>
+
+  <script>
+    class Login extends Polymer.Element {
+      static get is() { return 'lm-login'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: "bar"
+          },
+          postBody: {
+            type: String,
+            computed: 'getPostBody(userId, password)'
+        },
+        hideMessage:{
+          type:String,
+          value:""
+         }
+        }
+      }
+      
+      login() {
+        let userDetails = this.postBody;
+        if(userDetails && userDetails.userId && userDetails.password) {
+          this.ajaxResponse;
+          this.$.ironAjaxElement.generateRequest();
+        }
+      }
+      handleResponse(data) {
+        var result= data.detail.response 
+        if(result && result.status ==="200") {
+          result.message="";
+        localStorage.setItem('userId', result.userId);
+        window.history.pushState({}, null, '/view-profile');
+        window.dispatchEvent(new CustomEvent('location-changed'));
+        }
+     
+       
+      }
+      getPostBody (userId, password) {
+        return {
+          userId: userId,
+          password: password
+        };
+      }
+    }
+
+    window.customElements.define(Login.is, Login);
+  </script>
+</dom-module> 
+
+

@@ -1,0 +1,68 @@
+﻿<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="term-conditions">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding:0 0px;
+            }
+            .list{
+                overflow:hidden;
+                height:100px;
+            }
+            .term-conditions h1{
+                border-bottom: 1px solid #e8e8e8;
+                margin-bottom: 10px;
+            }
+        </style>
+        
+
+        <div class='term-conditions'>
+            <h1>Term and Conditions:</h1>
+             <ul class="list">
+                <template is='dom-repeat' items="[[terms]]">
+                    <li>[[item]]</li>
+                </template>
+            </ul>
+        </div>
+    </template>
+    <script>
+        class TermConditions extends Polymer.Element {
+            static get is() { return 'term-conditions'; }
+            static get properties() {
+                return {
+                    terms: {
+                        type: Array,
+                        reflectToAttribute: true
+                    }
+
+                }
+            }
+            constructor() {
+                super();
+                console.log('Constructor called');
+            }
+            connectedCallback() {
+                super.connectedCallback();
+                console.log('Team 2');
+                
+               }
+
+    }
+
+        window.customElements.define(TermConditions.is, TermConditions);
+    </script>
+</dom-module>

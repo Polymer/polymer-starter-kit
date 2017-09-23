@@ -1,0 +1,72 @@
+<link rel="import" href="rm-logo.html">
+<link rel="import" href="rm-progress.html">
+<dom-module id="rm-header">
+  <template>
+  <style >
+     header {
+        float: left;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px 15px;
+        background:#FF6200;
+        border-bottom: 1px solid #d0c2c2;
+        position: fixed;
+        top:0;
+        z-index: 10;
+      }
+      .container {
+        width:  100%;
+        max-width: 1170px;
+      }
+      #header {
+        width:  100%;
+        float: left;
+        clear: left;
+      }
+      .navbar{
+        display: block;
+        z-index: 100;
+        position: fixed;
+        float:right;
+        width: 300px;
+
+
+      }
+  </style>
+
+    <header>
+        <div class="container">
+          <div id="header">
+            <rm-logo on-click=""></rm-logo>
+          </div>
+            
+          </div>
+        </div>
+
+      </header>
+<!-- 
+      <div class="navbar">
+        <rm-progress></rm-progress>
+      </div> -->
+  </template>
+  <script>
+    
+      class RmHeader extends Polymer.Element{
+        constructor(){
+          super();
+        }
+        static get is(){
+          return 'rm-header'
+        }
+        static get properties(){
+
+        }
+      }
+    window.customElements.define(RmHeader.is, RmHeader);
+   
+  </script>
+
+</dom-module>
+
+
+

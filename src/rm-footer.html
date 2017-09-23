@@ -1,0 +1,46 @@
+<dom-module id="rm-footer">
+
+  <template>
+    <style>
+      .copyrights{
+        text-align: center;
+      }
+      footer {
+        width:  100%;
+        padding: 10px;
+        box-sizing: border-box;
+        border-top: 1px solid #d0c2c2;
+        position: fixed;
+        bottom: 0;
+        background-color: #fff;
+        font-size: 14px;
+
+      }
+      .container {
+        width:  100%;
+        margin: 0 auto;
+        max-width: 1170px;
+
+      }
+    </style>
+    <footer>
+      <div class="container">
+        <div class="copyrights">&copy; All rights reserved to Lightning Mortgage Services</div>
+      </div>
+    </footer>
+  </template>
+  <script>
+  class RmFooter extends Polymer.Element {
+    constructor() {
+      super();
+    }
+    static get is(){
+      return 'rm-footer';
+    }
+    static get properties () {
+      
+    }
+  }
+  window.customElements.define(RmFooter.is, RmFooter);
+</script>
+</dom-module>
