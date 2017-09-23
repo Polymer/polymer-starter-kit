@@ -9,16 +9,18 @@
 		}
 		;
 		div.container{
-			width:80%;
-			text-align: center;
-			padding-left: 5			
+			display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+						
 		}
 		div.container img{
-			width : 70%;
+			width : 50%;
 		}
 		paper-card{
 			border-radius: 50px;
 			margin-top: 10px;
+			width: 10%;
 		}
 		paper-card:hover{
 			cursor: pointer;
@@ -33,11 +35,17 @@
 	</style>
 	<div class='container'>
 	<template is="dom-repeat" items="{{itemindex}}">
+	
         <paper-card id='paper_card_{{index}}' on-click="_getDetails" class='default'>
+
            <div class="card-content"> 
-           <img src='../images/icon-{{item.id}}.png' title="{{item.name}}"  />
+               <a href="{{item.url}}" target="_blank">
+                   <img src='../images/icon-{{item.id}}.png' title="{{item.name}} of amount {{item.value}}" />
+               </a>
+
            </div>
         </paper-card>
+	
       </template>	
 	</div>
 	
@@ -61,7 +69,8 @@
 			static get properties(){
 				return {
 					itemindex:{
-						type : Array,
+					    type: Array,
+
 					},
 					selectedVas:{
 						type :Array,
@@ -75,8 +84,7 @@
 						value:0,
 						reflectToAttribute : true,
 						notify:true
-								}
-					
+					}					
 
 				};
 			}
@@ -86,6 +94,7 @@
 					sum +=this.selectedVas[counter];
 				} 
 				this.totalvas = sum;
+				this.dispatchEvent(new CustomEvent('totalvas-changed', {detail: {valuechanged: true}}));
 			}
 			_getDetails(event){
 		        let selectedIndex = event.model.__data.index;
