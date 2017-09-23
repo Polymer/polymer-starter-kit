@@ -41,6 +41,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: white;
             }
 
+            .paper-button-disabled {
+                background-color: #808080;
+                color: white;
+            }
             .details-container {
                 background-color: white;
                 border-radius: 5px;
@@ -190,9 +194,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                  </div>
                 <div class="center">&nbsp;</div>                 
                     <term-conditions terms="[[termsArray]]"></term-conditions>
-                    <paper-checkbox checked="{{checked}}">Place holder  text for Aggrement with term and conditions...</paper-checkbox>
+                    <paper-checkbox checked="{{checked}}" on-change="valchanged" id="checkboxterm">Place holder  text for Aggrement with term and conditions...</paper-checkbox>
                     <div class="right">
-                        <paper-button class="paper-button" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
+                        <paper-button id="submitbtn" class="paper-button-disabled" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
                     </div>
 
                     <paper-dialog id="dialoge">
@@ -391,6 +395,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.postBody.downPayment = 20000;
                 this.postBody.annualPercentageRate = 2.3;
                 this.$.ironAjaxSubmit.generateRequest();
+                this.$.checkboxterm.disabled = true;
+                this.$.submitbtn.disabled = true;
+                this.$.submitbtn.classList.add('paper-button-disabled');
+                this.$.submitbtn.classList.remove('paper-button');
+               
                 this.$.dialoge.open();
                 //dialoge.toggle();
             }
@@ -477,6 +486,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             getSelectedClass(index) {
                 if (index == 0) {
                     return 'selected';
+                }
+            }
+            valchanged(event) {
+               // this.$.checkboxterm.checked = !this.$.checkboxterm.checked;
+                console.log(this.$.checkboxterm.checked);
+                if (this.$.checkboxterm.checked) {
+                    this.$.submitbtn.classList.remove('paper-button-disabled');
+                    this.$.submitbtn.classList.add('paper-button');
+                }
+                else {
+                    this.$.submitbtn.classList.add('paper-button-disabled');
+                    this.$.submitbtn.classList.remove('paper-button');
                 }
             }
             // window.addEventListener('totalvas-changed',function(){
