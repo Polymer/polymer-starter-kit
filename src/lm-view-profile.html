@@ -31,6 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         /* display: block; */
         padding: 10px;
       }
+      .separate_sec{margin-bottom: -17px;}
         .val_dropdown
         {
         display: inline;
@@ -39,8 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         {
           overflow: hidden;box-sizing: border-box;max-width: 77.4844px;max-height: 294.078px;
         }
-        .bsn_width{    width: 50%;
-    margin-top: -12%;}
+        .bsn_width{    width: 65%;    margin-top: -14%; margin-bottom: -17px;}
         .icon_space{margin-right: 10px;}
         #container {display: flex;}
         paper-button{ padding: 10px; border-radius: 5px; float: right;}
@@ -48,21 +48,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         paper-button.green { background-color: var(--paper-green-500); color: white;}
         paper-button.green[active] {background-color: var(--paper-red-500);}
         .style-scope.lm-view-profile {height: auto;}
-        .input_width_email{width:80%;margin-top:-18%}
+        .input_width_email{width:105%;margin-top:-20%;margin-bottom:-7%;}
         .next_button {overflow: auto;}
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
-        .contact_div {margin-top: 7%;}
+        .contact_div {margin-top: -4%;}
         .confirm_info{font-size: 14px;        }
-        .input_width{width:50%;margin-bottom: -10%;margin-top:1%;}
-        .User_details{margin:70px auto;width:55%;}
+        .input_width{width:65%;margin-bottom: -10%;margin-top:1%;}
+        .input_width_incm{width:65%;margin-bottom: -5%;margin-top:-2%;}
+        .input_width_add{width:65%;margin-bottom: 10%;margin-top:1%;}
+        .input_width_loc{width:65%;margin-bottom: 10%;margin-top:-22%;}
+        .input_width_post{width:65%;margin-bottom: 10%;margin-top:-22%;}
+        .User_details{margin:70px auto;width:50%;}
         .User_details paper-dropdown-menu{margin-bottom: 0;}
-        paper-dropdown-menu.salutation{width: 50%;}
+        paper-dropdown-menu.salutation{width: 35%;}
         .men_btn{display: block;
     padding: 3px;}
-        .Salutation_detail{height: 50px;width:50%;}
-        paper-dropdown-menu.Marital_Status{width:50%;}
-        paper-dropdown-menu.dependents{width:50%;}
+        .Salutation_detail{height: 50px;width:65%;}
+        paper-dropdown-menu.Marital_Status{width:65%;margin-top: -7px;}
+        paper-dropdown-menu.dependents{width:65%;margin-top:-7px;}
         paper-dropdown-menu.mob_code{width:17%;padding-right: 3px}
 		    :host paper-input[disabled] {
         --paper-input-container-input-color: #afafaf;
@@ -85,9 +89,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             top: 290px;
             left: 600px;
           } 
-          .mob_code {width: 15%; float: left;}
+          .mob_code {width: 22%; float: left;}
           .mobile_number {padding: 1px 0 0 0;}
-          .declaration_text{margin:25px 0;}
+          .declaration_text{margin:30px 0px 8px;font-size:14px;}
     </style>
 	
     <iron-ajax
@@ -128,7 +132,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         "So that we can offer you the best mortgage options, please confirm if the following information is accurate"
     </div>       
 
-        <h3>Personal Details</h3><hr>        
+        <h3>Personal Details</h3><hr class="separate_sec">        
         <div class="row Salutation_detail"> 
           <div class="col"> 
                 <paper-dropdown-menu class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
@@ -187,21 +191,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="col"></div>
           </div>
 
-          <h3>Address Details</h3><hr>
+          <h3>Address Details</h3><hr class="separate_sec">
           <div class="row">
             <div class="col">  
-              <paper-input class="input_width"label="Door Number" required auto-validate error-message="Fill Door Number" 
+              <paper-input class="input_width_add"label="Door Number" required auto-validate error-message="Fill Door Number" 
               value="{{ajaxResponse.address.doorNumber}}">
               </paper-input>
             </div>
             <div class="col">
-                <paper-input class="input_width"label="Street Name" required auto-validate error-message="Fill Street Name" value="{{ajaxResponse.address.addressLine1}}">
+                <paper-input class="input_width_add"label="Street Name" required auto-validate error-message="Fill Street Name" value="{{ajaxResponse.address.addressLine1}}">
                 </paper-input>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <paper-input class="input_width"label="Locality" required auto-validate error-message="Fill Locality" 
+              <paper-input class="input_width_loc"label="Locality" required auto-validate error-message="Fill Locality" 
               value="{{ajaxResponse.address.addressLine2}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
@@ -210,16 +214,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
           <div class="row">
             <div class="col">
-              <paper-input class="input_width"type="number" required auto-validate error-message="Fill Post code" 
+              <paper-input class="input_width_post"type="number" required auto-validate error-message="Fill Post code" 
               label="Post code" 
                 value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo"></paper-input>
             </div>
             <div class="col">
-                <paper-input class="input_width"disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
+                <paper-input class="input_width_post"disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
             </div>
           </div>
 
-          <h3 class="contact_div">Contact Details</h3><hr>
+          <h3 class="contact_div">Contact Details</h3><hr class="separate_sec">
             <div class="row Contact_details">  
               <div class="col"> 
                 <paper-input class="input_width"label="Home Number" required auto-validate error-message="Fill Home Number"
@@ -238,9 +242,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       </paper-dropdown-menu>
                   </div>
                   <div class="mobile_number">
-                    <paper-input class="input_width"required auto-validate error-message="Fill Mobile Number"  maxlength="10" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" 
-                    type="number">
-                      <div slot="prefix"></div>
+                    <paper-input class="input_width"required auto-validate error-message="Fill Mobile Number"  maxlength="10" label="Mobile" value="{{ajaxResponse.mobileNumber}}" 
+                    type="number"><div slot="prefix"></div>
                     </paper-input>
                 </div>
               </div>
@@ -256,23 +259,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <div class="col"></div><div class="col"></div>
             </div>
 
-          <h3>Finance Details</h3><hr>
+          <h3>Finance Details</h3><hr class="separate_sec">
           <div class="row">
             <div class="col">
-              <paper-input required label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
-                <div slot="prefix">€</div>
+              <paper-input required class="input_width"label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
+                <div slot="prefix"class="icon_space">€</div>
               </paper-input>
             </div>
             <div class="col">
-              <paper-input required label="Monthly Family Expense" step="200" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
-                <div slot="prefix">€</div>
+              <paper-input required class="input_width" label="Monthly Family Expense" step="200" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
+                <div slot="prefix" class="icon_space">€</div>
               </paper-input>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <paper-input label="Monthly Family Income (additional)" step="200" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
-                <div slot="prefix">€</div>
+              <paper-input class="input_width_incm" label="Monthly Family Income (additional)" step="200" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
+                <div slot="prefix" class="icon_space">€</div>
               </paper-input>
             </div>
             <div class="col"></div>                
@@ -280,7 +283,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="declaration_text">
               <span><input type="checkbox" name="decaration" id="declaration-text" on-change="sub"/></span>
               I hereby confirm that the information provided above is true and fair to the 
-              best of your knowledge and that you authorize ING to contact 
+              best of my knowledge and that I authorize ING to contact 
               such agencies as needed to verify the correctness of the information provided
             </div>
           <paper-alert-dialog id="validateText" confirm-button="OK">
