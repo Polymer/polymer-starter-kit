@@ -35,7 +35,10 @@
 	<template is="dom-repeat" items="{{itemindex}}">
         <paper-card id='paper_card_{{index}}' on-click="_getDetails" class='default'>
            <div class="card-content"> 
-           <img src='../images/icon-{{item.id}}.png' title="{{item.name}} of amount {{item.value}}"  />
+               <a href="{{item.url}}" target="_blank">
+                   <img src='../images/icon-{{item.id}}.png' title="{{item.name}} of amount {{item.value}}" />
+               </a>
+           
            </div>
         </paper-card>
       </template>	
@@ -61,7 +64,8 @@
 			static get properties(){
 				return {
 					itemindex:{
-						type : Array,
+					    type: Array,
+
 					},
 					selectedVas:{
 						type :Array,
@@ -75,9 +79,7 @@
 						value:0,
 						reflectToAttribute : true,
 						notify:true
-						},
-
-					
+					}					
 
 				};
 			}
