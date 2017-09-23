@@ -36,6 +36,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         {
         display: inline;
         }
+        .close-dialog {    position: absolute;
+          top: -12px;
+          right: -31px;}
         .dep_dropdown
         {
           overflow: hidden;box-sizing: border-box;max-width: 77.4844px;max-height: 294.078px;
@@ -288,7 +291,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               In order to understand reject reason and provide necessary documents. 
           </paper-alert-dialog>
 
-          <paper-alert-dialog id="confirmText" confirm-button="OK">
+          <paper-alert-dialog id="confirmText" confirm-button="OK" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+              <paper-button style="position: absolute; top: -12px;right: -31px;" dialog-dismiss><iron-icon  icon="icons:cancel"></iron-icon></paper-button>
              <p> Please ensure that the information you update matches with official records. </p> <p>You will be required to 
               submit documents to support the change before the mortgage is processed. </p>
           </paper-alert-dialog>
