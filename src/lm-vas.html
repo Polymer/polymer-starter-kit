@@ -18,14 +18,21 @@
 			width : 50%;
 		}
 		paper-card{
-			border-radius: 50px;
-			margin-top: 10px;
-			width: 10%;
+			        border-radius: 9px;
+					margin-left: 15px;
+					width: 10%;
+					height: 85px;
+					border: 1px solid #bdacac;
+					box-shadow: 2px 2px 5px 4px #bdacac;
+					box-sizing: border-box;
 		}
-		paper-card:hover{
+		paper-card div.card-content{
+		    text-align: center;
+			padding-top: 14px;}
+			paper-card:hover,div.container img{
 			cursor: pointer;
-			transform: scale(1.1);
-			transition-duration: 0.1s;
+			transform: scale(1.05);
+			transition-duration: 0.2s;
 			transition-timing-function: ease-in;
 		}
 		paper-card.selected {
