@@ -46,13 +46,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         .bsn_width{    width: 65%;    margin-top: -14%; margin-bottom: -17px;}
         .icon_space{margin-right: 10px;}
+        /* .icon_space_mail{} */
+        .icon_mandatory_mail{margin-right: 4px; color: #ff0000}
+        .icon_mandatory{margin-right: 4px; color: #ff0000}
         #container {display: flex;}
         paper-button{ padding: 10px; border-radius: 5px; float: right;}
+        paper-button[disabled]{ cursor: no-drop!important; pointer-events: all !important; background: #F3C5C5}
+        paper-button[hover][active]{background: red!important;}
         paper-button.green:hover { background-color: var(--paper-green-400);}
         paper-button.green { background-color: var(--paper-green-500); color: white;}
         paper-button.green[active] {background-color: var(--paper-red-500);}
         .style-scope.lm-view-profile {height: auto;}
-        .input_width_email{width:105%;margin-top:-20%;margin-bottom:-7%;}
+         .input_width_email{width:105%;margin-top:-22%;margin-bottom:-7%;} 
         .next_button {overflow: auto;}
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
@@ -65,7 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .input_width_post{width:65%;margin-bottom: 10%;margin-top:-22%;}
         .User_details{margin:35px auto;width:51%;}
         .User_details paper-dropdown-menu{margin-bottom: 0;}
-        paper-dropdown-menu.salutation{width: 35%;}
+        paper-dropdown-menu.salutation{width: 50%;}
         .men_btn{display: block;
     padding: 3px;}
         .Salutation_detail{height: 50px;width:65%;}
@@ -151,6 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-input class="input_width" required auto-validate error-message="Fill First Name" autocapitalize allowed-pattern="[a-zA-Z]" 
                 label = "First name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
+                  <div class="icon_mandatory" slot="prefix">*</div>
                 </paper-input>
               </div>
               <div class="col"> 
@@ -164,7 +170,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-dropdown-menu auto-validate error-message="Fill Marital Status" 
                 class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" 
                  required auto-validate>
-                    <paper-listbox  slot = "dropdown-content" class="val_dropdown">
+                 <div class="icon_mandatory" slot="prefix">*</div>
+                  <paper-listbox  slot = "dropdown-content" class="val_dropdown">
                       <paper-item>Single</paper-item>
                       <paper-item>Married</paper-item>
                       <paper-item>Divorced</paper-item>
@@ -198,7 +205,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="row">
             <div class="col">  
               <paper-input class="input_width_add"label="Door Number" required auto-validate error-message="Fill Door Number" 
-              value="{{ajaxResponse.address.doorNumber}}">
+              value="{{ajaxResponse.address.doorNumber}}"><div class="icon_mandatory" slot="prefix">*</div>
               </paper-input>
             </div>
             <div class="col">
@@ -209,7 +216,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="row">
             <div class="col">
               <paper-input class="input_width_loc"label="Locality" required auto-validate error-message="Fill Locality" 
-              value="{{ajaxResponse.address.addressLine2}}">
+              value="{{ajaxResponse.address.addressLine2}}"><div class="icon_mandatory" slot="prefix">*</div>
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
             </div>
@@ -217,9 +224,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
           <div class="row">
             <div class="col">
-              <paper-input class="input_width_post"type="number" required auto-validate error-message="Fill Post code" 
+              <paper-input class="input_width_post" id="abc"type="number" required auto-validate error-message="Fill Post code" 
               label="Post code" 
-                value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo"></paper-input>
+                value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo"><div class="icon_mandatory" slot="prefix">*</div></paper-input>
             </div>
             <div class="col">
                 <paper-input class="input_width_post"disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
@@ -246,17 +253,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   </div>
                   <div class="mobile_number">
                     <paper-input class="input_width"required auto-validate error-message="Fill Mobile Number"  maxlength="10" label="Mobile" value="{{ajaxResponse.mobileNumber}}" 
-                    type="number"><div slot="prefix"></div>
+                    type="number"><div class="icon_mandatory" slot="prefix">*</div><div slot="prefix"></div>
                     </paper-input>
                 </div>
               </div>
             </div>
             <div class="row">  
               <div class="col">
+                
                 <paper-input class="input_width_email"required label="Email Address" required auto-validate error-message="Fill Email Address" 
                   value="{{ajaxResponse.emailAddress}}">
                   <iron-icon icon="mail" class="icon_space" slot="prefix"></iron-icon>
-                  <div slot="suffix"></div>
+                  <!-- <div class="icon_mandatory_mail" slot="prefix">*</div> -->
                 </paper-input>
               </div>
               <div class="col"></div><div class="col"></div>
@@ -265,8 +273,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h3><iron-icon icon="account-balance" class="icon_space" slot="prefix"></iron-icon>Finance Details</h3><hr class="separate_sec">
           <div class="row">
             <div class="col">
-              <paper-input required class="input_width"label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
-                <div slot="prefix"class="icon_space">€</div>
+              <paper-input required class="input_width"label=" Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
+                   <div slot="prefix"class="icon_space">€</div>
               </paper-input>
             </div>
             <div class="col">
@@ -277,7 +285,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
           <div class="row">
             <div class="col">
-              <paper-input class="input_width_incm" label="Monthly Family Income (additional)" step="200" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
+              <paper-input class="input_width_incm" label="Income (additional)" step="200" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
                 <div slot="prefix" class="icon_space">€</div>
               </paper-input>
             </div>
@@ -470,33 +478,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       {
         this.checked= !this.checked;
       }
-        
 
 
-        
-        //console.log(JSON.stringify(this.saveProfile));
-
-          
-      getUrl() {
-        var userId=localStorage.getItem('userId');
-        return "http://10.138.65.226:8080/lightningmortgage/customer/getCustomer/"+userId;
-        
-      }
-      getKnockUrl() {
-        var userId=localStorage.getItem('userId');
-
-        return "http://10.138.65.226:8080/lightningmortgage/knockoutCheck/"+userId;
-
-      }
-      knockOutCheck() {
-        this.$.knockOutAjax.generateRequest();
-      }
+        sub2()
+        {alert("hi");}
+        //console.log(JSON.stringify(this.B
+      //}
       knockOutResponse(data) {
         var result= data.detail.response 
         if(result && result.responseCode ==="200") {
         window.history.pushState({}, null, '/property-details');
         window.dispatchEvent(new CustomEvent('location-changed'));
-        }else{
+        }
+        else{
           this.$.validateText.open();
         }
       }
