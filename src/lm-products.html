@@ -23,6 +23,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
 <dom-module id="product-preference">
 
     <template>
@@ -153,10 +156,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             
 
             paper-dialog {
-                width: 70%;
+                width: 40%;
                 height: auto;
                 padding: 2%;
                 border-radius: 5px;
+                font-size:15px;
             }
 
             .fontincrease {
@@ -176,6 +180,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           .close:hover {
             color: #f60;
+          }
+          #checkboxterm{
+              font-size:15px;
+          }
+          paper-dialog h3{
+              color:forestgreen;
+              text-align:center;
           }
         </style>
         <div class="productContainer card">
@@ -201,7 +212,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div class="" style="margin-left:0px;">Down Payment : <span style='margin-left:42px;'>&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
                 </div>               
                 <div class="vas-icons">
-                    <h3>checkout some services offered for you</h3>
+                    <h3>Checkout some services offered for you</h3>
                 <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
                  </div>
                 <div class="center">&nbsp;</div>                 
@@ -212,18 +223,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </div>
 
                     <paper-dialog id="dialoge">
-                        <label  class="center">Congratulations on your Mortgage Offer</label>
-                        <a  class="close" dialog-confirm>X</a>
+                        <div>
+                            <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                        </div>
+                        <h3>Congratulations on your Mortgage Offer</h3>
+                        <!--<a class="close" dialog-confirm>X</a>-->
                         <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>X</paper-button>-->
                         <div><label><b>Here are details of the offer:</b></label> </div>
                         <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
                         <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
-                        <div><label><span class="fontincrease">Offer Amount:</span> {{offeramount}} &euro;</label></div>
-                        <div><label><span class="fontincrease">Down payment:</span> [[offerdownpayment]] &euro;</label></div>
-                        <div><label><span class="fontincrease">EPI:</span> {{epi}} &euro;</label></div>
+                        <div><label><span class="fontincrease">Offer Amount: </span>&euro;  {{offeramount}} </label></div>
+                        <div><label><span class="fontincrease">Down payment: </span>&euro; [[offerdownpayment]]</label></div>
+                        <div><label><span class="fontincrease">EPI: </span> &euro; {{epi}}</label></div>
                         <div><label><b>Additional Documents</b></label></div>
                         <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
-                        <paper-button style="float: right;" class="paper-button" dialog-confirm>Close</paper-button>
+                        <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>Close</paper-button>-->
                     </paper-dialog>
 
 
