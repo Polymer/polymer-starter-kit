@@ -1,4 +1,4 @@
-
+<!--
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -14,57 +14,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html"> 
 
 <dom-module id="lm-login">
   
   <template id="login" is="dom-bind">
     <style include="shared-styles">
+         
       .login-container{
-        margin: 100px auto;
+        margin: 48px auto;
         width: 30%;
-        border: 1px solid #e8e8e8;
+        /* border: 1px solid #e8e8e8; */
         
         padding: 15px;
       }
+      .icon_space{margin-right: 10px;}
       .button-class{
         margin-top: 15px;
+        float: right;
       }
-
-      /* .button-class{
-        width: 5%;
-            height: 45px;
-            display: block;
-            padding: 0 px;
-            border: none;
-            border-bottom: 0 px solid;
-            text-align: center;
-      } */
-      /* .input_field{
-            width: 35%;
-            height: 50px;
-            display: block;
-            margin: 0 auto 15px;
-            padding: 0 15px;
-            border: none;
-            } */
-            /* .input_reg{
-              float: left;
-              margin-left: 32%;
-              font-size: 17px
-            
-            } */
-            .header
-            {
-              padding-top: 6%;
-              text-align: center;
-              margin-bottom: -4%;
-              color:#0b0080;
-              /* padding: 10px;
-              border-bottom: 1px solid #e8e8e8;
-              margin-top: 50px;
-              color: #f60;
-              font-weight: bold; */
+      .header{
+        padding: 10px;
+        border-bottom: 0;
+        margin-top: 100px;
+        color: #fff;
+        background: #f60; 
+      }
+      .login-bg{
+              background: url(../images/Polygon-BG-bottom-6.jpg) no-repeat;
+              background-size: 100%;
+              height: 550px;
             }
+            .login-form{
+              border: 1px solid #ccc;
+              padding: 10px;
+              border-top: 0;
+              overflow: hidden;
+            }
+
+          
+             
+            
             .invalidUser
             {
               text-align: center;
@@ -74,38 +65,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               margin-top: 10px;
               padding:2px 5px;
             }
-            .regi_btn{
+             .regi_btn{
               display: inline-block;
-              float: right;
+              float: left;
               margin-top: 25px;
-            }
+            } 
             .regi_btn a{
               font-size: 14px;
               color: #301067;
             }
+            paper-spinner-lite {
+            --paper-spinner-color: #FF6600;
+            position: absolute;
+            top: 290px;
+            left: 600px;
+          }
+          paper-spinner-lite.active{position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);}
      
     </style>
-
-      <h2 class="header">Login</h2>
+<div class="login-bg">
       <div class="login-container">
-          <div id="Reg">
+        <div class="header">Login</div>
+          <div id="Reg" class="login-form">
             <form name="form">
               
               <!-- <h2 class="header">Login to Lightning Mortgage</h2> -->
               <div class = "invalidUser"> <span hidden="{{hideMessage}}">{{ajaxResponse.message}}</span></div>
   
-
-              <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="  Username" maxlength="10" required error-message="Please Enter Username" auto-validate allowed-pattern="[a-zA-Z]"><iron-icon icon="account-circle" class="icon_space" slot="prefix"></iron-icon></paper-input>
-             <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Please input Password" auto-validate placeholder="  Password"><iron-icon icon="lock-open" class="icon_space" slot="prefix"></iron-icon></paper-input>
-             <div class="regi_btn"><iron-icon icon="assignment-ind" class="icon_space" slot="prefix"></iron-icon>&nbsp<a href="register-profile" class="input_reg">Register</a></div>
+            <paper-spinner-lite active$="{{loader}}" class="orange active"></paper-spinner-lite>
+            <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="  Username" maxlength="10" required error-message="Please Enter Username" auto-validate allowed-pattern="[a-zA-Z]"><iron-icon icon="account-circle" class="icon_space" slot="prefix"></iron-icon></paper-input>
+            <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Please input Password" auto-validate placeholder="  Password"><iron-icon icon="lock-open" class="icon_space" slot="prefix"></iron-icon></paper-input>
+            <div class="regi_btn"><iron-icon icon="assignment-ind" class="icon_space" slot="prefix"></iron-icon>&nbsp<a href="register-profile" class="input_reg">Register</a></div>
              <paper-button raised class="button-class" on-tap="login" value="Login"><iron-icon icon="assignment-turned-in"></iron-icon>Login</paper-button>
             </form>
           </div>
         </div>
+        </div>
      
     <iron-ajax
               id="ironAjaxElement" 
-               url="http://10.138.64.202:8880/lightningmortgage/customer/userLogin"
+               url="http://10.138.64.19:8080/lightningmortgage/customer/userLogin"
                handle-as="json"
                body='{{postBody}}'
                method="post"
@@ -133,11 +132,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         hideMessage:{
           type:String,
           value:""
-         }
+         },
+         loader:{
+          type : Boolean,
+          value : false
+        }
         }
       }
       
       login() {
+        this.loader = true;
         let userDetails = this.postBody;
         if(userDetails && userDetails.userId && userDetails.password) {
           this.ajaxResponse;
@@ -145,6 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
       handleResponse(data) {
+        this.loader = false;
         var result= data.detail.response 
         if(result && result.status ==="200") {
           result.message="";

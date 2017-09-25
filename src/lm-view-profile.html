@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel = 'import' href='../bower_components/polymer/polymer.html'>
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="lm-view-progress.html">
 <link rel = "import" href = "../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel = "import" href = "../bower_components/paper-item/paper-item.html">
 <link rel = "import" href = "../bower_components/paper-listbox/paper-listbox.html">
@@ -24,6 +25,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel = "import" href = "../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 <link rel = "import" href = "../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html"> 
 
 <dom-module id="lm-view-profile">
   <template>
@@ -60,7 +63,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          .input_width_email{width:105%;margin-top:-22%;margin-bottom:-7%;} 
         .next_button {overflow: auto;}
         .row {display: flex;}
-        .col {flex: 1;padding: 1em;}
+        .col {flex: 1; padding: 18px 0 25px 50PX;}
         .contact_div {margin-top: -4%;}
         .confirm_info{font-size: 14px;        }
         .input_width{width:65%;margin-bottom: -10%;margin-top:1%;}
@@ -68,7 +71,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .input_width_add{width:65%;margin-bottom: 10%;margin-top:1%;}
         .input_width_loc{width:65%;margin-bottom: 10%;margin-top:-22%;}
         .input_width_post{width:65%;margin-bottom: 10%;margin-top:-22%;}
-        .User_details{margin:35px auto;width:51%;}
+        .User_details{margin:0px auto;width:60%;}
+
         .User_details paper-dropdown-menu{margin-bottom: 0;}
         paper-dropdown-menu.salutation{width: 48%;}
         .men_btn{display: block;
@@ -79,6 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         paper-dropdown-menu.mob_code{width:17%;padding-right: 3px}
 		    :host paper-input[disabled] {
         --paper-input-container-input-color: #afafaf;
+        --paper-input-container-label:{border:1px solid red;};
         --paper-input-container-disabled: {
         opacity: 0.7;
 
@@ -93,14 +98,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         } 
         paper-spinner-lite {
-            --paper-spinner-color: #FF6600;
-            position: absolute;
-            top: 290px;
-            left: 600px;
-          } 
+          --paper-spinner-color: #FF6600;
+          position: absolute;
+          top: 290px;
+          left: 600px;
+        }
+        #cover{position: fixed;top:0;left:0;background: rgba(0,0,0,0.6);z-index: 5;width:100%;height: 100%;display: none;}
+ 
           .mob_code {width: 22%; float: left;}
           .mobile_number {padding: 1px 0 0 0;}
           .declaration_text{margin:30px 0px 8px;font-size:14px;}
+          paper-spinner-lite.active{position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);}
+            
     </style>
 	
     <iron-ajax
@@ -123,7 +132,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
     <iron-ajax
       id="saveProfile"
-      url="http://10.138.64.202:8880/lightningmortgage/customer/editCustomer"
+      url="http://10.138.64.19:8080/lightningmortgage/customer/editCustomer"
       handle-as="json"
       method = "POST"
       on-response = "updateEditProfile"
@@ -132,10 +141,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       >
     </iron-ajax>
     
-
+<div class="progress">
+  <rm-progress></rm-progress>
+</div>
 <iron-form id="userForm">
   <form>
-    <div class="card User_details">         
+    <div class="card User_details">     
     <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite> 
     <div class="confirm_info"><iron-icon icon="icons:verified-user" class="icon_space" slot="prefix"></iron-icon>
         So that we can offer you the best mortgage options, please confirm if the below information is accurate
@@ -143,17 +154,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <h3><iron-icon icon="account-box" class="icon_space" slot="prefix"></iron-icon>Personal Details</h3><hr class="separate_sec">        
         <div class="row Salutation_detail"> 
           <div class="col"> 
-                <paper-dropdown-menu class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
-                    <paper-listbox  slot = "dropdown-content" class="val_dropdown">
-                      <paper-item>Mr.</paper-item>
-                      <paper-item>Mrs.</paper-item>
+                <paper-dropdown-menu class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}" >
+                    <paper-listbox  selected="{{ajaxResponse.salutation}}" slot = "dropdown-content" class="val_dropdown">
+                      <paper-item value="0">Mr.</paper-item>
+                      <paper-item value="1">Mrs.</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
           </div>
         </div>
           <div class="row"> 
               <div class="col"> 
-                <paper-input class="input_width" required auto-validate error-message="Fill First Name" autocapitalize allowed-pattern="[a-zA-Z]" 
+                <paper-input class="input_width" required auto-validate error-message="Fill First Name" id="firstName"autocapitalize allowed-pattern="[a-zA-Z]" 
                 label = "First name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                   <div class="icon_mandatory" slot="prefix">*</div>
@@ -168,27 +179,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="row">
             <div class="col">  
                 <paper-dropdown-menu auto-validate error-message="Fill Marital Status" 
-                class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" 
+                class="Marital_Status" label="Marital Status"  value="{{ajaxResponse.maritalStatus}}" 
                  required auto-validate>
                  <div class="icon_mandatory" slot="prefix">*</div>
-                  <paper-listbox  slot = "dropdown-content" class="val_dropdown">
-                      <paper-item>Single</paper-item>
-                      <paper-item>Married</paper-item>
-                      <paper-item>Divorced</paper-item>
+                  <paper-listbox  selected="{{ajaxResponse.maritalStatus}}" slot = "dropdown-content" class="val_dropdown">
+                      <paper-item value="0">Single</paper-item>
+                      <paper-item value="1">Married</paper-item>
+                      <paper-item value="2">Divorced</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
             </div>
             <div class="col">
                 <paper-dropdown-menu required auto-validate error-message="No. of Dependents" 
-                class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
-                    <paper-listbox  slot = "dropdown-content" class="dep_dropdown">
-                      <paper-item>0</paper-item>
-                      <paper-item>1</paper-item>
-                      <paper-item>2</paper-item>
-                      <paper-item>3</paper-item>
-                      <paper-item>4</paper-item>
-                      <paper-item>5</paper-item>
-                      <paper-item>6</paper-item>
+                class="dependents" label="No of Dependents"  value="{{ajaxResponse.noOfDependents}}">
+                    <paper-listbox  selected="{{ajaxResponse.noOfDependents}}" slot = "dropdown-content" class="dep_dropdown">
+                      <paper-item value="0">0</paper-item>
+                      <paper-item value="1">1</paper-item>
+                      <paper-item value="2">2</paper-item>
+                      <paper-item value="3">3</paper-item>
+                      <paper-item value="4">4</paper-item>
+                      <paper-item value="5">5</paper-item>
+                      <paper-item value="6">6</paper-item>
                     </paper-listbox>
                 </paper-dropdown-menu>
               </div>
@@ -229,7 +240,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo"><div class="icon_mandatory" slot="prefix">*</div></paper-input>
             </div>
             <div class="col">
-                <paper-input class="input_width_post"disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
+                <paper-input class="input_width_post" readonly id="cityName" label="City" value="{{ajaxResponse.address.city}}"></paper-input>
+
             </div>
           </div>
 
@@ -244,10 +256,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>                
                 <div class="col mob_number">
                   <div class="mob_code">
-                    <paper-dropdown-menu class="men_btn" label="Code" value="{{ajaxResponse.salutation}}">
-                        <paper-listbox  slot = "dropdown-content" >
-                          <paper-item>+31</paper-item>
-                          <paper-item>+91</paper-item>
+                    <paper-dropdown-menu class="men_btn" label="Code"  value="{{ajaxResponse.mobileCode}}">
+                        <paper-listbox selected="{{ajaxResponse.mobileCode}}" slot = "dropdown-content" >
+                          <paper-item value="0">+31</paper-item>
+                          <paper-item value="1">+91</paper-item>
                         </paper-listbox>
                       </paper-dropdown-menu>
                   </div>
@@ -296,21 +308,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 best of my knowledge and that I authorize ING to contact 
                 such agencies as needed to verify the correctness of the information provided</paper-checkbox>
             </div>
-          <paper-alert-dialog id="validateText" confirm-button="OK">
-              Request call back and Visit nearest branch
-              In order to understand reject reason and provide necessary documents. 
-          </paper-alert-dialog>
+        <div id="cover"></div>    
+        
+          <paper-dialog id="validateText" no-cancel-on-outside-click>
+              <div on-click="closeDialog">
+                  <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+              </div>
+              <p>Request call back and Visit nearest branch
+              In order to understand reject reason and provide necessary documents. </p>
+              <paper-button class="custom dialog-orange" on-click="closeDialog" dialog-dismiss>Ok</paper-button>               
+          </paper-dialog>
 
-          <paper-alert-dialog id="confirmText" confirm-button="OK" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
-              <paper-button style="position: absolute; top: -12px;right: -31px;" dialog-dismiss><iron-icon  icon="icons:cancel"></iron-icon></paper-button>
-             <p> Please ensure that the information you update matches with official records. </p> <p>You will be required to 
-              submit documents to support the change before the mortgage is processed. </p>
-          </paper-alert-dialog>
+          <paper-dialog id="confirmText" no-cancel-on-outside-click>
+              <!-- entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop> -->
+              <div on-click="closeDialog">
+                  <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+              </div>
+             <p> Please ensure that the information you update matches with official records. </p>
+             <p>You will be required to submit documents to support the change before the mortgage is processed. </p>
+            <paper-button class="custom dialog-orange" on-click="knockOutCheck" dialog-dismiss>Ok</paper-button>               
+          </paper-dialog>
+
         <div class="next_button">
-
+          <paper-spinner-lite active$="{{loader}}" class="orange active"></paper-spinner-lite>
           <paper-button toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
-          <paper-button hidden$="{{hide}}" toggles raised class ="" on-tap="knockOutCheck">Validate</paper-button>      
-          <paper-button disabled$="{{!checked}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+          <!-- <paper-button hidden$="{{hide}}" toggles raised class ="" on-tap="knockOutCheck">Validate</paper-button>       -->
+          <paper-button disabled$="{{!checked}}" toggles raised class = "" on-tap="updateProfile">Validate</paper-button>
            <!-- <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>  -->
 
         </div>
@@ -423,6 +446,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           hide:{
             type:Boolean,
             value:false
+          },
+          loader:{
+            type : Boolean,
+            value : false
           }
         }
       }
@@ -435,6 +462,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       updateProfile(){
         this.$.confirmText.open();
         this.$.saveProfile.generateRequest();
+        this.loader = true;
+        this.$.cover.style.display="block";
+      }
+      closeDialog()
+      {
+        this.loader = false;
+        this.$.cover.style.display="none";
       }
       saveProfile(){
         this.edit=false;
@@ -455,7 +489,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               // this.isActive = true;
               let postCode = this.ajaxResponse.address.postCode;
                if(postCode!="undefined" && postCode!="")
-               this.postCodeApiUrl = "https://api.bring.com/shippingguide/api/postalCode.json?clientUrl=t&country=NL&pnr="+postCode;
+               this.postCodeApiUrl = "http://10.138.64.19:8080/lightningmortgage/city/"+postCode;
               this.$.cityInfoReq.generateRequest();
             }
      
@@ -477,6 +511,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       sub()
       {
         this.checked= !this.checked;
+        if(this.firstName!=null)
+        {
+          return this.checked;
+        }
       }
 
 
@@ -486,21 +524,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       //}
       getUrl() {
         var userId=localStorage.getItem('userId');
-        return "http://10.138.64.202:8880/lightningmortgage/customer/getCustomer/"+userId;
+        return "http://10.138.64.19:8080/lightningmortgage/customer/getCustomer/"+userId;
         
       }
       getKnockUrl() {
         var userId=localStorage.getItem('userId');
-        return "http://10.138.64.218:8080/lightningmortgage/knockoutCheck/"+userId;
+        return "http://10.138.64.19:8080/lightningmortgage/knockoutCheck/"+userId;
         
       }
       knockOutCheck() {
+        this.loader = true;
         this.$.knockOutAjax.generateRequest();
+        this.$.cover.style.display="none";
+        
       }
       knockOutResponse(data) {
+        this.loader = false;
         var result= data.detail.response 
         if(result && result.responseCode ==="200") {
-        window.history.pushState({}, null, '/property-details');
+        window.history.pushState({}, null, '/property-selection');
         window.dispatchEvent(new CustomEvent('location-changed'));
         }
         else{
@@ -510,10 +552,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       updateEditProfile() {
         this.edit=false;
         this.hide = false;
+        this.loader = false;
       }
       json(obj) {
         return JSON.stringify(obj, null, 2);
       }
+
     }
 
     window.customElements.define(ViewProfile.is, ViewProfile);
