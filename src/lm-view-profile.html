@@ -128,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
     <iron-ajax
       id="saveProfile"
-      url="http://10.138.64.202:8880/lightningmortgage/customer/editCustomer"
+      url="http://10.138.13.58:8080/lightningmortgage/customer/editCustomer"
       handle-as="json"
       method = "POST"
       on-response = "updateEditProfile"
@@ -498,12 +498,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       //}
       getUrl() {
         var userId=localStorage.getItem('userId');
-        return "http://10.138.64.202:8880/lightningmortgage/customer/getCustomer/"+userId;
+        return "http://10.138.13.58:8080/lightningmortgage/customer/getCustomer/"+userId;
         
       }
       getKnockUrl() {
         var userId=localStorage.getItem('userId');
-        return "http://10.138.64.218:8080/lightningmortgage/knockoutCheck/"+userId;
+        return "http://10.138.13.58:8080/lightningmortgage/knockoutCheck/"+userId;
         
       }
       knockOutCheck() {
