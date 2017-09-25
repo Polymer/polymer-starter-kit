@@ -3,6 +3,7 @@
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html"> 
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html"> 
 
 <link rel="import" href="shared-styles.html">
 <dom-module id="property-details">
@@ -45,8 +46,8 @@
           paper-spinner-lite {
             --paper-spinner-color: #FF6600;
             position: absolute;
-            top: 290px;
-            left: 600px;
+            top: 200px;
+            left: 500px;
           }
 
         </style>
@@ -61,13 +62,36 @@
         			<paper-input name="propCity" class="floatBox" readonly label="City" id="propCity" value="{{propertydetails.propCity::input}}"></paper-input>
               <div style="clear: both"></div>
               <br/>
-              <paper-button raised class="custom orange" on-click="submitDetails">Submit</paper-button>
-              <paper-button raised class="custom LM-gray">Save</paper-button>
-              
-              <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="post"
-                         body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse">
+              <paper-button id="btnSubmit" raised class="custom orange" on-click="submitDetails">Submit</paper-button>
+
+              <paper-dialog id="dialogBox" confirm-button="Ok">
+                <div>
+                  <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                </div>
+                <label>Please enter the postal code</label>   
+                <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>             
+              </paper-dialog>
+
+              <paper-dialog id="dialogBoxPostErrorResponse" confirm-button="Ok">
+                <div>
+                  <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                </div>
+                <label>Invalid postal code</label> 
+                <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>               
+              </paper-dialog>
+
+              <paper-dialog id="dialogBoxAddErrorResponse" confirm-button="Ok">
+                <div>
+                  <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                </div>
+                <label>Invalid User or Postal code</label> 
+                <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>               
+              </paper-dialog>
+
+              <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="get"
+                         body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse" on-error="dialogBoxPostErrorResponse">
               </iron-ajax>
-              <iron-ajax id="propDetailsReq" url="http://10.138.64.218:8080/lightningmortgage/property/add" method="post" body='{{propDetailsData}}' handle-as="json" content-type="application/json" on-response="handlePropDetailsResponse">
+              <iron-ajax id="propDetailsReq" url="http://10.138.64.218:8080/lightningmortgage/property/add" method="post" body='{{propDetailsData}}' handle-as="json" content-type="application/json" on-response="handlePropDetailsResponse" on-error="handleErrorResponse">
               </iron-ajax>
         	  </section>
         </div>
@@ -104,7 +128,9 @@
 
               let postCode = this.propertydetails.propPostCode;
               if(postCode!="undefined" && postCode!="")
-              this.postCodeApiUrl = "https://api.bring.com/shippingguide/api/postalCode.json?clientUrl=t&country=NL&pnr="+postCode;
+              //this.postCodeApiUrl = "https://api.bring.com/shippingguide/api/postalCode.json?clientUrl=t&country=NL&pnr="+postCode;
+              this.postCodeApiUrl = "http://10.138.13.58:8080/lightningmortgage/city/"+postCode;
+              //this.$.btnSubmit.disabled= true;
               this.$.cityInfoReq.generateRequest();
             }
             submitDetails() {
@@ -113,30 +139,40 @@
               console.log("hi"+JSON.stringify(this.propertydetails));
               //{"propDoorNo":"11","propAddressLine1":"Address1","propAddressLine2":"Address2","propPostCode":"8211"}
               this.propDetailsData.propertyDetails["doorNumber"]= "";
-              if(this.propertydetails["propDoorNo"]!="undefined")
+              if(this.propertydetails["propDoorNo"]!=undefined)
                 this.propDetailsData.propertyDetails["doorNumber"]=this.propertydetails["propDoorNo"];
               
               this.propDetailsData.propertyDetails["addressLine1"] = "";
-              if(this.propertydetails["addressLine1"]!="undefined")
+              if(this.propertydetails["propAddressLine1"]!=undefined)
                 this.propDetailsData.propertyDetails["addressLine1"]=this.propertydetails["propAddressLine1"];
 
               this.propDetailsData.propertyDetails["addressLine2"] = "";
-              if(this.propertydetails["addressLine2"]!="undefined")
+              if(this.propertydetails["propAddressLine2"]!=undefined)
                 this.propDetailsData.propertyDetails["addressLine2"]=this.propertydetails["propAddressLine2"];
 
               this.propDetailsData.propertyDetails["postalCode"]="";
-              if(this.propertydetails["postalCode"]!="undefined")
+              console.log("pc "+this.propertydetails["postalCode"]);
+              if(this.propertydetails["propPostCode"]!=undefined){
                 this.propDetailsData.propertyDetails["postalCode"]=this.propertydetails["propPostCode"];
+              } else {
+                this.$.dialogBox.open();
+                this.isActive = false;
+                return;
+              }
 
               this.propDetailsData.propertyDetails["city"]="";
-              if(this.propertydetails["city"]!="undefined")
+              if(this.propertydetails["propCity"]!=undefined)
                 this.propDetailsData.propertyDetails["city"]=this.propertydetails["propCity"];
-              console.log("LOC "+localStorage.userId);
+              //console.log("LOC "+localStorage.userId);
               if(localStorage.userId!=undefined && localStorage.userId!="" )
                 this.propDetailsData.propertyDetails["customerId"]=localStorage.userId;
               else 
-                this.propDetailsData.propertyDetails["customerId"] = 2;
-              console.log("hi"+JSON.stringify(this.propDetailsData));
+                this.propDetailsData.propertyDetails["customerId"] = 101;
+              console.log("hi   "+JSON.stringify(this.propDetailsData));
+              localStorage.postalCode = this.propDetailsData.propertyDetails["postalCode"];
+              localStorage.outstandingBalance = "";
+               //window.history.pushState({},"", '/products/');
+                //window.dispatchEvent(new CustomEvent('location-changed'));
               this.$.propDetailsReq.generateRequest();
             }
             handleCityInfoResponse(res){
@@ -151,21 +187,28 @@
                 this.$.propCity.value = "";
               }
               this.isActive = false;
+              //this.$.btnSubmit.disabled= true;
+            }
+            dialogBoxPostErrorResponse(res){
+              this.$.dialogBoxPostErrorResponse.open();
+              this.isActive = false;
+              return;
             }
             handlePropDetailsResponse(res){
-              console.log("jjjjjj"+JSON.stringify(res.detail.response));
+              //console.log("kkkk"+JSON.stringify(res.detail.response));
               let response = res.detail.response;
               this.isActive = false;
               let customerId = this.propDetailsData.propertyDetails["customerId"];
               if(response.responseCode == 200 && response.responseData.propertyStatus==true){
-                localStorage.postalCode = this.propDetailsData.propertyDetails["postalCode"];
-                localStorage.outstandingBalance = "";
                 window.history.pushState({},"", '/products/');
                 window.dispatchEvent(new CustomEvent('location-changed'));
               } 
-              else if(response.responseCode == 500){
-                
-              }
+            }
+            handleErrorResponse(res){
+              //console.log(res.detail.request.xhr.response);
+              this.$.dialogBoxPostErrorResponse.close();
+              this.$.dialogBoxAddErrorResponse.open();
+              this.isActive = false;
             }
         }
         window.customElements.define(PropertyDetails.is, PropertyDetails);
