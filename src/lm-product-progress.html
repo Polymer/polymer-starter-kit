@@ -10,7 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
-
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="rm-progress">
@@ -227,8 +226,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    class RmProgress2 extends Polymer.Element {
-      static get is() { return 'rm-progress2'; }
+    class RmProgress extends Polymer.Element {
+      static get is() { return 'rm-progress'; }
      static get properties(){
         return {
           stepsCounter : {
@@ -239,7 +238,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     }
 
-    window.customElements.define(RmProgress2.is, RmProgress2);
+    window.customElements.define(RmProgress.is, RmProgress);
   </script>
 </dom-module>
 

@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./lm-vas.html">
 <link rel="import" href="./term-conditions.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="lm-product-progress.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
@@ -154,8 +155,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     color: #f60;
                 }
 
-
-
             paper-dialog {
                 width: 40%;
                 height: auto;
@@ -205,6 +204,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 display: none;
             }
         </style>
+        <div class="progress">
+            <rm-progress></rm-progress>
+
+        </div>
         <div class="productContainer card">
             <div class="flex-container">
                 <template is="dom-repeat" items="[[products.product]]">
@@ -229,7 +232,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div class="" style="margin-left:0px;">Down Payment : <span style='margin-left:42px;'>&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
                 </div>
                 <div class="vas-icons">
-                    
+
 
                     <h3>Checkout some services offered for you</h3>
                     <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
@@ -261,9 +264,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                     </div>
                     <div class="center">&nbsp;</div>
-                    <paper-dialog id="dialogeterm" >
-                        <div>
-                            <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                    <paper-dialog id="dialogeterm">
+                        <div on-click="closedialog">                     
+                            <paper-icon-button icon ="icons:cancel"  title="Close"  dialog-dismiss></paper-icon-button>
                         </div>
                         <term-conditions terms="[[termsArray]]"></term-conditions>
                     </paper-dialog>
@@ -274,8 +277,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div id="cover"></div>
 
                     <paper-dialog id="dialoge" no-cancel-on-outside-click>
-   
-                        <div>
+
+                         <div on-click="closedialog">
                             <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
                         </div>
                         <h3>Congratulations on your Mortgage Offer</h3>
@@ -295,7 +298,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </div>
                         <div><label><b>Additional Documents</b></label></div>
                         <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
-                        <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>Close</paper-button>-->
+                        <paper-button style="float: right;" on-click="closedialog" class="paper-button" dialog-confirm>OK</paper-button>
                     </paper-dialog>
 
 
@@ -596,6 +599,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             openterms(event) {
                 this.$.dialogeterm.open();
+            }
+           
+            closedialog() {
+                console.log("closed");
+                window.history.pushState({}, null, '/home');
+                window.dispatchEvent(new CustomEvent('location-changed'));
             }
             // window.addEventListener('totalvas-changed',function(){
             //     alert(1);
