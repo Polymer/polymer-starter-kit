@@ -62,7 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          .input_width_email{width:105%;margin-top:-22%;margin-bottom:-7%;} 
         .next_button {overflow: auto;}
         .row {display: flex;}
-        .col {flex: 1;padding: 1em;}
+        .col {flex: 1; padding: 18px 0 25px 50PX;}
         .contact_div {margin-top: -4%;}
         .confirm_info{font-size: 14px;        }
         .input_width{width:65%;margin-bottom: -10%;margin-top:1%;}
@@ -70,7 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .input_width_add{width:65%;margin-bottom: 10%;margin-top:1%;}
         .input_width_loc{width:65%;margin-bottom: 10%;margin-top:-22%;}
         .input_width_post{width:65%;margin-bottom: 10%;margin-top:-22%;}
-        .User_details{margin:35px auto;width:51%;}
+        .User_details{margin:35px auto;width:60%;}
         .User_details paper-dropdown-menu{margin-bottom: 0;}
         paper-dropdown-menu.salutation{width: 48%;}
         .men_btn{display: block;
@@ -157,7 +157,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
           <div class="row"> 
               <div class="col"> 
-                <paper-input class="input_width" required auto-validate error-message="Fill First Name" autocapitalize allowed-pattern="[a-zA-Z]" 
+                <paper-input class="input_width" required auto-validate error-message="Fill First Name" id="firstName"autocapitalize allowed-pattern="[a-zA-Z]" 
                 label = "First name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                   <div class="icon_mandatory" slot="prefix">*</div>
@@ -233,7 +233,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo"><div class="icon_mandatory" slot="prefix">*</div></paper-input>
             </div>
             <div class="col">
-                <paper-input class="input_width_post"disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
+                <paper-input class="input_width_post" readonly id="cityName" label="City" value="{{ajaxResponse.address.city}}"></paper-input>
             </div>
           </div>
 
@@ -250,6 +250,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <div class="mob_code">
 
                     <paper-dropdown-menu class="men_btn" label="Code" selected="{{ajaxResponse.mobileCode}}" value="{{ajaxResponse.mobileCode}}">
+
                         <paper-listbox  slot = "dropdown-content" >
                           <paper-item>+31</paper-item>
                           <paper-item>+91</paper-item>
@@ -314,8 +315,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="next_button">
           <paper-spinner-lite active$="{{loader}}" class="orange active"></paper-spinner-lite>
           <paper-button toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
-          <paper-button hidden$="{{hide}}" toggles raised class ="" on-tap="knockOutCheck">Validate</paper-button>      
-          <paper-button disabled$="{{!checked}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+          <!-- <paper-button hidden$="{{hide}}" toggles raised class ="" on-tap="knockOutCheck">Validate</paper-button>       -->
+          <paper-button disabled$="{{!checked}}" toggles raised class = "" on-tap="updateProfile">Validate</paper-button>
            <!-- <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>  -->
 
         </div>
@@ -487,6 +488,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       sub()
       {
         this.checked= !this.checked;
+        if(this.firstName!=null)
+        {
+          return this.checked;
+        }
       }
 
 
