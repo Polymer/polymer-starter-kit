@@ -233,7 +233,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo"><div class="icon_mandatory" slot="prefix">*</div></paper-input>
             </div>
             <div class="col">
-                <paper-input class="input_width_post"disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
+                <paper-input class="input_width_post"disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}"></paper-input>
             </div>
           </div>
 
@@ -300,16 +300,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 best of my knowledge and that I authorize ING to contact 
                 such agencies as needed to verify the correctness of the information provided</paper-checkbox>
             </div>
-          <paper-alert-dialog id="validateText" confirm-button="OK">
-              Request call back and Visit nearest branch
-              In order to understand reject reason and provide necessary documents. 
-          </paper-alert-dialog>
+          <paper-dialog id="validateText" confirm-button="OK">
+              <div>
+                  <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+              </div>
+              <p>Request call back and Visit nearest branch
+              In order to understand reject reason and provide necessary documents. </p>
+              <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>               
+          </paper-dialog>
 
-          <paper-alert-dialog id="confirmText" confirm-button="OK" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
-              <paper-button style="position: absolute; top: -12px;right: -31px;" dialog-dismiss><iron-icon  icon="icons:cancel"></iron-icon></paper-button>
-             <p> Please ensure that the information you update matches with official records. </p> <p>You will be required to 
-              submit documents to support the change before the mortgage is processed. </p>
-          </paper-alert-dialog>
+          <paper-dialog id="confirmText" confirm-button="OK" >
+              <!-- entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop> -->
+              <div>
+                  <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+              </div>
+             <p> Please ensure that the information you update matches with official records. </p>
+             <p>You will be required to submit documents to support the change before the mortgage is processed. </p>
+            <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>               
+          </paper-dialog>
+
         <div class="next_button">
           <paper-spinner-lite active$="{{loader}}" class="orange active"></paper-spinner-lite>
           <paper-button toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
