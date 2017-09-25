@@ -326,7 +326,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
              <p> Please ensure that the information you update matches with official records. </p>
              <p>You will be required to submit documents to support the change before the mortgage is processed. </p>
-            <paper-button class="custom dialog-orange" on-click="closeDialog;knockOutCheck" dialog-dismiss>Ok</paper-button>               
+            <paper-button class="custom dialog-orange" on-click="knockOutCheck" dialog-dismiss>Ok</paper-button>               
           </paper-dialog>
 
         <div class="next_button">
@@ -535,6 +535,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       knockOutCheck() {
         this.loader = true;
         this.$.knockOutAjax.generateRequest();
+        this.$.cover.style.display="none";
         
       }
       knockOutResponse(data) {
