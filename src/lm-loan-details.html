@@ -49,9 +49,21 @@
             top: 200px;
             left: 500px;
           }
+          #cover {
+            position: fixed;
+            top:0;
+            left:0;
+            background:#000;
+            opacity: 0.6;
+            width: 100%;
+            height: 100%;
+            display: none;
+            z-index:5;
+          }
 
         </style>
         <div class="loan-details">
+          <div id="cover"></div>
           <section>
             <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite>
             <paper-dropdown-menu label="Current Lender"  id="id" name="bank">
@@ -69,20 +81,20 @@
             
             <br/>
             <paper-button id="btnSubmit" raised class="custom orange" on-click="submitDetails">Submit</paper-button>
-            <paper-dialog id="dialogBox" confirm-button="Ok">
-              <div>
+            <paper-dialog id="dialogBox" no-cancel-on-outside-click>
+              <div on-click="closeDialog">
                 <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
               </div>
                 <label>Please provide Current lender and Mortgage contract number</label>      
-                <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>         
+                <paper-button class="custom dialog-orange" dialog-dismiss on-click="closeDialog">Ok</paper-button>         
             </paper-dialog>
 
-            <paper-dialog id="dialogBoxOutStandingError" confirm-button="Ok">
-              <div>
+            <paper-dialog id="dialogBoxOutStandingError" no-cancel-on-outside-click>
+              <div on-click="closeDialog">
                 <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
               </div>
                 <label>Invalid Current lender or Mortgage contract number</label>  
-                <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>             
+                <paper-button class="custom dialog-orange" dialog-dismiss on-click="closeDialog">Ok</paper-button>             
             </paper-dialog>
 
             <iron-ajax id="outstandingDetailsReq" url="{{outstandingBalReqAPI}}" method="get" body='{{loandetails}}' handle-as="json" content-type="application/json" on-response="handleOutstandingDetailsResponse" on-error="handleOutstandingErrorResponse">
@@ -136,12 +148,15 @@
             }
             handleOutstandingErrorResponse(res){
               this.$.dialogBoxOutStandingError.open();
+              this.$.cover.style.display = "block";
+
               this.isActive = false;
             }
             submitDetails(){
               //console.log("bababa "+this.loandetails.outstandingBal);
               if(this.loandetails.bankName==undefined || this.loandetails.mortgageContractNumber==undefined){
                 this.$.dialogBox.open();
+                this.$.cover.style.display = "block";
                 this.isActive = false;
                 return;
               } else {
@@ -153,9 +168,13 @@
                 } else {
                   this.$.dialogBoxOutStandingError.close();
                   this.$.dialogBoxOutStandingError.open();
+                  this.$.cover.style.display = "block";
                   this.isActive = false;
                 }
               }
+            }
+            closeDialog(){
+              this.$.cover.style.display="none";
             }
         }
         window.customElements.define(LoanDetails.is, LoanDetails);
