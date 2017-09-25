@@ -174,7 +174,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
         this.page = page || 'login';
-        if(page == 'login' || page ==''){
+        if(page == 'login' || page =='' || page=='home'){
           this.shadowRoot.querySelector('progress-stepper').className='hidden';
         }else{
           this.shadowRoot.querySelector('progress-stepper').className='';
