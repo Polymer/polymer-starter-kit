@@ -69,7 +69,6 @@
             
             <br/>
             <paper-button id="btnSubmit" raised class="custom orange" on-click="submitDetails">Submit</paper-button>
-            <paper-button raised class="custom LM-gray">Save</paper-button>
             <paper-dialog id="dialogBox" confirm-button="Ok">
               <div>
                 <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
@@ -140,7 +139,7 @@
               this.isActive = false;
             }
             submitDetails(){
-              console.log("bababa "+this.loandetails.outstandingBal);
+              //console.log("bababa "+this.loandetails.outstandingBal);
               if(this.loandetails.bankName==undefined || this.loandetails.mortgageContractNumber==undefined){
                 this.$.dialogBox.open();
                 this.isActive = false;
