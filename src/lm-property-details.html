@@ -104,7 +104,7 @@
               <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="get"
                          body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse" on-error="dialogBoxPostErrorResponse">
               </iron-ajax>
-              <iron-ajax id="propDetailsReq" url="http://10.138.64.218:8080/lightningmortgage/property/add" method="post" body='{{propDetailsData}}' handle-as="json" content-type="application/json" on-response="handlePropDetailsResponse" on-error="handleErrorResponse">
+              <iron-ajax id="propDetailsReq" url="http://10.138.64.19:8080/lightningmortgage/property/add" method="post" body='{{propDetailsData}}' handle-as="json" content-type="application/json" on-response="handlePropDetailsResponse" on-error="handleErrorResponse">
               </iron-ajax>
         	  </section>
         </div>
@@ -142,7 +142,7 @@
               let postCode = this.propertydetails.propPostCode;
               if(postCode!="undefined" && postCode!="")
               //this.postCodeApiUrl = "https://api.bring.com/shippingguide/api/postalCode.json?clientUrl=t&country=NL&pnr="+postCode;
-              this.postCodeApiUrl = "http://10.138.13.53:8080/lightningmortgage/city/"+postCode;
+              this.postCodeApiUrl = "http://10.138.64.19:8080/lightningmortgage/city/"+postCode;
               //this.$.btnSubmit.disabled= true;
               this.$.cityInfoReq.generateRequest();
             }
