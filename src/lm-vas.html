@@ -9,21 +9,30 @@
 		}
 		;
 		div.container{
-			width:80%;
-			text-align: center;
-			padding-left: 5			
+			display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+						
 		}
 		div.container img{
-			width : 70%;
+			width : 50%;
 		}
 		paper-card{
-			border-radius: 50px;
-			margin-top: 10px;
+			        border-radius: 9px;
+					margin-left: 15px;
+					width: 10%;
+					height: 85px;
+					border: 1px solid #bdacac;
+					box-shadow: 2px 2px 5px 4px #bdacac;
+					box-sizing: border-box;
 		}
-		paper-card:hover{
+		paper-card div.card-content{
+		    text-align: center;
+			padding-top: 14px;}
+			paper-card:hover,div.container img{
 			cursor: pointer;
-			transform: scale(1.1);
-			transition-duration: 0.1s;
+			transform: scale(1.05);
+			transition-duration: 0.2s;
 			transition-timing-function: ease-in;
 		}
 		paper-card.selected {
@@ -33,11 +42,17 @@
 	</style>
 	<div class='container'>
 	<template is="dom-repeat" items="{{itemindex}}">
+	
         <paper-card id='paper_card_{{index}}' on-click="_getDetails" class='default'>
+
            <div class="card-content"> 
-           <img src='../images/icon-{{item.id}}.png' title="{{item.name}}"  />
+               <a href="{{item.url}}" target="_blank">
+                   <img src='../images/icon-{{item.id}}.png' title="{{item.name}} of amount {{item.value}}" />
+               </a>
+
            </div>
         </paper-card>
+	
       </template>	
 	</div>
 	
@@ -61,7 +76,8 @@
 			static get properties(){
 				return {
 					itemindex:{
-						type : Array,
+					    type: Array,
+
 					},
 					selectedVas:{
 						type :Array,
@@ -75,8 +91,7 @@
 						value:0,
 						reflectToAttribute : true,
 						notify:true
-								}
-					
+					}					
 
 				};
 			}
@@ -86,6 +101,7 @@
 					sum +=this.selectedVas[counter];
 				} 
 				this.totalvas = sum;
+				this.dispatchEvent(new CustomEvent('totalvas-changed', {detail: {valuechanged: true}}));
 			}
 			_getDetails(event){
 		        let selectedIndex = event.model.__data.index;
