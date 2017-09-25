@@ -49,9 +49,22 @@
             top: 200px;
             left: 500px;
           }
+          #cover {
+            position: fixed;
+            top:0;
+            left:0;
+            background:#000;
+            opacity: 0.6;
+            width: 100%;
+            height: 100%;
+            display: none;
+            z-index:5;
+          }
 
         </style>
+        
         <div class="prop-details">
+        <div id="cover"></div>
          <!-- <h3>Property Details</h3> -->
         	<section>
             <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite>
@@ -64,28 +77,28 @@
               <br/>
               <paper-button id="btnSubmit" raised class="custom orange" on-click="submitDetails">Submit</paper-button>
 
-              <paper-dialog id="dialogBox" confirm-button="Ok">
-                <div>
+              <paper-dialog id="dialogBox" no-cancel-on-outside-click>
+                <div on-click="closeDialog">
                   <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
                 </div>
                 <label>Please enter the postal code</label>   
-                <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>             
+                <paper-button class="custom dialog-orange" dialog-dismiss on-click="closeDialog">Ok</paper-button>             
               </paper-dialog>
 
-              <paper-dialog id="dialogBoxPostErrorResponse" confirm-button="Ok">
-                <div>
+              <paper-dialog id="dialogBoxPostErrorResponse" no-cancel-on-outside-click>
+                <div on-click="closeDialog">
                   <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
                 </div>
                 <label>Invalid postal code</label> 
-                <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>               
+                <paper-button class="custom dialog-orange" dialog-dismiss on-click="closeDialog">Ok</paper-button>               
               </paper-dialog>
 
-              <paper-dialog id="dialogBoxAddErrorResponse" confirm-button="Ok">
-                <div>
+              <paper-dialog id="dialogBoxAddErrorResponse" no-cancel-on-outside-click>
+                <div on-click="closeDialog">
                   <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
                 </div>
                 <label>Invalid User or Postal code</label> 
-                <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>               
+                <paper-button class="custom dialog-orange" dialog-dismiss on-click="closeDialog">Ok</paper-button>               
               </paper-dialog>
 
               <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="get"
@@ -129,14 +142,14 @@
               let postCode = this.propertydetails.propPostCode;
               if(postCode!="undefined" && postCode!="")
               //this.postCodeApiUrl = "https://api.bring.com/shippingguide/api/postalCode.json?clientUrl=t&country=NL&pnr="+postCode;
-              this.postCodeApiUrl = "http://10.138.13.58:8080/lightningmortgage/city/"+postCode;
+              this.postCodeApiUrl = "http://10.138.13.53:8080/lightningmortgage/city/"+postCode;
               //this.$.btnSubmit.disabled= true;
               this.$.cityInfoReq.generateRequest();
             }
             submitDetails() {
               this.isActive = true;
               //API URL -- http://10.138.13.156:8080/lightningmortgage/property/add
-              console.log("hi"+JSON.stringify(this.propertydetails));
+              //console.log("hi"+JSON.stringify(this.propertydetails));
               //{"propDoorNo":"11","propAddressLine1":"Address1","propAddressLine2":"Address2","propPostCode":"8211"}
               this.propDetailsData.propertyDetails["doorNumber"]= "";
               if(this.propertydetails["propDoorNo"]!=undefined)
@@ -156,6 +169,7 @@
                 this.propDetailsData.propertyDetails["postalCode"]=this.propertydetails["propPostCode"];
               } else {
                 this.$.dialogBox.open();
+                this.$.cover.style.display = "block";
                 this.isActive = false;
                 return;
               }
@@ -168,7 +182,7 @@
                 this.propDetailsData.propertyDetails["customerId"]=localStorage.userId;
               else 
                 this.propDetailsData.propertyDetails["customerId"] = 101;
-              console.log("hi   "+JSON.stringify(this.propDetailsData));
+              //console.log("hi   "+JSON.stringify(this.propDetailsData));
               localStorage.postalCode = this.propDetailsData.propertyDetails["postalCode"];
               localStorage.outstandingBalance = "";
                //window.history.pushState({},"", '/products/');
@@ -190,8 +204,11 @@
               //this.$.btnSubmit.disabled= true;
             }
             dialogBoxPostErrorResponse(res){
+              console.log("hhhhhhhhhhhhhhhh");
+              this.$.cover.style.display = "block";
               this.$.dialogBoxPostErrorResponse.open();
               this.isActive = false;
+              
               return;
             }
             handlePropDetailsResponse(res){
@@ -208,7 +225,11 @@
               //console.log(res.detail.request.xhr.response);
               this.$.dialogBoxPostErrorResponse.close();
               this.$.dialogBoxAddErrorResponse.open();
+              this.$.cover.style.display = "block";
               this.isActive = false;
+            }
+            closeDialog(){
+              this.$.cover.style.display="none";
             }
         }
         window.customElements.define(PropertyDetails.is, PropertyDetails);
