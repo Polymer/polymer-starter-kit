@@ -1,17 +1,32 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 
 <dom-module id="vas-service">
 <template>
 	<style type="text/css">
 		:host{
 			display: inline-block;
+
+			
 			
 		}
-		;
+		paper-tooltip {
+			--paper-tooltip-background: #f60;
+			--paper-tooltip-text-color: #fff;
+			--paper-tooltip-opacity : 1;
+			width: 200px;
+			border-radius: 15px;
+			
+		}
+		paper-tooltip #tooltip{
+			font-size: 18px;
+			border-radius: 50px;
+
+		}
 		div.container{
-			/*display: flex;*/
-                /*flex-direction: row;
-                flex-wrap: wrap;*/
+			/*display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;*/
                 text-align: center;
 						
 		}
@@ -24,13 +39,15 @@
 					width: 10%;
 					height: 85px;
 					border: 1px solid #bdacac;
-					box-shadow: 2px 2px 5px 4px #bdacac;
+					box-shadow: 2px 2px 6px 1px #bdacac;
 					box-sizing: border-box;
 		}
 		paper-card div.card-content{
 		    text-align: center;
-			padding-top: 14px;}
-			paper-card:hover,div.container img{
+			padding-top: 25px;}
+
+			paper-card:hover,
+			div.container img{
 			cursor: pointer;
 			transform: scale(1.05);
 			transition-duration: 0.2s;
@@ -38,23 +55,27 @@
 		}
 		paper-card.selected {
         border-bottom:4px solid #f60;
+        box-shadow: 2px 2px 6px 4px #bdacac;
        }
 
 	</style>
 	<div class='container'>
 	<template is="dom-repeat" items="{{itemindex}}">
 	
-        <paper-card id='paper_card_{{index}}' on-click="_getDetails" class='default'>
+        <paper-card id='paper_card_{{index}}' on-click="_getDetails" class='default' >
 
            <div class="card-content"> 
                <a href="{{item.url}}" target="_blank">
-                   <img src='../images/icon-{{item.id}}.png' title="{{item.name}} of amount {{item.value}}" />
+                   <img src='../images/icon-{{item.id}}.png' />
                </a>
-
+               <paper-tooltip for='paper_card_{{index}}' position="top" animation-delay="0">{{item.name}}: &euro; {{item.value}}
+               </paper-tooltip>
            </div>
         </paper-card>
 	
       </template>	
+      <div>
+      </div>
 	</div>
 	
 </template>
