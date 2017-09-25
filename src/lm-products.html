@@ -193,6 +193,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: forestgreen;
                 text-align: center;
             }
+            .popup2 {
+                      position: absolute;
+                      content: "";
+                      top: 0;
+                      left: 0;
+                      bottom: 0;
+                      right: 0;
+                      background: #FFF;
+                      z-index: -1;
+                    }
         </style>
         <div class="productContainer card">
             <div class="flex-container">
@@ -214,7 +224,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
                     <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
                     <!-- <lm-slider title='Down Payment' prefix='&euro;' minval='0' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider> -->
-                    
+
                     <div class="" style="margin-left:0px;">Down Payment : <span style='margin-left:42px;'>&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
                 </div>
                 <div class="vas-icons">
@@ -222,38 +232,71 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
                 </div>
                 <div class="center">&nbsp;</div>
-                <paper-dialog id="dialogeterm">
+                <div>
+                    <h3>Total Offer Breakup</h3>
+
                     <div>
-                        <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                        <table>
+
+                            <tr>
+                                <td><label>Funded by Bank :</label></td>
+                                <td>&euro;{{_convertToLocale(offeramount)}}</td>
+                            </tr>
+                            <tr>
+                                <td><label>Funded by applicant :</label></td>
+                                <td>&euro;{{_convertToLocale(offerdownpayment)}}</td>
+                            </tr>
+                            <tr>
+                                <td><label>Value Added Services :</label></td>
+                                <td>&euro;{{_convertToLocale(vasamount)}}</td>
+                            </tr>
+                            <tr>
+                                <td><label>Total Offer Value : </label></td>
+                                <td>&euro;{{_convertToLocale(totaloffervalue)}}</td>
+                            </tr>
+                        </table>               
+         
                     </div>
-                    <term-conditions terms="[[termsArray]]"></term-conditions>
-                </paper-dialog>
-                        <paper-checkbox checked="{{checked}}" on-change="valchanged" id="checkboxterm">I agree <a href="javascript:void(0);" on-click="openterms"> Terms and conditions</a></paper-checkbox>
-                        <div class="right">
-                            <paper-button id="submitbtn" class="paper-button-disabled" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
+                    <div class="center">&nbsp;</div>
+                    <paper-dialog id="dialogeterm">
+                        <div>
+                            <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
                         </div>
+                        <term-conditions terms="[[termsArray]]"></term-conditions>
+                    </paper-dialog>
+                    <paper-checkbox checked="{{checked}}" on-change="valchanged" id="checkboxterm">I agree <a href="javascript:void(0);" on-click="openterms"> Terms and conditions</a></paper-checkbox>
+                    <div class="right">
+                        <paper-button id="submitbtn" class="paper-button-disabled" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
+                    </div>
 
-                        <paper-dialog id="dialoge">
-                            <div>
-                                <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
-                            </div>
-                            <h3>Congratulations on your Mortgage Offer</h3>
-                            <!--<a class="close" dialog-confirm>X</a>-->
-                            <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>X</paper-button>-->
-                            <div><label><b>Here are details of the offer:</b></label> </div>
-                            <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
-                            <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
-                            <div><label><span class="fontincrease">Offer Amount: </span>&euro;  {{offeramount}} </label></div>
-                            <div><label><span class="fontincrease">Down payment: </span>&euro; [[offerdownpayment]]</label></div>
-                            <div><label><span class="fontincrease">EPI: </span> &euro; {{epi}}</label></div>
-                            <div><label><b>Additional Documents</b></label></div>
-                            <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
-                            <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>Close</paper-button>-->
-                        </paper-dialog>
+                    <paper-dialog id="dialoge">
+                        <div class="popup2"></div>
+                        <div>
+                            <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                        </div>
+                        <h3>Congratulations on your Mortgage Offer</h3>
+                        <!--<a class="close" dialog-confirm>X</a>-->
+                        <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>X</paper-button>-->
+                        <div><label><b>Here are details of the offer:</b></label> </div>
+                        <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
+                        <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
+                        <div><label><span class="fontincrease">Down payment: </span>&euro; [[offerdownpayment]]</label></div>
+                        <div><label><span class="fontincrease">EPI: </span> &euro; {{epi}}</label></div>
+                        <div>
+                            <h4>Total Offer Breakup</h4>
+                            <div><label>Funded by Bank : &euro;{{_convertToLocale(offeramount)}}</label></div>
+                            <div><label>Funded by applicant : &euro;{{_convertToLocale(offerdownpayment)}}</label></div>
+                            <div><label>Value Added Services : &euro;{{_convertToLocale(vasamount)}}</label></div>
+                            <div><label>Total Offer Value : &euro;{{_convertToLocale(totaloffervalue)}}</label></div>
+                        </div>
+                        <div><label><b>Additional Documents</b></label></div>
+                        <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
+                        <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>Close</paper-button>-->
+                    </paper-dialog>
 
 
-</div>
-        </div>
+                </div>
+            </div>
 
         </div>
 
@@ -363,6 +406,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     totaloffervalue: {
                         type: Number
                     },
+                    vasamount: {
+                        type: Number,
+                        value: 0
+                    },
                     termsArray: Array,
                     vasArray: {
                         type: Array,
@@ -374,6 +421,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
             _convertToLocale(val) {
+                if (val == 0) {
+                    return val.toLocaleString();
+                }
                 if (val) {
                     return val.toLocaleString();
                 }
@@ -392,6 +442,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             updateOfferAmount() {
                 let tmp = this.shadowRoot.querySelector('vas-service');
+                this.vasamount = tmp.totalvas;
                 this.totaloffervalue = parseInt(this.offeramount) + parseInt(this.offerdownpayment) + parseInt(tmp.totalvas);
             }
             _getProductDetails(event) {
@@ -536,7 +587,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.$.submitbtn.classList.add('paper-button-disabled');
                     this.$.submitbtn.classList.remove('paper-button');
                 }
-                
+
             }
             openterms(event) {
                 this.$.dialogeterm.open();
