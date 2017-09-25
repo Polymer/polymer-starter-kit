@@ -8,6 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel = 'import' href='../bower_components/polymer/polymer.html'>
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
@@ -19,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel = "import" href = "../bower_components/paper-styles/paper-styles.html">
 <link rel = "import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel = "import" href = "../bower_components/paper-input/paper-input.html">
+<link rel = "import" href = "../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel = "import" href = "../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 <link rel = "import" href = "../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
@@ -27,39 +29,78 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
    <style include="shared-styles">
       :host {
-        display: block;
+        /* display: block; */
         padding: 10px;
       }
-        
+      .separate_sec{margin-bottom: -17px;}
+        .val_dropdown
+        {
+        display: inline;
+        }
+        .close-dialog {    position: absolute;
+          top: -12px;
+          right: -31px;}
+        .dep_dropdown
+        {
+          overflow: hidden;box-sizing: border-box;max-width: 77.4844px;max-height: 294.078px;
+        }
+        .bsn_width{    width: 65%;    margin-top: -14%; margin-bottom: -17px;}
+        .icon_space{margin-right: 10px;}
+        /* .icon_space_mail{} */
+        .icon_mandatory_mail{margin-right: 4px; color: #ff0000}
+        .icon_mandatory{margin-right: 4px; color: #ff0000}
         #container {display: flex;}
         paper-button{ padding: 10px; border-radius: 5px; float: right;}
+        paper-button[disabled]{ cursor: no-drop!important; pointer-events: all !important; background: #F3C5C5}
+        paper-button[hover][active]{background: red!important;}
         paper-button.green:hover { background-color: var(--paper-green-400);}
         paper-button.green { background-color: var(--paper-green-500); color: white;}
         paper-button.green[active] {background-color: var(--paper-red-500);}
         .style-scope.lm-view-profile {height: auto;}
+         .input_width_email{width:105%;margin-top:-22%;margin-bottom:-7%;} 
         .next_button {overflow: auto;}
         .row {display: flex;}
         .col {flex: 1;padding: 1em;}
-        .confirm_info{
-          font-size: 13px;
-        }
-        .User_details{margin:47px auto;width:980px;}
-        paper-dropdown-menu.salutation{width: 11%;}
-        paper-dropdown-menu.Marital_Status{width:27%;}
-        paper-dropdown-menu.dependents{width:34%;}
-        paper-dropdown-menu.mob_code{width:29%;}
+        .contact_div {margin-top: -4%;}
+        .confirm_info{font-size: 14px;        }
+        .input_width{width:65%;margin-bottom: -10%;margin-top:1%;}
+        .input_width_incm{width:65%;margin-bottom: -5%;margin-top:-2%;}
+        .input_width_add{width:65%;margin-bottom: 10%;margin-top:1%;}
+        .input_width_loc{width:65%;margin-bottom: 10%;margin-top:-22%;}
+        .input_width_post{width:65%;margin-bottom: 10%;margin-top:-22%;}
+        .User_details{margin:35px auto;width:51%;}
+        .User_details paper-dropdown-menu{margin-bottom: 0;}
+        paper-dropdown-menu.salutation{width: 48%;}
+        .men_btn{display: block;
+    padding: 3px;}
+        .Salutation_detail{height: 50px;width:65%;}
+        paper-dropdown-menu.Marital_Status{width:65%;margin-top: -7px;}
+        paper-dropdown-menu.dependents{width:65%;margin-top:-7px;}
+        paper-dropdown-menu.mob_code{width:17%;padding-right: 3px}
 		    :host paper-input[disabled] {
         --paper-input-container-input-color: #afafaf;
         --paper-input-container-disabled: {
-        opacity: o.5;
+        opacity: 0.7;
+
         }
         }
         :host paper-dropdown-menu[disabled] {
         --paper-input-container-input-color: #afafaf;
         --paper-input-container-disabled: {
-        opacity: 0.5;
+
+        opacity: 0.7;
+
         }
         } 
+        paper-spinner-lite {
+            --paper-spinner-color: #FF6600;
+            position: absolute;
+            top: 290px;
+            left: 600px;
+          } 
+          .mob_code {width: 22%; float: left;}
+          .mobile_number {padding: 1px 0 0 0;}
+          .declaration_text{margin:30px 0px 8px;font-size:14px;}
     </style>
 	
     <iron-ajax
@@ -82,7 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
     <iron-ajax
       id="saveProfile"
-      url="http://10.138.64.202:8080/lightningmortgage/customer/editCustomer"
+      url="http://10.138.64.202:8880/lightningmortgage/customer/editCustomer"
       handle-as="json"
       method = "POST"
       on-response = "updateEditProfile"
@@ -92,63 +133,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </iron-ajax>
     
 
-
+<iron-form id="userForm">
+  <form>
     <div class="card User_details">         
-       
-		<div class="next_button">
-      <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>
-      <paper-button hidden$="{{hide}}" toggles raised class = "LM-blue" on-tap="knockOutCheck">Validate</paper-button>      
-    </div>  
-    <div class="confirm_info">
-        "So that we can offer you the best mortgage options, please confirm if the following information is accurate"
+    <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite> 
+    <div class="confirm_info"><iron-icon icon="icons:verified-user" class="icon_space" slot="prefix"></iron-icon>
+        So that we can offer you the best mortgage options, please confirm if the below information is accurate
     </div>       
-
-        <h3>Personal Details</h3><hr>        
-        <div class="row"> 
+        <h3><iron-icon icon="account-box" class="icon_space" slot="prefix"></iron-icon>Personal Details</h3><hr class="separate_sec">        
+        <div class="row Salutation_detail"> 
           <div class="col"> 
-              <div class="blocks">
-                <paper-dropdown-menu disabled$="{{!edit}}" class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
-                    <paper-listbox  slot = "dropdown-content" >
-                      <paper-item value=""></paper-item>
+                <paper-dropdown-menu class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
+                    <paper-listbox  slot = "dropdown-content" class="val_dropdown">
                       <paper-item>Mr.</paper-item>
                       <paper-item>Mrs.</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
-
-              </div>
           </div>
         </div>
           <div class="row"> 
               <div class="col"> 
-                <paper-input auto-validate autocapitalize allowed-pattern="[a-zA-Z]" disabled$="{{!edit}}" 
-                  label = "First name" value="{{ajaxResponse.firstName}}">
+                <paper-input class="input_width" required auto-validate error-message="Fill First Name" autocapitalize allowed-pattern="[a-zA-Z]" 
+                label = "First name" value="{{ajaxResponse.firstName}}">
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
+                  <div class="icon_mandatory" slot="prefix">*</div>
                 </paper-input>
-                <paper-dropdown-menu disabled$="{{!edit}}" class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" required auto-validate>
-                    <paper-listbox  slot = "dropdown-content" >
+              </div>
+              <div class="col"> 
+                <paper-input class="input_width" auto-validate error-message="Fill Last name" autocapitalize allowed-pattern="[a-zA-Z]" 
+                  label="Last Name" required value= "{{ajaxResponse.lastName}}">
+                </paper-input>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col">  
+                <paper-dropdown-menu auto-validate error-message="Fill Marital Status" 
+                class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" 
+                 required auto-validate>
+                 <div class="icon_mandatory" slot="prefix">*</div>
+                  <paper-listbox  slot = "dropdown-content" class="val_dropdown">
                       <paper-item>Single</paper-item>
                       <paper-item>Married</paper-item>
                       <paper-item>Divorced</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
-                  <paper-input readonly disabled label="BSN(National Identifier)" value="{{ajaxResponse.bsn}}">
-                  <iron-icon icon = "account-circle" value="" prefix></iron-icon>
-                </paper-input> 
-               <!-- <paper-input-container always-float-label auto-validate attr-for-value="value">
-                    <label slot="label">BSN(National Identifier)</label>
-                    <ssn-input class="paper-input-input" slot="input"></ssn-input>
-                    <paper-input-error slot="add-on">SSN invalid!</paper-input-error>
-                  </paper-input-container>-->
-              </div>
-            
-              <div class="col">  
-                <paper-input auto-validate autocapitalize allowed-pattern="[a-zA-Z]" 
-                  label="Last Name" required disabled$="{{!edit}}" value= "{{ajaxResponse.lastName}}">
-                  <iron-icon icon = "account-circle"  prefix></iron-icon>
-                </paper-input>
-                
-                <paper-dropdown-menu disabled$="{{!edit}}" class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
-                    <paper-listbox  slot = "dropdown-content">
+            </div>
+            <div class="col">
+                <paper-dropdown-menu required auto-validate error-message="No. of Dependents" 
+                class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
+                    <paper-listbox  slot = "dropdown-content" class="dep_dropdown">
                       <paper-item>0</paper-item>
                       <paper-item>1</paper-item>
                       <paper-item>2</paper-item>
@@ -156,102 +189,138 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       <paper-item>4</paper-item>
                       <paper-item>5</paper-item>
                       <paper-item>6</paper-item>
-        
                     </paper-listbox>
                 </paper-dropdown-menu>
-                  
               </div>
           </div>
-
-          <h3>Address Details</h3><hr>
           <div class="row">
-              <div class="col">  
-                <paper-input label="Door Number" disabled$="{{!edit}}" value="{{ajaxResponse.address.doorNumber}}">
+            <div class="col">
+              <paper-input class="bsn_width" readonly label="BSN(National Identifier)" value="{{ajaxResponse.bsn}}">
+              </paper-input>
+            </div>
+            <div class="col"></div>
+          </div>
+
+          <h3><iron-icon icon="home" class="icon_space" slot="prefix"></iron-icon>Address Details</h3><hr class="separate_sec">
+          <div class="row">
+            <div class="col">  
+              <paper-input class="input_width_add"label="Door Number" required auto-validate error-message="Fill Door Number" 
+              value="{{ajaxResponse.address.doorNumber}}"><div class="icon_mandatory" slot="prefix">*</div>
+              </paper-input>
+            </div>
+            <div class="col">
+                <paper-input class="input_width_add"label="Street Name" required auto-validate error-message="Fill Street Name" value="{{ajaxResponse.address.addressLine1}}">
+                </paper-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <paper-input class="input_width_loc"label="Locality" required auto-validate error-message="Fill Locality" 
+              value="{{ajaxResponse.address.addressLine2}}"><div class="icon_mandatory" slot="prefix">*</div>
                   <iron-icon icon = "account-circle"  prefix></iron-icon>
                 </paper-input>
-                <paper-input disabled$="{{!edit}}" type="number" label="Post code" value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo">
-                  </paper-input>
-                  <paper-input disabled$="{{!edit}}" label="Locality" value="{{ajaxResponse.address.addressLine2}}">
-                      <iron-icon icon = "account-circle"  prefix></iron-icon>
-                    </paper-input>
-              </div>
-                <div class="col">
-                    <paper-input disabled$="{{!edit}}" label="Street Name" value="{{ajaxResponse.address.addressLine1}}"></paper-input>
-
-                    <paper-input disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
-
-                </div>
+            </div>
+            <div class="col"></div>
           </div>
-          <h3>Contact Details</h3><hr>
-            <div class="row">  
-                <div class="col"> 
-                    <paper-input disabled$="{{!edit}}" label="Home Number" value="{{ajaxResponse.homeNumber}}" type="number">
-                      <div slot="prefix"></div>
-                    </paper-input>
-                  </div>
-                  <div class="col"></div>
-                
-                <div class="col">
-                    <paper-dropdown-menu disabled$="{{!edit}}" class="mob_code" label="Code" value="{{ajaxResponse.salutation}}">
+          <div class="row">
+            <div class="col">
+              <paper-input class="input_width_post" id="abc"type="number" required auto-validate error-message="Fill Post code" 
+              label="Post code" 
+                value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo"><div class="icon_mandatory" slot="prefix">*</div></paper-input>
+            </div>
+            <div class="col">
+                <paper-input class="input_width_post"disabled id="cityName" label="City" value="{{ajaxResponse.address.city}}">
+            </div>
+          </div>
+
+          <h3 class="contact_div"><iron-icon icon="settings-phone" class="icon_space" slot="prefix"></iron-icon>Contact Details</h3><hr class="separate_sec">
+            <div class="row Contact_details">  
+              <div class="col"> 
+                <paper-input class="input_width"label="Home Number" required auto-validate error-message="Fill Home Number"
+                 value="{{ajaxResponse.homeNumber}}" 
+                  type="number">
+                  <div slot="prefix"></div>
+                </paper-input>
+              </div>                
+                <div class="col mob_number">
+                  <div class="mob_code">
+                    <paper-dropdown-menu class="men_btn" label="Code" value="{{ajaxResponse.salutation}}">
                         <paper-listbox  slot = "dropdown-content" >
                           <paper-item>+31</paper-item>
                           <paper-item>+91</paper-item>
                         </paper-listbox>
                       </paper-dropdown-menu>
+                  </div>
+                  <div class="mobile_number">
+                    <paper-input class="input_width"required auto-validate error-message="Fill Mobile Number"  maxlength="10" label="Mobile" value="{{ajaxResponse.mobileNumber}}" 
+                    type="number"><div class="icon_mandatory" slot="prefix">*</div><div slot="prefix"></div>
+                    </paper-input>
                 </div>
-                <div class="col">
-                  <paper-input disabled$="{{!edit}}" required maxlength="10" label="Mobile Number" value="{{ajaxResponse.mobileNumber}}" type="number">
-                    <div slot="prefix"></div>
-                  </paper-input>
               </div>
             </div>
             <div class="row">  
-                <div class="col">
-                  <paper-input disabled$="{{!edit}}" required label="Email Address" value="{{ajaxResponse.emailAddress}}">
-                    <iron-icon icon="mail" slot="prefix"></iron-icon>
-                     <div slot="suffix"></div>
-                   </paper-input>
-                </div>
-                <div class="col"></div><div class="col"></div>
+              <div class="col">
+                
+                <paper-input class="input_width_email"required label="Email Address" required auto-validate error-message="Fill Email Address" 
+                  value="{{ajaxResponse.emailAddress}}">
+                  <iron-icon icon="mail" class="icon_space" slot="prefix"></iron-icon>
+                  <!-- <div class="icon_mandatory_mail" slot="prefix">*</div> -->
+                </paper-input>
+              </div>
+              <div class="col"></div><div class="col"></div>
             </div>
 
-          <h3>Finance Details</h3><hr>
+          <h3><iron-icon icon="account-balance" class="icon_space" slot="prefix"></iron-icon>Finance Details</h3><hr class="separate_sec">
           <div class="row">
-              <div class="col">
-                  <paper-input disabled$="{{!edit}}" required label="Monthly Family Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
-                  </paper-input>
-                  <paper-input disabled$="{{!edit}}" required label="Monthly Family Expense" step="200" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
-                    </paper-input>
-              </div>
-              <div class="col">
-                  <paper-input disabled$="{{!edit}}" label="Monthly Family Income (additional)" step="200" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
-                    </paper-input>
-                  
-                </div>
+            <div class="col">
+              <paper-input required class="input_width"label=" Income(confirmed)" step="200" value="{{ajaxResponse.monthlyFamilyIncome}}" type="number">
+                   <div slot="prefix"class="icon_space">€</div>
+              </paper-input>
+            </div>
+            <div class="col">
+              <paper-input required class="input_width" label="Monthly Family Expense" step="200" value="{{ajaxResponse.monthlyFamilyExpense}}" type="number">
+                <div slot="prefix" class="icon_space">€</div>
+              </paper-input>
+            </div>
           </div>
-          <div hidden$="{{!edit}}" class="declaration_text">
-              <span><input type="checkbox" name="decaration" id="declaration-text"/></span>
-              I hereby confirm that the information provided above is true and fair to the 
-              best of your knowledge and that you authorize ING to contact 
-              such agencies as needed to verify the correctness of the information provided
+          <div class="row">
+            <div class="col">
+              <paper-input class="input_width_incm" label="Income (additional)" step="200" value="{{ajaxResponse.monthlyFamilyIncomeAdditonal}}" type="number">
+                <div slot="prefix" class="icon_space">€</div>
+              </paper-input>
+            </div>
+            <div class="col"></div>                
+          </div>
+          <div class="declaration_text">
+      <paper-checkbox name="read" on-change ="sub" required> I hereby confirm that the information provided above is true and fair to the 
+                best of my knowledge and that I authorize ING to contact 
+                such agencies as needed to verify the correctness of the information provided</paper-checkbox>
             </div>
           <paper-alert-dialog id="validateText" confirm-button="OK">
               Request call back and Visit nearest branch
               In order to understand reject reason and provide necessary documents. 
           </paper-alert-dialog>
 
-          <paper-alert-dialog id="confirmText" confirm-button="OK">
+          <paper-alert-dialog id="confirmText" confirm-button="OK" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+              <paper-button style="position: absolute; top: -12px;right: -31px;" dialog-dismiss><iron-icon  icon="icons:cancel"></iron-icon></paper-button>
              <p> Please ensure that the information you update matches with official records. </p> <p>You will be required to 
-              submit documents to support the change before the mortgage is processed </p>
+              submit documents to support the change before the mortgage is processed. </p>
           </paper-alert-dialog>
         <div class="next_button">
-          <paper-button hidden$="{{!hide}}" toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
-          <paper-button hidden$="{{!hide}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+
+          <paper-button toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
+          <paper-button hidden$="{{hide}}" toggles raised class ="" on-tap="knockOutCheck">Validate</paper-button>      
+          <paper-button disabled$="{{!checked}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
+           <!-- <paper-button toggles raised hidden="{{hide}}" on-click="eventClick" class = "">Edit Profile</paper-button>  -->
+
         </div>
     </div>
+  </form>
+</iron-form>
+    
     <iron-ajax id="cityInfoReq" url={{postCodeApiUrl}} method="GET"
-    body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse">
-</iron-ajax>
+        body='{{postalCodeInfo}}' handle-as="json" on-response="handleCityInfoResponse">
+    </iron-ajax>
     
   </template>
 
@@ -347,6 +416,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type:Boolean,
             value: false
           },
+          checked:{
+            type:Boolean,
+            value:false
+          },
           hide:{
             type:Boolean,
             value:false
@@ -378,7 +451,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
             getCityInfo(){
               //this.ajaxResponse= this.tempResponse.address.postCode;
-              this.$;
+             // this.$;
               // this.isActive = true;
               let postCode = this.ajaxResponse.address.postCode;
                if(postCode!="undefined" && postCode!="")
@@ -401,16 +474,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.edit=false;
         this.hide = false;
       }
-        
+      sub()
+      {
+        this.checked= !this.checked;
+      }
 
 
-        
-        //console.log(JSON.stringify(this.saveProfile));
-
-          
+        sub2()
+        {alert("hi");}
+        //console.log(JSON.stringify(this.B
+      //}
       getUrl() {
         var userId=localStorage.getItem('userId');
-        return "http://10.138.65.226:8080/lightningmortgage/customer/getCustomer/"+userId;
+        return "http://10.138.64.202:8880/lightningmortgage/customer/getCustomer/"+userId;
         
       }
       getKnockUrl() {
@@ -426,7 +502,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if(result && result.responseCode ==="200") {
         window.history.pushState({}, null, '/property-details');
         window.dispatchEvent(new CustomEvent('location-changed'));
-        }else{
+        }
+        else{
           this.$.validateText.open();
         }
       }
