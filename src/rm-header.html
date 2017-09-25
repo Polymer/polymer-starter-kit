@@ -57,14 +57,16 @@
         <div class="container">
           <div id="header">
             <rm-logo on-click=""></rm-logo>
+            <div hidden$="{{hide}}" class="btn-bar">
+              <a >Logout</a>
+    
+            </div>
           </div>
-            
+          
           </div>
+         
         </div>
-        <div class="btn-bar">
-          <a>Logout</a>
 
-        </div>
       </header>
 
 
@@ -79,7 +81,12 @@
           return 'rm-header'
         }
         static get properties(){
-
+          return {
+          hide: {
+            type: Boolean,
+            value:true
+          }
+          }
         }
       }
     window.customElements.define(RmHeader.is, RmHeader);
