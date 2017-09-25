@@ -199,12 +199,15 @@
                 this.propertydetails["propCity"] = res.detail.response.result;
               } else {
                 this.$.propCity.value = "";
+                this.$.cover.style.display = "block";
+                this.$.dialogBoxPostErrorResponse.open();
+                this.isActive = false;
               }
               this.isActive = false;
               //this.$.btnSubmit.disabled= true;
             }
             dialogBoxPostErrorResponse(res){
-              console.log("hhhhhhhhhhhhhhhh");
+              //console.log("hhhhhhhhhhhhhhhh");
               this.$.cover.style.display = "block";
               this.$.dialogBoxPostErrorResponse.open();
               this.isActive = false;
