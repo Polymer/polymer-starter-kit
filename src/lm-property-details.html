@@ -169,6 +169,7 @@
                 this.propDetailsData.propertyDetails["postalCode"]=this.propertydetails["propPostCode"];
               } else {
                 this.$.dialogBox.open();
+                this.$.cover.style.display = "block";
                 this.isActive = false;
                 return;
               }
@@ -181,7 +182,7 @@
                 this.propDetailsData.propertyDetails["customerId"]=localStorage.userId;
               else 
                 this.propDetailsData.propertyDetails["customerId"] = 101;
-              console.log("hi   "+JSON.stringify(this.propDetailsData));
+              //console.log("hi   "+JSON.stringify(this.propDetailsData));
               localStorage.postalCode = this.propDetailsData.propertyDetails["postalCode"];
               localStorage.outstandingBalance = "";
                //window.history.pushState({},"", '/products/');
