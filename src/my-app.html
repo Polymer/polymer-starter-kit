@@ -38,6 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="lm-property-selection.html">
 <link rel="lazy-import" href="lm-products.html">
 <link rel="lazy-import" href="lm-home.html">
+<link rel="import" href="lm-progress-stepper.html">
 
 
 <dom-module id="my-app">
@@ -115,6 +116,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
         </app-header> -->
         <rm-header></rm-header>
+        <div class="progress">
+            <progress-stepper page='{{page}}'></progress-stepper>
+
+        </div>
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
@@ -179,6 +184,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             null,
             this._showPage404.bind(this),
             true);
+        
       }
       _showPage404() {
         this.page = 'view404';
