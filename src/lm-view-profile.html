@@ -235,7 +235,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
           <div class="row">
             <div class="col">
-              <paper-input class="input_width_post" id="abc"type="number" required auto-validate error-message="Fill Post code" 
+              <paper-input class="input_width_post" id="abc"type="text" required auto-validate error-message="Fill Post code" 
               label="Post code" 
                 value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo"><div class="icon_mandatory" slot="prefix">*</div></paper-input>
             </div>
@@ -459,8 +459,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.lmDialog.open();
       }
 
-      updateProfile(){
-        this.$.confirmText.open();
+      updateProfile(e){
+        //e.prevent
+        //this.$.form.submit();
         this.$.saveProfile.generateRequest();
         this.loader = true;
         this.$.cover.style.display="block";
@@ -517,11 +518,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
 
-
-        sub2()
-        {alert("hi");}
-        //console.log(JSON.stringify(this.B
-      //}
       getUrl() {
         var userId=localStorage.getItem('userId');
         return "http://10.138.64.19:8080/lightningmortgage/customer/getCustomer/"+userId;
@@ -549,10 +545,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.validateText.open();
         }
       }
-      updateEditProfile() {
+      updateEditProfile(data) {
         this.edit=false;
         this.hide = false;
         this.loader = false;
+        var result= data.detail.response 
+        if(result && result.responseCode ==="200") {
+          this.$.confirmText.open();
+        }
+        else{
+          this.$.validateText.open();
+        }
       }
       json(obj) {
         return JSON.stringify(obj, null, 2);
