@@ -6,7 +6,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 
 
 <dom-module id="loan-details">
@@ -68,15 +68,25 @@
             </paper-input>
             
             <br/>
-            <paper-button raised class="custom orange" on-click="submitDetails">Submit</paper-button>
+            <paper-button id="btnSubmit" raised class="custom orange" on-click="submitDetails">Submit</paper-button>
             <paper-button raised class="custom LM-gray">Save</paper-button>
-            <paper-alert-dialog id="dialogBox" confirm-button="Ok">
-              
-                <label>Please provide Current lender and Mortgage contract number</label>
-                
-              </paper-alert-dialog>
+            <paper-dialog id="dialogBox" confirm-button="Ok">
+              <div>
+                <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+              </div>
+                <label>Please provide Current lender and Mortgage contract number</label>      
+                <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>         
+            </paper-dialog>
 
-            <iron-ajax id="outstandingDetailsReq" url="{{outstandingBalReqAPI}}" method="get" body='{{loandetails}}' handle-as="json" content-type="application/json" on-response="handleOutstandingDetailsResponse">
+            <paper-dialog id="dialogBoxOutStandingError" confirm-button="Ok">
+              <div>
+                <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+              </div>
+                <label>Invalid Current lender or Mortgage contract number</label>  
+                <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>             
+            </paper-dialog>
+
+            <iron-ajax id="outstandingDetailsReq" url="{{outstandingBalReqAPI}}" method="get" body='{{loandetails}}' handle-as="json" content-type="application/json" on-response="handleOutstandingDetailsResponse" on-error="handleOutstandingErrorResponse">
             </iron-ajax>
           </section>
         </div>
@@ -114,26 +124,38 @@
              //console.log("req data "+JSON.stringify(this.loandetails));
              this.isActive = true;
              this.outstandingBalReqAPI = "http://10.138.64.218:8080/lightningmortgage/existingLoan/outStandingAmount?bankName="+this.loandetails.bankName+"&mortgageContractNumber="+this.loandetails.mortgageContractNumber;
-
+             //this.$.btnSubmit.disabled= true;
              this.$.outstandingDetailsReq.generateRequest();
             }
             handleOutstandingDetailsResponse(res){
               this.isActive = false;
               let response = res.detail.response;
+              //this.$.btnSubmit.disabled= false;
               //console.log("jjjjjj"+JSON.stringify(res.detail.response));
               this.$.outstandingBal.value = res.detail.response.outstandingAmount;
               this.loandetails.outstandingBal = res.detail.response.outstandingAmount;
             }
+            handleOutstandingErrorResponse(res){
+              this.$.dialogBoxOutStandingError.open();
+              this.isActive = false;
+            }
             submitDetails(){
+              console.log("bababa "+this.loandetails.outstandingBal);
               if(this.loandetails.bankName==undefined || this.loandetails.mortgageContractNumber==undefined){
                 this.$.dialogBox.open();
                 this.isActive = false;
                 return;
               } else {
-                localStorage.postalCode = "";
-                localStorage.outstandingBalance = this.loandetails.outstandingBal;
-                window.history.pushState({},"", '/products/');
-                window.dispatchEvent(new CustomEvent('location-changed'));
+                if(this.loandetails.outstandingBal > 0){
+                  localStorage.postalCode = "";
+                  localStorage.outstandingBalance = this.loandetails.outstandingBal;
+                  window.history.pushState({},"", '/products/');
+                  window.dispatchEvent(new CustomEvent('location-changed'));
+                } else {
+                  this.$.dialogBoxOutStandingError.close();
+                  this.$.dialogBoxOutStandingError.open();
+                  this.isActive = false;
+                }
               }
             }
         }
