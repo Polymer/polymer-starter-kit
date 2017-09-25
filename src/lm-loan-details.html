@@ -134,7 +134,7 @@
             getOutstandingAmount(){
              //console.log("req data "+JSON.stringify(this.loandetails));
              this.isActive = true;
-             this.outstandingBalReqAPI = "http://10.138.13.58:8080/lightningmortgage/existingLoan/outStandingAmount?bankName="+this.loandetails.bankName+"&mortgageContractNumber="+this.loandetails.mortgageContractNumber;
+             this.outstandingBalReqAPI = "http://10.138.64.19:8080/lightningmortgage/existingLoan/outStandingAmount?bankName="+this.loandetails.bankName+"&mortgageContractNumber="+this.loandetails.mortgageContractNumber;
              //this.$.btnSubmit.disabled= true;
              this.$.outstandingDetailsReq.generateRequest();
             }
