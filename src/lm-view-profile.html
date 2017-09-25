@@ -153,8 +153,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="col"> 
                 <paper-dropdown-menu class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}" >
                     <paper-listbox  selected="{{ajaxResponse.salutation}}" slot = "dropdown-content" class="val_dropdown">
-                      <paper-item value="0">Mr.</paper-item>
-                      <paper-item value="1">Mrs.</paper-item>
+                      <paper-item value="Mr.">Mr.</paper-item>
+                      <paper-item value="Mrs.">Mrs.</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
           </div>
@@ -180,9 +180,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                  required auto-validate>
                  <div class="icon_mandatory" slot="prefix">*</div>
                   <paper-listbox  selected="{{ajaxResponse.maritalStatus}}" slot = "dropdown-content" class="val_dropdown">
-                      <paper-item value="0">Single</paper-item>
-                      <paper-item value="1">Married</paper-item>
-                      <paper-item value="2">Divorced</paper-item>
+                      <paper-item value="Single">Single</paper-item>
+                      <paper-item value="Married">Married</paper-item>
+                      <paper-item value="Divorced">Divorced</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
             </div>
@@ -232,7 +232,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
           <div class="row">
             <div class="col">
-              <paper-input class="input_width_post" id="abc"type="number" required auto-validate error-message="Fill Post code" 
+              <paper-input class="input_width_post" id="abc"type="text" required auto-validate error-message="Fill Post code" 
               label="Post code" 
                 value="{{ajaxResponse.address.postCode}}" on-blur="getCityInfo"><div class="icon_mandatory" slot="prefix">*</div></paper-input>
             </div>
@@ -255,8 +255,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <div class="mob_code">
                     <paper-dropdown-menu class="men_btn" label="Code"  value="{{ajaxResponse.mobileCode}}">
                         <paper-listbox selected="{{ajaxResponse.mobileCode}}" slot = "dropdown-content" >
-                          <paper-item value="0">+31</paper-item>
-                          <paper-item value="1">+91</paper-item>
+                          <paper-item value="+31">+31</paper-item>
+                          <paper-item value="+91">+91</paper-item>
                         </paper-listbox>
                       </paper-dropdown-menu>
                   </div>
@@ -456,8 +456,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.lmDialog.open();
       }
 
-      updateProfile(){
-        this.$.confirmText.open();
+      updateProfile(e){
+        // e.stopPropagation(); 
+        // return false;
+ 
+
         this.$.saveProfile.generateRequest();
         this.loader = true;
         this.$.cover.style.display="block";
@@ -514,11 +517,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
 
-
-        sub2()
-        {alert("hi");}
-        //console.log(JSON.stringify(this.B
-      //}
       getUrl() {
         var userId=localStorage.getItem('userId');
         return "http://10.138.64.19:8080/lightningmortgage/customer/getCustomer/"+userId;
@@ -546,10 +544,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.validateText.open();
         }
       }
-      updateEditProfile() {
+      updateEditProfile(data) {
         this.edit=false;
         this.hide = false;
         this.loader = false;
+        var result= data.detail.response 
+        if(result && result.status ==="200") {
+          this.$.confirmText.open();
+        }
+        else{
+          this.$.validateText.open();
+        }
       }
       json(obj) {
         return JSON.stringify(obj, null, 2);
