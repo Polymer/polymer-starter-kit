@@ -101,10 +101,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           top: 290px;
           left: 600px;
         }
+        #cover{position: fixed;top:0;left:0;background: rgba(0,0,0,0.6);z-index: 5;width:100%;height: 100%;display: none;}
+ 
           .mob_code {width: 22%; float: left;}
           .mobile_number {padding: 1px 0 0 0;}
           .declaration_text{margin:30px 0px 8px;font-size:14px;}
           paper-spinner-lite.active{position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);}
+            
     </style>
 	
     <iron-ajax
@@ -139,7 +142,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <iron-form id="userForm">
   <form>
-    <div class="card User_details">         
+    <div class="card User_details">     
     <paper-spinner-lite active$="{{isActive}}" class="orange active"></paper-spinner-lite> 
     <div class="confirm_info"><iron-icon icon="icons:verified-user" class="icon_space" slot="prefix"></iron-icon>
         So that we can offer you the best mortgage options, please confirm if the below information is accurate
@@ -300,8 +303,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 best of my knowledge and that I authorize ING to contact 
                 such agencies as needed to verify the correctness of the information provided</paper-checkbox>
             </div>
-          <paper-dialog id="validateText" confirm-button="OK">
-              <div>
+        <div id="cover"></div>    
+        
+          <paper-dialog id="validateText" no-cancel-on-outside-click>
+              <div on-click="closeDialog">
                   <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
               </div>
               <p>Request call back and Visit nearest branch
@@ -309,14 +314,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>               
           </paper-dialog>
 
-          <paper-dialog id="confirmText" confirm-button="OK" >
+          <paper-dialog id="confirmText" no-cancel-on-outside-click>
               <!-- entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop> -->
-              <div>
+              <div on-click="closeDialog">
                   <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
               </div>
              <p> Please ensure that the information you update matches with official records. </p>
              <p>You will be required to submit documents to support the change before the mortgage is processed. </p>
-            <paper-button class="custom dialog-orange" dialog-dismiss>Ok</paper-button>               
+            <paper-button class="custom dialog-orange" on-click="closeDialog" dialog-dismiss>Ok</paper-button>               
           </paper-dialog>
 
         <div class="next_button">
@@ -453,6 +458,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.confirmText.open();
         this.$.saveProfile.generateRequest();
         this.loader = true;
+        this.$.cover.style.display="block";
+      }
+      closeDialog()
+      {
+        this.loader = false;
+        this.$.cover.style.display="none";
       }
       saveProfile(){
         this.edit=false;
@@ -536,6 +547,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       json(obj) {
         return JSON.stringify(obj, null, 2);
       }
+
     }
 
     window.customElements.define(ViewProfile.is, ViewProfile);
