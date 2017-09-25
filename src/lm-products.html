@@ -149,7 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .productContainer {
                 width: 980px;
-                margin: 70px auto;
+                margin: 0px auto;
             }
 
             .slide-detail {
@@ -375,7 +375,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </iron-ajax> -->
 
         <iron-ajax id="ironAjaxSubmit"
-                   url="http://10.138.13.58:8080/lightningmortgage/customerOffer"
+                   url="http://10.138.64.19:8080/lightningmortgage/customerOffer"
                    handle-as="json"
                    body='{{postBody}}'
                    method="post"
@@ -403,9 +403,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     balance = 0;
                 }
                 console.log("local storage values" + customerId + postalCode + balance);
-                this.onloadurl = "http://10.138.13.58:8080/lightningmortgage/identifyProduct/123/1012CM/0";
-                // this.onloadurl = "http://10.138.13.58:8080/lightningmortgage/identifyProduct/" + customerId + "/" + postalCode + "/" + balance;
-                this.onloadurl = "src/products.json";
+              //  this.onloadurl = "http://10.138.13.58:8080/lightningmortgage/identifyProduct/123/1012CM/0";
+                this.onloadurl = "http://10.138.64.19:8080/lightningmortgage/identifyProduct/" + customerId + "/" + postalCode + "/" + balance;
+               // this.onloadurl = "src/products.json";
                 console.log("url " + this.onloadurl);
                 console.log("url " + this.onloadurl);
                 this.$.ironAjaxOnload.generateRequest();
