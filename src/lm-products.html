@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./lm-vas.html">
 <link rel="import" href="./term-conditions.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="lm-product-progress.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
@@ -128,7 +129,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .right {
                 text-align: right;
-                margin-top:10px;
+                margin-top:-15px;
                 display: inline-block;
                 margin-left: 81%;
             }
@@ -161,12 +162,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     font-size: 24px;
                     font-weight: bold;
                     color: #f60;
-             }
-             .center-text{
+
+                }
+            .center-text{
                 text-align: center;
              }
-            
-
             paper-dialog {
                 width: 40%;
                 height: auto;
@@ -238,6 +238,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
         </style>
+        <div class="progress">
+            <rm-progress></rm-progress>
+
+        </div>
         <div class="productContainer card">
             <div class="flex-container">
                 <template is="dom-repeat" items="[[products.product]]">
@@ -266,9 +270,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="center">&nbsp;</div>        
                 <div class="vas-icons">
                     <h3 class="center-text">Would you be interested in amazing deals from our trusted partners?</h3>
+
                 <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
                  </div>
                 <div class="center">&nbsp;</div>                
+
 
                 </div>
 
@@ -296,6 +302,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </table>
 
                     </div>
+
                     <paper-dialog id="dialogeterm" no-cancel-on-outside-click entry-animation="scale-up-animation"
                 exit-animation="scale-down-animation" >
                         <div>
@@ -313,10 +320,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </div>
                     </div>
                     <div id="cover"></div>
+
                     <paper-dialog id="dialoge" no-cancel-on-outside-click entry-animation="scale-up-animation"
                 exit-animation="scale-down-animation">
    
                         <div>
+
                             <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
                         </div>
                         <h2>Congratulations on your Mortgage Offer</h2>
@@ -334,6 +343,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </div>
                         <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
                         <div><label><b>Copy of this offer has been sent to your registered email address.</b></label> </div>
+
+                        <paper-button style="float: right;" on-click="closedialog" class="paper-button" dialog-confirm>OK</paper-button>
+
                     </paper-dialog>
 
 
@@ -639,7 +651,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             closeTerms(event){
                 this.$.cover.style.display = "none";
             }
+
+           
+            closedialog() {
+                console.log("closed");
+                window.history.pushState({}, null, '/home');
+                window.dispatchEvent(new CustomEvent('location-changed'));
+            }
+            // window.addEventListener('totalvas-changed',function(){
+            //     alert(1);
+            // });
             
+
         }
         window.customElements.define(ProductPreference.is, ProductPreference);
     </script>

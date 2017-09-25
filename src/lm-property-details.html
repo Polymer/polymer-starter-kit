@@ -63,7 +63,6 @@
               <div style="clear: both"></div>
               <br/>
               <paper-button id="btnSubmit" raised class="custom orange" on-click="submitDetails">Submit</paper-button>
-              <paper-button raised class="custom LM-gray">Save</paper-button>
 
               <paper-dialog id="dialogBox" confirm-button="Ok">
                 <div>
@@ -168,7 +167,7 @@
               if(localStorage.userId!=undefined && localStorage.userId!="" )
                 this.propDetailsData.propertyDetails["customerId"]=localStorage.userId;
               else 
-                this.propDetailsData.propertyDetails["customerId"] = 2;
+                this.propDetailsData.propertyDetails["customerId"] = 101;
               console.log("hi   "+JSON.stringify(this.propDetailsData));
               localStorage.postalCode = this.propDetailsData.propertyDetails["postalCode"];
               localStorage.outstandingBalance = "";
