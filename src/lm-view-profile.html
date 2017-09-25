@@ -24,6 +24,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel = "import" href = "../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 <link rel = "import" href = "../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
 <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html"> 
 
 <dom-module id="lm-view-profile">
   <template>
@@ -94,14 +96,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         } 
         paper-spinner-lite {
-            --paper-spinner-color: #FF6600;
-            position: absolute;
-            top: 290px;
-            left: 600px;
-          } 
+          --paper-spinner-color: #FF6600;
+          position: absolute;
+          top: 290px;
+          left: 600px;
+        }
           .mob_code {width: 22%; float: left;}
           .mobile_number {padding: 1px 0 0 0;}
           .declaration_text{margin:30px 0px 8px;font-size:14px;}
+          paper-spinner-lite.active{position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);}
     </style>
 	
     <iron-ajax
@@ -144,10 +147,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <h3><iron-icon icon="account-box" class="icon_space" slot="prefix"></iron-icon>Personal Details</h3><hr class="separate_sec">        
         <div class="row Salutation_detail"> 
           <div class="col"> 
-                <paper-dropdown-menu class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}">
-                    <paper-listbox  slot = "dropdown-content" class="val_dropdown">
-                      <paper-item>Mr.</paper-item>
-                      <paper-item>Mrs.</paper-item>
+                <paper-dropdown-menu class="salutation" label="Salutation" value="{{ajaxResponse.salutation}}" >
+                    <paper-listbox  selected="{{ajaxResponse.salutation}}" slot = "dropdown-content" class="val_dropdown">
+                      <paper-item value="0">Mr.</paper-item>
+                      <paper-item value="1">Mrs.</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
           </div>
@@ -169,27 +172,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="row">
             <div class="col">  
                 <paper-dropdown-menu auto-validate error-message="Fill Marital Status" 
-                class="Marital_Status" label="Marital Status" value="{{ajaxResponse.maritalStatus}}" 
+                class="Marital_Status" label="Marital Status"  value="{{ajaxResponse.maritalStatus}}" 
                  required auto-validate>
                  <div class="icon_mandatory" slot="prefix">*</div>
-                  <paper-listbox  slot = "dropdown-content" class="val_dropdown">
-                      <paper-item>Single</paper-item>
-                      <paper-item>Married</paper-item>
-                      <paper-item>Divorced</paper-item>
+                  <paper-listbox  selected="{{ajaxResponse.maritalStatus}}" slot = "dropdown-content" class="val_dropdown">
+                      <paper-item value="0">Single</paper-item>
+                      <paper-item value="1">Married</paper-item>
+                      <paper-item value="2">Divorced</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
             </div>
             <div class="col">
                 <paper-dropdown-menu required auto-validate error-message="No. of Dependents" 
-                class="dependents" label="No of Dependents" value="{{ajaxResponse.noOfDependents}}">
-                    <paper-listbox  slot = "dropdown-content" class="dep_dropdown">
-                      <paper-item>0</paper-item>
-                      <paper-item>1</paper-item>
-                      <paper-item>2</paper-item>
-                      <paper-item>3</paper-item>
-                      <paper-item>4</paper-item>
-                      <paper-item>5</paper-item>
-                      <paper-item>6</paper-item>
+                class="dependents" label="No of Dependents"  value="{{ajaxResponse.noOfDependents}}">
+                    <paper-listbox  selected="{{ajaxResponse.noOfDependents}}" slot = "dropdown-content" class="dep_dropdown">
+                      <paper-item value="0">0</paper-item>
+                      <paper-item value="1">1</paper-item>
+                      <paper-item value="2">2</paper-item>
+                      <paper-item value="3">3</paper-item>
+                      <paper-item value="4">4</paper-item>
+                      <paper-item value="5">5</paper-item>
+                      <paper-item value="6">6</paper-item>
                     </paper-listbox>
                 </paper-dropdown-menu>
               </div>
@@ -245,7 +248,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>                
                 <div class="col mob_number">
                   <div class="mob_code">
-                    <paper-dropdown-menu class="men_btn" label="Code" value="{{ajaxResponse.mobileCode}}">
+
+                    <paper-dropdown-menu class="men_btn" label="Code" selected="{{ajaxResponse.mobileCode}}" value="{{ajaxResponse.mobileCode}}">
                         <paper-listbox  slot = "dropdown-content" >
                           <paper-item>+31</paper-item>
                           <paper-item>+91</paper-item>
@@ -308,7 +312,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               submit documents to support the change before the mortgage is processed. </p>
           </paper-alert-dialog>
         <div class="next_button">
-
+          <paper-spinner-lite active$="{{loader}}" class="orange active"></paper-spinner-lite>
           <paper-button toggles raised class = "LM-gray" on-tap="cancel">Cancel</paper-button>
           <paper-button hidden$="{{hide}}" toggles raised class ="" on-tap="knockOutCheck">Validate</paper-button>      
           <paper-button disabled$="{{!checked}}" toggles raised class = "" on-tap="updateProfile">Save</paper-button>
@@ -424,6 +428,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           hide:{
             type:Boolean,
             value:false
+          },
+          loader:{
+            type : Boolean,
+            value : false
           }
         }
       }
@@ -436,6 +444,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       updateProfile(){
         this.$.confirmText.open();
         this.$.saveProfile.generateRequest();
+        this.loader = true;
       }
       saveProfile(){
         this.edit=false;
@@ -497,11 +506,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       knockOutCheck() {
         this.$.knockOutAjax.generateRequest();
+        this.loader = true;
       }
       knockOutResponse(data) {
         var result= data.detail.response 
         if(result && result.responseCode ==="200") {
-        window.history.pushState({}, null, '/property-details');
+        window.history.pushState({}, null, '/property-selection');
         window.dispatchEvent(new CustomEvent('location-changed'));
         }
         else{
