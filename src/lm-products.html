@@ -193,16 +193,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: forestgreen;
                 text-align: center;
             }
-            .popup2 {
-                      position: absolute;
-                      content: "";
-                      top: 0;
-                      left: 0;
-                      bottom: 0;
-                      right: 0;
-                      background: #FFF;
-                      z-index: -1;
-                    }
+
+            #cover {
+                position: fixed;
+                top: 0;
+                left: 0;
+                background: rgba(0,0,0,0.6);
+                z-index: 5;
+                width: 100%;
+                height: 100%;
+                display: none;
+            }
         </style>
         <div class="productContainer card">
             <div class="flex-container">
@@ -228,6 +229,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div class="" style="margin-left:0px;">Down Payment : <span style='margin-left:42px;'>&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
                 </div>
                 <div class="vas-icons">
+                    
+
                     <h3>Checkout some services offered for you</h3>
                     <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
                 </div>
@@ -254,11 +257,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 <td><label>Total Offer Value : </label></td>
                                 <td>&euro;{{_convertToLocale(totaloffervalue)}}</td>
                             </tr>
-                        </table>               
-         
+                        </table>
+
                     </div>
                     <div class="center">&nbsp;</div>
-                    <paper-dialog id="dialogeterm">
+                    <paper-dialog id="dialogeterm" >
                         <div>
                             <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
                         </div>
@@ -268,9 +271,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div class="right">
                         <paper-button id="submitbtn" class="paper-button-disabled" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
                     </div>
+                    <div id="cover"></div>
 
-                    <paper-dialog id="dialoge">
-                        <div class="popup2"></div>
+                    <paper-dialog id="dialoge" no-cancel-on-outside-click>
+   
                         <div>
                             <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
                         </div>
@@ -489,6 +493,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.submitbtn.classList.remove('paper-button');
 
                 this.$.dialoge.open();
+                this.$.cover.style.display = "block";
                 //dialoge.toggle();
             }
             sendResponse(data) {
