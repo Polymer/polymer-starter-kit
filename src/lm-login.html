@@ -14,6 +14,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html"> 
 
 <dom-module id="lm-login">
   
@@ -83,6 +85,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               font-size: 14px;
               color: #301067;
             }
+            paper-spinner-lite {
+            --paper-spinner-color: #FF6600;
+            position: absolute;
+            top: 290px;
+            left: 600px;
+          }
      
     </style>
 
@@ -94,10 +102,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <!-- <h2 class="header">Login to Lightning Mortgage</h2> -->
               <div class = "invalidUser"> <span hidden="{{hideMessage}}">{{ajaxResponse.message}}</span></div>
   
-
-              <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="  Username" maxlength="10" required error-message="Please Enter Username" auto-validate allowed-pattern="[a-zA-Z]"><iron-icon icon="account-circle" class="icon_space" slot="prefix"></iron-icon></paper-input>
-             <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Please input Password" auto-validate placeholder="  Password"><iron-icon icon="lock-open" class="icon_space" slot="prefix"></iron-icon></paper-input>
-             <div class="regi_btn"><iron-icon icon="assignment-ind" class="icon_space" slot="prefix"></iron-icon>&nbsp<a href="register-profile" class="input_reg">Register</a></div>
+            <paper-spinner-lite active$="{{loader}}" class="orange active"></paper-spinner-lite>
+            <paper-input class="input_field" name="username" id="username" value="{{userId::input}}" type="text" placeholder="  Username" maxlength="10" required error-message="Please Enter Username" auto-validate allowed-pattern="[a-zA-Z]"><iron-icon icon="account-circle" class="icon_space" slot="prefix"></iron-icon></paper-input>
+            <paper-input class="input_field" name="password" id="password"  value="{{password::input}}" type="password" required error-message="Please input Password" auto-validate placeholder="  Password"><iron-icon icon="lock-open" class="icon_space" slot="prefix"></iron-icon></paper-input>
+            <div class="regi_btn"><iron-icon icon="assignment-ind" class="icon_space" slot="prefix"></iron-icon>&nbsp<a href="register-profile" class="input_reg">Register</a></div>
              <paper-button raised class="button-class" on-tap="login" value="Login"><iron-icon icon="assignment-turned-in"></iron-icon>Login</paper-button>
             </form>
           </div>
@@ -133,11 +141,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         hideMessage:{
           type:String,
           value:""
-         }
+         },
+         loader:{
+          type : Boolean,
+          value : false
+        }
         }
       }
       
       login() {
+        this.loader = true;
         let userDetails = this.postBody;
         if(userDetails && userDetails.userId && userDetails.password) {
           this.ajaxResponse;
