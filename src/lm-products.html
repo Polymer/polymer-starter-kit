@@ -16,7 +16,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./lm-vas.html">
 <link rel="import" href="./term-conditions.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="lm-product-progress.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/scale-down-animation.html">
@@ -35,6 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 padding: 10px;
             }
 
+
             header {
                 text-align: center;
             }
@@ -49,7 +52,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: white;
                 opacity: 0.5;
             }
-
             .details-container {
                 background-color: white;
                 border-radius: 5px;
@@ -70,13 +72,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 280px;
                 cursor: pointer;
                 margin: 20px;
+                box-sizing: border-box;
+                padding: 5px;
+                box-shadow: 2px 2px 6px 1px #bdacac;
             }
+
+            paper-card.selected {
+                border-bottom: 4px solid #f60;
+                box-shadow: 2px 2px 6px 4px #bdacac;
+            }
+
 
             .flex-container {
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
-                text-align: center;
+                text-align:center;
             }
 
             .flex-item {
@@ -95,10 +106,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .bold-item {
                 font-weight: bold;
-            }
-
-            paper-card.selected {
-                border-bottom: 4px solid #f60;
             }
 
             .submittedClass {
@@ -122,19 +129,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .right {
                 text-align: right;
+                margin-top:-15px;
+                display: inline-block;
+                margin-left: 81%;
             }
+            .slider-header{
+                margin:10px auto 0;
+                width:83%;
+                border-bottom:1px solid #ffa726;
+                 border-top:1px solid #ffa726;
+                /* box-shadow:0px 4px 1px #f1f1f1;*/
 
-            .slider-header {
-                margin: 10px auto 0;
-                width: 83%;
-                border-bottom: 1px solid #ffa726;
-                border-top: 1px solid #ffa726;
-                box-shadow: 0px 4px 1px #f1f1f1;
             }
 
             .slider-contianer {
                 margin: 50px 0 0 9%;
-                font-size: 15px;
+                font-size:15px;
             }
 
             .productContainer {
@@ -148,20 +158,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-size: 15px;
             }
 
-                .slide-detail span {
+            .slide-detail span {
                     font-size: 24px;
                     font-weight: bold;
                     color: #f60;
                 }
-
-
-
+            .center-text{
+                text-align: center;
+             }
+ 
             paper-dialog {
                 width: 40%;
                 height: auto;
                 padding: 2%;
                 border-radius: 5px;
-                font-size: 15px;
+                font-size:15px;
             }
 
             .fontincrease {
@@ -189,16 +200,54 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-size: 15px;
             }
 
-            paper-dialog h3 {
+            paper-dialog h2 {
                 color: forestgreen;
                 text-align: center;
             }
+
+            #cover {
+                position: fixed;
+                top: 0;
+                left: 0;
+                background: rgba(0,0,0,0.6);
+                z-index: 5;
+                width: 100%;
+                height: 100%;
+                display: none;
+            }
+            paper-checkbox{
+                float:left;
+                margin-top : 15px;
+            }
+            .pad-left{
+               font-weight: bold;   
+               padding-left : 10px; 
+               margin-top : 15px; 
+            }
+            .mar-left{
+                font-weight: bold;  
+                margin-left : 42px;
+            }
+            .mar-left-1{
+                margin-left:26px
+            }
+
+            div a{
+                    position: relative;
+                    top: 13px;
+            }
+
         </style>
+        <div class="progress">
+            <rm-progress></rm-progress>
+
+        </div>
         <div class="productContainer card">
             <div class="flex-container">
                 <template is="dom-repeat" items="[[products.product]]">
-                    <paper-card id='paper_card_{{index}}' heading="[[item.productName]]" on-click="_getProductDetails" class="white flex-item" class$="{{getSelectedClass(index)}}">
-                        <div class="card-content">[[item.productDesc]]</div>
+                    <paper-card id='paper_card_{{index}}' heading="[[item.productName]]" class="white flex-item" class$="{{getSelectedClass(index)}}">
+                        <div class="card-content">
+                        </div>
                     </paper-card>
                 </template>
             </div>
@@ -213,48 +262,99 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="slider-contianer">
                     <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
                     <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
-                    <!-- <lm-slider title='Down Payment' prefix='&euro;' minval='0' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider> -->
-                    
-                    <div class="" style="margin-left:0px;">Down Payment : <span style='margin-left:42px;'>&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
-                </div>
+
+
+                    <div class='pad-left'>Down Payment : <span class="mar-left">&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
+                    <div class='pad-left'>Repayment Mode : <span class='mar-left-1'>Monthly </span></div>
+                </div>        
+                <div class="center">&nbsp;</div>        
                 <div class="vas-icons">
-                    <h3>Checkout some services offered for you</h3>
-                    <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
+                    <h3 class="center-text">Would you be interested in amazing deals from our trusted partners?</h3>
+
+                <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
+                 </div>
+                <div class="center">&nbsp;</div>                
+
+
                 </div>
-                <div class="center">&nbsp;</div>
-                <paper-dialog id="dialogeterm">
+
+                <div>
+                    <h3>Total Offer Breakup</h3>
                     <div>
-                        <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                        <table>
+
+                            <tr>
+                                <td><label>Funded by Bank :</label></td>
+                                <td>&euro;{{_convertToLocale(offeramount)}}</td>
+                            </tr>
+                            <tr>
+                                <td><label>Funded by applicant :</label></td>
+                                <td>&euro;{{_convertToLocale(offerdownpayment)}}</td>
+                            </tr>
+                            <tr>
+                                <td><label>Value Added Services :</label></td>
+                                <td>&euro;{{_convertToLocale(vasamount)}}</td>
+                            </tr>
+                            <tr>
+                                <td><label>Total Offer Value : </label></td>
+                                <td>&euro;{{_convertToLocale(totaloffervalue)}}</td>
+                            </tr>
+                        </table>
+
                     </div>
-                    <term-conditions terms="[[termsArray]]"></term-conditions>
-                </paper-dialog>
-                        <paper-checkbox checked="{{checked}}" on-change="valchanged" id="checkboxterm">I agree <a href="javascript:void(0);" on-click="openterms"> Terms and conditions</a></paper-checkbox>
+
+                    <paper-dialog id="dialogeterm" no-cancel-on-outside-click entry-animation="scale-up-animation"
+                exit-animation="scale-down-animation" >
+                        <div>
+                            <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss on-click='closeTerms'></paper-icon-button>
+                        </div>
+                        <term-conditions terms="[[termsArray]]"></term-conditions>
+                    </paper-dialog>
+                
+                    <div class="center">&nbsp;</div>
+                    <div>
+                        <paper-checkbox checked="{{checked}}" on-change="valchanged" id="checkboxterm">I agree</paper-checkbox>&nbsp;
+                         <a href="javascript:void(0);" on-click="openterms">Terms and conditions</a> 
                         <div class="right">
                             <paper-button id="submitbtn" class="paper-button-disabled" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
                         </div>
+                    </div>
+                    <div id="cover"></div>
 
-                        <paper-dialog id="dialoge">
-                            <div>
-                                <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
-                            </div>
-                            <h3>Congratulations on your Mortgage Offer</h3>
-                            <!--<a class="close" dialog-confirm>X</a>-->
-                            <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>X</paper-button>-->
-                            <div><label><b>Here are details of the offer:</b></label> </div>
-                            <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
-                            <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
-                            <div><label><span class="fontincrease">Offer Amount: </span>&euro;  {{offeramount}} </label></div>
-                            <div><label><span class="fontincrease">Down payment: </span>&euro; [[offerdownpayment]]</label></div>
-                            <div><label><span class="fontincrease">EPI: </span> &euro; {{epi}}</label></div>
-                            <div><label><b>Additional Documents</b></label></div>
-                            <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
-                            <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>Close</paper-button>-->
-                        </paper-dialog>
+                    <paper-dialog id="dialoge" no-cancel-on-outside-click entry-animation="scale-up-animation"
+                exit-animation="scale-down-animation">
+   
+                        <div on-click="closedialog">
+
+                            <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                        </div>
+                        <h2>Congratulations on your Mortgage Offer</h2>
+                        <div><label><b>Here are details of the offer:</b></label> </div>
+                        <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
+                        <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
+                        <div><label><span class="fontincrease">Down payment: </span>&euro; [[offerdownpayment]]</label></div>
+                        <div><label><span class="fontincrease">EPI: </span> &euro; {{epi}}</label></div>
+                        <div>
+                            <h4>Total Offer Breakup</h4>
+                            <div><label>Funded by Bank : &euro;{{_convertToLocale(offeramount)}}</label></div>
+                            <div><label>Funded by applicant : &euro;{{_convertToLocale(offerdownpayment)}}</label></div>
+                            <div><label>Value Added Services : &euro;{{_convertToLocale(vasamount)}}</label></div>
+                            <div><label>Total Offer Value : &euro;{{_convertToLocale(totaloffervalue)}}</label></div>
+                        </div>
+                        <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
+                        <div><label><b>Copy of this offer has been sent to your registered email address.</b></label> </div>
+
+                        <paper-button style="float: right;" on-click="closedialog" class="dialog-orange" dialog-confirm>OK</paper-button>
+
+                    </paper-dialog>
 
 
-</div>
-        </div>
+                </div>
+            </div>
 
+                </div>
+            </div>
+            
         </div>
 
         <iron-ajax id="ironAjaxOnload"
@@ -363,6 +463,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     totaloffervalue: {
                         type: Number
                     },
+                    vasamount: {
+                        type: Number,
+                        value: 0
+                    },
                     termsArray: Array,
                     vasArray: {
                         type: Array,
@@ -374,6 +478,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
             _convertToLocale(val) {
+                if (val == 0) {
+                    return val.toLocaleString();
+                }
                 if (val) {
                     return val.toLocaleString();
                 }
@@ -392,6 +499,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             updateOfferAmount() {
                 let tmp = this.shadowRoot.querySelector('vas-service');
+                this.vasamount = tmp.totalvas;
                 this.totaloffervalue = parseInt(this.offeramount) + parseInt(this.offerdownpayment) + parseInt(tmp.totalvas);
             }
             _getProductDetails(event) {
@@ -436,9 +544,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.submitbtn.disabled = true;
                 this.$.submitbtn.classList.add('paper-button-disabled');
                 this.$.submitbtn.classList.remove('paper-button');
-
                 this.$.dialoge.open();
-                //dialoge.toggle();
+                this.$.cover.style.display = "block";
             }
             sendResponse(data) {
                 if (data && data.status === "200") {
@@ -515,8 +622,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var monthd = today.getMonth() + 1;
                     var years = today.getFullYear();
                     this.currentDate = dated + "-" + monthd + "-" + years;
-                    this.checked = false;
-                    // classList.classList.add('selected');
+                    this.checked=false;
+
 
                 }
             }
@@ -526,7 +633,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
             valchanged(event) {
-                // this.$.checkboxterm.checked = !this.$.checkboxterm.checked;
                 console.log(this.$.checkboxterm.checked);
                 if (this.$.checkboxterm.checked) {
                     this.$.submitbtn.classList.remove('paper-button-disabled');
@@ -536,14 +642,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.$.submitbtn.classList.add('paper-button-disabled');
                     this.$.submitbtn.classList.remove('paper-button');
                 }
-                
             }
+            
             openterms(event) {
                 this.$.dialogeterm.open();
+                this.$.cover.style.display = "block";
+            }
+            closeTerms(event){
+                this.$.cover.style.display = "none";
+            }
+
+           
+            closedialog() {
+                console.log("closed");
+                window.history.pushState({}, null, '/home');
+                window.dispatchEvent(new CustomEvent('location-changed'));
             }
             // window.addEventListener('totalvas-changed',function(){
             //     alert(1);
             // });
+            
+
         }
         window.customElements.define(ProductPreference.is, ProductPreference);
     </script>

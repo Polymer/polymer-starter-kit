@@ -113,7 +113,7 @@
         {
             "productId": 10001,
             "productDesc": "JM10001",
-            "productName": "JumboMortgage",
+            "productName": "Super Power Mortgage",
             "minTenure": 5,
             "maxTenure": 60,
             "minAmount": 100000,
@@ -132,18 +132,18 @@
         {
             "productId": 10002,
             "productDesc": "JM10002",
-            "productName": "JumboMortgage",
-            "minTenure": 5,
-            "maxTenure": 60,
+            "productName": "Gold Wealth Builder Mortgage",
+            "minTenure": 10,
+            "maxTenure": 70,
             "minAmount": 100000,
             "maxAmount": 2500000,
-            "minDownpayment": 5000,
-            "maxDownpayment": 150000,
+            "minDownpayment": 10000,
+            "maxDownpayment": 200000,
             "terms": [
-                "Terms and conditions part5",
-                "Terms and conditions part6",
-                "Terms and conditions part7",
-                "Terms and conditions part8"
+                "Terms and conditions part1",
+                "Terms and conditions part2",
+                "Terms and conditions part3",
+                "Terms and conditions part4"
             ],
             "interestRate": 2.6,
             "productDetails": null

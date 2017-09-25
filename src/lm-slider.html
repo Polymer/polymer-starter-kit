@@ -28,6 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  
 
       }
+
       .fill-space{
         display: inline-block;
         width: 10px;
@@ -41,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--layout-flex-1);
        }
        .flex-item-2{
-        @apply(--layout-flex-1);
+        @apply(--layout-flex-2);
         width: 100px;
         margin-top:4px;
        }
@@ -96,11 +97,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width : 85.5%;
        }
        .label-msg{
-        padding-top: 10px;
+        padding-top: 10px;        
+       }
+       .bold-txt{
+        font-weight: bold !important;
        }
    </style>
     <div class='flex-container'>
-      <div class="flex-item-2 lebel-msg">{{title}}</div>        
+      <div class="flex-item-2 lebel-msg bold-txt">{{title}}</div>        
         <div class="flex-item-9">
             <paper-slider 
               min='{{minval}}'
