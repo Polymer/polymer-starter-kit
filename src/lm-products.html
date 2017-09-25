@@ -49,6 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: white;
                 opacity: 0.5;
             }
+
             .details-container {
                 background-color: white;
                 border-radius: 5px;
@@ -75,7 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
-                text-align:center;
+                text-align: center;
             }
 
             .flex-item {
@@ -122,18 +123,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .right {
                 text-align: right;
             }
-            .slider-header{
-                margin:10px auto 0;
-                width:83%;
-                border-bottom:1px solid #ffa726;
-                 border-top:1px solid #ffa726;
-                 box-shadow:0px 4px 1px #f1f1f1;
 
+            .slider-header {
+                margin: 10px auto 0;
+                width: 83%;
+                border-bottom: 1px solid #ffa726;
+                border-top: 1px solid #ffa726;
+                box-shadow: 0px 4px 1px #f1f1f1;
             }
 
             .slider-contianer {
                 margin: 50px 0 0 9%;
-                font-size:15px;
+                font-size: 15px;
             }
 
             .productContainer {
@@ -147,47 +148,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-size: 15px;
             }
 
-            .slide-detail span {
+                .slide-detail span {
                     font-size: 24px;
                     font-weight: bold;
                     color: #f60;
-             }
+                }
 
-            
+
 
             paper-dialog {
                 width: 40%;
                 height: auto;
                 padding: 2%;
                 border-radius: 5px;
-                font-size:15px;
+                font-size: 15px;
             }
 
             .fontincrease {
                 font-size: 15px;
                 font-weight: 20px;
             }
-         .close {
-            position: absolute;
-            top: 1%;
-            right: 30px;
-            transition: all 200ms;
-            font-size: 30px;
-            font-weight: bold;
-            text-decoration: none;
-            color: #333;
-            cursor: pointer;
-          }
-          .close:hover {
-            color: #f60;
-          }
-          #checkboxterm{
-              font-size:15px;
-          }
-          paper-dialog h3{
-              color:forestgreen;
-              text-align:center;
-          }
+
+            .close {
+                position: absolute;
+                top: 1%;
+                right: 30px;
+                transition: all 200ms;
+                font-size: 30px;
+                font-weight: bold;
+                text-decoration: none;
+                color: #333;
+                cursor: pointer;
+            }
+
+                .close:hover {
+                    color: #f60;
+                }
+
+            #checkboxterm {
+                font-size: 15px;
+            }
+
+            paper-dialog h3 {
+                color: forestgreen;
+                text-align: center;
+            }
         </style>
         <div class="productContainer card">
             <div class="flex-container">
@@ -209,41 +214,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
                     <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
                     <!-- <lm-slider title='Down Payment' prefix='&euro;' minval='0' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider> -->
+                    
                     <div class="" style="margin-left:0px;">Down Payment : <span style='margin-left:42px;'>&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
-                </div>               
+                </div>
                 <div class="vas-icons">
                     <h3>Checkout some services offered for you</h3>
-                <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
-                 </div>
-                <div class="center">&nbsp;</div>                 
-                    <term-conditions terms="[[termsArray]]"></term-conditions>
-                    <paper-checkbox checked="{{checked}}" on-change="valchanged" id="checkboxterm">Place holder  text for Aggrement with term and conditions...</paper-checkbox>
-                    <div class="right">
-                        <paper-button id="submitbtn" class="paper-button-disabled" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
-                    </div>
-
-                    <paper-dialog id="dialoge">
-                        <div>
-                            <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
-                        </div>
-                        <h3>Congratulations on your Mortgage Offer</h3>
-                        <!--<a class="close" dialog-confirm>X</a>-->
-                        <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>X</paper-button>-->
-                        <div><label><b>Here are details of the offer:</b></label> </div>
-                        <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
-                        <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
-                        <div><label><span class="fontincrease">Offer Amount: </span>&euro;  {{offeramount}} </label></div>
-                        <div><label><span class="fontincrease">Down payment: </span>&euro; [[offerdownpayment]]</label></div>
-                        <div><label><span class="fontincrease">EPI: </span> &euro; {{epi}}</label></div>
-                        <div><label><b>Additional Documents</b></label></div>
-                        <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
-                        <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>Close</paper-button>-->
-                    </paper-dialog>
-
-
+                    <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
                 </div>
-            </div>
-            
+                <div class="center">&nbsp;</div>
+                <paper-dialog id="dialogeterm">
+                    <div>
+                        <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                    </div>
+                    <term-conditions terms="[[termsArray]]"></term-conditions>
+                </paper-dialog>
+                        <paper-checkbox checked="{{checked}}" on-change="valchanged" id="checkboxterm">I agree <a href="javascript:void(0);" on-click="openterms"> Terms and conditions</a></paper-checkbox>
+                        <div class="right">
+                            <paper-button id="submitbtn" class="paper-button-disabled" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
+                        </div>
+
+                        <paper-dialog id="dialoge">
+                            <div>
+                                <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                            </div>
+                            <h3>Congratulations on your Mortgage Offer</h3>
+                            <!--<a class="close" dialog-confirm>X</a>-->
+                            <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>X</paper-button>-->
+                            <div><label><b>Here are details of the offer:</b></label> </div>
+                            <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
+                            <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
+                            <div><label><span class="fontincrease">Offer Amount: </span>&euro;  {{offeramount}} </label></div>
+                            <div><label><span class="fontincrease">Down payment: </span>&euro; [[offerdownpayment]]</label></div>
+                            <div><label><span class="fontincrease">EPI: </span> &euro; {{epi}}</label></div>
+                            <div><label><b>Additional Documents</b></label></div>
+                            <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
+                            <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>Close</paper-button>-->
+                        </paper-dialog>
+
+
+</div>
+        </div>
+
         </div>
 
         <iron-ajax id="ironAjaxOnload"
@@ -425,7 +436,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.submitbtn.disabled = true;
                 this.$.submitbtn.classList.add('paper-button-disabled');
                 this.$.submitbtn.classList.remove('paper-button');
-               
+
                 this.$.dialoge.open();
                 //dialoge.toggle();
             }
@@ -504,7 +515,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var monthd = today.getMonth() + 1;
                     var years = today.getFullYear();
                     this.currentDate = dated + "-" + monthd + "-" + years;
-                    this.checked=false;
+                    this.checked = false;
                     // classList.classList.add('selected');
 
                 }
@@ -515,7 +526,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
             valchanged(event) {
-               // this.$.checkboxterm.checked = !this.$.checkboxterm.checked;
+                // this.$.checkboxterm.checked = !this.$.checkboxterm.checked;
                 console.log(this.$.checkboxterm.checked);
                 if (this.$.checkboxterm.checked) {
                     this.$.submitbtn.classList.remove('paper-button-disabled');
@@ -525,6 +536,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.$.submitbtn.classList.add('paper-button-disabled');
                     this.$.submitbtn.classList.remove('paper-button');
                 }
+                
+            }
+            openterms(event) {
+                this.$.dialogeterm.open();
             }
             // window.addEventListener('totalvas-changed',function(){
             //     alert(1);
