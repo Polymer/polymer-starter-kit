@@ -324,7 +324,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-dialog id="dialoge" no-cancel-on-outside-click entry-animation="scale-up-animation"
                 exit-animation="scale-down-animation">
    
-                        <div>
+                        <div on-click="closedialog">
 
                             <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
                         </div>
@@ -344,7 +344,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
                         <div><label><b>Copy of this offer has been sent to your registered email address.</b></label> </div>
 
-                        <paper-button style="float: right;" on-click="closedialog" class="paper-button" dialog-confirm>OK</paper-button>
+                        <paper-button style="float: right;" on-click="closedialog" class="dialog-orange" dialog-confirm>OK</paper-button>
 
                     </paper-dialog>
 
