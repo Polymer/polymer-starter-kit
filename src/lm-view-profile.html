@@ -81,6 +81,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         paper-dropdown-menu.mob_code{width:17%;padding-right: 3px}
 		    :host paper-input[disabled] {
         --paper-input-container-input-color: #afafaf;
+        --paper-input-container-label:{border:1px solid red;};
         --paper-input-container-disabled: {
         opacity: 0.7;
 
@@ -463,7 +464,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               // this.isActive = true;
               let postCode = this.ajaxResponse.address.postCode;
                if(postCode!="undefined" && postCode!="")
-               this.postCodeApiUrl = "https://api.bring.com/shippingguide/api/postalCode.json?clientUrl=t&country=NL&pnr="+postCode;
+               this.postCodeApiUrl = "http://10.138.13.58:8080/lightningmortgage/city/"+postCode;
               this.$.cityInfoReq.generateRequest();
             }
      
