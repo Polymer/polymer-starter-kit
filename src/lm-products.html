@@ -200,7 +200,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-size: 15px;
             }
 
-            paper-dialog h3 {
+            paper-dialog h2 {
                 color: forestgreen;
                 text-align: center;
             }
@@ -243,7 +243,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <template is="dom-repeat" items="[[products.product]]">
                     <paper-card id='paper_card_{{index}}' heading="[[item.productName]]" class="white flex-item" class$="{{getSelectedClass(index)}}">
                         <div class="card-content">
-                        <div>[[item.productDesc]]</div>
                         </div>
                     </paper-card>
                 </template>
@@ -263,9 +262,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                     <div class='pad-left'>Down Payment : <span class="mar-left">&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
                     <div class='pad-left'>Repayment Mode : <span class='mar-left-1'>Monthly </span></div>
-                </div>               
+                </div>        
+                <div class="center">&nbsp;</div>        
                 <div class="vas-icons">
-                    <h3 class="center-text">Checkout Some Value Added Services</h3>
+                    <h3 class="center-text">Would you be interested in amazing deals from our trusted partners?</h3>
                 <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
                  </div>
                 <div class="center">&nbsp;</div>                
@@ -306,8 +306,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 
                     <div class="center">&nbsp;</div>
                     <div>
-                        <paper-checkbox checked="{{checked}}" on-change="valchanged" id="checkboxterm">I agree </paper-checkbox>&nbsp;&nbsp;
-                         <a href="javascript:void(0);" on-click="openterms"> Terms and conditions</a> 
+                        <paper-checkbox checked="{{checked}}" on-change="valchanged" id="checkboxterm">I agree</paper-checkbox>&nbsp;
+                         <a href="javascript:void(0);" on-click="openterms">Terms and conditions</a> 
                         <div class="right">
                             <paper-button id="submitbtn" class="paper-button-disabled" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
                         </div>
@@ -319,9 +319,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div>
                             <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
                         </div>
-                        <h3>Congratulations on your Mortgage Offer</h3>
-                        <!--<a class="close" dialog-confirm>X</a>-->
-                        <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>X</paper-button>-->
+                        <h2>Congratulations on your Mortgage Offer</h2>
                         <div><label><b>Here are details of the offer:</b></label> </div>
                         <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
                         <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
@@ -334,8 +332,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <div><label>Value Added Services : &euro;{{_convertToLocale(vasamount)}}</label></div>
                             <div><label>Total Offer Value : &euro;{{_convertToLocale(totaloffervalue)}}</label></div>
                         </div>
-                        <div><label><b>Additional Documents</b></label></div>
                         <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
+                        <div><label><b>Copy of this offer has been sent to your registered email address.</b></label> </div>
                     </paper-dialog>
 
 
