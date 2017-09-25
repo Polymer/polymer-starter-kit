@@ -460,8 +460,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       updateProfile(e){
-        //e.prevent
-        //this.$.form.submit();
+        // e.stopPropagation(); 
+        // return false;
+ 
+
         this.$.saveProfile.generateRequest();
         this.loader = true;
         this.$.cover.style.display="block";
@@ -550,7 +552,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.hide = false;
         this.loader = false;
         var result= data.detail.response 
-        if(result && result.responseCode ==="200") {
+        if(result && result.status ==="200") {
           this.$.confirmText.open();
         }
         else{
