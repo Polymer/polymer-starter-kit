@@ -149,6 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
       handleResponse(data) {
+        this.loader = false;
         var result= data.detail.response 
         if(result && result.status ==="200") {
           result.message="";

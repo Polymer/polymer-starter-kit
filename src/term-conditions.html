@@ -22,16 +22,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .list{
                 overflow:hidden;
                 height:100px;
+                font-size:13px;
             }
-            .term-conditions h1{
+            .list li{
+                list-style-type: circle;
+
+            }
+            .term-conditions h3{
                 border-bottom: 1px solid #e8e8e8;
                 margin-bottom: 10px;
+                padding-bottom:10px;
             }
         </style>
         
 
         <div class='term-conditions'>
-            <h1>Term and Conditions:</h1>
+            <h3>Term and Conditions:</h3>
              <ul class="list">
                 <template is='dom-repeat' items="[[terms]]">
                     <li>[[item]]</li>
