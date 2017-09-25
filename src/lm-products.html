@@ -22,481 +22,529 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/scale-down-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
 <dom-module id="product-preference">
 
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
-        padding: 10px;
-      }
-      header
-      {
-        text-align: center;
-      }
-      .paper-button
-      {
-        background-color: #f60;
-        color: white;
-      }
-      .details-container
-      {
-        background-color: white;
-        border-radius: 5px;
-        overflow: auto;
-         display: block;
-      }
-      paper-card.white {
-          --paper-card-header-color:black;
-        }
-        paper-card
-        {
-          background: #fdfdfd;
-          border: 1px solid #f1f1f1;
-          box-shadow: none;
-          border-radius: 5px;
-          text-align: center;
-          width:280px;
-          cursor: pointer;
-          margin: 20px;
-        }
-        
-        .flex-container{
-          flex-direction: row;
-          flex-wrap: wrap;
-        }
-        .flex-item{
-          flex:1;
-        }
-        .flex-container-bleed{
-            @apply(--layout-horizontal);
-            @apply(--layout-wrap);
-            justify-content: center;
-       }
-       .flex-item-4{
-           @apply(--layout-flex-4);
-       }
-       .bold-item{
-            font-weight: bold;
-       }
-       paper-card.selected {
-        border-bottom:4px solid #f60;
-       }
-       .submittedClass {
-            padding: 10px;
-            color: green;
-            font-weight: normal;
-            font-size: 15px;
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-        } 
-       
-      .center{
-        margin-left: 23px;
-        font-weight: bold;
-        font-size: 20px;
-        color:#1f1f1f;
-        border-bottom: 1px solid #e8e8e8;
-        padding-bottom: 10px;
-       }
-       
-      .right{
-        text-align: right;
-      }
-      .slider-contianer{
-        margin: 50px 0 0 15px;
-      }
-      .productContainer{
-        width: 980px;
-        margin: 70px auto 0;
-
-      }
-      .slide-detail{
-        margin: 20px 25px;
-        display: inline-block;
-        font-size: 18px;
-      }
-      .slide-detail span{
-        font-size: 24px;
-        font-weight: bold;
-        color: #f60;
-      }
-      .vas-icons{
-        position: fixed;
-        top: 250px;
-        right: 10px;
-        height: 300px;
-        width: 100px;
-      }
-      paper-dialog
-      {
-        width: 70%;
-        height: auto;
-        padding: 2%;
-        border-radius: 5px;
-      }
-      .fontincrease
-      {
-        font-size:15px;
-        font-weight: 20px;
-      }
-
-      
-    </style>
-  <div class="productContainer card">
-    <div class="flex-container">
-      <template is="dom-repeat" items="[[products.product]]">
-        <paper-card id='paper_card_{{index}}'  heading="[[item.productName]]" on-click="_getProductDetails"  class="white flex-item" class$="{{getSelectedClass(index)}}">
-           <div class="card-content">[[item.productDesc]]</div>
-        </paper-card>
-      </template>
-    </div>
-
-    <div class="details-container"> 
-      <div class="center">&nbsp;</div>
-       <div class="slide-detail">Equated Periodic Installment(EPI) :  <span>&euro; {{_convertToLocale(epi)}}</span></div>
-       <div class="slide-detail">Effective APR% : <span>{{apr}}</span></div>
-       <div class="slide-detail">Total Offer Value : <span>&euro;{{_convertToLocale(totaloffervalue)}}</span></div>
-        
-       <div class="slider-contianer">
-               <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
-               <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
-               <lm-slider title='Down Payment' prefix='&euro;' minval='0' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider>
-
-        <term-conditions terms="[[termsArray]]"></term-conditions>
-        <div class="right">
-        <paper-button class="paper-button" on-click="_submitInfo">Submit</paper-button>
-         </div>
-
-         <paper-dialog id="dialoge" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-          <label class="center">Congratulations on your Mortgage Offer</label>
-          <paper-button style="float: right;" class="paper-button" disabled="true">Print</paper-button>
-          <paper-button style="float: right;" class="paper-button" disabled="true">Email</paper-button>
-          <div><label><b>Here are details of the offer:</b></label> </div>
-          <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
-          <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
-          <div><label><span class="fontincrease">Offer Amount:</span> {{offeramount}} &euro;</label></div>
-          <div><label><span class="fontincrease">Down payment:</span> [[offerdownpayment]] &euro;</label></div>
-          <div><label><span class="fontincrease">EPI:</span> {{epi}} &euro;</label></div>
-          <div><label><b>Additional Documents</b></label></div>
-          <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
-      </paper-dialog> 
-
-
-    </div>
-    </div>
-    <div class="vas-icons">
-       <vas-service itemindex='{{vasArray}}'></vas-service>
-
-    </div>
-    </div>
-    
-    <iron-ajax
-        id="ironAjaxOnload"
-        url="{{onloadurl}}"
-        params='{{params}}'
-        handle-as="json"
-        on-response="_handleResponseForProducts"
-        debounce-duration="300">
-    </iron-ajax>
-        
-         <!-- <iron-ajax
-              auto
-              url="src/products.json"
-              params='{{params}}'
-              handle-as="json"
-              on-response="_handleResponseForProducts"
-              debounce-duration="300">
-         </iron-ajax> -->
-
-     <iron-ajax id="ironAjaxSubmit"
-       url="http://127.0.0.1:8081/products"
-       handle-as="json"
-       body='{{postBody}}'
-       method="post"
-       on-response="sendResponse"
-       content-type="application/json">
-    </iron-ajax>
-</template>
-  
-
-  <script>
-    class ProductPreference extends Polymer.Element 
-
-{
-      constructor()
-      {
-        super();
-        this.products=[];
-      } 
-      connectedCallback()
-      {
-        super.connectedCallback();
-        let customerId=localStorage.getItem("userId");
-        let postalCode=localStorage.getItem("postalCode");
-        let balance = localStorage.getItem("outstandingBalance");
-        if(postalCode==null)
-        {
-          postalCode="0";
-        }
-        if(balance==null)
-        {
-          balance=0;
-        }
-        console.log("local storage values"+customerId+postalCode+balance);
-        this.onloadurl="src/products.json";//"http://10.138.13.58:8080/lightningmortgage/identifyProduct/"+customerId+"/"+postalCode+"/"+balance;
-        console.log("url "+this.onloadurl);
-        this.$.ironAjaxOnload.generateRequest();
-      }
-      static get is() { return 'product-preference'; }
-      static get properties()
-      {
-        return {
-          productName:{
-            type:String,
-            value:"Product Name"
-          },
-          productItem:{
-            type:Object,
-            value:{},
-            observer:"_productChanged"
-          },
-          termValues:{
-            type:Object,
-            value:{},
-            observer:"_productChanged"
-          },
-          amountValues:{
-            type:Object,
-            value:{},
-            observer:"_productChanged"
-          },
-          offeramount:{
-            type:Number,
-            observer:"_amountChanged"
-          },
-          offerterm:{
-            type:Number,
-            observer:"_termChanged"
-          },
-          offerdownpayment:{
-            type:Number
-          },
-          epi:{
-            type:String,
-            value:"392"
-          },
-          apr:{
-            type:String,
-            value:"2.4"
-          },
-          postBody: {
-              type: Object,
-              value: {
-              }
-          },
-          datasubmitted: {
-              type: Boolean,
-              value: false
-          },
-          totaloffervalue:{
-            type:Number
-          },
-          termsArray : Array,
-          vasArray : {
-            type: Array,
-            value : [{'id':0,'name':'Renovation','value':1000},
-            {'id':1,'name':'Landscape','value':3000},
-            {'id':2,'name':'Brick Wall','value':4000},
-            {'id':3,'name':'Garage','value':5000}]
-          }
-          }
-
-    }
-     _convertToLocale(val){
-        if(val){
-          return val.toLocaleString();
-        }
-
-
-      }
-      updateEPI_APR(data,term,offer)
-      {
-        for(let i=0;i<data.length;i++)
-        {
-          if(term==data[i].productTerm)
-          {
-            if(offer==data[i].offerValue)
-            {
-              this.epi=data[i].epi;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 10px;
             }
-          }
-        }
-        this.totaloffervalue = this.offeramount + this.offerdownpayment;
-        let tmp = this.shadowRoot.querySelector('vas-service');
-        //this.totaloffervalue += tmp.getAttribute('totalvas');
-      }
 
-      _getProductDetails(event)
-      {
-        let selectedIndex = event.model.__data.index;
-        var classList = this.shadowRoot.querySelectorAll('paper-card');
-           classList.forEach((e)=>{
-               e.classList.remove('selected');
-           });
-          classList[selectedIndex].classList.add('selected');
-          this.productIndex=selectedIndex;
-      }
-
-
-      _amountChanged(newValue,oldValue)
-      {
-        if(oldValue!==undefined)
-        {
-          this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
-  
-        }
-      }
-      _termChanged(newValue,oldValue)
-      {
-        if(oldValue!==undefined)
-        {
-          this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
-          this.offeramount=this.amountValues.maxAmount;
-          this.updateEPI_APR(this.productDetails,this.offerterm,this.offeramount);
-        }
-      }
-
-      _productChanged(newValue,oldValue)
-      {
-        console.log("value changed "+newValue);
-      }
-
-      _paramChanged(newValue,oldValue)
-      {
-        console.log(oldValue+"new"+newValue);
-      }
-
-      _submitInfo()
-       {
-
-          this.datasubmitted = true;
-          console.log("clicked submit");
-          this.postBody.customerId = 111;
-          this.postBody.epi = this.epi;
-          this.postBody.offerTerm = this.offerterm;
-          this.postBody.offerValue = this.offeramount;
-          this.postBody.downPayment = 20000;
-          this.postBody.annualPercentageRate = 2.3;
-          this.$.ironAjaxSubmit.generateRequest();
-          this.$.dialoge.open();
-          //dialoge.toggle();
-      }
-      sendResponse(data)
-       {
-          if (result && result.status === "200")
-           {
-              this.datasubmitted = true
-          }
-      }
-      setTermMinMaxStep(data)
-      {
-        let tempMin=data[0].productTerm;
-        let tempMax=0;
-        let tempStep=0;
-        for(let i=0;i<data.length;i++)
-        {
-          if(data[i].productTerm  < tempMin  ){
-            tempStep=tempMin-data[i].productTerm;
-            tempMin = data[i].productTerm;
-          }
-          if(data[i].productTerm  > tempMax ){
-            tempStep=data[i].productTerm-tempMax;
-            tempMax = data[i].productTerm;
-          }
-        }
-        var tempObj = {};
-        tempObj.minTerm = tempMin;
-        tempObj.maxTerm = tempMax;
-        tempObj.termStep = tempStep;
-        return tempObj;
-
-      }
-      setAmountMinMaxStep(data,term)
-      {
-        let tempMin=0;
-        let tempMax=0;
-        let tempStep=0;
-        for(let i=0;i<data.length;i++)
-        {
-          if(term==data[i].productTerm)
-          {
-            if(tempMin==0)
-            {
-            tempMin=data[i].offerValue;
+            header {
+                text-align: center;
             }
-            if(data[i].offerValue  < tempMin  )
-            {
-              tempStep=tempMin-data[i].offerValue;
-            tempMin = data[i].offerValue;
+
+            .paper-button {
+                background-color: #f60;
+                color: white;
             }
-           if(data[i].offerValue  > tempMax )
-            {
-              tempStep=data[i].offerValue-tempMax;
-            tempMax = data[i].offerValue;
+
+            .paper-button-disabled {
+                background-color: #f60;
+                color: white;
+                opacity: 0.5;
             }
-          }
+
+            .details-container {
+                background-color: white;
+                border-radius: 5px;
+                overflow: auto;
+                display: block;
+            }
+
+            paper-card.white {
+                --paper-card-header-color: black;
+            }
+
+            paper-card {
+                background: #fdfdfd;
+                border: 1px solid #f1f1f1;
+                box-shadow: none;
+                border-radius: 5px;
+                text-align: center;
+                width: 280px;
+                cursor: pointer;
+                margin: 20px;
+            }
+
+            .flex-container {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                text-align: center;
+            }
+
+            .flex-item {
+                flex: 1;
+            }
+
+            .flex-container-bleed {
+                @apply(--layout-horizontal);
+                @apply(--layout-wrap);
+                justify-content: center;
+            }
+
+            .flex-item-4 {
+                @apply(--layout-flex-4);
+            }
+
+            .bold-item {
+                font-weight: bold;
+            }
+
+            paper-card.selected {
+                border-bottom: 4px solid #f60;
+            }
+
+            .submittedClass {
+                padding: 10px;
+                color: green;
+                font-weight: normal;
+                font-size: 15px;
+                display: block;
+                margin-top: 10px;
+                text-align: center;
+            }
+
+            .center {
+                /*margin-left: 23px;*/
+                font-weight: bold;
+                font-size: 20px;
+                color: #1f1f1f;
+                border-bottom: 1px solid #e8e8e8;
+                /*padding-bottom: 10px;*/
+            }
+
+            .right {
+                text-align: right;
+            }
+
+            .slider-header {
+                margin: 10px auto 0;
+                width: 83%;
+                border-bottom: 1px solid #ffa726;
+                border-top: 1px solid #ffa726;
+                box-shadow: 0px 4px 1px #f1f1f1;
+            }
+
+            .slider-contianer {
+                margin: 50px 0 0 9%;
+                font-size: 15px;
+            }
+
+            .productContainer {
+                width: 980px;
+                margin: 70px auto;
+            }
+
+            .slide-detail {
+                margin: 20px 25px;
+                display: inline-block;
+                font-size: 15px;
+            }
+
+                .slide-detail span {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #f60;
+                }
+
+
+
+            paper-dialog {
+                width: 40%;
+                height: auto;
+                padding: 2%;
+                border-radius: 5px;
+                font-size: 15px;
+            }
+
+            .fontincrease {
+                font-size: 15px;
+                font-weight: 20px;
+            }
+
+            .close {
+                position: absolute;
+                top: 1%;
+                right: 30px;
+                transition: all 200ms;
+                font-size: 30px;
+                font-weight: bold;
+                text-decoration: none;
+                color: #333;
+                cursor: pointer;
+            }
+
+                .close:hover {
+                    color: #f60;
+                }
+
+            #checkboxterm {
+                font-size: 15px;
+            }
+
+            paper-dialog h3 {
+                color: forestgreen;
+                text-align: center;
+            }
+        </style>
+        <div class="productContainer card">
+            <div class="flex-container">
+                <template is="dom-repeat" items="[[products.product]]">
+                    <paper-card id='paper_card_{{index}}' heading="[[item.productName]]" on-click="_getProductDetails" class="white flex-item" class$="{{getSelectedClass(index)}}">
+                        <div class="card-content">[[item.productDesc]]</div>
+                    </paper-card>
+                </template>
+            </div>
+
+            <div class="details-container">
+                <div class="center">&nbsp;</div>
+                <div class="slider-header">
+                    <div class="slide-detail">Equated Periodic Installment(EPI) :  <span>&euro; {{_convertToLocale(epi)}}</span></div>
+                    <div class="slide-detail">Effective APR% : <span>{{apr}}</span></div>
+                    <div class="slide-detail">Total Offer Value : <span>&euro;{{_convertToLocale(totaloffervalue)}}</span></div>
+                </div>
+                <div class="slider-contianer">
+                    <lm-slider title='Tenure' minval='{{termValues.minTerm}}' maxval='{{termValues.maxTerm}}' selected='{{offerterm}}' interval='{{termValues.termStep}}' suffix='Yrs'></lm-slider>
+                    <lm-slider title='Amount' prefix='&euro;' minval='{{amountValues.minAmount}}' selected='{{offeramount}}' interval='{{amountValues.amountStep}}' maxval='{{amountValues.maxAmount}}'></lm-slider>
+                    <!-- <lm-slider title='Down Payment' prefix='&euro;' minval='0' selected='{{offerdownpayment}}' maxval='{{offerdownpayment}}' isdisabled='true'></></lm-slider> -->
+                    
+                    <div class="" style="margin-left:0px;">Down Payment : <span style='margin-left:42px;'>&euro;{{_convertToLocale(offerdownpayment)}} </span></div>
+                </div>
+                <div class="vas-icons">
+                    <h3>Checkout some services offered for you</h3>
+                    <vas-service itemindex='{{vasArray}}' on-click='updateOfferAmount'></vas-service>
+                </div>
+                <div class="center">&nbsp;</div>
+                <paper-dialog id="dialogeterm">
+                    <div>
+                        <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                    </div>
+                    <term-conditions terms="[[termsArray]]"></term-conditions>
+                </paper-dialog>
+                        <paper-checkbox checked="{{checked}}" on-change="valchanged" id="checkboxterm">I agree <a href="javascript:void(0);" on-click="openterms"> Terms and conditions</a></paper-checkbox>
+                        <div class="right">
+                            <paper-button id="submitbtn" class="paper-button-disabled" disabled$="[[!checked]]" on-click="_submitInfo">Submit</paper-button>
+                        </div>
+
+                        <paper-dialog id="dialoge">
+                            <div>
+                                <paper-icon-button icon="icons:cancel" title="Close" dialog-dismiss></paper-icon-button>
+                            </div>
+                            <h3>Congratulations on your Mortgage Offer</h3>
+                            <!--<a class="close" dialog-confirm>X</a>-->
+                            <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>X</paper-button>-->
+                            <div><label><b>Here are details of the offer:</b></label> </div>
+                            <div><label><span class="fontincrease">Date:</span> {{currentDate}}</label></div>
+                            <div><label><span class="fontincrease">Offer Term:</span> {{offerterm}} years</label></div>
+                            <div><label><span class="fontincrease">Offer Amount: </span>&euro;  {{offeramount}} </label></div>
+                            <div><label><span class="fontincrease">Down payment: </span>&euro; [[offerdownpayment]]</label></div>
+                            <div><label><span class="fontincrease">EPI: </span> &euro; {{epi}}</label></div>
+                            <div><label><b>Additional Documents</b></label></div>
+                            <div><a target="_blank" href="src/myexcel.xlsx">Click to download Amortization chart</a></div>
+                            <!--<paper-button style="float: right;" class="paper-button" dialog-confirm>Close</paper-button>-->
+                        </paper-dialog>
+
+
+</div>
+        </div>
+
+        </div>
+
+        <iron-ajax id="ironAjaxOnload"
+                   url="{{onloadurl}}"
+                   params='{{params}}'
+                   handle-as="json"
+                   on-response="_handleResponseForProducts"
+                   debounce-duration="300">
+        </iron-ajax>
+
+        <!-- <iron-ajax
+             auto
+             url="src/products.json"
+             params='{{params}}'
+             handle-as="json"
+             on-response="_handleResponseForProducts"
+             debounce-duration="300">
+        </iron-ajax> -->
+
+        <iron-ajax id="ironAjaxSubmit"
+                   url="http://10.138.13.58:8080/lightningmortgage/customerOffer"
+                   handle-as="json"
+                   body='{{postBody}}'
+                   method="post"
+                   on-response="sendResponse"
+                   content-type="application/json">
+        </iron-ajax>
+    </template>
+
+
+    <script>
+        class ProductPreference extends Polymer.Element {
+            constructor() {
+                super();
+                this.products = [];
+            }
+            connectedCallback() {
+                super.connectedCallback();
+                let customerId = localStorage.getItem("userId");
+                let postalCode = localStorage.getItem("postalCode");
+                let balance = localStorage.getItem("outstandingBalance");
+                if (postalCode == null || postalCode == "") {
+                    postalCode = "0";
+                }
+                if (balance == null || balance == "") {
+                    balance = 0;
+                }
+                console.log("local storage values" + customerId + postalCode + balance);
+                this.onloadurl = "http://10.138.13.58:8080/lightningmortgage/identifyProduct/123/1012CM/0";
+                // this.onloadurl = "http://10.138.13.58:8080/lightningmortgage/identifyProduct/" + customerId + "/" + postalCode + "/" + balance;
+                this.onloadurl = "src/products.json";
+                console.log("url " + this.onloadurl);
+                console.log("url " + this.onloadurl);
+                this.$.ironAjaxOnload.generateRequest();
+            }
+            static get is() { return 'product-preference'; }
+            static get properties() {
+                return {
+                    productName: {
+                        type: String,
+                        value: "Product Name"
+                    },
+                    productItem: {
+                        type: Object,
+                        value: {},
+                        observer: "_productChanged"
+                    },
+                    termValues: {
+                        type: Object,
+                        value: {},
+                        observer: "_productChanged"
+                    },
+                    amountValues: {
+                        type: Object,
+                        value: {},
+                        observer: "_productChanged"
+                    },
+                    offeramount: {
+                        type: Number,
+                        observer: "_amountChanged"
+                    },
+                    offerterm: {
+                        type: Number,
+                        observer: "_termChanged"
+                    },
+                    offerdownpayment: {
+                        type: Number
+                    },
+                    epi: {
+                        type: String,
+                        value: "392"
+                    },
+                    apr: {
+                        type: String,
+                        value: "2.4"
+                    },
+                    postBody: {
+                        type: Object,
+                        value: {
+                        }
+                    },
+                    datasubmitted: {
+                        type: Boolean,
+                        value: false
+                    },
+                    totaloffervalue: {
+                        type: Number
+                    },
+                    termsArray: Array,
+                    vasArray: {
+                        type: Array,
+                        value: [{ 'id': 0, 'name': 'Renovation', 'value': 1000, 'url': 'https://www.asianpaints.com/' },
+                        { 'id': 1, 'name': 'Landscape', 'value': 3000, 'url': 'http://www.gardeners.com/' },
+                        { 'id': 2, 'name': 'Brick Wall', 'value': 4000, 'url': 'https://www.99acres.com/' },
+                        { 'id': 3, 'name': 'Garage', 'value': 5000, 'url': 'https://www.housejoy.in/' }]
+                    }
+                }
+            }
+            _convertToLocale(val) {
+                if (val) {
+                    return val.toLocaleString();
+                }
+            }
+            updateEPI_APR(data, term, offer) {
+                for (let i = 0; i < data.length; i++) {
+                    if (term == data[i].productTerm) {
+                        if (offer == data[i].offerValue) {
+                            this.epi = data[i].epi;
+                        }
+                    }
+                }
+                this.totaloffervalue = this.offeramount + this.offerdownpayment;
+                let tmp = this.shadowRoot.querySelector('vas-service');
+                this.totaloffervalue += tmp.totalvas;
+            }
+            updateOfferAmount() {
+                let tmp = this.shadowRoot.querySelector('vas-service');
+                this.totaloffervalue = parseInt(this.offeramount) + parseInt(this.offerdownpayment) + parseInt(tmp.totalvas);
+            }
+            _getProductDetails(event) {
+                let selectedIndex = event.model.__data.index;
+                var classList = this.shadowRoot.querySelectorAll('paper-card');
+                classList.forEach((e) => {
+                    e.classList.remove('selected');
+                });
+                classList[selectedIndex].classList.add('selected');
+                this.productIndex = selectedIndex;
+            }
+            _amountChanged(newValue, oldValue) {
+                if (oldValue !== undefined) {
+                    this.updateEPI_APR(this.productDetails, this.offerterm, this.offeramount);
+
+                }
+            }
+            _termChanged(newValue, oldValue) {
+                if (oldValue !== undefined) {
+                    this.amountValues = this.setAmountMinMaxStep(this.productDetails, this.offerterm);
+                    this.offeramount = this.amountValues.maxAmount;
+                    this.updateEPI_APR(this.productDetails, this.offerterm, this.offeramount);
+                }
+            }
+            _productChanged(newValue, oldValue) {
+                console.log("value changed " + newValue);
+            }
+            _paramChanged(newValue, oldValue) {
+                console.log(oldValue + "new" + newValue);
+            }
+            _submitInfo() {
+                this.datasubmitted = true;
+                console.log("clicked submit");
+                this.postBody.customerId = 111;
+                this.postBody.epi = this.epi;
+                this.postBody.offerTerm = this.offerterm;
+                this.postBody.offerValue = this.offeramount;
+                this.postBody.downPayment = 20000;
+                this.postBody.annualPercentageRate = 2.3;
+                this.$.ironAjaxSubmit.generateRequest();
+                this.$.checkboxterm.disabled = true;
+                this.$.submitbtn.disabled = true;
+                this.$.submitbtn.classList.add('paper-button-disabled');
+                this.$.submitbtn.classList.remove('paper-button');
+
+                this.$.dialoge.open();
+                //dialoge.toggle();
+            }
+            sendResponse(data) {
+                if (data && data.status === "200") {
+                    this.datasubmitted = true
+                }
+            }
+            setTermMinMaxStep(data) {
+                let tempMin = data[0].productTerm;
+                let tempMax = 0;
+                let tempStep = 0;
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].productTerm < tempMin) {
+                        tempStep = tempMin - data[i].productTerm;
+                        tempMin = data[i].productTerm;
+                    }
+                    if (data[i].productTerm > tempMax) {
+                        tempStep = data[i].productTerm - tempMax;
+                        tempMax = data[i].productTerm;
+                    }
+                }
+                var tempObj = {};
+                tempObj.minTerm = tempMin;
+                tempObj.maxTerm = tempMax;
+                tempObj.termStep = tempStep;
+                return tempObj;
+            }
+            setAmountMinMaxStep(data, term) {
+                let tempMin = 0;
+                let tempMax = 0;
+                let tempStep = 0;
+                for (let i = 0; i < data.length; i++) {
+                    if (term == data[i].productTerm) {
+                        if (tempMin == 0) {
+                            tempMin = data[i].offerValue;
+                        }
+                        if (data[i].offerValue < tempMin) {
+                            tempStep = tempMin - data[i].offerValue;
+                            tempMin = data[i].offerValue;
+                        }
+                        if (data[i].offerValue > tempMax) {
+                            tempStep = data[i].offerValue - tempMax;
+                            tempMax = data[i].offerValue;
+                        }
+                    }
+                }
+                var tempObj = {};
+                tempObj.minAmount = tempMin;
+                tempObj.maxAmount = tempMax;
+                tempObj.amountStep = tempStep;
+                return tempObj;
+            }
+            //getAPI
+            _handleResponseForProducts(data) {
+                this.products = data.detail.response;
+                this.productDetails = this.products.offer;
+                this.productIndex = 0;
+                this.productObject = this.products.product[this.productIndex];
+                if (this.products) {
+                    this.productId = this.productObject.productId;
+                    console.log("hi" + JSON.stringify(this.productDetails));
+                    this.termValues = this.setTermMinMaxStep(this.productDetails);
+                    this.offerterm = this.termValues.maxTerm;
+                    this.amountValues = this.setAmountMinMaxStep(this.productDetails, this.offerterm);
+                    this.offeramount = this.amountValues.maxAmount;
+                    this.termsArray = this.productObject.terms;
+                    // this.offerdownpayment=10000;
+                    this.epi = this.productDetails[this.productDetails.length - 1].epi;
+                    this.apr = this.productDetails[0].annualPercentageRate;
+                    this.offerdownpayment = this.productDetails[0].minDownpayment;
+                    this.totaloffervalue = this.offeramount + this.offerdownpayment;
+                    this.currentDate = "22 Sep 2017";
+                    var today = new Date();
+                    var dated = today.getDate();
+                    var monthd = today.getMonth() + 1;
+                    var years = today.getFullYear();
+                    this.currentDate = dated + "-" + monthd + "-" + years;
+                    this.checked = false;
+                    // classList.classList.add('selected');
+
+                }
+            }
+            getSelectedClass(index) {
+                if (index == 0) {
+                    return 'selected';
+                }
+            }
+            valchanged(event) {
+                // this.$.checkboxterm.checked = !this.$.checkboxterm.checked;
+                console.log(this.$.checkboxterm.checked);
+                if (this.$.checkboxterm.checked) {
+                    this.$.submitbtn.classList.remove('paper-button-disabled');
+                    this.$.submitbtn.classList.add('paper-button');
+                }
+                else {
+                    this.$.submitbtn.classList.add('paper-button-disabled');
+                    this.$.submitbtn.classList.remove('paper-button');
+                }
+                
+            }
+            openterms(event) {
+                this.$.dialogeterm.open();
+            }
+            // window.addEventListener('totalvas-changed',function(){
+            //     alert(1);
+            // });
         }
-        var tempObj = {};
-        tempObj.minAmount = tempMin;
-        tempObj.maxAmount = tempMax;
-        tempObj.amountStep = tempStep;
-        return tempObj;
-      }
-      //getAPI
-      _handleResponseForProducts(data)
-      {
-        this.products = data.detail.response;
-        this.productDetails = this.products.offer;
-        this.productIndex=0;
-        this.productObject = this.products.product[this.productIndex];
-        if(this.products)
-        {
-
-          this.productId = this.productObject.productId;
-          console.log("hi"+JSON.stringify(this.productDetails));
-          this.termValues = this.setTermMinMaxStep(this.productDetails);
-
-          this.offerterm=this.termValues.maxTerm;
-          this.amountValues= this.setAmountMinMaxStep(this.productDetails,this.offerterm);
-          this.offeramount=this.amountValues.maxAmount;
-          this.termsArray = this.productObject.terms;
-        // this.offerdownpayment=10000; 
-          this.epi = this.productDetails[this.productDetails.length-1].epi;
-          this.apr = this.productDetails[0].annualPercentageRate;
-          this.offerdownpayment = this.productDetails[0].minDownpayment;
-          this.totaloffervalue = this.offeramount + this.offerdownpayment;
-          this.currentDate = "22 Sep 2017";
-          var today = new Date();
-          var dated = today.getDate();
-          var monthd = today.getMonth() + 1;
-          var years = today.getFullYear();
-          this.currentDate=  dated +"-" + monthd + "-" + years 
-          // classList.classList.add('selected');
-  
-
-        }
-      }
-      getSelectedClass(index){
-        if(index == 0){
-          return 'selected';
-        }
-      }
-
-      }
-    window.customElements.define(ProductPreference.is, ProductPreference);
-
-  </script>
+        window.customElements.define(ProductPreference.is, ProductPreference);
+    </script>
 </dom-module>
-
