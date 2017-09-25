@@ -504,10 +504,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
       }
       knockOutCheck() {
-        this.$.knockOutAjax.generateRequest();
         this.loader = true;
+        this.$.knockOutAjax.generateRequest();
+        
       }
       knockOutResponse(data) {
+        this.loader = false;
         var result= data.detail.response 
         if(result && result.responseCode ==="200") {
         window.history.pushState({}, null, '/property-selection');
@@ -520,6 +522,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       updateEditProfile() {
         this.edit=false;
         this.hide = false;
+        this.loader = false;
       }
       json(obj) {
         return JSON.stringify(obj, null, 2);
