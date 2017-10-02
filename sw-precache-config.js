@@ -18,7 +18,7 @@ module.exports = {
   ],
   runtimeCaching: [
     {
-      urlPattern: /bower_components\/webcomponentsjs\/.*.js/,
+      urlPattern: /\/bower_components\/webcomponentsjs\/.*.js/,
       handler: 'fastest',
       options: {
         cache: {
