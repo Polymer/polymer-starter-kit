@@ -12,9 +12,19 @@
 
 module.exports = {
   staticFileGlobs: [
-    'index.html',
+    'bower_components/webcomponentsjs/webcomponents-loader.js',
+    'images/*',
     'manifest.json',
-    'bower_components/webcomponentsjs/*',
   ],
-  navigateFallback: 'index.html',
+  runtimeCaching: [
+    {
+      urlPattern: /\/bower_components\/webcomponentsjs\/.*.js/,
+      handler: 'fastest',
+      options: {
+        cache: {
+          name: 'webcomponentsjs-polyfills-cache',
+        },
+      },
+    },
+  ],
 };
