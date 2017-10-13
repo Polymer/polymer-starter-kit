@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "public": "build/es5-bundled/",
+    "rewrites": [
+      {
+        "source": "**/!(*.*)",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
