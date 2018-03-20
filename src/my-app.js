@@ -128,7 +128,7 @@ class MyApp extends Element {
       }
     };
   }
-  
+
   static get observers() {
     return [
       '_routePageChanged(routeData.page)',
@@ -138,9 +138,7 @@ class MyApp extends Element {
   _routePageChanged(page) {
     // If no page was found in the route data, page will be an empty string.
     // Default to 'view1' in that case.
-    console.log(page)
     this.page = page || 'view1';
-    console.log('this.page', this.page)
 
     // Close a non-persistent drawer when the page & route are changed.
     if (!this.$.drawer.persistent) {
@@ -149,7 +147,6 @@ class MyApp extends Element {
   }
 
   _pageChanged(page) {
-    console.log(page)
     // Load page import on demand. Show 404 page if fails
     let loaded = import('./my-' + page + '.js');
 
