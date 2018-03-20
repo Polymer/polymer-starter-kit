@@ -1,4 +1,6 @@
-<!--
+import { Element } from '../node_modules/@polymer/polymer/polymer-element.js';
+import { html } from '../node_modules/@polymer/polymer/lib/utils/html-tag.js';
+/**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -6,12 +8,10 @@ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
-
-<dom-module id="my-view404">
-  <template>
+*/
+class MyView404 extends Element {
+  static get template() {
+    return html`
     <style>
       :host {
         display: block;
@@ -21,20 +21,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     Oops you hit a 404. <a href="[[rootPath]]">Head back to home.</a>
-  </template>
+`;
+  }
 
-  <script>
-    class MyView404 extends Polymer.Element {
-      static get is() { return 'my-view404'; }
-      static get properties() {
-        return {
-          // This shouldn't be neccessary, but the Analyzer isn't picking up
-          // Polymer.Element#rootPath
-          rootPath: String,
-        };
-      }
-    }
+  static get is() { return 'my-view404'; }
+  static get properties() {
+    return {
+      // This shouldn't be neccessary, but the Analyzer isn't picking up
+      // Polymer.Element#rootPath
+      rootPath: String,
+    };
+  }
+}
 
-    window.customElements.define(MyView404.is, MyView404);
-  </script>
-</dom-module>
+window.customElements.define(MyView404.is, MyView404);

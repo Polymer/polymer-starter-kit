@@ -1,4 +1,7 @@
-<!--
+import { Element } from '../node_modules/@polymer/polymer/polymer-element.js';
+import './shared-styles.js';
+import { html } from '../node_modules/@polymer/polymer/lib/utils/html-tag.js';
+/**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -6,13 +9,10 @@ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="shared-styles.html">
-
-<dom-module id="my-view1">
-  <template>
+*/
+class MyView1 extends Element {
+  static get template() {
+    return html`
     <style include="shared-styles">
       :host {
         display: block;
@@ -27,13 +27,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
       <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
     </div>
-  </template>
+`;
+  }
 
-  <script>
-    class MyView1 extends Polymer.Element {
-      static get is() { return 'my-view1'; }
-    }
+  static get is() { return 'my-view1'; }
+}
 
-    window.customElements.define(MyView1.is, MyView1);
-  </script>
-</dom-module>
+window.customElements.define(MyView1.is, MyView1);
