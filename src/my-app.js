@@ -15,7 +15,7 @@ import './my-view1.js';
 import './my-view2.js';
 import './my-view3.js';
 import './my-view404.js';
-import { setPassiveTouchGestures } from '../node_modules/@polymer/polymer/lib/utils/settings.js';
+import { setPassiveTouchGestures, setRootPath } from '../node_modules/@polymer/polymer/lib/utils/settings.js';
 import { html } from '../node_modules/@polymer/polymer/lib/utils/html-tag.js';
 //import { importHref } from '../node_modules/@polymer/polymer/lib/utils/import-href.js';
 // Gesture events like tap and track generated from touch will not be
@@ -127,6 +127,11 @@ class MyApp extends Element {
         value: Polymer.rootPath
       }
     };
+  }
+
+  ready() {
+    super.ready();
+    setRootPath(Polymer.rootPath);
   }
 
   static get observers() {
