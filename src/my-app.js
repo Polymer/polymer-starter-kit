@@ -29,7 +29,9 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
+
 setPassiveTouchGestures(true);
+setRootPath(Polymer.rootPath);
 
 class MyApp extends Element {
   static get template() {
@@ -121,17 +123,12 @@ class MyApp extends Element {
         observer: '_pageChanged',
       },
       routeData: Object,
-      subroute: Object,
-      rootPath: {
-        type: String,
-        value: Polymer.rootPath
-      }
+      subroute: Object
     };
   }
 
   ready() {
     super.ready();
-    setRootPath(Polymer.rootPath);
   }
 
   static get observers() {
@@ -153,7 +150,25 @@ class MyApp extends Element {
 
   _pageChanged(page) {
     // Load page import on demand. Show 404 page if fails
-    let loaded = import('./my-' + page + '.js');
+    // Note: `polymer build` doesn't like string concatenation in
+    // the import statement, so break it up.
+    let loaded;
+    switch(page) {
+      case 'view1':
+        loaded = import('./my-view1.js');
+        break;
+      case 'view2':
+        loaded = import('./my-view2.js');
+        break;
+      case 'view3':
+        loaded = import('./my-view3.js');
+        break;
+      case 'view404':
+        loaded = import('./my-view404.js');
+        break;
+      default:
+        loaded = Promise.reject();
+    }
 
     loaded.then(
       _ => {},
