@@ -22,15 +22,15 @@
   },
   "author": "The Polymer Authors",
   "dependencies": {
-    "@polymer/app-layout": "^3.0.0-pre.10",
-    "@polymer/app-route": "^3.0.0-pre.10",
-    "@polymer/iron-flex-layout": "^3.0.0-pre.10",
-    "@polymer/iron-iconset-svg": "^3.0.0-pre.10",
-    "@polymer/iron-media-query": "^3.0.0-pre.10",
-    "@polymer/iron-pages": "^3.0.0-pre.10",
-    "@polymer/iron-selector": "^3.0.0-pre.10",
-    "@polymer/paper-icon-button": "^3.0.0-pre.10",
-    "@polymer/polymer": "^3.0.0-pre.10",
+    "@polymer/app-layout": "^3.0.0-pre.12",
+    "@polymer/app-route": "^3.0.0-pre.12",
+    "@polymer/iron-flex-layout": "^3.0.0-pre.12",
+    "@polymer/iron-iconset-svg": "^3.0.0-pre.12",
+    "@polymer/iron-media-query": "^3.0.0-pre.12",
+    "@polymer/iron-pages": "^3.0.0-pre.12",
+    "@polymer/iron-selector": "^3.0.0-pre.12",
+    "@polymer/paper-icon-button": "^3.0.0-pre.12",
+    "@polymer/polymer": "^3.0.0-pre.12",
     "@webcomponents/webcomponentsjs": "^1.0.0"
   }
 }

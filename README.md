@@ -56,7 +56,7 @@ Second, install [Bower](https://bower.io/) using [npm](https://www.npmjs.com)
 This command serves the app at `http://127.0.0.1:8081` and provides basic URL
 routing for the app:
 
-    polymer serve
+    polymer serve --module-resolution=node --npm
 
 ### Build
 
@@ -99,7 +99,7 @@ Run `polymer help build` for the full list of available options and optimization
 
 This command serves your app. Replace `build-folder-name` with the folder name of the build you want to serve.
 
-    polymer serve build/build-folder-name/
+    polymer serve --module-resolution=node --npm build/build-folder-name/
 
 ### Run tests
 

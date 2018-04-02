@@ -1,4 +1,4 @@
-import { Element } from '../node_modules/@polymer/polymer/polymer-element.js';
+import { PolymerElement } from '../node_modules/@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
 import { html } from '../node_modules/@polymer/polymer/lib/utils/html-tag.js';
 /**
@@ -10,7 +10,7 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-class MyView2 extends Element {
+class MyView2 extends PolymerElement {
   static get template() {
     return html`
     <style include="shared-styles">

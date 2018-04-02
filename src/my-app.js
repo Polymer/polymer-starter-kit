@@ -1,4 +1,4 @@
-import { Element } from '../node_modules/@polymer/polymer/polymer-element.js';
+import { PolymerElement } from '../node_modules/@polymer/polymer/polymer-element.js';
 import '../node_modules/@polymer/app-layout/app-drawer/app-drawer.js';
 import '../node_modules/@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '../node_modules/@polymer/app-layout/app-header/app-header.js';
@@ -33,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 setPassiveTouchGestures(true);
 setRootPath(Polymer.rootPath);
 
-class MyApp extends Element {
+class MyApp extends PolymerElement {
   static get template() {
     return html`
     <style>
