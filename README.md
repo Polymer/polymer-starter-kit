@@ -56,7 +56,7 @@ Second, install [Bower](https://bower.io/) using [npm](https://www.npmjs.com)
 This command serves the app at `http://127.0.0.1:8081` and provides basic URL
 routing for the app:
 
-    polymer serve --module-resolution=node --npm
+    polymer serve
 
 ### Build
 
@@ -86,12 +86,12 @@ Builds will be output to a subdirectory under the `build/` directory as follows:
 build/
   es5-bundled/
   es6-bundled/
-  es6-unbundled/
+  esm-bundled/
 ```
 
 * `es5-bundled` is a bundled, minified build with a service worker. ES6 code is compiled to ES5 for compatibility with older browsers.
 * `es6-bundled` is a bundled, minified build with a service worker. ES6 code is served as-is. This build is for browsers that can handle ES6 code - see [building your project for production](https://www.polymer-project.org/2.0/toolbox/build-for-production#compiling) for a list.
-* `es6-unbundled` is an unbundled, minified build with a service worker. ES6 code is served as-is. This build is for browsers that support HTTP/2 push.
+* `esm-bundled` is a bundled, minified build with a service worker. It uses standard ES module import/export statements for browsers that support them.
 
 Run `polymer help build` for the full list of available options and optimizations. Also, see the documentation on the [polymer.json specification](https://www.polymer-project.org/2.0/docs/tools/polymer-json) and [building your Polymer application for production](https://www.polymer-project.org/2.0/toolbox/build-for-production).
 
@@ -99,7 +99,7 @@ Run `polymer help build` for the full list of available options and optimization
 
 This command serves your app. Replace `build-folder-name` with the folder name of the build you want to serve.
 
-    polymer serve --module-resolution=node --npm build/build-folder-name/
+    polymer serve build/build-folder-name/
 
 ### Run tests
 
