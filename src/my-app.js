@@ -11,10 +11,6 @@ import '../node_modules/@polymer/iron-pages/iron-pages.js';
 import '../node_modules/@polymer/iron-selector/iron-selector.js';
 import '../node_modules/@polymer/paper-icon-button/paper-icon-button.js';
 import './my-icons.js';
-import './my-view1.js';
-import './my-view2.js';
-import './my-view3.js';
-import './my-view404.js';
 import { setPassiveTouchGestures, setRootPath } from '../node_modules/@polymer/polymer/lib/utils/settings.js';
 import { html } from '../node_modules/@polymer/polymer/lib/utils/html-tag.js';
 //import { importHref } from '../node_modules/@polymer/polymer/lib/utils/import-href.js';
@@ -102,7 +98,7 @@ class MyApp extends PolymerElement {
           </app-toolbar>
         </app-header>
 
-        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+        <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
           <my-view1 name="view1"></my-view1>
           <my-view2 name="view2"></my-view2>
           <my-view3 name="view3"></my-view3>
@@ -138,9 +134,15 @@ class MyApp extends PolymerElement {
   }
 
   _routePageChanged(page) {
-    // If no page was found in the route data, page will be an empty string.
-    // Default to 'view1' in that case.
-    this.page = page || 'view1';
+    if (!page) {
+      // If no page was found in the route data, page will be an empty string.
+      // Default to 'view1' in that case.
+      this.page = 'view1';
+    } else if (['view1', 'view2', 'view3'].indexOf(page) !== -1) {
+      this.page = page;
+    } else {
+      this.page = 'view404';
+    }
 
     // Close a non-persistent drawer when the page & route are changed.
     if (!this.$.drawer.persistent) {
@@ -152,32 +154,20 @@ class MyApp extends PolymerElement {
     // Load page import on demand. Show 404 page if fails
     // Note: `polymer build` doesn't like string concatenation in
     // the import statement, so break it up.
-    let loaded;
     switch(page) {
       case 'view1':
-        loaded = import('./my-view1.js');
+        import('./my-view1.js');
         break;
       case 'view2':
-        loaded = import('./my-view2.js');
+        import('./my-view2.js');
         break;
       case 'view3':
-        loaded = import('./my-view3.js');
+        import('./my-view3.js');
         break;
       case 'view404':
-        loaded = import('./my-view404.js');
+        import('./my-view404.js');
         break;
-      default:
-        loaded = Promise.reject();
     }
-
-    loaded.then(
-      _ => {},
-      _ => { this._showPage404.bind(this) }
-    );
-  }
-
-  _showPage404() {
-    this.page = 'view404';
   }
 }
 

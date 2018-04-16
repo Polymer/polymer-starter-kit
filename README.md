@@ -36,14 +36,10 @@ We've recorded a Polycast to get you up and running with PSK2 fast!
 
 ##### Prerequisites
 
-First, install [Polymer CLI](https://github.com/Polymer/polymer-cli) using
+Install [Polymer CLI](https://github.com/Polymer/polymer-cli) using
 [npm](https://www.npmjs.com) (we assume you have pre-installed [node.js](https://nodejs.org)).
 
-    npm install -g polymer-cli
-
-Second, install [Bower](https://bower.io/) using [npm](https://www.npmjs.com)
-
-    npm install -g bower
+    npm install -g polymer-cli@next
 
 ##### Initialize project from template
 
