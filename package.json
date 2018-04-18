@@ -6,6 +6,8 @@
   "license": "BSD-3-Clause",
   "repository": "Polymer/polymer-starter-kit",
   "scripts": {
+    "start": "polymer serve",
+    "build": "polymer build",
     "lint": "npm run lint:javascript && polymer lint",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
     "test": "polymer test",
@@ -27,6 +29,7 @@
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.0",
     "eslint-plugin-html": "^2.0.0",
+    "polymer-cli": "^1.7.0-pre.11",
     "wct-browser-legacy": "^0.0.1-pre.12"
   }
 }
