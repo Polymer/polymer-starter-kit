@@ -11,9 +11,8 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import './my-icons.js';
-import { setPassiveTouchGestures, setRootPath } from '../node_modules/@polymer/polymer/lib/utils/settings.js';
-import { html } from '../node_modules/@polymer/polymer/lib/utils/html-tag.js';
-//import { importHref } from '../node_modules/@polymer/polymer/lib/utils/import-href.js';
+import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
 /**
