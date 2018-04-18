@@ -25,6 +25,6 @@
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.0",
     "eslint-plugin-html": "^2.0.0",
-    "wct-browser-legacy": "0.0.1-pre.11"
+    "wct-browser-legacy": "^0.0.1-pre.12"
   }
 }
