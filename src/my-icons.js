@@ -11,7 +11,6 @@
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 const $_documentContainer = document.createElement('div');
 $_documentContainer.setAttribute('style', 'display: none;');
-
 $_documentContainer.innerHTML = `<iron-iconset-svg name="my-icons" size="24">
   <svg>
     <defs>

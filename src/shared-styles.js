@@ -9,9 +9,9 @@
  */
 
 import '@polymer/polymer/polymer-element.js';
+
 const $_documentContainer = document.createElement('div');
 $_documentContainer.setAttribute('style', 'display: none;');
-
 $_documentContainer.innerHTML = `<dom-module id="shared-styles">
   <template>
     <style>

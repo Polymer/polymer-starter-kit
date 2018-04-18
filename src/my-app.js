@@ -8,7 +8,8 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
+import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
@@ -21,11 +22,13 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import './my-icons.js';
-import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
-// Gesture events like tap and track generated from touch will not be
-// preventable, allowing for better scrolling performance.
 
+/**
+ * Gesture events like tap and track generated from touch will not be
+ * preventable, allowing for better scrolling performance.
+ */
 setPassiveTouchGestures(true);
+
 setRootPath(Polymer.rootPath);
 
 class MyApp extends PolymerElement {
@@ -115,7 +118,7 @@ class MyApp extends PolymerElement {
       page: {
         type: String,
         reflectToAttribute: true,
-        observer: '_pageChanged',
+        observer: '_pageChanged'
       },
       routeData: Object,
       subroute: Object
@@ -128,7 +131,7 @@ class MyApp extends PolymerElement {
 
   static get observers() {
     return [
-      '_routePageChanged(routeData.page)',
+      '_routePageChanged(routeData.page)'
     ];
   }
 
