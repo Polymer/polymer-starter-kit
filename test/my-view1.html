@@ -16,8 +16,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <title>my-view1</title>
 
-    <script src="../../@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../../wct-browser-legacy/browser.js"></script>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
 
     <!-- Import the element to test -->
     <script type="module" src="../src/my-view1.js"></script>
@@ -29,8 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </template>
     </test-fixture>
 
-    <script type="module">
-import '../src/my-view1.js';
+<script type="module">
 suite('my-view1 tests', function() {
   test('Number in circle should be 1', function() {
     var myView = fixture('BasicView');
