@@ -8,8 +8,7 @@
   "scripts": {
     "start": "polymer serve",
     "build": "polymer build",
-    "lint": "npm run lint:javascript && polymer lint",
-    "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
+    "lint": "polymer lint",
     "test": "polymer test",
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
@@ -26,9 +25,6 @@
     "@webcomponents/webcomponentsjs": "^1.2.0"
   },
   "devDependencies": {
-    "eslint": "^3.19.0",
-    "eslint-config-google": "^0.7.0",
-    "eslint-plugin-html": "^2.0.0",
     "polymer-cli": "^1.7.0-pre.11",
     "wct-browser-legacy": "^0.0.1-pre.12"
   }
