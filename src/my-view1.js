@@ -1,6 +1,6 @@
-import { PolymerElement } from '../node_modules/@polymer/polymer/polymer-element.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
-import { html } from '../node_modules/@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 /**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.

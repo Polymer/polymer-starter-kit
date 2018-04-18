@@ -1,4 +1,4 @@
-import '../node_modules/@polymer/iron-iconset-svg/iron-iconset-svg.js';
+import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 const $_documentContainer = document.createElement('div');
 $_documentContainer.setAttribute('style', 'display: none;');
 
