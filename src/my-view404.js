@@ -1,5 +1,4 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 /**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
