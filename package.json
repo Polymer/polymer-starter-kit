@@ -1,8 +1,10 @@
 {
   "name": "polymer-starter-kit",
+  "version": "4.0.0-pre.1",
+  "description": "A starting point for Polymer apps",
   "author": "The Polymer Authors",
   "license": "BSD-3-Clause",
-  "version": "4.0.0-pre.1",
+  "repository": "Polymer/polymer-starter-kit",
   "scripts": {
     "lint": "npm run lint:javascript && polymer lint",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
