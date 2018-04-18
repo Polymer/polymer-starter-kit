@@ -13,7 +13,7 @@
     "test": "polymer test",
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
-  "version": "1.0.0",
+  "version": "4.0.0-pre.1",
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",
