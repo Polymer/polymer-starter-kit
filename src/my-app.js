@@ -111,8 +111,6 @@ class MyApp extends PolymerElement {
     `;
   }
 
-  static get is() { return 'my-app'; }
-
   static get properties() {
     return {
       page: {
@@ -173,4 +171,4 @@ class MyApp extends PolymerElement {
   }
 }
 
-window.customElements.define(MyApp.is, MyApp);
+window.customElements.define('my-app', MyApp);

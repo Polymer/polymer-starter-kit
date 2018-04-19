@@ -24,8 +24,6 @@ class MyView404 extends PolymerElement {
       Oops you hit a 404. <a href="[[rootPath]]">Head back to home.</a>
     `;
   }
-
-  static get is() { return 'my-view404'; }
 }
 
-window.customElements.define(MyView404.is, MyView404);
+window.customElements.define('my-view404', MyView404);

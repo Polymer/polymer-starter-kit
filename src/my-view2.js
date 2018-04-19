@@ -30,8 +30,6 @@ class MyView2 extends PolymerElement {
       </div>
     `;
   }
-
-  static get is() { return 'my-view2'; }
 }
 
-window.customElements.define(MyView2.is, MyView2);
+window.customElements.define('my-view2', MyView2);
