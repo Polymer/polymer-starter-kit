@@ -134,9 +134,13 @@ class MyApp extends PolymerElement {
   }
 
   _routePageChanged(page) {
+    /**
+     * Show the corresponding page according to the route.
+     *
+     * If no page was found in the route data, page will be an empty string.
+     * Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
+     */
     if (!page) {
-      // If no page was found in the route data, page will be an empty string.
-      // Default to 'view1' in that case.
       this.page = 'view1';
     } else if (['view1', 'view2', 'view3'].indexOf(page) !== -1) {
       this.page = page;
@@ -144,16 +148,21 @@ class MyApp extends PolymerElement {
       this.page = 'view404';
     }
 
-    // Close a non-persistent drawer when the page & route are changed.
+    /**
+     * Close a non-persistent drawer when the page & route are changed.
+     */
     if (!this.$.drawer.persistent) {
       this.$.drawer.close();
     }
   }
 
   _pageChanged(page) {
-    // Load page import on demand. Show 404 page if fails
-    // Note: `polymer build` doesn't like string concatenation in
-    // the import statement, so break it up.
+    /**
+     * Import the page component on demand.
+     *
+     * Note: `polymer build` doesn't like string concatenation in the import
+     * statement, so break it up.
+     */
     switch (page) {
       case 'view1':
         import('./my-view1.js');
