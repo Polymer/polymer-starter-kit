@@ -6,6 +6,7 @@
   "license": "BSD-3-Clause",
   "repository": "Polymer/polymer-starter-kit",
   "scripts": {
+    "precommit": "pretty-quick --staged",
     "start": "polymer serve",
     "build": "polymer build",
     "lint": "polymer lint",
@@ -25,7 +26,10 @@
     "@webcomponents/webcomponentsjs": "^2.0.0-beta.2"
   },
   "devDependencies": {
+    "husky": "^0.14.0",
     "polymer-cli": "^1.7.0-pre.17",
+    "prettier": "1.12.0",
+    "pretty-quick": "^1.4.0",
     "wct-browser-legacy": "^0.0.1-pre.12"
   },
   "engines": {
