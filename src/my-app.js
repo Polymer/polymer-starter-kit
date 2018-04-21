@@ -9,7 +9,10 @@
  */
 
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
+import {
+  setPassiveTouchGestures,
+  setRootPath
+} from '@polymer/polymer/lib/utils/settings.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
@@ -126,9 +129,7 @@ class MyApp extends PolymerElement {
   }
 
   static get observers() {
-    return [
-      '_routePageChanged(routeData.page)'
-    ];
+    return ['_routePageChanged(routeData.page)'];
   }
 
   _routePageChanged(page) {
