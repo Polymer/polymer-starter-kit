@@ -154,7 +154,7 @@ class MyApp extends PolymerElement {
     // Load page import on demand. Show 404 page if fails
     // Note: `polymer build` doesn't like string concatenation in
     // the import statement, so break it up.
-    switch(page) {
+    switch (page) {
       case 'view1':
         import('./my-view1.js');
         break;
