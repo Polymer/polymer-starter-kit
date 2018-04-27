@@ -1,5 +1,7 @@
 language: node_js
-node_js: "9"
+node_js:
+  - "9"
+  - "6"
 dist: trusty
 sudo: required
 addons:
