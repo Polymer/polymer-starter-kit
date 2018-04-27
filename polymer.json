@@ -25,9 +25,7 @@
       "html": {
         "minify": true
       },
-      "bundle": {
-        "inlineScripts": false
-      },
+      "bundle": true,
       "addServiceWorker": true
     },
     {
@@ -45,9 +43,7 @@
       "html": {
         "minify": true
       },
-      "bundle": {
-        "inlineScripts": false
-      },
+      "bundle": true,
       "addServiceWorker": true
     },
     {
@@ -63,9 +59,7 @@
       "html": {
         "minify": true
       },
-      "bundle": {
-        "inlineScripts": false
-      },
+      "bundle": true,
       "addServiceWorker": true
     }
   ],
