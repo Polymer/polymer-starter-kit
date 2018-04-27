@@ -3,7 +3,7 @@ node_js:
   - "9"
   - "6"
 dist: trusty
-sudo: required
+sudo: false
 addons:
   firefox: latest
   chrome: stable
