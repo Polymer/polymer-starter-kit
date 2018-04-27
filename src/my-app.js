@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
@@ -23,10 +23,8 @@ import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import './my-icons.js';
 
-/**
- * Gesture events like tap and track generated from touch will not be
- * preventable, allowing for better scrolling performance.
- */
+// Gesture events like tap and track generated from touch will not be
+// preventable, allowing for better scrolling performance.
 setPassiveTouchGestures(true);
 
 setRootPath(Polymer.rootPath);
@@ -134,9 +132,11 @@ class MyApp extends PolymerElement {
   }
 
   _routePageChanged(page) {
+     // Show the corresponding page according to the route.
+     //
+     // If no page was found in the route data, page will be an empty string.
+     // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
     if (!page) {
-      // If no page was found in the route data, page will be an empty string.
-      // Default to 'view1' in that case.
       this.page = 'view1';
     } else if (['view1', 'view2', 'view3'].indexOf(page) !== -1) {
       this.page = page;
@@ -151,10 +151,11 @@ class MyApp extends PolymerElement {
   }
 
   _pageChanged(page) {
-    // Load page import on demand. Show 404 page if fails
-    // Note: `polymer build` doesn't like string concatenation in
-    // the import statement, so break it up.
-    switch(page) {
+    // Import the page component on demand.
+    //
+    // Note: `polymer build` doesn't like string concatenation in the import
+    // statement, so break it up.
+    switch (page) {
       case 'view1':
         import('./my-view1.js');
         break;

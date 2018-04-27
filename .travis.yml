@@ -1,16 +1,12 @@
 language: node_js
-dist: trusty
-sudo: required
-addons:
-  firefox: "latest"
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
 node_js:
   - "9"
   - "6"
+dist: trusty
+sudo: required
+addons:
+  firefox: latest
+  chrome: stable
 cache:
   directories:
     - node_modules
