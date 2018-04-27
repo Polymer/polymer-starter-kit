@@ -9,7 +9,7 @@ addons:
     packages:
       - google-chrome-stable
 node_js:
-  - "node"
+  - "9"
   - "6"
 cache:
   directories:
