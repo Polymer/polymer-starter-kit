@@ -8,17 +8,15 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/* eslint-env node */
-
 module.exports = {
   staticFileGlobs: [
-    'manifest.json',
     'src/**/*',
+    'manifest.json'
   ],
   runtimeCaching: [
     {
       urlPattern: /\/@webcomponents\/webcomponentsjs\//,
       handler: 'fastest'
     }
-  ],
+  ]
 };
