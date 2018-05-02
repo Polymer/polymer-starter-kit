@@ -27,5 +27,8 @@
   "devDependencies": {
     "polymer-cli": "^1.7.0-pre.16",
     "wct-browser-legacy": "^0.0.1-pre.12"
+  },
+  "engines": {
+    "node": ">=8.0"
   }
 }
