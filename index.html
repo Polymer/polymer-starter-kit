@@ -59,17 +59,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="msapplication-TileColor" content="#3f51b5">
     <meta name="msapplication-tap-highlight" content="no">
 
-    <script type="module">
-      import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
-
-      // Gesture events like tap and track generated from touch will not be
-      // preventable, allowing for better scrolling performance.
-      setPassiveTouchGestures(true);
-
+    <script>
       /**
       * [polymer-root-path]
       *
-      * By default, we set Polymer's root path to the server root path (`/`).
+      * By default, we set `Polymer.rootPath` to the server root path (`/`).
       * Leave this line unchanged if you intend to serve your app from the root
       * path (e.g., with URLs like `my.domain/` and `my.domain/view1`).
       *
@@ -78,14 +72,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       * to indicate the path from which you'll be serving, including leading
       * and trailing slashes (e.g., `/my-app/`).
       */
-      const rootPath = '/';
-      setRootPath(rootPath);
+      window.Polymer = { rootPath: '/' };
 
       // Load and register pre-caching Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('service-worker.js', {
-            scope: rootPath
+            scope: Polymer.rootPath
           });
         });
       }
