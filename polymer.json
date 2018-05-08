@@ -5,7 +5,9 @@
     "images/**/*"
   ],
   "extraDependencies": [
-    "manifest.json"
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/*.js",
+    "!node_modules/@webcomponents/webcomponentsjs/gulpfile.js"
   ],
   "builds": [
     {
@@ -61,6 +63,7 @@
       "addServiceWorker": true
     }
   ],
+  "moduleResolution": "node",
   "npm": true,
   "lint": {
     "rules": [
