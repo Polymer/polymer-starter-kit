@@ -27,7 +27,9 @@ import './my-icons.js';
 // preventable, allowing for better scrolling performance.
 setPassiveTouchGestures(true);
 
-setRootPath(Polymer.rootPath);
+// Set Polymer's root path to the same value we passed to our service worker
+// in `index.html`.
+setRootPath(MyAppGlobals.rootPath);
 
 class MyApp extends PolymerElement {
   static get template() {
