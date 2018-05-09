@@ -21,8 +21,8 @@
     "@polymer/iron-pages": "^3.0.0-pre.15",
     "@polymer/iron-selector": "^3.0.0-pre.15",
     "@polymer/paper-icon-button": "^3.0.0-pre.15",
-    "@polymer/polymer": "^3.0.0-pre.13",
-    "@webcomponents/webcomponentsjs": "^2.0.0-beta.2"
+    "@polymer/polymer": "^3.0.0",
+    "@webcomponents/webcomponentsjs": "^2.0.0"
   },
   "devDependencies": {
     "polymer-cli": "^1.7.0",
