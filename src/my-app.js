@@ -123,10 +123,6 @@ class MyApp extends PolymerElement {
     };
   }
 
-  ready() {
-    super.ready();
-  }
-
   static get observers() {
     return [
       '_routePageChanged(routeData.page)'
