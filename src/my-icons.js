@@ -9,8 +9,7 @@
  */
 
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
-const $_documentContainer = document.createElement('div');
-$_documentContainer.setAttribute('style', 'display: none;');
+const $_documentContainer = document.createElement('template');
 $_documentContainer.innerHTML = `<iron-iconset-svg name="my-icons" size="24">
   <svg>
     <defs>
@@ -30,4 +29,4 @@ $_documentContainer.innerHTML = `<iron-iconset-svg name="my-icons" size="24">
   </svg>
 </iron-iconset-svg>`;
 
-document.head.appendChild($_documentContainer);
+document.head.appendChild($_documentContainer.content);
