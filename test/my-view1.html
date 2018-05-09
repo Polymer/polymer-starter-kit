@@ -16,11 +16,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <title>my-view1</title>
 
-    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../bower_components/web-component-tester/browser.js"></script>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
 
     <!-- Import the element to test -->
-    <link rel="import" href="../src/my-view1.html">
+    <script type="module" src="../src/my-view1.js"></script>
   </head>
   <body>
     <test-fixture id="BasicView">
@@ -29,11 +29,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </template>
     </test-fixture>
 
-    <script>
+    <script type="module">
       suite('my-view1 tests', function() {
         test('Number in circle should be 1', function() {
           var myView = fixture('BasicView');
           var circle = myView.shadowRoot.querySelector('.circle');
+
           assert.equal(circle.textContent, '1');
         });
       });
