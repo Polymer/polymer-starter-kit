@@ -84,9 +84,9 @@ class MyApp extends PolymerElement {
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name="view1" href="[[rootPath]]view1">View One</a>
-            <a name="view2" href="[[rootPath]]view2">View Two</a>
-            <a name="view3" href="[[rootPath]]view3">View Three</a>
+            <template is="dom-repeat" items="{{pages}}" filter="visibleNavItems">
+              <a name="[[item.name]]" href="[[rootPath]][[item.name]]">[[item.display]]</a>
+            </template>
           </iron-selector>
         </app-drawer>
 
@@ -100,11 +100,7 @@ class MyApp extends PolymerElement {
             </app-toolbar>
           </app-header>
 
-          <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-            <my-view1 name="view1"></my-view1>
-            <my-view2 name="view2"></my-view2>
-            <my-view3 name="view3"></my-view3>
-            <my-view404 name="view404"></my-view404>
+          <iron-pages selected="[[page]]" attr-for-selected="name" role="main" id="navpages">
           </iron-pages>
         </app-header-layout>
       </app-drawer-layout>
@@ -118,9 +114,38 @@ class MyApp extends PolymerElement {
         reflectToAttribute: true,
         observer: '_pageChanged'
       },
+      pages: {
+        type: Array,
+        value() {
+          return [
+            /* ADD ALL PAGES HERE - ADD THEM TO MAIN NAVIGATON BY SETTING A DISPLAY VALUE */
+            {name: "view1", element: "my-view1", file: "./my-view1.js", display: "View One", role: "home"},
+            {name: "view2", element: "my-view2", file: "./my-view2.js", display: "View Two"},
+            {name: "view3", element: "my-view3", file: "./my-view3.js", display: "View Three"},
+            {name: "view404", element: "my-view404", file: "./my-view404.js", role: "err404"}
+          ];
+        }
+      },
       routeData: Object,
       subroute: Object
     };
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    /* populate the iron-pages element with pages */
+    for (var i = 0; i < this.pages.length; i++) {
+      var newPage = document.createElement(this.pages[i].element);
+      newPage.name = this.pages[i].name;
+      this.$.navpages.appendChild(newPage);
+    }
+  }
+
+  visibleNavItems(item) {
+    if (item.display == null || item.display == false) {
+      return false;
+    } 
+    return true;
   }
 
   static get observers() {
@@ -133,13 +158,13 @@ class MyApp extends PolymerElement {
      // Show the corresponding page according to the route.
      //
      // If no page was found in the route data, page will be an empty string.
-     // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
-    if (!page) {
-      this.page = 'view1';
-    } else if (['view1', 'view2', 'view3'].indexOf(page) !== -1) {
+     // Show the page with "home" role in that case. And if the page doesn't exist, show page with role "err404".
+     if (!page) {
+      this.page = this.pages[this.pages.map(a => a.role).indexOf("home")].name;
+    } else if (this.pages.map(a => a.name).indexOf(page) !== -1) {
       this.page = page;
     } else {
-      this.page = 'view404';
+      this.page = this.pages[this.pages.map(a => a.role).indexOf("err404")].name;
     }
 
     // Close a non-persistent drawer when the page & route are changed.
@@ -153,20 +178,7 @@ class MyApp extends PolymerElement {
     //
     // Note: `polymer build` doesn't like string concatenation in the import
     // statement, so break it up.
-    switch (page) {
-      case 'view1':
-        import('./my-view1.js');
-        break;
-      case 'view2':
-        import('./my-view2.js');
-        break;
-      case 'view3':
-        import('./my-view3.js');
-        break;
-      case 'view404':
-        import('./my-view404.js');
-        break;
-    }
+    import(this.pages[this.pages.map(a => a.name).indexOf(page)].file)
   }
 }
 
