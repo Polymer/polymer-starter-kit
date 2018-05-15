@@ -38,27 +38,27 @@ class MyApp extends PolymerElement {
         :host {
           --app-primary-color: #4285f4;
           --app-secondary-color: black;
-
+      
           display: block;
         }
-
+      
         app-drawer-layout:not([narrow]) [drawer-toggle] {
           display: none;
         }
-
+      
         app-header {
           color: #fff;
           background-color: var(--app-primary-color);
         }
-
+      
         app-header paper-icon-button {
           --paper-icon-button-ink-color: white;
         }
-
+      
         .drawer-list {
           margin: 0 20px;
         }
-
+      
         .drawer-list a {
           display: block;
           padding: 0 16px;
@@ -66,19 +66,19 @@ class MyApp extends PolymerElement {
           color: var(--app-secondary-color);
           line-height: 40px;
         }
-
+      
         .drawer-list a.iron-selected {
           color: black;
           font-weight: bold;
         }
       </style>
-
+      
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
       </app-location>
-
+      
       <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
       </app-route>
-
+      
       <app-drawer-layout fullbleed="" narrow="{{narrow}}">
         <!-- Drawer content -->
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
@@ -89,17 +89,17 @@ class MyApp extends PolymerElement {
             </template>
           </iron-selector>
         </app-drawer>
-
+      
         <!-- Main content -->
         <app-header-layout has-scrolling-region="">
-
+      
           <app-header slot="header" condenses="" reveals="" effects="waterfall">
             <app-toolbar>
               <paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
               <div main-title="">My App</div>
             </app-toolbar>
           </app-header>
-
+      
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main" id="navpages">
           </iron-pages>
         </app-header-layout>
@@ -118,11 +118,15 @@ class MyApp extends PolymerElement {
         type: Array,
         value() {
           return [
-            /* ADD ALL PAGES HERE - ADD THEM TO MAIN NAVIGATON BY SETTING A DISPLAY VALUE */
-            {name: "view1", element: "my-view1", file: "./my-view1.js", display: "View One", role: "home"},
-            {name: "view2", element: "my-view2", file: "./my-view2.js", display: "View Two"},
-            {name: "view3", element: "my-view3", file: "./my-view3.js", display: "View Three"},
-            {name: "view404", element: "my-view404", file: "./my-view404.js", role: "err404"}
+            // Add all pages here. Make them visible in the menu by setting a display value.
+            // 'name' is used internally to reference the page, but it's visible to users in the page route.
+            // 'element' is the page's HTML custom element name. It's the first argument to the window.customElements.define() call in the page source.
+            // 'display' is what is shown to users in the menu. If left blank or set to false, it isn't added to the menu.
+            // 'role' is used internally when deciding what page to display for an undefined or bad page route.
+            { name: "view1", element: "my-view1", file: "./my-view1.js", display: "View One", role: "home" },
+            { name: "view2", element: "my-view2", file: "./my-view2.js", display: "View Two" },
+            { name: "view3", element: "my-view3", file: "./my-view3.js", display: "View Three" },
+            { name: "view404", element: "my-view404", file: "./my-view404.js", role: "err404" }
           ];
         }
       },
@@ -131,20 +135,10 @@ class MyApp extends PolymerElement {
     };
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    /* populate the iron-pages element with pages */
-    for (var i = 0; i < this.pages.length; i++) {
-      var newPage = document.createElement(this.pages[i].element);
-      newPage.name = this.pages[i].name;
-      this.$.navpages.appendChild(newPage);
-    }
-  }
-
   visibleNavItems(item) {
     if (item.display == null || item.display == false) {
       return false;
-    } 
+    }
     return true;
   }
 
@@ -155,11 +149,11 @@ class MyApp extends PolymerElement {
   }
 
   _routePageChanged(page) {
-     // Show the corresponding page according to the route.
-     //
-     // If no page was found in the route data, page will be an empty string.
-     // Show the page with "home" role in that case. And if the page doesn't exist, show page with role "err404".
-     if (!page) {
+    // Show the corresponding page according to the route.
+    //
+    // If no page was found in the route data, page will be an empty string.
+    // Show the page with "home" role in that case. And if the page doesn't exist, show page with role "err404".
+    if (!page) {
       this.page = this.pages[this.pages.map(a => a.role).indexOf("home")].name;
     } else if (this.pages.map(a => a.name).indexOf(page) !== -1) {
       this.page = page;
@@ -174,11 +168,25 @@ class MyApp extends PolymerElement {
   }
 
   _pageChanged(page) {
-    // Import the page component on demand.
+    // Import the page component and add it to the 'iron-pages' element on demand.
     //
     // Note: `polymer build` doesn't like string concatenation in the import
     // statement, so break it up.
-    import(this.pages[this.pages.map(a => a.name).indexOf(page)].file)
+
+    //If this page isn't in the iron-pages.
+    if (Array.from(this.$.navpages.children).map(a => a.name).indexOf(page) == -1) {
+
+      //Grab the page definition for the correct page.
+      var pagedef = this.pages[this.pages.map(a => a.name).indexOf(page)];
+
+      //Import the page component.
+      import(pagedef.file);
+
+      //Generate and insert the page element into the iron-pages.
+      var newPage = document.createElement(pagedef.element);
+      newPage.name = pagedef.name;
+      this.$.navpages.appendChild(newPage);
+    }
   }
 }
 
