@@ -13,20 +13,20 @@
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
   "dependencies": {
-    "@polymer/app-layout": "^3.0.0",
-    "@polymer/app-route": "^3.0.0",
-    "@polymer/iron-flex-layout": "^3.0.0",
-    "@polymer/iron-iconset-svg": "^3.0.0",
-    "@polymer/iron-media-query": "^3.0.0",
-    "@polymer/iron-pages": "^3.0.0",
-    "@polymer/iron-selector": "^3.0.0",
-    "@polymer/paper-icon-button": "^3.0.0",
-    "@polymer/polymer": "^3.0.0",
-    "@webcomponents/webcomponentsjs": "^2.0.0"
+    "@polymer/app-layout": "^3.0.2",
+    "@polymer/app-route": "^3.0.2",
+    "@polymer/iron-flex-layout": "^3.0.1",
+    "@polymer/iron-iconset-svg": "^3.0.1",
+    "@polymer/iron-media-query": "^3.0.1",
+    "@polymer/iron-pages": "^3.0.1",
+    "@polymer/iron-selector": "^3.0.1",
+    "@polymer/paper-icon-button": "^3.0.2",
+    "@polymer/polymer": "^3.2.0",
+    "@webcomponents/webcomponentsjs": "^2.2.7"
   },
   "devDependencies": {
-    "polymer-cli": "^1.7.1",
-    "wct-browser-legacy": "^1.0.0"
+    "polymer-cli": "^1.9.7",
+    "wct-browser-legacy": "^1.0.2"
   },
   "engines": {
     "node": ">=8.0"
